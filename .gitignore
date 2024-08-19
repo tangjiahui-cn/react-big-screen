@@ -1,0 +1,14 @@
+node_modules
+dist
+lib
+.idea
+.vscode
+.DS_Store
+.dumi/tmp*
+docs-dist
+
+# build product
+/umd
+/es
+/cjs
+/types

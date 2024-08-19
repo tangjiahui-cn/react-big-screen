@@ -1,0 +1,16 @@
+# http://editorconfig.org
+root = true
+
+[*]
+indent_style = space              # 空格格式缩进
+indent_size = 2                   # 缩进2字符
+end_of_line = lf                  # lf 结尾符
+charset = utf-8                   # 字符集
+max_line_length = 100             # 每行最大字符数量
+trim_trailing_whitespace = true   # 不保留行末空格
+insert_final_newline = true       # 文件末尾添加一个空行
+
+[*.md]
+trim_trailing_whitespace = false  # 不保留行末空格
+insert_final_newline = true       # 文件末尾添加一个空行
+

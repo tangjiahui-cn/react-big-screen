@@ -1,0 +1,13 @@
+*.yaml
+*.json
+
+lib
+node_modules
+*ignore
+LICENSE
+*.md
+*.d.ts
+*.rc
+
+/packages/Icon/*.js
+docs-dist
