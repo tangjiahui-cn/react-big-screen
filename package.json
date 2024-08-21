@@ -23,8 +23,10 @@
     ]
   },
   "dependencies": {
+    "antd": "4.21.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "vue": "^3.4.37"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.4.0",
@@ -36,6 +38,7 @@
     "@typescript-eslint/eslint-plugin": "^8.1.0",
     "@typescript-eslint/parser": "^8.1.0",
     "@vitejs/plugin-react": "^4.3.1",
+    "@vitejs/plugin-vue": "^5.1.2",
     "commitizen": "^4.3.0",
     "conventional-changelog-cli": "^5.0.0",
     "eslint": "^8.57.0",
@@ -47,6 +50,7 @@
     "globals": "^15.9.0",
     "husky": "^8",
     "inquirer": "8",
+    "less": "^4.2.0",
     "lint-staged": "^13.2.1",
     "prettier": "^2.8.7",
     "typescript": "^5.5.3",

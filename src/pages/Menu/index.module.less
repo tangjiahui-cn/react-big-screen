@@ -1,0 +1,34 @@
+.menu {
+  @gap: 12px;
+  width: 100%;
+  height: 100%;
+  padding: @gap;
+  overflow-y: auto;
+  box-sizing: border-box;
+
+  &_item {
+    cursor: move;
+    height: 80px;
+    width: calc(50% - @gap / 2);
+    box-sizing: border-box;
+    border: 1px solid #e8e8e8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #505050;
+    user-select: none;
+
+    &:nth-child(2n) {
+      margin-left: @gap;
+    }
+
+    &:nth-child(n + 3) {
+      margin-top: @gap;
+    }
+
+    &:hover {
+      background: whitesmoke;
+    }
+  }
+}
