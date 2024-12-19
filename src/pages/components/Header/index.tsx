@@ -62,13 +62,11 @@ export default function Header() {
       <div className={styles.header_flex}>
         {operates.map((item: OperateItem) => {
           return (
-            <div
-              key={item.key}
-              className={styles.header_flex_btn}
-              onClick={() => handleOperate(item)}
-            >
-              <Tooltip title={item.description}>{item.icon}</Tooltip>
-            </div>
+            <Tooltip key={item.key} title={item.description}>
+              <div className={styles.header_flex_btn} onClick={() => handleOperate(item)}>
+                {item.icon}
+              </div>
+            </Tooltip>
           );
         })}
       </div>
