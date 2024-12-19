@@ -1,0 +1,42 @@
+.page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: whitesmoke;
+  display: flex;
+  flex-direction: column;
+
+  &_header {
+    height: 40px;
+    background: white;
+    border-bottom: @border;
+  }
+
+  &_body {
+    flex: 1;
+    display: flex;
+
+    &_left {
+      flex: 0 0 300px;
+      background: white;
+    }
+
+    &_main {
+      flex: 1;
+      overflow: auto;
+    }
+
+    &_right {
+      flex: 0 0 300px;
+      background: white;
+    }
+  }
+
+  &_footer {
+    height: 40px;
+    background: white;
+    border-top: @border;
+  }
+}

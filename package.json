@@ -23,7 +23,8 @@
     ]
   },
   "dependencies": {
-    "antd": "4.21.0",
+    "@ant-design/icons": "^5.5.2",
+    "antd": "4.24.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "vue": "^3.4.37"
@@ -38,7 +39,6 @@
     "@typescript-eslint/eslint-plugin": "^8.1.0",
     "@typescript-eslint/parser": "^8.1.0",
     "@vitejs/plugin-react": "^4.3.1",
-    "@vitejs/plugin-vue": "^5.1.2",
     "commitizen": "^4.3.0",
     "conventional-changelog-cli": "^5.0.0",
     "eslint": "^8.57.0",

@@ -4,8 +4,30 @@
  * @author tangjiahui
  * @date 2024/12/19
  */
+import styles from './index.module.less';
+import Header from './components/Header';
+import Attributes from './components/Attributes';
+import Editor from './components/Editor';
+import Lib from './components/Lib';
 
 export default function Page() {
-  const str = '1';
-  return <div>11</div>;
+  return (
+    <div className={styles.page}>
+      <div className={styles.page_header}>
+        <Header />
+      </div>
+      <div className={styles.page_body}>
+        <div className={styles.page_body_left}>
+          <Lib />
+        </div>
+        <div className={styles.page_body_main}>
+          <Editor />
+        </div>
+        <div className={styles.page_body_right}>
+          <Attributes />
+        </div>
+      </div>
+      <div className={styles.page_footer}>底部区域</div>
+    </div>
+  );
 }
