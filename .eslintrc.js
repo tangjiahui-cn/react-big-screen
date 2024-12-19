@@ -27,7 +27,6 @@ module.exports = {
     'react/prop-types': 'off',
 
     // base
-    semi: 'error',
     quotes: ['error', 'single'],
     'no-console': 'off',
     'no-debugger': 'error',

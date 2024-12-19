@@ -6,7 +6,6 @@ node_modules
 *ignore
 LICENSE
 *.md
-*.d.ts
 *.rc
 
 /packages/Icon/*.js
