@@ -8,7 +8,7 @@ import styles from './index.module.less';
 import Header from './components/Header';
 import Attributes from './components/Attributes';
 import Editor from './components/Editor';
-import Lib from './components/Lib';
+import Library from './components/Library';
 
 export default function Page() {
   return (
@@ -18,7 +18,7 @@ export default function Page() {
       </div>
       <div className={styles.page_body}>
         <div className={styles.page_body_left}>
-          <Lib />
+          <Library />
         </div>
         <div className={styles.page_body_main}>
           <Editor />
