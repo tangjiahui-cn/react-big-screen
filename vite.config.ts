@@ -9,6 +9,11 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 11000,
   },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
   css: {
     preprocessorOptions: {
       less: {
