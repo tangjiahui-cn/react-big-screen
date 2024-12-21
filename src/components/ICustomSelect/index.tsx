@@ -15,16 +15,16 @@ export type ICustomMultipleSelectProps = Omit<CustomSelectProps, OmitKeys> & {
 export type ICustomSelectProps = CustomSelectProps | ICustomMultipleSelectProps;
 
 export function ICustomMultipleSelect(props: ICustomMultipleSelectProps) {
-  const { value, onChange, ...rest } = props;
+  const { value, onChange, extAntdProps, ...rest } = props;
   return (
     <CustomSelect
       {...rest}
-      value={value}
-      onChange={onChange}
+      value={value as any}
+      onChange={onChange as any}
       extAntdProps={{
         mode: 'multiple',
         maxTagCount: props?.maxTagCount ?? 1,
-        ...props?.extAntdProps,
+        ...extAntdProps,
       }}
     />
   );

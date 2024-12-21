@@ -27,7 +27,7 @@ export default function Page() {
           <Attributes />
         </div>
       </div>
-      <div className={styles.page_footer}>底部区域</div>
+      {/*<div className={styles.page_footer}>底部区域</div>*/}
     </div>
   );
 }
