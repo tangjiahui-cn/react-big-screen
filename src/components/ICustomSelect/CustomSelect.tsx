@@ -82,9 +82,9 @@ export default function CustomSelect(props: CustomSelectProps) {
 
   function query(keyword: string = '', isUpdateByEffect?: boolean) {
     requestFn?.(keyword).then((list: IOption[] = []) => {
-      const dataMap: any = {};
+      const dataMap: Record<string, any> = {};
       list.forEach((x: IOption) => {
-        dataMap[x?.value] = x;
+        dataMap[`${x?.value}`] = x;
       });
       setDataMap(dataMap);
       setOptionList(list?.map((x: any) => ({ ...x, value: `${x?.value || ''}` })));
@@ -109,7 +109,7 @@ export default function CustomSelect(props: CustomSelectProps) {
       requestFn?.(keyword)?.then((list: IOption[] = []) => {
         const dataMap: any = {};
         list.forEach((x: IOption) => {
-          dataMap[x?.value] = x;
+          dataMap[`${x?.value}`] = x;
         });
         setDataMap(dataMap);
         setOptionList(list?.map((x: any) => ({ ...x, value: `${x?.value || ''}` })));
