@@ -4,10 +4,10 @@
  * @author tangjiahui
  * @date 2024/12/19
  */
-import type { Component } from '@/pages/core';
+import type { Component } from '@/engine';
 import { Input } from 'antd';
 import { useState } from 'react';
-import { useThrottleEffect } from 'ahooks';
+import { useDebounceEffect } from 'ahooks';
 import IEmpty from '@/components/IEmpty';
 import styles from './index.module.less';
 import { components } from '@/built-in';
@@ -16,7 +16,7 @@ export default function Library() {
   const [keyword, setKeyword] = useState<string>('');
   const [displayComponents, setDisplayComponents] = useState<Component[]>([]);
 
-  useThrottleEffect(
+  useDebounceEffect(
     () => {
       const keywordLowerCase: string = keyword.toLowerCase();
       setDisplayComponents(

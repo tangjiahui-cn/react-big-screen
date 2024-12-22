@@ -1,0 +1,24 @@
+.tooltipButton {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  cursor: pointer;
+  user-select: none;
+  font-size: 16px;
+
+  &_disabled {
+    color: #afafaf;
+    cursor: not-allowed;
+
+    &:hover {
+      background: white !important;
+    }
+  }
+
+  &:hover {
+    background: #f1f1f1;
+  }
+}

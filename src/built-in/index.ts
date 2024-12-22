@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2024/12/21
  */
-import type { Component } from '@/pages/core';
+import type { Component } from '@/engine';
 import ICON_BUTTON from '@/static/built-in/button.png';
 import ICON_INPUT from '@/static/built-in/input.png';
 import ICON_IMAGE from '@/static/built-in/image.png';

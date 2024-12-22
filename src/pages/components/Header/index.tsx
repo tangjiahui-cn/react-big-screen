@@ -13,16 +13,27 @@ import {
   SaveOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
-import { Tooltip } from 'antd';
 import styles from './index.module.less';
+import TooltipButton from '@/components/TooltipButton';
+import { message } from 'antd';
+import IconFont from '@/components/IconFont';
+import SizeBar from './components/SizeBar';
 
 interface OperateItem {
   key: string;
-  description: string;
-  icon: React.ReactNode;
+  disabled?: boolean;
+  description?: string;
+  icon?: React.ReactNode;
 }
 
 const operates: OperateItem[] = [
+  { key: 'undo', description: '撤销', disabled: true, icon: <IconFont type={'icon-undo'} /> },
+  {
+    key: 'cancelRevoke',
+    description: '取消撤销',
+    disabled: true,
+    icon: <IconFont type={'icon-cancel-undo'} />,
+  },
   { key: 'upload', description: '上传', icon: <UploadOutlined /> },
   { key: 'import', description: '导入', icon: <VerticalAlignBottomOutlined /> },
   { key: 'preview', description: '预览', icon: <DesktopOutlined /> },
@@ -36,8 +47,15 @@ export default function Header() {
   }
 
   function handleOperate(item: OperateItem) {
-    console.log('zz click: ', item.key);
+    message.success('click ' + item.key);
+
     switch (item.key) {
+      case 'undo':
+        message.warn('暂不支持撤销');
+        break;
+      case 'cancelRevoke':
+        message.warn('暂不支持取消撤销');
+        break;
       case 'upload':
         break;
       case 'import':
@@ -59,14 +77,20 @@ export default function Header() {
         <b>BigScreen</b>
         <GithubFilled style={{ cursor: 'pointer', fontSize: 16 }} onClick={handleJumpGithub} />
       </div>
+
+      <SizeBar />
+
       <div className={styles.header_flex}>
         {operates.map((item: OperateItem) => {
           return (
-            <Tooltip key={item.key} title={item.description}>
-              <div className={styles.header_flex_btn} onClick={() => handleOperate(item)}>
-                {item.icon}
-              </div>
-            </Tooltip>
+            <TooltipButton
+              key={item.key}
+              disabled={item?.disabled}
+              title={item.description}
+              onClick={() => handleOperate(item)}
+            >
+              {item.icon}
+            </TooltipButton>
           );
         })}
       </div>
