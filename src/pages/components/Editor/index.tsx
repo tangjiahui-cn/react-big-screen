@@ -7,5 +7,9 @@
 import styles from './index.module.less';
 
 export default function Editor() {
-  return <div className={styles.attributes}>编辑器区域</div>;
+  return (
+    <div className={styles.editor}>
+      <div className={styles.editor_render} style={{ width: 1920, height: 1080 }}></div>
+    </div>
+  );
 }
