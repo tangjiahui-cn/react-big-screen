@@ -1,0 +1,49 @@
+{
+  "path": "cz-conventional-changelog",
+  "types": {
+    "feat": {
+      "description": "新增功能特性",
+      "title": "Features"
+    },
+    "fix": {
+      "description": "修复bug",
+      "title": "Bug Fixes"
+    },
+    "docs": {
+      "description": "仅仅修改文档",
+      "title": "Documentation"
+    },
+    "style": {
+      "description": "仅仅修改样式文件，不涉及代码逻辑",
+      "title": "Styles"
+    },
+    "refactor": {
+      "description": "重构代码",
+      "title": "Code Refactoring"
+    },
+    "perf": {
+      "description": "性能优化",
+      "title": "Performance Improvements"
+    },
+    "test": {
+      "description": "代码测试",
+      "title": "Tests"
+    },
+    "build": {
+      "description": "修改代码构建系统",
+      "title": "Builds"
+    },
+    "ci": {
+      "description": "修改CI工具",
+      "title": "Continuous Integrations"
+    },
+    "chore": {
+      "description": "修改除了src和test之外的内容",
+      "title": "Chores"
+    },
+    "revert": {
+      "description": "代码回滚",
+      "title": "Reverts"
+    }
+  }
+}
