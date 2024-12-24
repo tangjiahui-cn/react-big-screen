@@ -4,35 +4,45 @@
  * @author tangjiahui
  * @date 2024/12/19
  */
-import type { Component } from '@/engine';
+import { ComponentType } from '@/engine';
 import { Input } from 'antd';
-import { useState } from 'react';
-import { useDebounceEffect } from 'ahooks';
+import { useMemo, useState } from 'react';
+import { useUpdateEffect } from 'ahooks';
 import IEmpty from '@/components/IEmpty';
 import styles from './index.module.less';
-import { components } from '@/built-in';
+import { useComponents } from '@/engine/hooks/useComponents.ts';
+import { debounce } from 'lodash-es';
+
+function filterComponents(componentList: ComponentType[], keyword: string = ''): ComponentType[] {
+  if (!keyword) return componentList;
+  const keywordLowerCase = keyword.toLowerCase();
+  return componentList.filter((component: ComponentType) => {
+    return (
+      component.name.toLowerCase().includes(keywordLowerCase) ||
+      component.cId.toLowerCase().includes(keywordLowerCase)
+    );
+  });
+}
 
 export default function Library() {
+  const components = useComponents();
   const [keyword, setKeyword] = useState<string>('');
-  const [displayComponents, setDisplayComponents] = useState<Component[]>([]);
+  const [displayComponents, setDisplayComponents] = useState<ComponentType[]>([]);
 
-  useDebounceEffect(
-    () => {
-      const keywordLowerCase: string = keyword.toLowerCase();
-      setDisplayComponents(
-        components.filter((component: Component) => {
-          return (
-            component.name.toLowerCase().includes(keywordLowerCase) ||
-            component.id.toLowerCase().includes(keywordLowerCase)
-          );
-        }),
-      );
-    },
-    [keyword, components],
-    {
-      wait: 500,
-    },
-  );
+  const debounceFilterComponent = useMemo(() => {
+    return debounce((componentList: ComponentType[], keyword: string = '') => {
+      const result = filterComponents(componentList, keyword);
+      setDisplayComponents(result);
+    }, 500);
+  }, []);
+
+  useUpdateEffect(() => {
+    setDisplayComponents(filterComponents(components, keyword));
+  }, [components]);
+
+  useUpdateEffect(() => {
+    debounceFilterComponent(components, keyword);
+  }, [keyword]);
 
   return (
     <div className={styles.library}>
@@ -48,9 +58,9 @@ export default function Library() {
       </div>
       <div className={styles.library_main}>
         {!displayComponents.length && <IEmpty description={'暂无组件'} />}
-        {displayComponents.map((component: Component) => {
+        {displayComponents.map((component: ComponentType) => {
           return (
-            <div key={component.id} className={styles.library_item}>
+            <div key={component.cId} className={styles.library_item}>
               <div className={styles.library_item_body}>
                 {component.icon ? (
                   <img src={component.icon} draggable={false} />

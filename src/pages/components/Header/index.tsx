@@ -18,6 +18,8 @@ import TooltipButton from '@/components/TooltipButton';
 import { message } from 'antd';
 import IconFont from '@/components/IconFont';
 import SizeBar from './components/SizeBar';
+import engine from '@/engine';
+import { saveToFile } from '@/utils';
 
 interface OperateItem {
   key: string;
@@ -34,10 +36,10 @@ const operates: OperateItem[] = [
     disabled: true,
     icon: <IconFont type={'icon-cancel-undo'} />,
   },
-  { key: 'upload', description: '上传', icon: <UploadOutlined /> },
+  { key: 'export', description: '导出', icon: <UploadOutlined /> },
   { key: 'import', description: '导入', icon: <VerticalAlignBottomOutlined /> },
   { key: 'preview', description: '预览', icon: <DesktopOutlined /> },
-  { key: 'save', description: '保存', icon: <SaveOutlined /> },
+  { key: 'save', description: '保存到本地', icon: <SaveOutlined /> },
   { key: 'settings', description: '设置', icon: <SettingOutlined /> },
 ];
 
@@ -56,13 +58,16 @@ export default function Header() {
       case 'cancelRevoke':
         message.warn('暂不支持取消撤销');
         break;
-      case 'upload':
+      case 'export':
+        const text: string = JSON.stringify(engine.getJSON());
+        saveToFile(text, '大屏看板.json');
         break;
       case 'import':
         break;
       case 'preview':
         break;
       case 'save':
+        console.log('zz 保存 -->', engine.getJSON());
         break;
       case 'settings':
         break;

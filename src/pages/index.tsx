@@ -9,8 +9,21 @@ import Header from './components/Header';
 import Attributes from './components/Attributes';
 import Editor from './components/Editor';
 import Library from './components/Library';
+import engine from '@/engine';
+import { builtInComponents } from '@/built-in';
+import mockJSON from './mockJSON.json';
+import { useEffectOnce } from '@/hooks';
 
 export default function Page() {
+  useEffectOnce(() => {
+    // register built-in components.
+    engine.component.registerComponentList(builtInComponents);
+    // load JSON
+    engine.loadJSON(JSON.stringify(mockJSON));
+
+    console.log('zz load success: ', engine.getJSON());
+  });
+
   return (
     <div className={styles.page}>
       <div className={styles.page_header}>
