@@ -4,14 +4,13 @@
  * @author tangjiahui
  * @date 2024/12/24
  */
-import { useSelector } from 'react-redux';
-import { ComponentType, GlobalState } from '@/engine';
+import { ComponentType, GlobalState, useGlobalSelector } from '@/engine';
 import { useMemo } from 'react';
 
 export function useComponents(): ComponentType[] {
-  const componentMap = useSelector((state: GlobalState) => state?.component?.componentMap);
+  const componentMap = useGlobalSelector((state) => state.componentMap);
 
-  return useMemo(() => {
+  return useMemo((): ComponentType[] => {
     return componentMap ? Object.values(componentMap) : [];
   }, [componentMap]);
 }

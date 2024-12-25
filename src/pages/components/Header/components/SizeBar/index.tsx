@@ -7,8 +7,7 @@
 import styles from './index.module.less';
 import { CloseOutlined } from '@ant-design/icons';
 import InputNumberWithSuffix from '@/components/InputNumberWithSuffix';
-import { useConfig } from '@/engine/hooks/useConfig.ts';
-import engine from '@/engine';
+import engine, { useConfig } from '@/engine';
 
 export default function SizeBar() {
   const config = useConfig();

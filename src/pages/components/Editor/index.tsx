@@ -5,7 +5,7 @@
  * @date 2024/12/19
  */
 import styles from './index.module.less';
-import { useConfig } from '@/engine/hooks/useConfig.ts';
+import { useConfig } from '@/engine';
 
 export default function Editor() {
   const config = useConfig();

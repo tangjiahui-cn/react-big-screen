@@ -1,38 +1,26 @@
 /**
- * global store.
+ * global store
  *
  * @author tangjiahui
- * @date 2024/12/24
+ * @date 2024/12/25
  */
-import { configureStore, Dispatch } from '@reduxjs/toolkit';
-import { Provider } from 'react-redux';
-import componentSlice, { GlobalStateComponent } from './component.ts';
-import configSlice from './config.ts';
-import { GlobalConfig } from '@/engine';
+import { create } from 'zustand';
+import { GlobalState } from './types';
 
-// types
-export interface GlobalState {
-  component: GlobalStateComponent;
-  config: GlobalConfig;
-}
-
-// store
-const globalStore = configureStore<GlobalState>({
-  reducer: {
-    component: componentSlice.reducer,
-    config: configSlice.reducer,
-  },
+export const useGlobalSelector = create<GlobalState>(() => {
+  return {
+    componentMap: {},
+    config: {
+      width: 1920,
+      height: 1080,
+    },
+  };
 });
 
-// React FC.
-export const GlobalProvider = ({ children }) => {
-  return <Provider store={globalStore}>{children}</Provider>;
-};
+export function setGlobalState(setFn: GlobalState | ((state: GlobalState) => GlobalState)) {
+  useGlobalSelector.setState(setFn);
+}
 
-// functions.
-export const globalDispatch: Dispatch<any> = globalStore.dispatch;
-export const getGlobalState: () => GlobalState = globalStore.getState;
-
-// actions
-export const componentActions = componentSlice.actions;
-export const configActions = configSlice.actions;
+export function getGlobalState() {
+  return useGlobalSelector.getState();
+}

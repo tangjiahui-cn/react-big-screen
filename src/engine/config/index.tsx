@@ -4,28 +4,23 @@
  * @author tangjiahui
  * @date 2024/12/24
  */
-import { configActions, getGlobalState, globalDispatch } from '@/engine';
-import { GlobalConfig } from '@/engine/type.ts';
-
-export interface GlobalConfig {
-  width: number;
-  height: number;
-}
+import { getGlobalState, setGlobalState, GlobalConfig } from '@/engine';
 
 export class Config {
   /**
    * set config
-   * @param config global config.
+   * @param value global config.
    */
-  setConfig(config: GlobalConfig | ((config: GlobalConfig) => GlobalConfig)) {
-    const target = typeof config === 'function' ? config(this.getConfig()) : config;
-    globalDispatch(configActions.setConfig(target));
+  setConfig(value: GlobalConfig | ((value: GlobalConfig) => GlobalConfig)): void {
+    setGlobalState({
+      config: typeof value === 'function' ? value(this.getConfig()) : value,
+    });
   }
 
   /**
    * get config.
    */
-  getConfig() {
+  getConfig(): GlobalConfig {
     return getGlobalState().config;
   }
 }

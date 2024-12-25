@@ -1,5 +1,4 @@
-import { useSelector } from 'react-redux';
-import { GlobalState } from '@/engine';
+import { useGlobalSelector } from '@/engine';
 
 /**
  * useConfig
@@ -8,5 +7,5 @@ import { GlobalState } from '@/engine';
  * @date 2024/12/24
  */
 export function useConfig() {
-  return useSelector((state: GlobalState) => state.config);
+  return useGlobalSelector((state) => state.config);
 }

@@ -11,8 +11,8 @@ import type { JsonType } from './type.ts';
 import { getGlobalState, GlobalState } from './store';
 
 export type * from './component';
-export type * from './config';
 export * from './store';
+export * from './hooks';
 
 class Engine {
   config: Config = new Config();

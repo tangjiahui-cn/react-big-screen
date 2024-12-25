@@ -4,8 +4,9 @@
  * @author tangjiahui
  * @date 2024/12/24
  */
-import { componentActions, getGlobalState, globalDispatch } from '@/engine';
+import { getGlobalState, setGlobalState } from '@/engine';
 
+// registered component type.
 export interface ComponentType {
   /** unique component id */
   cId: string;
@@ -21,7 +22,12 @@ export class Component {
    * @param component target component.
    */
   registerComponent(component: ComponentType) {
-    globalDispatch(componentActions.registerComponent(component));
+    setGlobalState((state) => ({
+      componentMap: {
+        ...state.componentMap,
+        [component.cId]: component,
+      },
+    }));
   }
 
   /**
@@ -29,7 +35,15 @@ export class Component {
    * @param componentList target component list.
    */
   registerComponentList(componentList: ComponentType[]) {
-    globalDispatch(componentActions.registerComponentList(componentList));
+    setGlobalState((state) => ({
+      componentMap: {
+        ...state.componentMap,
+        ...componentList.reduce((result, component) => {
+          result[component.cId] = component;
+          return result;
+        }, {}),
+      },
+    }));
   }
 
   /**
@@ -37,6 +51,6 @@ export class Component {
    * @return component list.
    */
   getAll(): ComponentType[] {
-    return Object.values(getGlobalState().component.componentMap);
+    return Object.values(getGlobalState().componentMap);
   }
 }

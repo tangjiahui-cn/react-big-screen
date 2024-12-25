@@ -4,13 +4,12 @@
  * @author tangjiahui
  * @date 2024/12/19
  */
-import { ComponentType } from '@/engine';
+import { ComponentType, useComponents } from '@/engine';
 import { Input } from 'antd';
 import { useMemo, useState } from 'react';
 import { useUpdateEffect } from 'ahooks';
 import IEmpty from '@/components/IEmpty';
 import styles from './index.module.less';
-import { useComponents } from '@/engine/hooks/useComponents.ts';
 import { debounce } from 'lodash-es';
 
 function filterComponents(componentList: ComponentType[], keyword: string = ''): ComponentType[] {
