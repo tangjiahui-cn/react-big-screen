@@ -10,6 +10,7 @@ import { useMemo, useState } from 'react';
 import { useUpdateEffect } from 'ahooks';
 import IEmpty from '@/components/IEmpty';
 import styles from './index.module.less';
+import Item from './components/Item';
 import { debounce } from 'lodash-es';
 
 function filterComponents(componentList: ComponentType[], keyword: string = ''): ComponentType[] {
@@ -58,18 +59,7 @@ export default function Library() {
       <div className={styles.library_main}>
         {!displayComponents.length && <IEmpty description={'暂无组件'} />}
         {displayComponents.map((component: ComponentType) => {
-          return (
-            <div key={component.cId} className={styles.library_item}>
-              <div className={styles.library_item_body}>
-                {component.icon ? (
-                  <img src={component.icon} draggable={false} />
-                ) : (
-                  <span>None</span>
-                )}
-              </div>
-              <div className={styles.library_item_footer}>{component.name}</div>
-            </div>
-          );
+          return <Item key={component.cId} component={component} className={styles.library_item} />;
         })}
       </div>
     </div>

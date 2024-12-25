@@ -27,46 +27,11 @@
   }
 
   &_item {
-    user-select: none;
-    width: 33.3%;
-    height: 110px;
     border-right: @border;
     border-bottom: @border;
-    display: inline-flex;
-    flex-direction: column;
-    transition: all .3s;
-    cursor: move;
-
-    &:hover {
-      @boxShadowRadius: 10px;
-      @boxShadowColor: @borderColor;
-      box-shadow: 2px 0 @boxShadowRadius @boxShadowColor, -2px 0 @boxShadowRadius @boxShadowColor, 0 2px @boxShadowRadius @boxShadowColor;
-    }
 
     &:nth-child(3n) {
       border-right: none;
-    }
-
-    &_body {
-      flex: 1;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      & > img {
-        max-width: 50%;
-        max-height: 50%;
-      }
-
-      & > span {
-        color: #b8b8b8
-      }
-    }
-
-    &_footer {
-      padding: 6px 16px 14px;
-      text-align: center;
     }
   }
 }
