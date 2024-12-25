@@ -3,22 +3,23 @@
  *
  * @author tangjiahui
  * @date 2024/12/21
- * @description instance = component + componentState
+ * @description instance = component + componentData
  */
 import { Config } from './config';
 import { Component } from './component';
-import type { JsonType } from './type.ts';
-import { getGlobalState, GlobalState } from './store';
+import { Panel } from './panel';
+import type { JsonType } from './type';
+import { getGlobalState, GlobalState, setGlobalState } from './store';
 
 export type * from './component';
+export type * from './type';
 export * from './store';
 export * from './hooks';
 
 class Engine {
   config: Config = new Config();
   component: Component = new Component();
-  componentStates: any[] = [];
-  panelStates: any[] = [];
+  panel: Panel = new Panel();
 
   /**
    * load json text.
@@ -28,8 +29,7 @@ class Engine {
     try {
       const json: JsonType = JSON.parse(jsonText) as JsonType;
       this.config.setConfig(json.config);
-      this.componentStates = json.componentStates;
-      this.panelStates = json.panelStates;
+      this.panel.setPanels(json.panels);
     } catch (e) {
       console.error(e);
     }
@@ -42,8 +42,7 @@ class Engine {
   getJSON(): JsonType {
     return {
       config: this.config.getConfig(),
-      componentStates: this.componentStates,
-      panelStates: this.panelStates,
+      panels: this.panel.getPanels(),
     };
   }
 
@@ -54,6 +53,13 @@ class Engine {
   getGlobalState(): GlobalState {
     return getGlobalState();
   }
+
+  /**
+   * set global state
+   */
+  setGlobalState: typeof setGlobalState = (...args: any) => {
+    setGlobalState(...args);
+  };
 }
 
 const engine: Engine = new Engine();

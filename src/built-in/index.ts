@@ -10,11 +10,14 @@ import ICON_INPUT from '@/static/built-in/input.png';
 import ICON_IMAGE from '@/static/built-in/image.png';
 import ICON_TABS from '@/static/built-in/tabs.png';
 
+import Button from './Button';
+
 export const builtInComponents: ComponentType[] = [
   {
     cId: 'button',
     name: '按钮',
     icon: ICON_BUTTON,
+    component: Button,
   },
   {
     cId: 'input',

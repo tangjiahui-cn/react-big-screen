@@ -7,12 +7,17 @@
 import { create } from 'zustand';
 import { GlobalState } from './types';
 
+export type * from './types';
 export const useGlobalSelector = create<GlobalState>(() => {
   return {
+    panels: [],
     componentMap: {},
     config: {
       width: 1920,
       height: 1080,
+    },
+    runtime: {
+      currentPanelId: null,
     },
   };
 });

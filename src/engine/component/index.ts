@@ -4,16 +4,25 @@
  * @author tangjiahui
  * @date 2024/12/24
  */
+import React from 'react';
 import { getGlobalState, setGlobalState } from '@/engine';
 
+export interface ComponentProps<Option = Record<string, any>> {
+  width: number;
+  height: number;
+  options: Option;
+}
+
 // registered component type.
-export interface ComponentType {
+export interface ComponentType<Options = Record<string, any>> {
   /** unique component id */
   cId: string;
   /** component name */
   name: string;
   /** component icon */
   icon?: string;
+  /** react function component */
+  component: React.FC<ComponentProps<Options>>;
 }
 
 export class Component {
@@ -50,7 +59,15 @@ export class Component {
    * get All registered Components.
    * @return component list.
    */
-  getAll(): ComponentType[] {
+  getAllComponents(): ComponentType[] {
     return Object.values(getGlobalState().componentMap);
+  }
+
+  /**
+   * get a component
+   */
+  getComponent(cId: string): ComponentType | undefined {
+    if (!cId) return;
+    return getGlobalState().componentMap[cId];
   }
 }

@@ -9,19 +9,22 @@ import Header from './components/Header';
 import Attributes from './components/Attributes';
 import Editor from './components/Editor';
 import Library from './components/Library';
-import engine from '@/engine';
+import engine, { usePanel } from '@/engine';
 import { builtInComponents } from '@/built-in';
-import mockJSON from './mockJSON.json';
+import { mockJSON } from './mockJSON';
 import { useEffectOnce } from '@/hooks';
 
 export default function Page() {
+  const panel = usePanel();
+
   useEffectOnce(() => {
     // register built-in components.
     engine.component.registerComponentList(builtInComponents);
     // load JSON
     engine.loadJSON(JSON.stringify(mockJSON));
-
-    console.log('zz load success: ', engine.getJSON());
+    engine.panel.useFirstPanel();
+    // log global
+    console.log('zz get: ', engine.getGlobalState());
   });
 
   return (
@@ -34,7 +37,7 @@ export default function Page() {
           <Library />
         </div>
         <div className={styles.page_body_main}>
-          <Editor />
+          <Editor panel={panel} />
         </div>
         <div className={styles.page_body_right}>
           <Attributes />
