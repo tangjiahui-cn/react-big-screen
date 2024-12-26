@@ -51,3 +51,15 @@ pnpm dev
 * 2、渲染到编辑器
 * 3、用户设计页面 （本质是对json进行修改）
 * 4、保存本地（保存服务器）
+
+## 关键概念
+
+`engine`: 一组API，用于集中管理所有的大屏操作，方便快速查找和修改。
+
+`渲染原理`：instance = component + componentData。
+
+- json：存储数据的格式。
+- component：组件的模板。
+- componentData: 实例存储的数据。
+- panels: 单页面中的若干面板（用做单页面切换 panels）
+- store: 存储的全局数据（不做复杂action，仅用作响应式变量触发引用位置更新）

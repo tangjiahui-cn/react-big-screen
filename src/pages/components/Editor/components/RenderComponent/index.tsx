@@ -15,10 +15,16 @@ export default function RenderComponent(props: RenderComponentProps) {
   const { componentData, component } = props;
   const ReactFC = component.component;
 
-  console.log('zz componentData: ', componentData);
-
   return (
-    <div>
+    <div
+      style={{
+        position: 'absolute',
+        left: componentData.x,
+        top: componentData.y,
+        width: componentData.width,
+        height: componentData.height,
+      }}
+    >
       <ReactFC
         options={componentData.options}
         width={componentData.width}

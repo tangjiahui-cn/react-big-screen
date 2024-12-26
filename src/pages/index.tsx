@@ -15,8 +15,6 @@ import { mockJSON } from './mockJSON';
 import { useEffectOnce } from '@/hooks';
 
 export default function Page() {
-  const panel = usePanel();
-
   useEffectOnce(() => {
     // register built-in components.
     engine.component.registerComponentList(builtInComponents);
@@ -24,7 +22,7 @@ export default function Page() {
     engine.loadJSON(JSON.stringify(mockJSON));
     engine.panel.useFirstPanel();
     // log global
-    console.log('zz get: ', engine.getGlobalState());
+    // console.log('zz get: ', engine.getGlobalState());
   });
 
   return (
@@ -37,7 +35,7 @@ export default function Page() {
           <Library />
         </div>
         <div className={styles.page_body_main}>
-          <Editor panel={panel} />
+          <Editor />
         </div>
         <div className={styles.page_body_right}>
           <Attributes />

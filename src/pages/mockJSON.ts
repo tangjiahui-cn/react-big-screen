@@ -17,6 +17,8 @@ export const mockJSON: JsonType = {
         {
           id: 'aaaaa', // 实例id
           cId: 'button', // 组件模板id（group表示groupId）
+          x: 0,
+          y: 0,
           width: 100,
           height: 50,
           options: {
@@ -29,8 +31,10 @@ export const mockJSON: JsonType = {
         {
           id: 'bbbbb',
           cId: 'button',
-          width: 200,
-          height: 32,
+          x: 200,
+          y: 200,
+          width: 100,
+          height: 100,
           options: {
             type: 'default',
             children: '重置',
