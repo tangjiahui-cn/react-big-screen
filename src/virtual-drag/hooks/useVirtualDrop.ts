@@ -7,7 +7,7 @@
 import React, { useEffect } from 'react';
 import { virtualDragData, VirtualDragOptions } from '@/virtual-drag/data';
 
-type DomRef<T = HTMLElement> = React.RefObject<T>;
+type DomRef<T extends HTMLElement> = React.RefObject<T>;
 
 interface VirtualDropOptions {
   /** accept drag types */
@@ -16,7 +16,10 @@ interface VirtualDropOptions {
   onDrop?: (e: MouseEvent, dragOptions: VirtualDragOptions) => void;
 }
 
-export function useVirtualDrop(domRef: DomRef<HTMLElement>, options: VirtualDropOptions) {
+export function useVirtualDrop<T extends HTMLElement>(
+  domRef: DomRef<T>,
+  options: VirtualDropOptions,
+) {
   useEffect(() => {
     const dom = domRef.current;
     if (!dom) {

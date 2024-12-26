@@ -9,10 +9,10 @@ import { globalStyle } from '../globalStyle';
 import { dragElement } from '../utils';
 import { virtualDragData, VirtualDragOptions } from '../data';
 
-type DomRef<T = HTMLElement> = React.RefObject<T>;
+type DomRef<T extends HTMLElement> = React.RefObject<T>;
 
-export function useVirtualDrag(
-  domRef: DomRef<HTMLElement>,
+export function useVirtualDrag<T extends HTMLElement>(
+  domRef: DomRef<T>,
   virtualDragOptions: VirtualDragOptions,
 ) {
   useEffect(() => {
