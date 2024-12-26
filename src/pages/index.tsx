@@ -16,13 +16,8 @@ import { useEffectOnce } from '@/hooks';
 
 export default function Page() {
   useEffectOnce(() => {
-    // register built-in components.
     engine.component.registerComponentList(builtInComponents);
-    // load JSON
     engine.loadJSON(JSON.stringify(mockJSON));
-    engine.panel.useFirstPanel();
-    // log global
-    // console.log('zz get: ', engine.getGlobalState());
   });
 
   return (

@@ -30,6 +30,7 @@ class Engine {
       const json: JsonType = JSON.parse(jsonText) as JsonType;
       this.config.setConfig(json.config);
       this.panel.setPanels(json.panels);
+      this.panel.useFirstPanel();
     } catch (e) {
       console.error(e);
     }
