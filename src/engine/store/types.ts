@@ -17,6 +17,6 @@ export interface GlobalState {
   panels: PanelType[];
   // runtime variables.
   runtime: {
-    currentPanelId: number;
+    currentPanelId: string;
   };
 }

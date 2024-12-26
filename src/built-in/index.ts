@@ -23,15 +23,18 @@ export const builtInComponents: ComponentType[] = [
     cId: 'input',
     name: '输入框',
     icon: ICON_INPUT,
+    component: Button,
   },
   {
     cId: 'image',
     name: '图片',
     icon: ICON_IMAGE,
+    component: Button,
   },
   {
     cId: 'tabs',
     name: '标签页',
     icon: ICON_TABS,
+    component: Button,
   },
 ];

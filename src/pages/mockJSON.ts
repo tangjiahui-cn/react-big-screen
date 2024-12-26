@@ -5,14 +5,14 @@ export const mockJSON: JsonType = {
     {
       panelId: '1',
       name: '首页',
-      groups: {
-        'group-aaa': {
-          groupId: 'group-bbb',
-        },
-        'group-bbb': {
-          groupId: false,
-        },
-      },
+      // groups: {
+      //   'group-aaa': {
+      //     groupId: 'group-bbb',
+      //   },
+      //   'group-bbb': {
+      //     groupId: false,
+      //   },
+      // },
       children: [
         {
           id: 'aaaaa', // 实例id
@@ -26,7 +26,7 @@ export const mockJSON: JsonType = {
             type: 'primary',
             children: '查询',
           },
-          groupId: 'group-aaa', // 当前组件成组时，会有groupId
+          // groupId: 'group-aaa', // 当前组件成组时，会有groupId
         },
         {
           id: 'bbbbb',

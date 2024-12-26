@@ -9,7 +9,7 @@ import Header from './components/Header';
 import Attributes from './components/Attributes';
 import Editor from './components/Editor';
 import Library from './components/Library';
-import engine, { usePanel } from '@/engine';
+import engine from '@/engine';
 import { builtInComponents } from '@/built-in';
 import { mockJSON } from './mockJSON';
 import { useEffectOnce } from '@/hooks';

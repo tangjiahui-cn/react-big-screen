@@ -14,7 +14,7 @@ export interface ComponentProps<Option = Record<string, any>> {
 }
 
 // registered component type.
-export interface ComponentType<Options = Record<string, any>> {
+export interface ComponentType<Options = any> {
   /** unique component id */
   cId: string;
   /** component name */
@@ -50,7 +50,7 @@ export class Component {
         ...componentList.reduce((result, component) => {
           result[component.cId] = component;
           return result;
-        }, {}),
+        }, {} as Record<string, ComponentType>),
       },
     }));
   }

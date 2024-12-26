@@ -4,27 +4,27 @@
  * @author tangjiahui
  * @date 2024/12/26
  */
-import { MutableRefObject, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { virtualDragData, VirtualDragOptions } from '@/virtual-drag/data';
 
-type DomRef<T = HTMLElement> = MutableRefObject<T>;
+type DomRef<T = HTMLElement> = React.RefObject<T>;
 
 interface VirtualDropOptions {
   /** accept drag types */
-  accept: string[];
+  accept?: string[];
   /** drop callback */
-  onDrop: (e: MouseEvent, dragOptions: VirtualDragOptions) => void;
+  onDrop?: (e: MouseEvent, dragOptions: VirtualDragOptions) => void;
 }
 
-export function useVirtualDrop<T = HTMLElement>(domRef: DomRef<T>, options: VirtualDropOptions) {
+export function useVirtualDrop(domRef: DomRef<HTMLElement>, options: VirtualDropOptions) {
   useEffect(() => {
-    const dom: T = domRef.current;
+    const dom = domRef.current;
     if (!dom) {
       console.warn('dom must be set.');
       return;
     }
 
-    const mouseup = (e) => {
+    const mouseup = (e: MouseEvent) => {
       if (!virtualDragData.getIsDragging()) return;
       const dragOptions = virtualDragData.getDragOptions();
       options?.onDrop?.(e, dragOptions);

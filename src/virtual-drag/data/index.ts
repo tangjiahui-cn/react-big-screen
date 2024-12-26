@@ -14,7 +14,7 @@ export interface VirtualDragOptions {
 
 class VirtualDragData {
   private isDragging: boolean = false;
-  private dragOptions: DragOptions = {
+  private dragOptions: VirtualDragOptions = {
     type: '',
     data: undefined,
   };
@@ -27,7 +27,7 @@ class VirtualDragData {
     return this.isDragging;
   }
 
-  public setDragOptions(dragOptions: DragOptions, cover?: boolean) {
+  public setDragOptions(dragOptions: VirtualDragOptions, cover?: boolean) {
     if (cover) {
       this.dragOptions = {
         ...dragOptions,

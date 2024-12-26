@@ -17,7 +17,7 @@ export default function SizeBar() {
       <InputNumberWithSuffix
         suffix={'px'}
         value={config.width}
-        onChange={(width) => {
+        onChange={(width: any) => {
           engine.config.setConfig((config) => {
             return {
               ...config,
@@ -30,7 +30,7 @@ export default function SizeBar() {
       <InputNumberWithSuffix
         suffix={'px'}
         value={config.height}
-        onChange={(height) => {
+        onChange={(height: any) => {
           engine.config.setConfig((config) => {
             return {
               ...config,

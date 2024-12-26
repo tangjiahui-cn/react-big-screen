@@ -20,7 +20,7 @@ type Options = {
  *
  * @param dom bind dom.
  * @param options callback options
- * @description while try drag a element, listen which status.
+ * @description while try drag an element, listen which status.
  */
 export function dragElement(dom: HTMLElement, options: Options): UnmountWatch {
   let isDragging = false;
@@ -34,19 +34,23 @@ export function dragElement(dom: HTMLElement, options: Options): UnmountWatch {
 
   function mousedown() {
     dom.addEventListener('mousemove', mousemove);
-    window.addEventListener('mouseup', clean);
+    window.addEventListener('mouseup', mouseup);
   }
 
-  function clean(e: MouseEvent) {
+  function mouseup(e: MouseEvent) {
+    options?.onEnd?.(e, { isDragging });
+    clearMove();
+  }
+
+  function clearMove() {
     if (!isDragging) return;
     isDragging = false;
     dom.removeEventListener('mousemove', mousemove);
-    window.removeEventListener('mouseup', clean);
-    options?.onEnd?.(e, { isDragging });
+    window.removeEventListener('mouseup', mouseup);
   }
 
   return () => {
-    clean();
+    clearMove();
     dom.removeEventListener('mousedown', mousedown);
   };
 }

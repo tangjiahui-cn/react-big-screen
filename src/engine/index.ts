@@ -9,7 +9,7 @@ import { Config } from './config';
 import { Component } from './component';
 import { Panel } from './panel';
 import type { JsonType } from './type';
-import { getGlobalState, GlobalState, setGlobalState } from './store';
+import { getGlobalState, setGlobalState } from './store';
 
 export type * from './component';
 export type * from './type';
@@ -50,16 +50,12 @@ class Engine {
    * get global state
    * @return global state.
    */
-  getGlobalState(): GlobalState {
-    return getGlobalState();
-  }
+  getGlobalState = getGlobalState;
 
   /**
    * set global state
    */
-  setGlobalState: typeof setGlobalState = (...args: any) => {
-    setGlobalState(...args);
-  };
+  setGlobalState = setGlobalState;
 }
 
 const engine: Engine = new Engine();

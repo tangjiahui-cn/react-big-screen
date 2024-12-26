@@ -1,2 +1,2 @@
-export * from './useEffectOnce.ts';
-export * from './useStateWithRef.ts';
+export * from './useEffectOnce';
+export * from './useStateWithRef';

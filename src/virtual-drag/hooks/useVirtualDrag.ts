@@ -4,19 +4,19 @@
  * @author tangjiahui
  * @date 2024/12/26
  */
-import { MutableRefObject, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { globalStyle } from '../globalStyle';
 import { dragElement } from '../utils';
 import { virtualDragData, VirtualDragOptions } from '../data';
 
-type DomRef<T = HTMLElement> = MutableRefObject<T>;
+type DomRef<T = HTMLElement> = React.RefObject<T>;
 
-export function useVirtualDrag<T = HTMLElement>(
-  domRef: DomRef<T>,
+export function useVirtualDrag(
+  domRef: DomRef<HTMLElement>,
   virtualDragOptions: VirtualDragOptions,
 ) {
   useEffect(() => {
-    const dom: T = domRef.current;
+    const dom = domRef.current;
     if (!dom) {
       console.warn('dom must be set.');
       return;

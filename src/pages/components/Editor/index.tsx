@@ -13,7 +13,7 @@ import { useVirtualDrop } from '@/virtual-drag';
 export default React.memo(() => {
   const panel = usePanel();
   const config = useConfig();
-  const editorDomRef = useRef<HTMLDivElement>();
+  const editorDomRef = useRef<HTMLDivElement>(null);
 
   const renderComponents = useMemo(() => {
     return panel?.children?.map((componentData: ComponentData) => {

@@ -5,7 +5,7 @@
  * @date 2024/12/24
  * @description get all registered components.
  */
-import { ComponentType, GlobalState, useGlobalSelector } from '@/engine';
+import { ComponentType, useGlobalSelector } from '@/engine';
 import { useMemo } from 'react';
 
 export function useComponents(): ComponentType[] {

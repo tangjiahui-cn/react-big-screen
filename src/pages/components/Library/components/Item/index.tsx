@@ -17,7 +17,7 @@ interface Props {
 
 export default function (props: Props) {
   const { component } = props;
-  const domRef = useRef<HTMLDivElement>();
+  const domRef = useRef<HTMLDivElement>(null);
 
   useVirtualDrag(domRef, {
     type: 'create-component',

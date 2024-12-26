@@ -7,7 +7,7 @@
 import engine, { PanelType, useGlobalSelector } from '@/engine';
 import { useMemo } from 'react';
 
-export function usePanel(): PanelType {
+export function usePanel(): PanelType | undefined {
   const currentPanelId = useGlobalSelector((state) => {
     return state.runtime.currentPanelId;
   });

@@ -17,12 +17,14 @@ export const useGlobalSelector = create<GlobalState>(() => {
       height: 1080,
     },
     runtime: {
-      currentPanelId: null,
+      currentPanelId: '',
     },
   };
 });
 
-export function setGlobalState(setFn: GlobalState | ((state: GlobalState) => GlobalState)) {
+export function setGlobalState(
+  setFn: Partial<GlobalState> | ((state: GlobalState) => Partial<GlobalState>),
+) {
   useGlobalSelector.setState(setFn);
 }
 

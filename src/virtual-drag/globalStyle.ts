@@ -7,7 +7,7 @@
  */
 class GlobalStyle {
   // style tag.
-  style: HTMLStyleElement;
+  style: HTMLStyleElement | undefined;
   // count usage times.
   count: number = 0;
 
@@ -23,7 +23,7 @@ class GlobalStyle {
   }
 
   unmount() {
-    if (--this.count > 0) {
+    if (!this.style || --this.count > 0) {
       return;
     }
     this.count = 0;
