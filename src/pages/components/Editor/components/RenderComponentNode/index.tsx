@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2024/12/25
  */
-import { ComponentNodeType, ComponentType, useRegisterInstance } from '@/engine';
+import { ComponentNodeType, ComponentType, useRegisterInstance } from "@/engine";
 
 interface RenderComponentProps {
   componentNode: ComponentNodeType;
@@ -35,7 +35,7 @@ export default function RenderComponentNode(props: RenderComponentProps) {
   return (
     <div
       style={{
-        position: 'absolute',
+        position: "absolute",
         left: componentNode.x,
         top: componentNode.y,
         width: componentNode.width,

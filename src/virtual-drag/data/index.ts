@@ -19,7 +19,7 @@ export type UnMountDraggingChangeCallback = () => void;
 class VirtualDragData {
   private isDragging: boolean = false;
   private dragOptions: VirtualDragOptions = {
-    type: '',
+    type: "",
     data: undefined,
   };
   private draggingChangeCallback: DraggingChangeCallback[] = [];

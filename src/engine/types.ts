@@ -1,5 +1,5 @@
 // 基础组件类型
-import React from 'react';
+import React from "react";
 
 // 组件传入参数
 export interface ComponentProps<Option = any> {

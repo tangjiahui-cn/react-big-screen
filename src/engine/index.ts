@@ -21,15 +21,15 @@
  * （1）为什么要分离组件数据实例、行为实例，而不使用一个实例合并了全部？
  * 答：区分可持久化数据、运行时函数，职责分工避免混淆，并避免保存时分离两者所造成的性能损耗。
  */
-import Component from './component';
-import Instance from './instance';
-import ComponentNode from './componentNode';
-import Config from './config';
-import type { JsonType } from './types';
+import Component from "./component";
+import Instance from "./instance";
+import ComponentNode from "./componentNode";
+import Config from "./config";
+import type { JsonType } from "./types";
 
-export type * from './types';
-export * from './store';
-export * from './hooks';
+export type * from "./types";
+export * from "./store";
+export * from "./hooks";
 
 class Engine {
   // 组件模板

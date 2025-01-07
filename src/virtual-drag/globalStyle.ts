@@ -16,9 +16,9 @@ class GlobalStyle {
     if (this.style) {
       return;
     }
-    const el = document.createElement('style');
-    el.setAttribute('id', 'virtual-drag');
-    el.innerHTML = 'html.is-dragging * {cursor: copy;};';
+    const el = document.createElement("style");
+    el.setAttribute("id", "virtual-drag");
+    el.innerHTML = "html.is-dragging * {cursor: copy;};";
     document.head.appendChild((this.style = el));
   }
 

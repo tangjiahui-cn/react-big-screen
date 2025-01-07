@@ -4,8 +4,8 @@
  * @author tangjiahui
  * @date 2024/1/7
  */
-import { Tabs } from 'antd';
-import { ComponentProps } from '@/engine';
+import { Tabs } from "antd";
+import { ComponentProps } from "@/engine";
 
 type InputProps = ComponentProps<{
   // 标签页头部配置列表

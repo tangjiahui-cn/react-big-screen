@@ -5,8 +5,8 @@
  * @date 2024/12/24
  * @description 获取全部已注册组件模板
  */
-import { ComponentType, useGlobalSelector } from '..';
-import { useMemo } from 'react';
+import { ComponentType, useGlobalSelector } from "..";
+import { useMemo } from "react";
 
 export function useComponents(): ComponentType[] {
   const componentMap = useGlobalSelector((state) => state.componentMap);

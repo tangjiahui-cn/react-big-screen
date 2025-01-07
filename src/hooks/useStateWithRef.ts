@@ -5,7 +5,7 @@
  * @date 2022.01.04
  * @description extend useEffect with useRef, which solved the closure problem.
  */
-import { Dispatch, MutableRefObject, SetStateAction, useRef, useState } from 'react';
+import { Dispatch, MutableRefObject, SetStateAction, useRef, useState } from "react";
 
 export function useStateWithRef<T = undefined>(
   initialState: T | (() => T),

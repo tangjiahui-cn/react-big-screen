@@ -6,7 +6,7 @@
  * @description 用来控制运行时的每个实例的各种行为，例如：鼠标经过、鼠标选中效果等。
  */
 
-import type { InstanceType } from '..';
+import type { InstanceType } from "..";
 
 export default class Instance {
   // 存储 id => instance 的映射

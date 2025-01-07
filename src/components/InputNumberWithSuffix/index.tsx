@@ -4,10 +4,10 @@
  * @author tangjiahui
  * @date 2024/12/22
  */
-import { InputNumber, InputNumberProps } from 'antd';
-import styles from './index.module.less';
-import React from 'react';
-import classNames from 'classnames';
+import { InputNumber, InputNumberProps } from "antd";
+import styles from "./index.module.less";
+import React from "react";
+import classNames from "classnames";
 
 interface InputNumberWithSuffixProps extends InputNumberProps {
   suffix?: React.ReactNode;
@@ -22,7 +22,7 @@ export default function InputNumberWithSuffix(props: InputNumberWithSuffixProps)
       style={containerStyle}
       className={classNames(styles.inputNumberWithSuffix, containerClassName)}
     >
-      <InputNumber size={'small'} style={{ width: 70 }} {...rest} />
+      <InputNumber size={"small"} style={{ width: 70 }} {...rest} />
       {suffix && <div className={styles.inputNumberWithSuffix_suffix}>{suffix}</div>}
     </div>
   );

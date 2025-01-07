@@ -4,11 +4,11 @@
  * @author tangjiahui
  * @date 2024/12/15
  */
-import styles from './index.module.less';
-import { ComponentType } from '@/engine';
-import classNames from 'classnames';
-import { useRef } from 'react';
-import { useVirtualDrag } from '@/virtual-drag';
+import styles from "./index.module.less";
+import { ComponentType } from "@/engine";
+import classNames from "classnames";
+import { useRef } from "react";
+import { useVirtualDrag } from "@/virtual-drag";
 
 interface Props {
   className?: string;
@@ -20,7 +20,7 @@ export default function (props: Props) {
   const domRef = useRef<HTMLDivElement>(null);
 
   useVirtualDrag(domRef, {
-    type: 'create-component',
+    type: "create-component",
     data: {
       component,
     },

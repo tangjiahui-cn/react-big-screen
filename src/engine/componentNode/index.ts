@@ -11,14 +11,14 @@ import {
   type ComponentNodeType,
   ComponentType,
   BaseComponent,
-} from '..';
-import { omit } from 'lodash-es';
-import { createUUID } from '../utils';
+} from "..";
+import { omit } from "lodash-es";
+import { createUUID } from "../utils";
 
 // 默认值
 const INIT_COMPONENT: BaseComponent = {
-  cId: '',
-  cName: '',
+  cId: "",
+  cName: "",
   x: 0,
   y: 0,
   width: 100,
@@ -70,7 +70,7 @@ export default class ComponentNode {
     const componentNode: ComponentNodeType = Object.assign(
       {},
       INIT_COMPONENT, // 基础默认组件数据
-      omit(component, ['icon', 'component']), // 自定义组件默认数据
+      omit(component, ["icon", "component"]), // 自定义组件默认数据
       extComponentNode, // 扩展组件数据
     ) as ComponentNodeType;
     // 如果name不存在，则设置component的name作为默认值

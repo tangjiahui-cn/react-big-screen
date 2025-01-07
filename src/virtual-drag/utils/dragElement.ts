@@ -24,7 +24,7 @@ type Options = {
  */
 export function dragElement(dom: HTMLElement, options: Options): UnmountWatch {
   let isDragging = false;
-  dom.addEventListener('mousedown', mousedown);
+  dom.addEventListener("mousedown", mousedown);
 
   function mousemove(e: MouseEvent) {
     if (isDragging) return;
@@ -33,8 +33,8 @@ export function dragElement(dom: HTMLElement, options: Options): UnmountWatch {
   }
 
   function mousedown() {
-    dom.addEventListener('mousemove', mousemove);
-    window.addEventListener('mouseup', mouseup);
+    dom.addEventListener("mousemove", mousemove);
+    window.addEventListener("mouseup", mouseup);
   }
 
   function mouseup(e: MouseEvent) {
@@ -45,12 +45,12 @@ export function dragElement(dom: HTMLElement, options: Options): UnmountWatch {
   function clearMove() {
     if (!isDragging) return;
     isDragging = false;
-    dom.removeEventListener('mousemove', mousemove);
-    window.removeEventListener('mouseup', mouseup);
+    dom.removeEventListener("mousemove", mousemove);
+    window.removeEventListener("mouseup", mouseup);
   }
 
   return () => {
     clearMove();
-    dom.removeEventListener('mousedown', mousedown);
+    dom.removeEventListener("mousedown", mousedown);
   };
 }

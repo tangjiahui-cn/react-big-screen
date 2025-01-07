@@ -4,15 +4,15 @@
  * @author TangJiaHui
  * @date 2022.05.11
  */
-import React, { useState } from 'react';
-import { Select, SelectProps } from 'antd';
-import { useDebounceEffect, useUpdateEffect } from 'ahooks';
-import { useEffectOnce, useStateWithRef } from '@/hooks';
-import { IOption, localSearchFn } from './type';
+import React, { useState } from "react";
+import { Select, SelectProps } from "antd";
+import { useDebounceEffect, useUpdateEffect } from "ahooks";
+import { useEffectOnce, useStateWithRef } from "@/hooks";
+import { IOption, localSearchFn } from "./type";
 
 export interface CustomSelectProps {
   /** select size. */
-  size?: SelectProps['size'];
+  size?: SelectProps["size"];
   /** default select first item (only run once) */
   defaultFirst?: boolean;
   /** default select first item while effectParams Change. (may run some times) */
@@ -55,9 +55,9 @@ export default function CustomSelect(props: CustomSelectProps) {
     defaultFirst,
     disabled,
     all,
-    allName = '全部',
+    allName = "全部",
     value = undefined,
-    placeholder = '请选择',
+    placeholder = "请选择",
     style = {},
     debounceTime = 500,
     showSearch = true,
@@ -70,24 +70,24 @@ export default function CustomSelect(props: CustomSelectProps) {
 
   const optionAll: IOption = {
     label: allName,
-    value: '',
+    value: "",
   };
 
-  const [keyword, setKeyword] = useState<string>('');
+  const [keyword, setKeyword] = useState<string>("");
   const [optionList, setOptionList] = useState<IOption[]>([]);
   const [currentValue, setCurrentValue] = useState<string | undefined>(undefined);
   const [dataMap, setDataMap] = useState<any>({});
 
   const [_, setIsFirstSet, isFirstSetRef] = useStateWithRef<boolean>(false); // 是否设置过第一次值了
 
-  function query(keyword: string = '', isUpdateByEffect?: boolean) {
+  function query(keyword: string = "", isUpdateByEffect?: boolean) {
     requestFn?.(keyword).then((list: IOption[] = []) => {
       const dataMap: Record<string, any> = {};
       list.forEach((x: IOption) => {
         dataMap[`${x?.value}`] = x;
       });
       setDataMap(dataMap);
-      setOptionList(list?.map((x: any) => ({ ...x, value: `${x?.value || ''}` })));
+      setOptionList(list?.map((x: any) => ({ ...x, value: `${x?.value || ""}` })));
 
       // 是否初次查询设置 defaultFirst
       if (!isFirstSetRef.current && defaultFirst) {
@@ -112,7 +112,7 @@ export default function CustomSelect(props: CustomSelectProps) {
           dataMap[`${x?.value}`] = x;
         });
         setDataMap(dataMap);
-        setOptionList(list?.map((x: any) => ({ ...x, value: `${x?.value || ''}` })));
+        setOptionList(list?.map((x: any) => ({ ...x, value: `${x?.value || ""}` })));
       });
     },
     [keyword],
@@ -130,7 +130,7 @@ export default function CustomSelect(props: CustomSelectProps) {
       setCurrentValue(value);
     }
 
-    query('');
+    query("");
   });
 
   useUpdateEffect(() => {
@@ -138,7 +138,7 @@ export default function CustomSelect(props: CustomSelectProps) {
   }, [value]);
 
   useUpdateEffect(() => {
-    query('', true);
+    query("", true);
   }, effectParams);
 
   return (
@@ -156,7 +156,7 @@ export default function CustomSelect(props: CustomSelectProps) {
       onBlur={() => {
         // 如果是服务端模糊搜索则重置
         if (!props?.isLocalSearch) {
-          query('');
+          query("");
         }
       }}
       onSearch={showSearch && !isLocalSearch ? (k) => setKeyword(k) : undefined}
@@ -177,7 +177,7 @@ export default function CustomSelect(props: CustomSelectProps) {
       )}
       {optionList?.map((x: IOption) => {
         return (
-          <Select.Option key={`${x.value || ''}`} value={`${x.value || ''}`}>
+          <Select.Option key={`${x.value || ""}`} value={`${x.value || ""}`}>
             {props?.optionRender ? props.optionRender(x) : x?.label}
           </Select.Option>
         );

@@ -4,10 +4,10 @@
  * @author tangjiahui
  * @date 2024/12/22
  */
-import './index.less';
-import './iconfont.js';
+import "./index.less";
+import "./iconfont.js";
 
-type ICON_TYPE = 'icon-undo' | 'icon-cancel-undo';
+type ICON_TYPE = "icon-undo" | "icon-cancel-undo";
 
 export interface IconFontProps {
   type?: ICON_TYPE;

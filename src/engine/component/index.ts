@@ -6,8 +6,8 @@
  * @description 用来管理所有的组件。
  */
 
-import { getGlobalState, setGlobalState, ComponentMap } from '../store';
-import { ComponentType } from '../types';
+import { getGlobalState, setGlobalState, ComponentMap } from "../store";
+import { ComponentType } from "../types";
 
 export default class Component {
   // 注册一个组件（注意：每调用一次更新一次全局变量，注册多个请使用 registerComponents）

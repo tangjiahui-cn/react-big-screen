@@ -4,15 +4,15 @@
  * @author tangjiahui
  * @date 2024/12/19
  */
-import styles from './index.module.less';
-import Header from './components/Header';
-import Attributes from './components/Attributes';
-import Editor from './components/Editor';
-import Library from './components/Library';
-import engine from '@/engine';
-import { builtInComponents } from '@/built-in';
-import { mockJSON } from './mockJSON';
-import { useEffectOnce } from '@/hooks';
+import styles from "./index.module.less";
+import Header from "./components/Header";
+import Attributes from "./components/Attributes";
+import Editor from "./components/Editor";
+import Library from "./components/Library";
+import engine from "@/engine";
+import { builtInComponents } from "@/built-in";
+import { mockJSON } from "./mockJSON";
+import { useEffectOnce } from "@/hooks";
 
 export default function Page() {
   useEffectOnce(() => {

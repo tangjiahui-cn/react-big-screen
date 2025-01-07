@@ -4,8 +4,8 @@
  * @author tangjiahui
  * @date 2024/12/26
  */
-import React, { useEffect } from 'react';
-import { virtualDragData, VirtualDragOptions } from '@/virtual-drag/data';
+import React, { useEffect } from "react";
+import { virtualDragData, VirtualDragOptions } from "@/virtual-drag/data";
 
 type DomRef<T extends HTMLElement> = React.RefObject<T>;
 
@@ -23,12 +23,12 @@ export function useVirtualDrop<T extends HTMLElement>(
   useEffect(() => {
     const { accept } = options;
     if (!Array.isArray(accept)) {
-      throw new Error('accept must be a string array.');
+      throw new Error("accept must be a string array.");
     }
 
     const dom = domRef.current;
     if (!dom) {
-      console.warn('dom must be set.');
+      console.warn("dom must be set.");
       return;
     }
 
@@ -37,15 +37,15 @@ export function useVirtualDrop<T extends HTMLElement>(
         return;
       }
       const dragOptions = virtualDragData.getDragOptions();
-      if (accept && !accept?.includes?.(dragOptions.type || '')) {
+      if (accept && !accept?.includes?.(dragOptions.type || "")) {
         return;
       }
       options?.onDrop?.(e, dragOptions);
     };
 
-    dom.addEventListener('mouseup', mouseup);
+    dom.addEventListener("mouseup", mouseup);
     return () => {
-      dom.addEventListener('mouseup', mouseup);
+      dom.addEventListener("mouseup", mouseup);
     };
   }, []);
 }

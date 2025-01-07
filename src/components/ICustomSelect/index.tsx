@@ -1,6 +1,6 @@
-import { default as CustomSelect, CustomSelectProps } from './CustomSelect';
+import { default as CustomSelect, CustomSelectProps } from "./CustomSelect";
 
-type OmitKeys = 'value' | 'onChange' | 'defaultFirst';
+type OmitKeys = "value" | "onChange" | "defaultFirst";
 export type ICustomMultipleSelectProps = Omit<CustomSelectProps, OmitKeys> & {
   /** if multiple */
   multiple: boolean;
@@ -22,7 +22,7 @@ export function ICustomMultipleSelect(props: ICustomMultipleSelectProps) {
       value={value as any}
       onChange={onChange as any}
       extAntdProps={{
-        mode: 'multiple',
+        mode: "multiple",
         maxTagCount: props?.maxTagCount ?? 1,
         ...extAntdProps,
       }}

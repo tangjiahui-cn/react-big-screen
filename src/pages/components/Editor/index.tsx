@@ -4,13 +4,13 @@
  * @author tangjiahui
  * @date 2024/12/19
  */
-import styles from './index.module.less';
-import engine, { ComponentNodeType, ComponentType, useConfig } from '@/engine';
-import React, { useMemo, useRef } from 'react';
-import { useVirtualDrop, useIsDragging } from '@/virtual-drag';
-import { useComponentNodes } from '@/engine';
-import classNames from 'classnames';
-import RenderComponentNode from './components/RenderComponentNode';
+import styles from "./index.module.less";
+import engine, { ComponentNodeType, ComponentType, useConfig } from "@/engine";
+import React, { useMemo, useRef } from "react";
+import { useVirtualDrop, useIsDragging } from "@/virtual-drag";
+import { useComponentNodes } from "@/engine";
+import classNames from "classnames";
+import RenderComponentNode from "./components/RenderComponentNode";
 
 export default React.memo(() => {
   const config = useConfig();
@@ -32,11 +32,11 @@ export default React.memo(() => {
   }, [componentNodes]);
 
   const isDragging = useIsDragging({
-    accept: ['create-component'],
+    accept: ["create-component"],
   });
 
   useVirtualDrop(editorDomRef, {
-    accept: ['create-component'],
+    accept: ["create-component"],
     onDrop: (e: MouseEvent, dragOptions) => {
       const { data } = dragOptions;
       const component = data?.component;
@@ -59,7 +59,7 @@ export default React.memo(() => {
       <div
         ref={editorDomRef}
         className={styles.editor_render}
-        style={{ width: config.width, height: config.height, position: 'relative' }}
+        style={{ width: config.width, height: config.height, position: "relative" }}
       >
         {/* 渲染实例 */}
         {renderComponentNodes}

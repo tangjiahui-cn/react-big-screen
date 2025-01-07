@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import type { GlobalConfig, ComponentType, ComponentNodeType } from '..';
+import { create } from "zustand";
+import type { GlobalConfig, ComponentType, ComponentNodeType } from "..";
 
 export type ComponentMap = Record<string, ComponentType>;
 

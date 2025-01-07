@@ -5,9 +5,9 @@
  * @date 2024/12/25
  *
  */
-import { Button } from 'antd';
-import { ButtonType } from 'antd/es/button';
-import { ComponentProps } from '@/engine';
+import { Button } from "antd";
+import { ButtonType } from "antd/es/button";
+import { ComponentProps } from "@/engine";
 
 type ButtonProps = ComponentProps<{
   type: ButtonType;

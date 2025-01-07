@@ -6,4 +6,4 @@ export interface IOption {
 }
 
 export const localSearchFn = (key: string, options?: any) =>
-  (options?.children || '').toLowerCase().includes(key.toLowerCase());
+  (options?.children || "").toLowerCase().includes(key.toLowerCase());
