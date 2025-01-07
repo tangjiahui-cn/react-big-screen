@@ -20,8 +20,6 @@ export const builtInComponents: ComponentType[] = [
     cId: 'button',
     cName: '按钮',
     icon: ICON_BUTTON,
-    x: 0,
-    y: 0,
     width: 64,
     height: 32,
     options: {
@@ -34,8 +32,6 @@ export const builtInComponents: ComponentType[] = [
     cId: 'input',
     cName: '输入框',
     icon: ICON_INPUT,
-    x: 0,
-    y: 0,
     width: 180,
     height: 32,
     options: {
@@ -49,8 +45,6 @@ export const builtInComponents: ComponentType[] = [
     cId: 'image',
     cName: '图片',
     icon: ICON_IMAGE,
-    x: 0,
-    y: 0,
     width: 270,
     height: 150,
     options: {
@@ -62,8 +56,6 @@ export const builtInComponents: ComponentType[] = [
     cId: 'tabs',
     cName: '标签页',
     icon: ICON_TABS,
-    x: 0,
-    y: 0,
     width: 100,
     height: 100,
     options: {

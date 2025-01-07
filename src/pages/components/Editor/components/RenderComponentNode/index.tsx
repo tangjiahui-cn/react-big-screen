@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2024/12/25
  */
-import { ComponentNodeType, ComponentType } from '@/engine';
+import { ComponentNodeType, ComponentType, useRegisterInstance } from '@/engine';
 
 interface RenderComponentProps {
   componentNode: ComponentNodeType;
@@ -14,6 +14,23 @@ interface RenderComponentProps {
 export default function RenderComponentNode(props: RenderComponentProps) {
   const { componentNode, component } = props;
   const ReactFC = component.component;
+
+  // 注册运行时行为实例
+  useRegisterInstance({
+    id: componentNode.id,
+    handleHover() {
+      // ...
+    },
+    handleUnHover() {
+      // ...
+    },
+    handleSelected() {
+      // ...
+    },
+    handleUnSelected() {
+      // ...
+    },
+  });
 
   return (
     <div

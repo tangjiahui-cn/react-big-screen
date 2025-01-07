@@ -8,15 +8,16 @@ export interface ComponentProps<Option = any> {
   options: Option; // 配置数据
 }
 
-// 基础组件类型
+// 基础组件类型（组件模板、组件数据实例公共的属性）
 export interface BaseComponent {
   cId: string; // 组件id
   cName: string; // 组件名称
-  x: number; // 坐标 x
-  y: number; // 坐标 y
+  x?: number; // 坐标 x
+  y?: number; // 坐标 y
   width: number; // 宽度
   height: number; // 高度
-  options: Record<string, any>; // 配置数据
+  level?: number; // 层级
+  options?: Record<string, any>; // 配置数据
 }
 
 // 组件模板类型
