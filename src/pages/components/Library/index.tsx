@@ -18,7 +18,7 @@ function filterComponents(componentList: ComponentType[], keyword: string = ''):
   const keywordLowerCase = keyword.toLowerCase();
   return componentList.filter((component: ComponentType) => {
     return (
-      component.name.toLowerCase().includes(keywordLowerCase) ||
+      component.cName.toLowerCase().includes(keywordLowerCase) ||
       component.cId.toLowerCase().includes(keywordLowerCase)
     );
   });

@@ -4,31 +4,31 @@
  * @author tangjiahui
  * @date 2024/12/25
  */
-import { ComponentData, ComponentType } from '@/engine';
+import { ComponentNodeType, ComponentType } from '@/engine';
 
 interface RenderComponentProps {
-  componentData: ComponentData;
+  componentNode: ComponentNodeType;
   component: ComponentType;
 }
 
 export default function RenderComponent(props: RenderComponentProps) {
-  const { componentData, component } = props;
+  const { componentNode, component } = props;
   const ReactFC = component.component;
 
   return (
     <div
       style={{
         position: 'absolute',
-        left: componentData.x,
-        top: componentData.y,
-        width: componentData.width,
-        height: componentData.height,
+        left: componentNode.x,
+        top: componentNode.y,
+        width: componentNode.width,
+        height: componentNode.height,
       }}
     >
       <ReactFC
-        options={componentData.options}
-        width={componentData.width}
-        height={componentData.height}
+        options={componentNode.options}
+        width={componentNode.width}
+        height={componentNode.height}
       />
     </div>
   );

@@ -16,8 +16,10 @@ import { useEffectOnce } from '@/hooks';
 
 export default function Page() {
   useEffectOnce(() => {
-    engine.component.registerComponentList(builtInComponents);
-    engine.loadJSON(JSON.stringify(mockJSON));
+    // 注册静态组件
+    engine.component.registerComponents(builtInComponents);
+    // 设置json
+    engine.loadJSON(mockJSON);
   });
 
   return (

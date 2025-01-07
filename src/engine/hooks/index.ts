@@ -1,4 +1,3 @@
-export * from './useConfig';
-export * from './useComponent';
 export * from './useComponents';
-export * from './usePanel';
+export * from './useComponentNodes';
+export * from './useConfig';

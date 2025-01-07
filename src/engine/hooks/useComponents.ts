@@ -3,9 +3,9 @@
  *
  * @author tangjiahui
  * @date 2024/12/24
- * @description get all registered components.
+ * @description 获取全部已注册组件模板
  */
-import { ComponentType, useGlobalSelector } from '@/engine';
+import { ComponentType, useGlobalSelector } from '..';
 import { useMemo } from 'react';
 
 export function useComponents(): ComponentType[] {
