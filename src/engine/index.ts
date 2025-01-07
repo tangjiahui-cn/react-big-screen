@@ -1,63 +1,61 @@
 /**
- * Engine
+ * 大屏 api
  *
  * @author tangjiahui
- * @date 2024/12/21
- * @description instance = component + componentData
+ * @date 2024/1/7
+ *
+ * 核心:
+ *     编辑json + 交互逻辑。
+ *
+ * 流程：
+ * （1）读取 json 中的 “componentNodes”、或通过 “component模板” 创建 “componentNode数据实例”。
+ * （2）“componentNode数据实例” 渲染到画布时，注册 “instance运行时行为实例”。
+ *
+ * 定义：
+ * （1）component：组件模板。用于创建一个 componentNode，仅仅作为模板使用。
+ * （2）componentNode：组件可持久化数据实例。用于保存组件的数据配置，导出时会被保存。
+ * （3）instance：组件运行时行为实例。用于控制运行时组件的行为，例如：鼠标经过、选中效果。
+ * （4）实例：componentNode 和 instance 之和，即数据与行为的集合体。
+ *
+ * 关于：
+ * （1）为什么要分离组件数据实例、行为实例，而不使用一个实例合并了全部？
+ * 答：区分可持久化数据、运行时函数，职责分工避免混淆，并避免保存时分离两者所造成的性能损耗。
  */
-import { Config } from './config';
-import { Component } from './component';
-import { Panel } from './panel';
-import type { JsonType } from './type';
-import { getGlobalState, setGlobalState } from './store';
+import Component from './component';
+import Instance from './instance';
+import ComponentNode from './componentNode';
+import Config from './config';
+import type { JsonType } from './types';
 
-export type * from './component';
-export type * from './type';
+export type * from './types';
 export * from './store';
 export * from './hooks';
 
 class Engine {
-  config: Config = new Config();
+  // 组件模板
   component: Component = new Component();
-  panel: Panel = new Panel();
+  // 组件数据实例
+  componentNode: ComponentNode = new ComponentNode();
+  // 组件行为实例
+  instance: Instance = new Instance();
+  // 全局配置
+  config: Config = new Config();
 
-  /**
-   * load json text.
-   * @param jsonText stringify json text.
-   */
-  loadJSON(jsonText: string): void {
-    try {
-      const json: JsonType = JSON.parse(jsonText) as JsonType;
-      this.config.setConfig(json.config);
-      this.panel.setPanels(json.panels);
-      this.panel.useFirstPanel();
-    } catch (e) {
-      console.error(e);
-    }
+  // 加载json对象
+  public loadJSON(json: JsonType): void {
+    this.config.setConfig(json.config);
+    this.componentNode.init(json.componentNodes);
   }
 
-  /**
-   * get json.
-   * @return json object.
-   */
-  getJSON(): JsonType {
+  // 获取json对象
+  public getJSON(): JsonType {
     return {
+      used: {},
+      componentNodes: [],
       config: this.config.getConfig(),
-      panels: this.panel.getPanels(),
     };
   }
-
-  /**
-   * get global state
-   * @return global state.
-   */
-  getGlobalState = getGlobalState;
-
-  /**
-   * set global state
-   */
-  setGlobalState = setGlobalState;
 }
 
-const engine: Engine = new Engine();
+const engine = new Engine();
 export default engine;

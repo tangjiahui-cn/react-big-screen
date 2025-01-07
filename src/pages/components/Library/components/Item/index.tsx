@@ -29,7 +29,7 @@ export default function (props: Props) {
       <div className={styles.componentItem_body}>
         {component.icon ? <img src={component.icon} draggable={false} /> : <span>None</span>}
       </div>
-      <div className={styles.componentItem_footer}>{component.name}</div>
+      <div className={styles.componentItem_footer}>{component.cName}</div>
     </div>
   );
 }
