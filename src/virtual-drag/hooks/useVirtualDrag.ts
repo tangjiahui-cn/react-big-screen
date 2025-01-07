@@ -21,19 +21,18 @@ export function useVirtualDrag<T extends HTMLElement>(
       console.warn('dom must be set.');
       return;
     }
-
     const unmount = dragElement(dom, {
       onStart() {
         globalStyle.mount();
         document.documentElement.classList.add('is-dragging');
-        virtualDragData.setIsDragging(true);
         virtualDragData.setDragOptions(virtualDragOptions);
+        virtualDragData.setIsDragging(true);
       },
       onEnd() {
         globalStyle.unmount();
         document.documentElement.classList.remove('is-dragging');
-        virtualDragData.setIsDragging(false);
         virtualDragData.setDragOptions(virtualDragOptions);
+        virtualDragData.setIsDragging(false);
       },
     });
 

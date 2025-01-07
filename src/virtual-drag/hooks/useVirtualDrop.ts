@@ -21,6 +21,11 @@ export function useVirtualDrop<T extends HTMLElement>(
   options: VirtualDropOptions,
 ) {
   useEffect(() => {
+    const { accept } = options;
+    if (!Array.isArray(accept)) {
+      throw new Error('accept must be a string array.');
+    }
+
     const dom = domRef.current;
     if (!dom) {
       console.warn('dom must be set.');
@@ -28,8 +33,13 @@ export function useVirtualDrop<T extends HTMLElement>(
     }
 
     const mouseup = (e: MouseEvent) => {
-      if (!virtualDragData.getIsDragging()) return;
+      if (!virtualDragData.getIsDragging()) {
+        return;
+      }
       const dragOptions = virtualDragData.getDragOptions();
+      if (accept && !accept?.includes?.(dragOptions.type || '')) {
+        return;
+      }
       options?.onDrop?.(e, dragOptions);
     };
 

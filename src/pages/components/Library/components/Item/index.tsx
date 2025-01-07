@@ -21,7 +21,9 @@ export default function (props: Props) {
 
   useVirtualDrag(domRef, {
     type: 'create-component',
-    data: component,
+    data: {
+      component,
+    },
   });
 
   return (

@@ -1,6 +1,13 @@
 // 基础组件类型
 import React from 'react';
 
+// 组件传入参数
+export interface ComponentProps<Option = any> {
+  width: number;
+  height: number;
+  options: Option; // 配置数据
+}
+
 // 基础组件类型
 export interface BaseComponent {
   cId: string; // 组件id
@@ -10,13 +17,6 @@ export interface BaseComponent {
   width: number; // 宽度
   height: number; // 高度
   options: Record<string, any>; // 配置数据
-}
-
-// 组件传入参数
-export interface ComponentProps<Option = any> {
-  width: number;
-  height: number;
-  options: Option; // 配置数据
 }
 
 // 组件模板类型

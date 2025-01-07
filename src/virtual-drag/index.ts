@@ -4,4 +4,4 @@
  * @author tangjiahui
  * @date 2024/12/25
  */
-export { useVirtualDrag, useVirtualDrop } from './hooks';
+export { useVirtualDrag, useVirtualDrop, useIsDragging } from './hooks';

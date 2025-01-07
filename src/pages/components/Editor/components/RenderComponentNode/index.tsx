@@ -11,7 +11,7 @@ interface RenderComponentProps {
   component: ComponentType;
 }
 
-export default function RenderComponent(props: RenderComponentProps) {
+export default function RenderComponentNode(props: RenderComponentProps) {
   const { componentNode, component } = props;
   const ReactFC = component.component;
 

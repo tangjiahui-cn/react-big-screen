@@ -11,6 +11,9 @@ import ICON_IMAGE from '@/static/built-in/image.png';
 import ICON_TABS from '@/static/built-in/tabs.png';
 
 import Button from './Button';
+import Image from './Image';
+import Input from './Input';
+import Tabs from './Tabs';
 
 export const builtInComponents: ComponentType[] = [
   {
@@ -21,7 +24,10 @@ export const builtInComponents: ComponentType[] = [
     y: 0,
     width: 100,
     height: 100,
-    options: {},
+    options: {
+      type: 'primary',
+      children: 'button',
+    },
     component: Button,
   },
   {
@@ -30,10 +36,14 @@ export const builtInComponents: ComponentType[] = [
     icon: ICON_INPUT,
     x: 0,
     y: 0,
-    width: 100,
-    height: 100,
-    options: {},
-    component: Button,
+    width: 180,
+    height: 32,
+    options: {
+      allowClear: true,
+      defaultValue: '',
+      placeholder: '请输入',
+    },
+    component: Input,
   },
   {
     cId: 'image',
@@ -41,10 +51,12 @@ export const builtInComponents: ComponentType[] = [
     icon: ICON_IMAGE,
     x: 0,
     y: 0,
-    width: 100,
-    height: 100,
-    options: {},
-    component: Button,
+    width: 270,
+    height: 150,
+    options: {
+      src: 'https://ts3.cn.mm.bing.net/th?id=OIP-C.3r1vguZyWFUJ80A2Nf2k3AHaEK&w=333&h=187&c=8&rs=1&qlt=90&o=6&dpr=2&pid=3.1&rm=2',
+    },
+    component: Image,
   },
   {
     cId: 'tabs',
@@ -54,7 +66,12 @@ export const builtInComponents: ComponentType[] = [
     y: 0,
     width: 100,
     height: 100,
-    options: {},
-    component: Button,
+    options: {
+      items: [
+        { label: 'Tab1', key: '1' },
+        { label: 'Tab2', key: '2' },
+      ],
+    },
+    component: Tabs,
   },
 ];
