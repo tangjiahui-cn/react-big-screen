@@ -4,9 +4,9 @@ import type { GlobalConfig, ComponentType, ComponentNodeType } from "..";
 export type ComponentMap = Record<string, ComponentType>;
 
 export interface GlobalState {
-  componentNodes: ComponentNodeType[];
-  componentMap: ComponentMap;
-  config: GlobalConfig;
+  componentNodes: ComponentNodeType[]; // componentNodes
+  componentMap: ComponentMap; // 组件模板映射 (cId => component)
+  config: GlobalConfig; // 全局配置
 }
 
 export const useGlobalSelector = create<GlobalState>(() => ({

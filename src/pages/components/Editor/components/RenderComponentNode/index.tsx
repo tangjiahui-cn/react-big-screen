@@ -40,6 +40,7 @@ export default function RenderComponentNode(props: RenderComponentProps) {
         top: componentNode.y,
         width: componentNode.width,
         height: componentNode.height,
+        zIndex: componentNode.level,
       }}
     >
       <ReactFC

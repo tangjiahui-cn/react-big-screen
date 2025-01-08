@@ -23,7 +23,6 @@ const INIT_COMPONENT: BaseComponent = {
   y: 0,
   width: 100,
   height: 100,
-  level: 1,
 };
 
 export default class ComponentNode {
@@ -80,6 +79,9 @@ export default class ComponentNode {
     // 如果未指定id，则自动创建一个uuid作为id
     if (!componentNode.id) {
       componentNode.id = createUUID();
+    }
+    if (!componentNode.level) {
+      componentNode.level = ++this.maxLevel;
     }
     return Object.assign(componentNode);
   }
