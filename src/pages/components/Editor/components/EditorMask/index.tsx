@@ -9,7 +9,6 @@ import { useIsDragging, useVirtualDrop } from "@/virtual-drag";
 import engine from "@/engine";
 import classNames from "classnames";
 import styles from "./index.module.less";
-import { message } from "antd";
 
 interface Props {
   className?: string;
@@ -27,7 +26,7 @@ export default function EditorMask(props: Props) {
     onDrop: (e: MouseEvent, dragOptions) => {
       const dom = domRef.current;
       if (!dom) {
-        message.error("dom must be exist.");
+        console.error("dom must be exist.");
         return;
       }
       const { data } = dragOptions;
