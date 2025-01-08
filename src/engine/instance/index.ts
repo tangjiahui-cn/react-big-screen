@@ -10,7 +10,9 @@ import type { InstanceType } from "..";
 
 export default class Instance {
   // 存储 id => instance 的映射
-  data: Record<string, InstanceType> = {};
+  private data: Record<string, InstanceType> = {};
+  // 存储选中的实例列表
+  private selectedInstances: InstanceType[] = [];
 
   // 注册一个实例
   public registerInstance(instance: InstanceType) {
@@ -22,13 +24,22 @@ export default class Instance {
     delete this.data[id];
   }
 
-  public getInstance(id: string): InstanceType | undefined {
-    return this.data[id];
+  // 取消选中所有选中实例
+  public unSelectAllSelectedInstances() {
+    this.selectedInstances.forEach((instance) => {
+      instance.handleUnSelected();
+    });
   }
 
-  public getInstances(ids: string[]): (InstanceType | undefined)[] {
-    return ids.map((id) => {
-      return this.data[id];
+  // 新增一个选中实例
+  public addSelectedInstance(instance: InstanceType) {
+    this.selectedInstances.push(instance);
+  }
+
+  // 移出一个选中实例
+  public removeSelectedInstance(id: string) {
+    this.selectedInstances = this.selectedInstances.filter((instance) => {
+      return instance.id !== id;
     });
   }
 }

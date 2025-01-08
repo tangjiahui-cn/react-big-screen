@@ -60,4 +60,10 @@ export interface InstanceType {
   handleUnHover: () => void; // 取消经过实例
   handleSelected: () => void; // 选中实例
   handleUnSelected: () => void; // 取消选中实例
+  /**
+   * 触发更新局部componentNode
+   * @param componentNode 用来覆盖的值
+   * @param cover 是否直接覆盖
+   */
+  setScopeComponentNode: (componentNode: Partial<ComponentNodeType>, cover?: boolean) => void;
 }
