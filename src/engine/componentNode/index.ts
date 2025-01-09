@@ -92,12 +92,12 @@ export default class ComponentNode {
     component: ComponentType,
     extComponentNode?: Partial<ComponentNodeType>,
   ): ComponentNodeType {
-    const componentNode: ComponentNodeType = Object.assign(
-      {},
-      INIT_COMPONENT, // 基础默认组件数据
-      omit(component, ["icon", "component"]), // 自定义组件默认数据
-      extComponentNode, // 扩展组件数据
-    ) as ComponentNodeType;
+    const componentNode: ComponentNodeType = {
+      ...INIT_COMPONENT, // 基础默认组件数据
+      ...omit(component, ["icon", "component"]), // 自定义组件默认数据
+      ...extComponentNode, // 扩展组件数据
+    } as ComponentNodeType;
+
     // 如果name不存在，则设置component的name作为默认值
     if (!componentNode.name) {
       componentNode.name = component.cName;
