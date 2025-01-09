@@ -38,19 +38,21 @@ export interface GlobalConfig {
   height: number;
 }
 
+export type ComponentUsed = Record<
+  string, // cId
+  {
+    count: number; // 使用数量
+  }
+>;
+
 // json 文件格式
 export interface JsonType {
   // 实例化组件列表
   componentNodes: ComponentNodeType[];
   // 全局配置
   config: GlobalConfig;
-  // 已使用组件列表
-  used: Record<
-    string, // cId
-    {
-      count: number; // 使用数量
-    }
-  >;
+  // 已使用组件列表统计
+  used: ComponentUsed;
 }
 
 // 数据行为实例类型

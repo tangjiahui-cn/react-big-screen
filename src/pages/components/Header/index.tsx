@@ -19,7 +19,7 @@ import { message } from "antd";
 import IconFont from "@/components/IconFont";
 import SizeBar from "./components/SizeBar";
 import engine from "@/engine";
-import { saveToFile } from "@/utils";
+import { getLocalFileText, saveToFile } from "@/utils";
 
 interface OperateItem {
   key: string;
@@ -38,9 +38,9 @@ const operates: OperateItem[] = [
   },
   { key: "export", description: "导出", icon: <UploadOutlined /> },
   { key: "import", description: "导入", icon: <VerticalAlignBottomOutlined /> },
-  { key: "preview", description: "预览", icon: <DesktopOutlined /> },
-  { key: "save", description: "保存到本地", icon: <SaveOutlined /> },
-  { key: "settings", description: "设置", icon: <SettingOutlined /> },
+  { key: "preview", description: "预览", disabled: true, icon: <DesktopOutlined /> },
+  { key: "save", description: "保存到本地", disabled: true, icon: <SaveOutlined /> },
+  { key: "settings", description: "设置", disabled: true, icon: <SettingOutlined /> },
 ];
 
 export default function Header() {
@@ -49,24 +49,33 @@ export default function Header() {
   }
 
   function handleOperate(item: OperateItem) {
-    message.success("click " + item.key);
-
     switch (item.key) {
-      case "undo":
+      case "undo": // 撤销
         message.warn("暂不支持撤销");
         break;
-      case "cancelRevoke":
+      case "cancelRevoke": // 反撤销
         message.warn("暂不支持取消撤销");
         break;
-      case "export":
+      case "export": // 导出
         const text: string = JSON.stringify(engine.getJSON());
         saveToFile(text, "大屏看板.json");
         break;
-      case "import":
+      case "import": // 导入
+        getLocalFileText().then((text) => {
+          if (!text) {
+            return message.warn("文件内容不能为空");
+          }
+          try {
+            const json = JSON.parse(text);
+            engine.loadJSON(json);
+          } catch {
+            message.error("请上传json格式文件");
+          }
+        });
         break;
-      case "preview":
+      case "preview": // 预览
         break;
-      case "save":
+      case "save": // 保存
         console.log("zz 保存 -->", engine.getJSON());
         break;
       case "settings":

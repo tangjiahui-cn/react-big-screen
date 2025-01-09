@@ -9,7 +9,7 @@ import styles from "./index.module.less";
 import classNames from "classnames";
 import MoveItem, { MoveItemRefType } from "./components/MoveItem";
 import { useRef } from "react";
-import { useStateWithRef } from "@/hooks";
+import { useListenStateWithRef } from "@/hooks";
 
 interface RenderComponentProps {
   componentNode: ComponentNodeType;
@@ -20,10 +20,10 @@ export default function RenderComponentNode(props: RenderComponentProps) {
   const { component } = props;
   const Component = component.component;
   const [innerComponentNode, setInnerComponentNode, innerComponentNodeRef] =
-    useStateWithRef<ComponentNodeType>(props?.componentNode);
+    useListenStateWithRef<ComponentNodeType>(props.componentNode);
   const moveItemRef = useRef<MoveItemRefType>(null);
 
-  // 注册运行时行为实例
+  // 注册行为实例
   const instance = useRegisterInstance({
     id: innerComponentNode.id,
     handleHover() {},
@@ -45,14 +45,15 @@ export default function RenderComponentNode(props: RenderComponentProps) {
       engine.instance.removeSelectedInstance(innerComponentNode.id);
     },
     // 触发更新局部componentNode
-    setScopeComponentNode(componentNode: Partial<ComponentNodeType>, cover?: boolean) {
-      setInnerComponentNode(() => {
-        if (cover) return componentNode as any;
-        return {
-          ...innerComponentNodeRef.current,
-          ...componentNode,
-        };
-      });
+    setScopeComponentNode(extComponentNode: Partial<ComponentNodeType>) {
+      const scopeComponentNode: ComponentNodeType = {
+        ...(innerComponentNodeRef.current as ComponentNodeType),
+        ...extComponentNode,
+      };
+      // 更新内部componentNode
+      setInnerComponentNode(scopeComponentNode);
+      // 更新json的componentNode
+      engine.componentNode.updateComponentNode(innerComponentNode.id, scopeComponentNode);
     },
   });
 

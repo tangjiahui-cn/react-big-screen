@@ -50,8 +50,8 @@ class Engine {
   // 获取json对象
   public getJSON(): JsonType {
     return {
-      used: {},
-      componentNodes: [],
+      used: this.componentNode.getComponentUsed(),
+      componentNodes: this.componentNode.getAllComponentNodes(),
       config: this.config.getConfig(),
     };
   }

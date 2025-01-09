@@ -11,6 +11,7 @@ import {
   type ComponentNodeType,
   ComponentType,
   BaseComponent,
+  ComponentUsed,
 } from "..";
 import { omit } from "lodash-es";
 import { createUUID } from "../utils";
@@ -36,9 +37,34 @@ export default class ComponentNode {
     });
   }
 
+  // 获取已使用组件列表统计
+  public getComponentUsed(): ComponentUsed {
+    return this.getAllComponentNodes().reduce((used, currentValue) => {
+      const targetUsed = (used[currentValue.cId] ||= { count: 0 });
+      targetUsed.count++;
+      return used;
+    }, {} as ComponentUsed);
+  }
+
   // 获取全部componentNodes
   public getAllComponentNodes(): ComponentNodeType[] {
     return getGlobalState().componentNodes;
+  }
+
+  // 获取一个componentNode
+  public getComponentNode(id: string): ComponentNodeType | undefined {
+    return this.getAllComponentNodes().find((componentNode) => {
+      return componentNode.id === id;
+    });
+  }
+
+  // 更新componentNode（不会触发更新）
+  public updateComponentNode(id?: string, extComponentNode?: Partial<ComponentNodeType>) {
+    if (!id || !extComponentNode) return;
+    const componentNode = this.getComponentNode(id);
+    if (componentNode) {
+      Object.assign(componentNode, extComponentNode);
+    }
   }
 
   // 删除一个componentNode
