@@ -87,7 +87,7 @@ export default class ComponentNode {
   }
 
   // 删除多个componentNode
-  public delComponentNodes(ids: string) {
+  public delComponentNodes(ids: string[]) {
     setGlobalState((config) => {
       return {
         componentNodes: config.componentNodes.filter((item) => {

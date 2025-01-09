@@ -23,6 +23,7 @@ specifiers:
   eslint-plugin-react-hooks: ^5.1.0-rc.0
   eslint-plugin-react-refresh: ^0.4.9
   globals: ^15.9.0
+  hotkeys-js: ^3.13.9
   husky: ^8
   inquirer: '8'
   less: ^4.2.0
@@ -43,6 +44,7 @@ dependencies:
   ahooks: 3.8.4_react@18.3.1
   antd: 4.24.1_nnrd3gsncyragczmpvfhocinkq
   classnames: 2.5.1
+  hotkeys-js: 3.13.9
   lodash-es: 4.17.21
   react: 18.3.1
   react-dom: 18.3.1_react@18.3.1
@@ -3188,6 +3190,10 @@ packages:
     dependencies:
       lru-cache: 10.4.3
     dev: true
+
+  /hotkeys-js/3.13.9:
+    resolution: {integrity: sha512-3TRCj9u9KUH6cKo25w4KIdBfdBfNRjfUwrljCLDC2XhmPDG0SjAZFcFZekpUZFmXzfYoGhFDcdx2gX/vUVtztQ==}
+    dev: false
 
   /human-signals/4.3.1:
     resolution: {integrity: sha512-nZXjEF2nbo7lIw3mgYjItAfgQXog3OjJogSbKa2CQIIvSGWcKgeJnQlNXip6NglNzYH45nSRiEVimMvYL8DDqQ==}

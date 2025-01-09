@@ -6,14 +6,16 @@
  */
 import styles from "./index.module.less";
 import engine, { ComponentNodeType, ComponentType, useConfig } from "@/engine";
-import React, { useMemo } from "react";
+import React, { useMemo, useRef } from "react";
 import { useComponentNodes } from "@/engine";
 import RenderComponentNode from "./components/RenderComponentNode";
 import EditorMask from "./components/EditorMask";
+import { useClickDomOutSideOnce } from "@/hooks";
 
 export default React.memo(() => {
   const config = useConfig();
   const componentNodes: ComponentNodeType[] = useComponentNodes();
+  const editorDomRef = useRef<HTMLDivElement>(null);
 
   // 渲染实例列表
   const renderComponentNodes = useMemo(() => {
@@ -32,8 +34,20 @@ export default React.memo(() => {
     });
   }, [componentNodes]);
 
+  // 点击鼠标外部时（执行一次，进出dom会刷新执行次数）
+  useClickDomOutSideOnce(editorDomRef, () => {
+    // 取消选中当前选中实例
+    engine.instance.unSelectAllSelectedInstances();
+  });
+
   return (
-    <div className={styles.editor}>
+    <div
+      ref={editorDomRef}
+      className={styles.editor}
+      onMouseDown={() => {
+        engine.instance.unSelectAllSelectedInstances();
+      }}
+    >
       <div className={styles.editor_render} style={{ width: config.width, height: config.height }}>
         {/* 渲染实例 */}
         {renderComponentNodes}

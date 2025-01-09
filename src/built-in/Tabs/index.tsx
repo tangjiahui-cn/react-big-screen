@@ -18,7 +18,7 @@ type InputProps = ComponentProps<{
 export default function (props: InputProps) {
   const { options, width, height } = props;
   return (
-    <div style={{ width, height }}>
+    <div style={{ width, height, background: "white" }}>
       <Tabs size='small' items={options?.items} />
     </div>
   );

@@ -12,8 +12,12 @@ import Library from "./components/Library";
 import engine from "@/engine";
 import { builtInComponents } from "@/built-in";
 import { useEffectOnce } from "@/hooks";
+import { useShortCutKeys } from "@/shortCutKeys";
 
 export default function Page() {
+  // 注册快捷键
+  useShortCutKeys();
+
   useEffectOnce(() => {
     // 注册静态组件
     engine.component.registerComponents(builtInComponents);

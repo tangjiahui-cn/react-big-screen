@@ -24,16 +24,54 @@ export default class Instance {
     delete this.data[id];
   }
 
+  // 查询id是否被选中
+  public isSelected(id: string): boolean {
+    return !!this.selectedInstances.find((instance) => instance.id === id);
+  }
+
   // 取消选中所有选中实例
   public unSelectAllSelectedInstances() {
     this.selectedInstances.forEach((instance) => {
       instance.handleUnSelected();
     });
+    this.selectedInstances = [];
+  }
+
+  // 获取所有选中实例
+  public getAllSelectedInstances(): InstanceType[] {
+    return this.selectedInstances;
+  }
+
+  // 获取所有选中实例的id
+  public getAllSelectedInstanceIds(): string[] {
+    return this.getAllSelectedInstances().map((x) => x.id);
   }
 
   // 新增一个选中实例
   public addSelectedInstance(instance: InstanceType) {
     this.selectedInstances.push(instance);
+  }
+
+  // 获取全部实例
+  public getAllInstance() {
+    return Object.values(this.data);
+  }
+
+  // 选中全部实例
+  public selectedAllInstance() {
+    const allInstance = this.getAllInstance();
+    // 如果选中实例数量和总实例数量一样，则表示都选中或空，不必操作。
+    if (allInstance.length === this.selectedInstances.length) {
+      return;
+    }
+
+    // 所有实例选中
+    allInstance.forEach((instance: InstanceType) => {
+      instance.handleSelected(true);
+    });
+
+    // 复制选中实例
+    this.selectedInstances = allInstance;
   }
 
   // 移出一个选中实例
