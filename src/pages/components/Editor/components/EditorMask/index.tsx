@@ -43,6 +43,11 @@ export default function EditorMask(props: Props) {
       engine.componentNode.insertComponentNode(componentNode);
       // 设置遮罩层的zIndex
       dom.style.zIndex = `${engine.componentNode.getMaxLevel()}`;
+
+      setTimeout(() => {
+        // 选中新增的组件
+        engine.instance.getInstance(componentNode.id)?.handleSelected?.();
+      });
     },
   });
 

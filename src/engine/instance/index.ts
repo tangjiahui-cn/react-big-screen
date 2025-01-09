@@ -24,6 +24,11 @@ export default class Instance {
     delete this.data[id];
   }
 
+  // 获取单个实例
+  public getInstance(id: string): InstanceType | null {
+    return this.data[id];
+  }
+
   // 查询id是否被选中
   public isSelected(id: string): boolean {
     return !!this.selectedInstances.find((instance) => instance.id === id);
