@@ -7,8 +7,8 @@
  */
 import React, { ForwardedRef, useEffect, useImperativeHandle, useRef } from "react";
 import styles from "./index.module.less";
-import { moveDom } from "./moveDom";
 import classNames from "classnames";
+import { moveableDom } from "@/utils";
 
 export interface MoveItemRefType {
   // 选中组件
@@ -42,11 +42,18 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
   useEffect(() => {
     const dom = containerDomRef.current;
     if (!dom) return;
-    return moveDom(dom, {
+
+    // 给当前dom增加拖拽支持
+    const unmountMoveableDom = moveableDom(dom, {
       onEnd(deltaX: number, deltaY: number) {
         onMoveEnd?.(deltaX, deltaY);
       },
     });
+
+    // unmount
+    return () => {
+      unmountMoveableDom();
+    };
   }, []);
 
   return (

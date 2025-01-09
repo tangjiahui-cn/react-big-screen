@@ -2,15 +2,15 @@
  * 可移动dom
  *
  * @author tangjiahui
- * @date 2025/1/8
+ * @date 2025/1/9
  */
-interface MoveDomOptions {
+interface moveableDomOptions {
   onEnd?: (deltaX: number, deltaY: number) => void;
 }
 
-type UnmountMoveDom = () => void;
+type UnmountMoveableDom = () => void;
 
-export function moveDom(dom: HTMLDivElement, options: MoveDomOptions): UnmountMoveDom {
+export function moveableDom(dom: HTMLDivElement, options: moveableDomOptions): UnmountMoveableDom {
   let moveInfo = {
     startX: 0,
     startY: 0,
@@ -28,8 +28,8 @@ export function moveDom(dom: HTMLDivElement, options: MoveDomOptions): UnmountMo
   function mousemove(e: MouseEvent) {
     const deltaX = e.clientX - moveInfo.startX;
     const deltaY = e.clientY - moveInfo.startY;
-    // 触发GPU加速，避免repaint。
-    dom.style.setProperty("transform", `translate3d(${deltaX}px,${deltaY}px, 0)`);
+    // 开启硬件GPU加速，变成合成层，不会触发页面 layout 和 paint。
+    dom.style.transform = `translate3d(${deltaX}px,${deltaY}px, 0)`;
   }
 
   function mouseup(e: MouseEvent) {
