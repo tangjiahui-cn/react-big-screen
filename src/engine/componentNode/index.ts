@@ -29,9 +29,19 @@ const INIT_COMPONENT: BaseComponent = {
 export default class ComponentNode {
   private maxLevel: number = 1; // 最大层级
 
+  // 清空组件数据
+  public clear() {
+    this.maxLevel = 1;
+    setGlobalState({
+      componentNodes: [],
+    });
+  }
+
   // 初始化componentNodes
   public init(componentNodes: ComponentNodeType[]) {
-    this.maxLevel = Math.max(...componentNodes.map((componentNode) => componentNode?.level || 1));
+    this.maxLevel = componentNodes.reduce((maxValue, current) => {
+      return Math.max(maxValue, current?.level || 1);
+    }, 1);
     setGlobalState({
       componentNodes,
     });

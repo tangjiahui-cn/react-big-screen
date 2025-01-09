@@ -11,15 +11,15 @@ import Editor from "./components/Editor";
 import Library from "./components/Library";
 import engine from "@/engine";
 import { builtInComponents } from "@/built-in";
-import { mockJSON } from "./mockJSON";
 import { useEffectOnce } from "@/hooks";
 
 export default function Page() {
   useEffectOnce(() => {
     // 注册静态组件
     engine.component.registerComponents(builtInComponents);
-    // 设置json
-    engine.loadJSON(mockJSON);
+    // 读取本地json
+    const json = JSON.parse(localStorage.getItem("json") || "{}");
+    engine.loadJSON(json);
   });
 
   return (

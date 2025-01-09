@@ -12,6 +12,7 @@ import {
   DesktopOutlined,
   SaveOutlined,
   SettingOutlined,
+  ClearOutlined,
 } from "@ant-design/icons";
 import styles from "./index.module.less";
 import TooltipButton from "@/components/TooltipButton";
@@ -39,7 +40,8 @@ const operates: OperateItem[] = [
   { key: "export", description: "导出", icon: <UploadOutlined /> },
   { key: "import", description: "导入", icon: <VerticalAlignBottomOutlined /> },
   { key: "preview", description: "预览", disabled: true, icon: <DesktopOutlined /> },
-  { key: "save", description: "保存到本地", disabled: true, icon: <SaveOutlined /> },
+  { key: "save", description: "保存到本地", icon: <SaveOutlined /> },
+  { key: "clear", description: "清空", icon: <ClearOutlined /> },
   { key: "settings", description: "设置", disabled: true, icon: <SettingOutlined /> },
 ];
 
@@ -76,7 +78,11 @@ export default function Header() {
       case "preview": // 预览
         break;
       case "save": // 保存
-        console.log("zz 保存 -->", engine.getJSON());
+        localStorage.setItem("json", JSON.stringify(engine.getJSON()));
+        message.success("保存成功");
+        break;
+      case "clear":
+        engine.componentNode.clear();
         break;
       case "settings":
         break;
