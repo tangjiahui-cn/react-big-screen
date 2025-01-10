@@ -5,23 +5,27 @@
  * @date 2024/12/25
  * @description 用来控制运行时的每个实例的各种行为，例如：鼠标经过、鼠标选中效果等。
  */
-
-import type { InstanceType } from "..";
+import { InstanceType } from "..";
 
 export default class Instance {
+  // instance总数量
+  private size: number = 0;
   // 存储 id => instance 的映射
   private data: Record<string, InstanceType> = {};
   // 存储选中的实例列表
   private selectedInstances: InstanceType[] = [];
 
+  /************************ 实例数据 ************************/
   // 注册一个实例
   public registerInstance(instance: InstanceType) {
     this.data[instance.id] = instance;
+    this.size++;
   }
 
   // 取消注册一个实例
   public unregisterInstance(id: string) {
     delete this.data[id];
+    this.size--;
   }
 
   // 获取单个实例
@@ -29,6 +33,12 @@ export default class Instance {
     return this.data[id];
   }
 
+  // 获取全部实例
+  public getAllInstance() {
+    return Object.values(this.data);
+  }
+
+  /************************ 实例选中 ************************/
   // 查询id是否被选中
   public isSelected(id: string): boolean {
     return !!this.selectedInstances.find((instance) => instance.id === id);
@@ -55,11 +65,6 @@ export default class Instance {
   // 新增一个选中实例
   public addSelectedInstance(instance: InstanceType) {
     this.selectedInstances.push(instance);
-  }
-
-  // 获取全部实例
-  public getAllInstance() {
-    return Object.values(this.data);
   }
 
   // 选中全部实例

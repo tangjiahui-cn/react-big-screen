@@ -12,11 +12,11 @@ import Library from "./components/Library";
 import engine from "@/engine";
 import { builtInComponents } from "@/built-in";
 import { useEffectOnce } from "@/hooks";
-import { useShortCutKeys } from "@/shortCutKeys";
+import { useGlobalShortCutKeys } from "@/shortCutKeys";
 
 export default function Page() {
-  // 注册快捷键
-  useShortCutKeys();
+  // 注册全局快捷键
+  useGlobalShortCutKeys();
 
   useEffectOnce(() => {
     // 注册静态组件

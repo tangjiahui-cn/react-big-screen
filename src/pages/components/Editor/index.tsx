@@ -44,6 +44,7 @@ export default React.memo(() => {
     <div
       ref={editorDomRef}
       className={styles.editor}
+      onContextMenu={(e) => e.preventDefault()}
       onMouseDown={() => {
         engine.instance.unSelectAllSelectedInstances();
       }}

@@ -1,3 +1,5 @@
+import { isClickMouseLeft } from "@/utils/mouse";
+
 /**
  * 可移动dom
  *
@@ -18,6 +20,10 @@ export function moveableDom(dom: HTMLDivElement, options: moveableDomOptions): U
   };
 
   function mousedown(e: MouseEvent) {
+    // 只能点击鼠标左键开始移动
+    if (!isClickMouseLeft(e)) {
+      return;
+    }
     moveInfo.isMoving = true;
     moveInfo.startX = e.clientX;
     moveInfo.startY = e.clientY;

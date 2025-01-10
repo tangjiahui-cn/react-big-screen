@@ -1,3 +1,10 @@
+/**
+ * 全局store
+ *
+ * @author tangjiahui
+ * @date 2025/1/10
+ * @description 存储的数据会导致引用位置全局更新，故避免存储需要经常变动的数据。
+ */
 import { create } from "zustand";
 import type { GlobalConfig, ComponentType, ComponentNodeType } from "..";
 

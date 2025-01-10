@@ -11,6 +11,7 @@ import MoveItem, { MoveItemRefType } from "./components/MoveItem";
 import { useRef } from "react";
 import { useListenStateWithRef } from "@/hooks";
 import { isKeyPressed } from "@/shortCutKeys";
+import { isClickMouseLeft } from "@/utils";
 
 interface RenderComponentProps {
   componentNode: ComponentNodeType;
@@ -36,7 +37,7 @@ export default function RenderComponentNode(props: RenderComponentProps) {
         return;
       }
       // 是否按住多选键
-      const isHoldMultiple = isKeyPressed("command");
+      const isHoldMultiple = isKeyPressed("ctrl");
       // 清除其他选中实例
       if (!keepOther && !isHoldMultiple) {
         // 清空所有选中的实例
@@ -87,7 +88,9 @@ export default function RenderComponentNode(props: RenderComponentProps) {
         instance.handleUnHover();
       }}
       onMouseDown={(e) => {
-        instance.handleSelected();
+        if (isClickMouseLeft(e.nativeEvent)) {
+          instance.handleSelected();
+        }
         e.stopPropagation();
       }}
       onMoveEnd={(deltaX, deltaY) => {
@@ -98,6 +101,7 @@ export default function RenderComponentNode(props: RenderComponentProps) {
           });
         }
       }}
+      onContextMenu={(e) => e.preventDefault()}
     >
       {/* 渲染组件 */}
       <Component
