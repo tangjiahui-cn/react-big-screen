@@ -43,7 +43,7 @@ export default class ComponentNode {
   }
 
   // 初始化componentNodes
-  public init(componentNodes: ComponentNodeType[]) {
+  public init(componentNodes: ComponentNodeType[] = []) {
     this.maxLevel = componentNodes.reduce((maxValue, current) => {
       return Math.max(maxValue, current?.level || 1);
     }, 1);

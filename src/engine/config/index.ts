@@ -17,8 +17,13 @@ export default class Config {
 
   // 设置配置
   setConfig(config: GlobalConfig | ((value: GlobalConfig) => GlobalConfig)) {
-    setGlobalState({
-      config: typeof config === "function" ? config(this.getConfig()) : config,
+    setGlobalState((state) => {
+      return {
+        config: {
+          ...state.config,
+          ...(typeof config === "function" ? config(this.getConfig()) : config),
+        },
+      };
     });
   }
 }
