@@ -47,12 +47,14 @@ export default class Instance {
   // 取消选中所有选中实例
   public unSelectAllSelectedInstances() {
     // 如果无选中实例，则取消
-    if (this.selectedInstances.length) {
+    if (!this.selectedInstances.length) {
       return;
     }
+    // 所有选中实例执行 handleUnSelected
     this.selectedInstances.forEach((instance) => {
       instance.handleUnSelected();
     });
+    // 清空选中列表
     this.selectedInstances = [];
   }
 
