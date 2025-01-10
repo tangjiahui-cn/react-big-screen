@@ -26,6 +26,10 @@ pnpm dev
 - 多组件联动。
 - 批量处理。
 
+## 设计理念
+
+`数据`与`逻辑`分离。
+
 ## 核心概念
 
 读取 `json格式对象`，将`components`与`componentNodes`合并渲染到页面，渲染过程中注册`instance`，编辑器通过修改 `componentNodes` 生效变更。
