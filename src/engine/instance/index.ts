@@ -46,6 +46,10 @@ export default class Instance {
 
   // 取消选中所有选中实例
   public unSelectAllSelectedInstances() {
+    // 如果无选中实例，则取消
+    if (this.selectedInstances.length) {
+      return;
+    }
     this.selectedInstances.forEach((instance) => {
       instance.handleUnSelected();
     });
@@ -57,11 +61,6 @@ export default class Instance {
     return this.selectedInstances;
   }
 
-  // 获取所有选中实例的id
-  public getAllSelectedInstanceIds(): string[] {
-    return this.getAllSelectedInstances().map((x) => x.id);
-  }
-
   // 新增一个选中实例
   public addSelectedInstance(instance: InstanceType) {
     this.selectedInstances.push(instance);
@@ -69,13 +68,13 @@ export default class Instance {
 
   // 选中全部实例
   public selectedAllInstance() {
-    const allInstance = this.getAllInstance();
     // 如果选中实例数量和总实例数量一样，则表示都选中或空，不必操作。
-    if (allInstance.length === this.selectedInstances.length) {
+    if (this.size === this.selectedInstances.length) {
       return;
     }
 
     // 所有实例选中
+    const allInstance = this.getAllInstance();
     allInstance.forEach((instance: InstanceType) => {
       instance.handleSelected(true);
     });

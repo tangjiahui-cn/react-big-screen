@@ -15,7 +15,7 @@ import { useShortCutKeys } from "./hooks";
 
 // 删除选中数据
 function deleteSelectedComponentNodes() {
-  const selectedInstanceIds: string[] = engine.instance.getAllSelectedInstanceIds();
+  const selectedInstanceIds: string[] = engine.instance.getAllSelectedInstances().map((x) => x.id);
   engine.componentNode.delComponentNodes(selectedInstanceIds);
 }
 
