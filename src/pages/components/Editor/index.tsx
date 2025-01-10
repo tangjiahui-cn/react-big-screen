@@ -37,7 +37,7 @@ export default React.memo(() => {
   // 点击鼠标外部时（执行一次，进出dom会刷新执行次数）
   useClickDomOutSideOnce(editorDomRef, () => {
     // 取消选中当前选中实例
-    engine.instance.unSelectAllSelectedInstances();
+    engine.instance.unselectAll();
   });
 
   return (
@@ -46,7 +46,7 @@ export default React.memo(() => {
       className={styles.editor}
       onContextMenu={(e) => e.preventDefault()}
       onMouseDown={() => {
-        engine.instance.unSelectAllSelectedInstances();
+        engine.instance.unselectAll();
       }}
     >
       <div className={styles.editor_render} style={{ width: config.width, height: config.height }}>

@@ -11,9 +11,9 @@ export function useRegisterInstance(instance: InstanceType): InstanceType {
   const initInstance: InstanceType = useMemo(() => instance, []);
 
   useEffect(() => {
-    engine.instance.registerInstance(initInstance);
+    engine.instance.add(initInstance);
     return () => {
-      engine.instance.unregisterInstance(initInstance.id);
+      engine.instance.delete(initInstance.id);
     };
   }, []);
 

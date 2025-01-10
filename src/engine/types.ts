@@ -60,16 +60,8 @@ export interface InstanceType {
   id: string; // 实例id
   handleHover: () => void; // 经过实例
   handleUnHover: () => void; // 取消经过实例
-  /**
-   * 选中实例
-   * @param keepOther 是否保存其他实例的选中状态不清除 （默认false即清除其他实例状态）
-   */
-  handleSelected: (keepOther?: boolean) => void;
-  /**
-   * 取消选中实例
-   * @param remove 是否不把自身从instance.selectedInstances中移除。（默认false即移除自身，此变量一般用作性能优化）
-   */
-  handleUnSelected: (keepSelf?: boolean) => void;
+  handleSelected: () => void; // 选中实例
+  handleUnSelected: () => void; // 取消选中实例
   /**
    * 触发更新局部componentNode
    * @param componentNode 用来覆盖的值

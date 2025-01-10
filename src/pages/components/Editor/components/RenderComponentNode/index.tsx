@@ -26,36 +26,18 @@ export default function RenderComponentNode(props: RenderComponentProps) {
   const moveItemRef = useRef<MoveItemRefType>(null);
   const id = innerComponentNode.id;
 
-  // 注册行为实例
+  // 注册行为实例（只能改变内部值，不能修改engine的值）
   const instance = useRegisterInstance({
     id,
     handleHover() {},
     handleUnHover() {},
-    // 选中实例时
-    handleSelected(keepOther?: boolean) {
-      if (engine.instance.isSelected(id)) {
-        return;
-      }
-      // 是否按住多选键
-      const isHoldMultiple = isKeyPressed("ctrl");
-      // 清除其他选中实例
-      if (!keepOther && !isHoldMultiple) {
-        // 清空所有选中的实例
-        engine.instance.unSelectAllSelectedInstances();
-      }
-      // 增加选中样式
+    handleSelected() {
+      // 内部样式选中
       moveItemRef?.current?.handleSelected?.();
-      // 添加当前instance到选中实例中
-      engine.instance.addSelectedInstance(instance);
     },
-    // 取消选中实例时
-    handleUnSelected(keepSelf?: boolean) {
-      // 移出选中样式
+    handleUnSelected() {
+      // 移除内部样式选中
       moveItemRef?.current?.handleUnSelected?.();
-      if (!keepSelf) {
-        // 从选中实例中移除当前instance
-        engine.instance.removeSelectedInstance(id);
-      }
     },
     // 触发更新局部componentNode
     setScopeComponentNode(extComponentNode: Partial<ComponentNodeType>) {
@@ -69,6 +51,16 @@ export default function RenderComponentNode(props: RenderComponentProps) {
       engine.componentNode.updateComponentNode(innerComponentNode.id, scopeComponentNode);
     },
   });
+
+  // 选中当前组件
+  function handleSelect() {
+    if (engine.instance.isSelected(id)) {
+      return;
+    }
+    // 是否按住多选键
+    const isHoldMultiple = isKeyPressed("ctrl");
+    engine.instance.select(instance, !isHoldMultiple);
+  }
 
   return (
     <MoveItem
@@ -89,7 +81,8 @@ export default function RenderComponentNode(props: RenderComponentProps) {
       }}
       onMouseDown={(e) => {
         if (isClickMouseLeft(e.nativeEvent)) {
-          instance.handleSelected();
+          // 选中当前组件
+          handleSelect();
         }
         e.stopPropagation();
       }}

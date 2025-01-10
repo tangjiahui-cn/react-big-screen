@@ -15,13 +15,13 @@ import { useShortCutKeys } from "./hooks";
 
 // 删除选中数据
 function deleteSelectedComponentNodes() {
-  const selectedInstanceIds: string[] = engine.instance.getAllSelectedInstances().map((x) => x.id);
+  const selectedInstanceIds: string[] = engine.instance.getAll().map((instance) => instance.id);
   engine.componentNode.delComponentNodes(selectedInstanceIds);
 }
 
 // 全选页面组件
 function selectAllComponentNodes() {
-  engine.instance.selectedAllInstance();
+  engine.instance.selectAll();
 }
 
 /**
