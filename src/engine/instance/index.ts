@@ -28,6 +28,11 @@ export default class Instance extends BaseInstance {
     return [id]; // InstanceType
   }
 
+  // 获取全部选中实例
+  public getAllSelected(): InstanceType[] {
+    return this.selectedInstances.getAll();
+  }
+
   /**
    * 选中实例
    * @param id 待选中实例的key/keys/instance/instances

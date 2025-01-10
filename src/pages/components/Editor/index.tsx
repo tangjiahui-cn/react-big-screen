@@ -21,7 +21,7 @@ export default React.memo(() => {
   const renderComponentNodes = useMemo(() => {
     return componentNodes?.map((componentNode: ComponentNodeType) => {
       // 实例对应的组件模板
-      const component: ComponentType | undefined = engine.component.getComponent(componentNode.cId);
+      const component: ComponentType | undefined = engine.component.get(componentNode.cId);
       if (!component) return undefined;
       // 渲染 componentNode
       return (

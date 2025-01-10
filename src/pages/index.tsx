@@ -20,10 +20,13 @@ export default function Page() {
 
   useEffectOnce(() => {
     // 注册静态组件
-    engine.component.registerComponents(builtInComponents);
+    engine.component.register(builtInComponents);
     // 读取本地json
-    const json = JSON.parse(localStorage.getItem("json") || "{}");
-    engine.loadJSON(json);
+    engine.loadJSONString(localStorage.getItem("json"));
+
+    return () => {
+      engine.component.unRegisterAll();
+    };
   });
 
   return (

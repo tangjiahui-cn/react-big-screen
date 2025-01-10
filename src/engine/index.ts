@@ -6,6 +6,8 @@
  *
  * 核心:
  *     编辑json + 交互逻辑。
+ * 理念：
+ *     数据与逻辑分离
  *
  * 流程：
  * （1）读取 json 中的 “componentNodes”、或通过 “component模板” 创建 “componentNode数据实例”。
@@ -47,11 +49,21 @@ class Engine {
     this.componentNode.init(json.componentNodes);
   }
 
+  // 加载json字符串对象
+  public loadJSONString(text?: string | null): void {
+    try {
+      const json = JSON.parse(text || "{}");
+      this.loadJSON(json);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   // 获取json对象
   public getJSON(): JsonType {
     return {
       used: this.componentNode.getComponentUsed(),
-      componentNodes: this.componentNode.getAllComponentNodes(),
+      componentNodes: this.componentNode.getAll(),
       config: this.config.getConfig(),
     };
   }

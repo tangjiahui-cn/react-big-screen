@@ -37,6 +37,11 @@ export default class ComponentNode {
     });
   }
 
+  // 获取最大层级
+  public getMaxLevel(): number {
+    return this.maxLevel;
+  }
+
   // 初始化componentNodes
   public init(componentNodes: ComponentNodeType[]) {
     this.maxLevel = componentNodes.reduce((maxValue, current) => {
@@ -47,9 +52,18 @@ export default class ComponentNode {
     });
   }
 
+  // 新增一个 componentNode
+  public add(componentNode: ComponentNodeType) {
+    setGlobalState((state) => {
+      return {
+        componentNodes: [...state.componentNodes, componentNode],
+      };
+    });
+  }
+
   // 获取已使用组件列表统计
   public getComponentUsed(): ComponentUsed {
-    return this.getAllComponentNodes().reduce((used, currentValue) => {
+    return this.getAll().reduce((used, currentValue) => {
       const targetUsed = (used[currentValue.cId] ||= { count: 0 });
       targetUsed.count++;
       return used;
@@ -57,13 +71,13 @@ export default class ComponentNode {
   }
 
   // 获取全部componentNodes
-  public getAllComponentNodes(): ComponentNodeType[] {
+  public getAll(): ComponentNodeType[] {
     return getGlobalState().componentNodes;
   }
 
   // 获取一个componentNode
-  public getComponentNode(id: string): ComponentNodeType | undefined {
-    return this.getAllComponentNodes().find((componentNode) => {
+  public get(id: string): ComponentNodeType | undefined {
+    return this.getAll().find((componentNode) => {
       return componentNode.id === id;
     });
   }
@@ -71,23 +85,15 @@ export default class ComponentNode {
   // 更新componentNode（不会触发更新）
   public updateComponentNode(id?: string, extComponentNode?: Partial<ComponentNodeType>) {
     if (!id || !extComponentNode) return;
-    const componentNode = this.getComponentNode(id);
+    const componentNode = this.get(id);
     if (componentNode) {
       Object.assign(componentNode, extComponentNode);
     }
   }
 
-  // 删除一个componentNode
-  public delComponentNode(id: string) {
-    setGlobalState((config) => {
-      return {
-        componentNodes: config.componentNodes.filter((item) => item.id !== id),
-      };
-    });
-  }
-
-  // 删除多个componentNode
-  public delComponentNodes(ids: string[]) {
+  // 删除 componentNode
+  public delete(id: string | string[]) {
+    const ids: string[] = Array.isArray(id) ? id : [id];
     setGlobalState((config) => {
       return {
         componentNodes: config.componentNodes.filter((item) => {
@@ -120,19 +126,5 @@ export default class ComponentNode {
       componentNode.level = ++this.maxLevel;
     }
     return Object.assign(componentNode);
-  }
-
-  // 插入一个component到末尾
-  public insertComponentNode(componentNode: ComponentNodeType) {
-    setGlobalState((state) => {
-      return {
-        componentNodes: [...state.componentNodes, componentNode],
-      };
-    });
-  }
-
-  // 获取最大层级
-  public getMaxLevel(): number {
-    return this.maxLevel;
   }
 }

@@ -15,8 +15,10 @@ import { useShortCutKeys } from "./hooks";
 
 // 删除选中数据
 function deleteSelectedComponentNodes() {
-  const selectedInstanceIds: string[] = engine.instance.getAll().map((instance) => instance.id);
-  engine.componentNode.delComponentNodes(selectedInstanceIds);
+  const selectedInstanceIds: string[] = engine.instance
+    .getAllSelected()
+    .map((instance) => instance.id);
+  engine.componentNode.delete(selectedInstanceIds);
 }
 
 // 全选页面组件

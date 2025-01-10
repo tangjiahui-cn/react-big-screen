@@ -10,20 +10,25 @@ import { getGlobalState, setGlobalState, ComponentMap } from "../store";
 import { ComponentType } from "../types";
 
 export default class Component {
-  // 注册一个组件（注意：每调用一次更新一次全局变量，注册多个请使用 registerComponents）
-  public registerComponent(component: ComponentType) {
-    setGlobalState((config) => {
-      return {
-        componentMap: {
-          ...config.componentMap,
-          [component.cId]: component,
-        },
-      };
-    });
+  // 获取已注册组件列表
+  public getAll(): ComponentType[] {
+    return Object.values(getGlobalState().componentMap);
   }
 
-  // 注册多个组件
-  public registerComponents(components: ComponentType[]) {
+  // 获取一个组件模板
+  public get(cId?: string): ComponentType | undefined;
+  public get(cId: string[]): (ComponentType | undefined)[];
+  public get(cId?: string | string[]): ComponentType | undefined | (ComponentType | undefined)[] {
+    if (!cId) return undefined;
+    if (Array.isArray(cId)) {
+      return cId.map((value) => this.get(value));
+    }
+    return getGlobalState().componentMap[cId];
+  }
+
+  // 注册组件
+  public register(component: ComponentType | ComponentType[]) {
+    const components: ComponentType[] = Array.isArray(component) ? component : [component];
     const registerComponentsMap = components.reduce((componentMap, current) => {
       return Object.assign(componentMap, {
         [current.cId]: current,
@@ -40,34 +45,24 @@ export default class Component {
   }
 
   // 卸载一个组件
-  public unregisterComponent(cId: string) {
-    setGlobalState((config) => {
-      delete config.componentMap[cId];
-      return {
-        componentMap: config.componentMap,
-      };
-    });
-  }
-
-  // 卸载组件
-  public unregisterComponents(cIds: string[]) {
+  public unRegister(cId: string | string[]) {
+    const cIds: string[] = Array.isArray(cId) ? cId : [cId];
     setGlobalState((config) => {
       cIds.forEach((cId) => {
         delete config.componentMap[cId];
       });
       return {
-        componentMap: config.componentMap,
+        componentMap: {
+          ...config.componentMap,
+        },
       };
     });
   }
 
-  // 获取已注册组件列表
-  public getComponents(): ComponentType[] {
-    return Object.values(getGlobalState().componentMap);
-  }
-
-  // 获取一个组件模板
-  public getComponent(cId: string): ComponentType | undefined {
-    return getGlobalState().componentMap[cId];
+  // 卸载全部组件
+  public unRegisterAll() {
+    setGlobalState({
+      componentMap: {},
+    });
   }
 }

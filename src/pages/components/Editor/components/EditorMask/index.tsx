@@ -40,13 +40,13 @@ export default function EditorMask(props: Props) {
         y: e.layerY,
       });
       // 插入新componentNode到末尾
-      engine.componentNode.insertComponentNode(componentNode);
+      engine.componentNode.add(componentNode);
       // 设置遮罩层的zIndex
       dom.style.zIndex = `${engine.componentNode.getMaxLevel()}`;
 
       setTimeout(() => {
         // 选中新增的组件
-        engine.instance.getInstance(componentNode.id)?.handleSelected?.();
+        engine.instance.select(componentNode.id);
       });
     },
   });
