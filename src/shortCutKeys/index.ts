@@ -40,6 +40,7 @@ export function isKeyPressed(key: "command" | "ctrl"): boolean {
 export function useGlobalShortCutKeys() {
   useShortCutKeys({
     backspace: deleteSelectedComponentNodes,
+    delete: deleteSelectedComponentNodes,
     "Shift + A": selectAllComponentNodes,
   });
 }
