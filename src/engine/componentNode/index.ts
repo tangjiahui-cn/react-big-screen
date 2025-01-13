@@ -16,6 +16,9 @@ import {
 import { omit } from "lodash-es";
 import { createUUID } from "../utils";
 
+type ComponentNodeChangeEventCallback = (options: { payload: ComponentNodeType }) => void;
+type ComponentNodeChangeEventUnmount = () => void;
+
 // 默认值
 const INIT_COMPONENT: BaseComponent = {
   cId: "",
@@ -28,6 +31,29 @@ const INIT_COMPONENT: BaseComponent = {
 
 export default class ComponentNode {
   private maxLevel: number = 1; // 最大层级
+  private eventMap: Record<string, ComponentNodeChangeEventCallback[]> = {}; // 数据节点变更回调事件 （id => callback）
+
+  // 触发onChange事件
+  private notifyChange(componentNode: ComponentNodeType) {
+    this.eventMap[componentNode.id]?.forEach?.((cb: ComponentNodeChangeEventCallback) => {
+      cb?.({
+        payload: componentNode,
+      });
+    });
+  }
+
+  // 注册节点事件变更回调
+  public onChange(
+    id: string,
+    callback: ComponentNodeChangeEventCallback,
+  ): ComponentNodeChangeEventUnmount {
+    (this.eventMap[id] ||= []).push(callback);
+    return () => {
+      this.eventMap[id] = this.eventMap[id].filter((cb: ComponentNodeChangeEventCallback) => {
+        return cb !== callback;
+      });
+    };
+  }
 
   // 清空组件数据
   public clear() {
@@ -82,12 +108,20 @@ export default class ComponentNode {
     });
   }
 
-  // 更新componentNode（不会触发更新）
-  public updateComponentNode(id?: string, extComponentNode?: Partial<ComponentNodeType>) {
+  /**
+   * 更新componentNode（触发局部更新）
+   * @param id 待更新实例id
+   * @param extComponentNode 合并更新项
+   * @param silent 是否不触发onChange事件（默认false，true不触发，false触发）
+   */
+  public update(id?: string, extComponentNode?: Partial<ComponentNodeType>, silent?: boolean) {
     if (!id || !extComponentNode) return;
     const componentNode = this.get(id);
     if (componentNode) {
       Object.assign(componentNode, extComponentNode);
+      if (!silent) {
+        this.notifyChange(componentNode);
+      }
     }
   }
 
@@ -122,6 +156,7 @@ export default class ComponentNode {
     if (!componentNode.id) {
       componentNode.id = createUUID();
     }
+    // 如果未指定层级，则自动取最大层级
     if (!componentNode.level) {
       componentNode.level = ++this.maxLevel;
     }

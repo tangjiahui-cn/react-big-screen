@@ -8,8 +8,7 @@ import engine, { ComponentNodeType, ComponentType, useRegisterInstance } from "@
 import styles from "./index.module.less";
 import classNames from "classnames";
 import MoveItem, { MoveItemRefType } from "./components/MoveItem";
-import { useRef } from "react";
-import { useListenStateWithRef } from "@/hooks";
+import { useEffect, useRef, useState } from "react";
 import { isKeyPressed } from "@/shortCutKeys";
 import { isClickMouseLeft } from "@/utils";
 
@@ -19,46 +18,49 @@ interface RenderComponentProps {
 }
 
 export default function RenderComponentNode(props: RenderComponentProps) {
-  const { component } = props;
-  const Component = component.component;
-  const [innerComponentNode, setInnerComponentNode, innerComponentNodeRef] =
-    useListenStateWithRef<ComponentNodeType>(props.componentNode);
-  const moveItemRef = useRef<MoveItemRefType>(null);
-  const id = innerComponentNode.id;
+  const [componentNode, setComponentNode] = useState(props?.componentNode);
 
-  // 注册行为实例（只能改变内部值，不能修改engine的值）
+  useEffect(() => {
+    // 监听当前节点变更事件
+    return engine.componentNode.onChange(componentNode.id, ({ payload }) => {
+      setComponentNode({ ...payload });
+    });
+  }, []);
+
+  return <ScopeRenderComponentNode componentNode={componentNode} component={props?.component} />;
+}
+
+function ScopeRenderComponentNode(props: RenderComponentProps) {
+  const { component, componentNode } = props;
+  const Component = component.component;
+  const moveItemRef = useRef<MoveItemRefType>(null);
+
+  // 注册行为实例（只能改变内部属性）
   const instance = useRegisterInstance({
-    id,
+    id: componentNode.id,
+    // 经过实例
     handleHover() {},
+    // 离开实例
     handleUnHover() {},
+    // 选中实例
     handleSelected() {
       // 内部样式选中
       moveItemRef?.current?.handleSelected?.();
     },
+    // 取消选中实例
     handleUnSelected() {
       // 移除内部样式选中
       moveItemRef?.current?.handleUnSelected?.();
-    },
-    // 触发更新局部componentNode
-    setScopeComponentNode(extComponentNode: Partial<ComponentNodeType>) {
-      const scopeComponentNode: ComponentNodeType = {
-        ...(innerComponentNodeRef.current as ComponentNodeType),
-        ...extComponentNode,
-      };
-      // 更新内部componentNode
-      setInnerComponentNode(scopeComponentNode);
-      // 更新json的componentNode
-      engine.componentNode.updateComponentNode(innerComponentNode.id, scopeComponentNode);
     },
   });
 
   // 选中当前组件
   function handleSelect() {
-    if (engine.instance.isSelected(id)) {
+    if (engine.instance.isSelected(componentNode.id)) {
       return;
     }
     // 是否按住多选键
-    const isHoldMultiple = isKeyPressed("ctrl");
+    const isHoldMultiple: boolean = isKeyPressed("ctrl");
     engine.instance.select(instance, !isHoldMultiple);
   }
 
@@ -67,11 +69,11 @@ export default function RenderComponentNode(props: RenderComponentProps) {
       ref={moveItemRef}
       className={classNames(styles.renderComponentNode)}
       style={{
-        left: innerComponentNode.x,
-        top: innerComponentNode.y,
-        width: innerComponentNode.width,
-        height: innerComponentNode.height,
-        zIndex: innerComponentNode.level,
+        left: componentNode.x,
+        top: componentNode.y,
+        width: componentNode.width,
+        height: componentNode.height,
+        zIndex: componentNode.level,
       }}
       onMouseEnter={() => {
         instance.handleHover();
@@ -86,11 +88,12 @@ export default function RenderComponentNode(props: RenderComponentProps) {
         }
         e.stopPropagation();
       }}
-      onMoveEnd={(deltaX, deltaY) => {
+      onMoveEnd={(deltaX: number, deltaY: number) => {
         if (deltaX || deltaY) {
-          instance.setScopeComponentNode({
-            x: deltaX + (innerComponentNodeRef.current?.x || 0),
-            y: deltaY + (innerComponentNodeRef.current?.y || 0),
+          // 更新 componentNode
+          engine.componentNode.update(componentNode.id, {
+            x: deltaX + (componentNode?.x || 0),
+            y: deltaY + (componentNode?.y || 0),
           });
         }
       }}
@@ -98,9 +101,9 @@ export default function RenderComponentNode(props: RenderComponentProps) {
     >
       {/* 渲染组件 */}
       <Component
-        options={innerComponentNode.options}
-        width={innerComponentNode.width}
-        height={innerComponentNode.height}
+        options={componentNode.options}
+        width={componentNode.width}
+        height={componentNode.height}
       />
     </MoveItem>
   );
