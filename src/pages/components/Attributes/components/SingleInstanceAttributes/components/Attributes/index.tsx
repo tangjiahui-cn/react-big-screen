@@ -16,7 +16,6 @@ export default function () {
 
   useEffect(() => {
     if (componentNode) {
-      form.resetFields();
       form.setFieldsValue(componentNode);
     }
   }, [componentNode]);
