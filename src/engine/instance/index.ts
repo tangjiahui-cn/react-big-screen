@@ -6,7 +6,10 @@
  * @description 用来控制运行时的每个实例的各种行为，例如：鼠标经过、鼠标选中效果等。
  */
 import { InstanceType } from "..";
-import BaseInstance from "./BaseInstance";
+import BaseInstance, {
+  BaseInstanceDataChangeCallback,
+  BaseInstanceDataChangeUnmount,
+} from "./BaseInstance";
 
 export default class Instance extends BaseInstance {
   // 存储选中的实例列表
@@ -26,6 +29,11 @@ export default class Instance extends BaseInstance {
       return id as InstanceType[];
     }
     return [id]; // InstanceType
+  }
+
+  // 监听选中实例变更事件
+  public onSelectedChange(callback: BaseInstanceDataChangeCallback): BaseInstanceDataChangeUnmount {
+    return this.selectedInstances.onChange(callback);
   }
 
   // 获取全部选中实例
@@ -97,5 +105,12 @@ export default class Instance extends BaseInstance {
   // 查询id是否被选中
   public isSelected(id: string): boolean {
     return !!this.selectedInstances.get(id);
+  }
+
+  // 删除实例
+  public delete(id: string | (string | undefined)[]) {
+    super.delete(id);
+    // 同时删除选中实例
+    this.selectedInstances.delete(id);
   }
 }

@@ -112,14 +112,20 @@ export default class ComponentNode {
    * 更新componentNode（触发局部更新）
    * @param id 待更新实例id
    * @param extComponentNode 合并更新项
-   * @param silent 是否不触发onChange事件（默认false，true不触发，false触发）
+   * @param options 额外配置项
    */
-  public update(id?: string, extComponentNode?: Partial<ComponentNodeType>, silent?: boolean) {
+  public update(
+    id?: string,
+    extComponentNode?: Partial<ComponentNodeType>,
+    options?: {
+      silent?: boolean; // 是否不触发更新，而仅仅是修改值。（默认false，true不触发，false触发）
+    },
+  ) {
     if (!id || !extComponentNode) return;
     const componentNode = this.get(id);
     if (componentNode) {
       Object.assign(componentNode, extComponentNode);
-      if (!silent) {
+      if (!options?.silent) {
         this.notifyChange(componentNode);
       }
     }

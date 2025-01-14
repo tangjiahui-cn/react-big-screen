@@ -10,7 +10,6 @@ import React, { useMemo, useRef } from "react";
 import { useComponentNodes } from "@/engine";
 import RenderComponentNode from "./components/RenderComponentNode";
 import EditorMask from "./components/EditorMask";
-import { useClickDomOutSideOnce } from "@/hooks";
 
 export default React.memo(() => {
   const config = useConfig();
@@ -33,12 +32,6 @@ export default React.memo(() => {
       );
     });
   }, [componentNodes]);
-
-  // 点击鼠标外部时（执行一次，进出dom会刷新执行次数）
-  useClickDomOutSideOnce(editorDomRef, () => {
-    // 取消选中当前选中实例
-    engine.instance.unselectAll();
-  });
 
   return (
     <div
