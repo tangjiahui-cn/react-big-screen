@@ -6,6 +6,12 @@
  */
 import { Space } from "antd";
 import React from "react";
+import {
+  ArrowDownOutlined,
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
+  ArrowUpOutlined,
+} from "@ant-design/icons";
 
 function Key({ children }: { children: React.ReactNode }) {
   return (
@@ -31,17 +37,35 @@ export default function ShortCutKeysDescription() {
   return (
     <Space direction={"vertical"} style={{ padding: 6 }}>
       <b>快捷键</b>
+
       <Space>
         <span>全选：</span>
         <Key>Shift</Key>
         <span>+</span>
         <Key>A</Key>
       </Space>
+
       <Space>
         <span>删除：</span>
         <Key>BackSpace</Key>
         <span> 或 </span>
         <Key>Delete</Key>
+      </Space>
+
+      <Space>
+        <span>位移：</span>
+        <Key>
+          <ArrowUpOutlined />
+        </Key>
+        <Key>
+          <ArrowRightOutlined />
+        </Key>
+        <Key>
+          <ArrowDownOutlined />
+        </Key>
+        <Key>
+          <ArrowLeftOutlined />
+        </Key>
       </Space>
     </Space>
   );

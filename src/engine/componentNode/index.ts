@@ -131,6 +131,17 @@ export default class ComponentNode {
     }
   }
 
+  // 批量更新componentNode
+  public updateSome(extComponentNodes: ComponentNodeType[]) {
+    extComponentNodes.forEach((extComponentNode) => {
+      const componentNode = this.get(extComponentNode.id);
+      if (componentNode) {
+        Object.assign(componentNode, extComponentNode);
+        this.notifyChange(componentNode);
+      }
+    });
+  }
+
   // 删除 componentNode
   public delete(id: string | string[]) {
     const ids: string[] = Array.isArray(id) ? id : [id];
