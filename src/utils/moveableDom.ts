@@ -39,8 +39,8 @@ export function moveableDom(dom: HTMLDivElement, options: moveableDomOptions): U
   }
 
   function mouseup(e: MouseEvent) {
-    const deltaX = e.clientX - moveInfo.startX;
-    const deltaY = e.clientY - moveInfo.startY;
+    const deltaX = Math.round(e.clientX - moveInfo.startX);
+    const deltaY = Math.round(e.clientY - moveInfo.startY);
     dom.style.removeProperty("transform");
     options?.onEnd?.(deltaX, deltaY);
     clear();

@@ -36,8 +36,8 @@ export default function EditorMask(props: Props) {
       }
       // 创建一个componentNode
       const componentNode = engine.componentNode.createFromComponent(data.component, {
-        x: e.layerX,
-        y: e.layerY,
+        x: Math.round(e.layerX || 0),
+        y: Math.round(e.layerY || 0),
       });
       // 插入新componentNode到末尾
       engine.componentNode.add(componentNode);
