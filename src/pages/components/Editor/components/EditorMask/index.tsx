@@ -46,7 +46,7 @@ export default function EditorMask(props: Props) {
 
       setTimeout(() => {
         // 选中新增的组件
-        engine.instance.select(componentNode.id);
+        engine.instance.select(componentNode.id, true);
       });
     },
   });
