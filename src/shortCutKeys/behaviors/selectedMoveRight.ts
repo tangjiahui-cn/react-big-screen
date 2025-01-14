@@ -12,7 +12,6 @@ export function selectedMoveRight(e: KeyboardEvent) {
     const componentNode = engine.componentNode.get(instance.id);
     if (componentNode) {
       engine.componentNode.update(instance.id, {
-        ...componentNode,
         x: (componentNode?.x || 0) + 1,
       });
     }

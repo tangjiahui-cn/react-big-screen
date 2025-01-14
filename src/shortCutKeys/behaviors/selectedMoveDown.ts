@@ -12,7 +12,6 @@ export function selectedMoveDown(e: KeyboardEvent) {
     const componentNode = engine.componentNode.get(instance.id);
     if (componentNode) {
       engine.componentNode.update(instance.id, {
-        ...componentNode,
         y: (componentNode?.y || 0) + 1,
       });
     }
