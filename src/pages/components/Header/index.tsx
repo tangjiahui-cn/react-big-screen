@@ -13,6 +13,7 @@ import {
   SaveOutlined,
   SettingOutlined,
   ClearOutlined,
+  QuestionCircleOutlined,
 } from "@ant-design/icons";
 import styles from "./index.module.less";
 import TooltipButton from "@/components/TooltipButton";
@@ -21,15 +22,21 @@ import IconFont from "@/components/IconFont";
 import SizeBar from "./components/SizeBar";
 import engine from "@/engine";
 import { getLocalFileText, saveToFile } from "@/utils";
+import ShortCutKeysDescription from "./components/ShortCutKeysDescription";
 
 interface OperateItem {
   key: string;
   disabled?: boolean;
-  description?: string;
+  description?: React.ReactNode;
   icon?: React.ReactNode;
 }
 
 const operates: OperateItem[] = [
+  {
+    key: "shortCutKeys",
+    description: <ShortCutKeysDescription />,
+    icon: <QuestionCircleOutlined />,
+  },
   { key: "undo", description: "撤销", disabled: true, icon: <IconFont type={"icon-undo"} /> },
   {
     key: "cancelRevoke",

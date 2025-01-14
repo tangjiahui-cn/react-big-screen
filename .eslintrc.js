@@ -25,6 +25,7 @@ module.exports = {
     // react
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
+    "react/no-children-prop": "off",
 
     // base
     quotes: ["error", "double"],
