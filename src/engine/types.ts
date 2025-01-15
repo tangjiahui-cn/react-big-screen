@@ -62,4 +62,5 @@ export interface InstanceType {
   handleUnHover: () => void; // 取消经过实例
   handleSelected: () => void; // 选中实例
   handleUnSelected: () => void; // 取消选中实例
+  getContainerDom: () => HTMLDivElement; // 获取容器dom
 }

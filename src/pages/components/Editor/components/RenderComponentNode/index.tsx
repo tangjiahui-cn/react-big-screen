@@ -52,6 +52,10 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
       // 移除内部样式选中
       moveItemRef?.current?.handleUnSelected?.();
     },
+    // 获取容器dom
+    getContainerDom(): HTMLDivElement {
+      return moveItemRef.current.containerDom;
+    },
   });
 
   // 选中当前组件
@@ -60,7 +64,7 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
       return;
     }
     // 是否按住多选键
-    const isHoldMultiple: boolean = isKeyPressed("ctrl");
+    const isHoldMultiple: boolean = isKeyPressed("shift");
     engine.instance.select(instance, !isHoldMultiple);
   }
 
@@ -87,15 +91,6 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
           handleSelect();
         }
         e.stopPropagation();
-      }}
-      onMoveEnd={(deltaX: number, deltaY: number) => {
-        if (deltaX || deltaY) {
-          // 更新 componentNode
-          engine.componentNode.update(componentNode.id, {
-            x: deltaX + (componentNode?.x || 0),
-            y: deltaY + (componentNode?.y || 0),
-          });
-        }
       }}
       onContextMenu={(e) => e.preventDefault()}
     >

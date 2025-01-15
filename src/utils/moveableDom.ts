@@ -7,7 +7,9 @@ import { isClickMouseLeft } from "@/utils/mouse";
  * @date 2025/1/9
  */
 interface moveableDomOptions {
-  onEnd?: (deltaX: number, deltaY: number) => void;
+  onStart?: () => void; // 开始移动
+  onMove?: (deltaX: number, deltaY: number) => void; // 移动中
+  onEnd?: (deltaX: number, deltaY: number) => void; // 移动结束
 }
 
 type UnmountMoveableDom = () => void;
@@ -27,6 +29,7 @@ export function moveableDom(dom: HTMLDivElement, options: moveableDomOptions): U
     moveInfo.isMoving = true;
     moveInfo.startX = e.clientX;
     moveInfo.startY = e.clientY;
+    options?.onStart?.();
     window.addEventListener("mouseup", mouseup);
     window.addEventListener("mousemove", mousemove);
   }
@@ -34,14 +37,12 @@ export function moveableDom(dom: HTMLDivElement, options: moveableDomOptions): U
   function mousemove(e: MouseEvent) {
     const deltaX = e.clientX - moveInfo.startX;
     const deltaY = e.clientY - moveInfo.startY;
-    // 开启硬件GPU加速，变成合成层，不会触发页面 layout 和 paint。
-    dom.style.transform = `translate3d(${deltaX}px,${deltaY}px, 0)`;
+    options?.onMove?.(deltaX, deltaY);
   }
 
   function mouseup(e: MouseEvent) {
     const deltaX = Math.round(e.clientX - moveInfo.startX);
     const deltaY = Math.round(e.clientY - moveInfo.startY);
-    dom.style.removeProperty("transform");
     options?.onEnd?.(deltaX, deltaY);
     clear();
   }

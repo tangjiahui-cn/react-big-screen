@@ -9,17 +9,18 @@ import React, { ForwardedRef, useEffect, useImperativeHandle, useRef } from "rea
 import styles from "./index.module.less";
 import classNames from "classnames";
 import { moveableDom } from "@/utils";
+import engine, { InstanceType } from "@/engine";
 
 export interface MoveItemRefType {
+  // 容器dom
+  containerDom: HTMLDivElement;
   // 选中组件
   handleSelected: () => void;
   // 取消选中组件
   handleUnSelected: () => void;
 }
 
-interface MoveItemProps extends React.HTMLProps<HTMLDivElement> {
-  onMoveEnd?: (deltaX: number, deltaY: number) => void;
-}
+type MoveItemProps = React.HTMLProps<HTMLDivElement>;
 
 const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveItemRefType>) => {
   const { onMoveEnd, className, ...rest } = props;
@@ -28,6 +29,7 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
 
   useImperativeHandle(ref, () => {
     return {
+      containerDom: containerDomRef.current,
       handleSelected() {
         if (!boxDomRef.current) return;
         boxDomRef.current.classList.add(styles.moveItem_box_selected);
@@ -40,13 +42,36 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
   });
 
   useEffect(() => {
-    const dom = containerDomRef.current;
-    if (!dom) return;
+    const currentDOM = containerDomRef.current;
+    if (!currentDOM) return;
 
     // 给当前dom增加拖拽支持
-    const unmountMoveableDom = moveableDom(dom, {
+    let selectedContainerDomList: HTMLDivElement[] = [];
+    let selectedInstanceList: InstanceType[] = [];
+    const unmountMoveableDom = moveableDom(currentDOM, {
+      onStart() {
+        selectedInstanceList = engine.instance.getAllSelected();
+        selectedContainerDomList = selectedInstanceList.map((x) => x.getContainerDom());
+      },
+      onMove(deltaX: number, deltaY: numbe) {
+        selectedContainerDomList.forEach((dom: HTMLDivElement) => {
+          // 开启硬件GPU加速，变成合成层，不会触发页面 layout 和 paint。
+          dom.style.transform = `translate3d(${deltaX}px,${deltaY}px, 0)`;
+        });
+      },
       onEnd(deltaX: number, deltaY: number) {
-        onMoveEnd?.(deltaX, deltaY);
+        selectedInstanceList.forEach((instance, index) => {
+          // 删除 transform
+          selectedContainerDomList[index].style.removeProperty("transform");
+          // 更新 componentNode
+          const componentNode = engine.componentNode.get(instance.id);
+          if (componentNode) {
+            engine.componentNode.update(componentNode.id, {
+              x: deltaX + (componentNode?.x || 0),
+              y: deltaY + (componentNode?.y || 0),
+            });
+          }
+        });
       },
     });
 

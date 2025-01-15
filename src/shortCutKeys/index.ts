@@ -18,7 +18,7 @@ import {
 /**
  * 判断某些key是否按下
  */
-export function isKeyPressed(key: "command" | "ctrl"): boolean {
+export function isKeyPressed(key: "command" | "ctrl" | "shift"): boolean {
   return hotkeys[key];
 }
 

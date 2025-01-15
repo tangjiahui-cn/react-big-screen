@@ -46,6 +46,13 @@ export default function ShortCutKeysDescription() {
       </Space>
 
       <Space>
+        <span>多选：</span>
+        <span>按住</span>
+        <Key>Shift</Key>
+        <span>选中</span>
+      </Space>
+
+      <Space>
         <span>删除：</span>
         <Key>BackSpace</Key>
         <span> 或 </span>
