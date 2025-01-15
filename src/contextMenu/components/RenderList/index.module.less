@@ -1,5 +1,6 @@
 .renderList {
   position: relative;
+  background: white;
 
   &_item {
     width: 120px;
@@ -15,8 +16,16 @@
 
     &:hover{
       font-weight: bold;
-      background: whitesmoke;
+      background: rgba(24, 144, 255, 0.1);
       border-left-color: @primaryHover;
+    }
+
+    &_title {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      line-height: 18px;
     }
 
     &_unselectable {

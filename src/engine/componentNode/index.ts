@@ -57,7 +57,7 @@ export default class ComponentNode {
 
   // 清空组件数据
   public clear() {
-    this.maxLevel = 1;
+    this.maxLevel = this.getMinLevel();
     setGlobalState({
       componentNodes: [],
     });
@@ -66,6 +66,11 @@ export default class ComponentNode {
   // 获取最大层级
   public getMaxLevel(): number {
     return this.maxLevel;
+  }
+
+  // 获取最小层级
+  public getMinLevel() {
+    return 1;
   }
 
   // 初始化componentNodes
@@ -177,6 +182,9 @@ export default class ComponentNode {
     if (!componentNode.level) {
       componentNode.level = ++this.maxLevel;
     }
+
+    // 计算最大层级
+    this.maxLevel = Math.max(this.maxLevel, componentNode.level);
     return Object.assign(componentNode);
   }
 }

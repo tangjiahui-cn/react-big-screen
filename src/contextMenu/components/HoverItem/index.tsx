@@ -13,7 +13,7 @@ import engine from "@/engine";
 
 interface HoverItemProps extends Omit<HTMLAttributes<HTMLDivElement>, "onSelect"> {
   items?: RenderListItem[]; // 选项列表
-  onSelect?: (item: RenderListItem) => void; // 选中元素
+  onSelect?: (item: RenderListItem, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void; // 选中元素
 }
 
 const INIT_POSITION = {
@@ -58,8 +58,9 @@ export default function HoverItem(props: HoverItemProps) {
           >
             <RenderList
               items={items}
-              onSelect={(item) => {
-                onSelect?.(item);
+              onSelect={(item, e) => {
+                onSelect?.(item, e);
+                e.stopPropagation();
               }}
             />
           </div>,
