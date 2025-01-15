@@ -50,8 +50,11 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
     let selectedInstanceList: InstanceType[] = [];
     const unmountMoveableDom = moveableDom(currentDOM, {
       onStart() {
-        selectedInstanceList = engine.instance.getAllSelected();
-        selectedContainerDomList = selectedInstanceList.map((x) => x.getContainerDom());
+        // 等待选中时设置选中实例后，再获取
+        setTimeout(() => {
+          selectedInstanceList = engine.instance.getAllSelected();
+          selectedContainerDomList = selectedInstanceList.map((x) => x.getContainerDom());
+        });
       },
       onMove(deltaX: number, deltaY: numbe) {
         selectedContainerDomList.forEach((dom: HTMLDivElement) => {
