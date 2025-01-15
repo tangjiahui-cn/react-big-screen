@@ -159,6 +159,31 @@ export default class ComponentNode {
     });
   }
 
+  // 从实例数据创建新的数据实例
+  public createFromComponentNode(
+    originComponentNode: ComponentNodeType,
+    extComponentNode?: Partial<ComponentNodeType>,
+  ): ComponentNodeType {
+    const { x = 0, y = 0 } = originComponentNode || {};
+    const componentNode: ComponentNodeType = {
+      ...originComponentNode,
+      ...extComponentNode,
+      x: x + 10,
+      y: y + 10,
+    };
+    // 如果未指定id，则自动创建一个uuid作为id
+    if (!extComponentNode?.id) {
+      componentNode.id = createUUID();
+    }
+    // 如果未指定层级，则自动取最大层级
+    if (!componentNode?.level) {
+      componentNode.level = ++this.maxLevel;
+    }
+    // 计算最大层级
+    this.maxLevel = Math.max(this.maxLevel, componentNode.level);
+    return componentNode;
+  }
+
   // 从组件模板创建数据实例
   public createFromComponent(
     component: ComponentType,
@@ -171,20 +196,20 @@ export default class ComponentNode {
     } as ComponentNodeType;
 
     // 如果name不存在，则设置component的name作为默认值
-    if (!componentNode.name) {
+    if (!componentNode?.name) {
       componentNode.name = component.cName;
     }
     // 如果未指定id，则自动创建一个uuid作为id
-    if (!componentNode.id) {
+    if (!componentNode?.id) {
       componentNode.id = createUUID();
     }
     // 如果未指定层级，则自动取最大层级
-    if (!componentNode.level) {
+    if (!componentNode?.level) {
       componentNode.level = ++this.maxLevel;
     }
 
     // 计算最大层级
     this.maxLevel = Math.max(this.maxLevel, componentNode.level);
-    return Object.assign(componentNode);
+    return componentNode;
   }
 }

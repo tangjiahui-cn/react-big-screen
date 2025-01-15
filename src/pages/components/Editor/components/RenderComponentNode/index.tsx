@@ -8,16 +8,10 @@ import engine, { ComponentNodeType, ComponentType, useRegisterInstance } from "@
 import styles from "./index.module.less";
 import classNames from "classnames";
 import MoveItem, { MoveItemRefType } from "./components/MoveItem";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { isKeyPressed } from "@/shortCutKeys";
 import { isClickMouseLeft, isClickMouseRight } from "@/utils";
-import {
-  ArrowDownOutlined,
-  ArrowUpOutlined,
-  DeleteOutlined,
-  VerticalAlignBottomOutlined,
-  VerticalAlignTopOutlined,
-} from "@ant-design/icons";
+import { createContextMenu } from "./data/contextMenuItems";
 import { RenderListItem } from "@/contextMenu";
 
 interface RenderComponentProps {
@@ -42,6 +36,8 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
   const { component, componentNode } = props;
   const Component = component.component;
   const moveItemRef = useRef<MoveItemRefType>(null);
+  // 右键菜单配置项
+  const contextMenuItems: RenderListItem[] = useMemo(() => createContextMenu(componentNode), []);
 
   // 注册行为实例（只能改变内部属性）
   const instance = useRegisterInstance({
@@ -65,86 +61,6 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
       return moveItemRef.current?.containerDom!;
     },
   });
-
-  // 右键菜单配置项
-  const contextMenuItems: RenderListItem[] = [
-    {
-      key: "top",
-      icon: <VerticalAlignTopOutlined />,
-      title: "置顶",
-      style: { borderTop: "1px solid #e8e8e8" },
-      onSelect() {
-        const maxLevel = engine.componentNode.getMaxLevel();
-        engine.instance.getAllSelected().forEach((instance) => {
-          const componentNode = engine.componentNode.get(instance.id);
-          if (componentNode) {
-            engine.componentNode.update(instance.id, {
-              level: maxLevel,
-            });
-          }
-        });
-      },
-    },
-    {
-      key: "bottom",
-      icon: <VerticalAlignBottomOutlined />,
-      title: "置底",
-      onSelect() {
-        const minLevel = engine.componentNode.getMinLevel();
-        engine.instance.getAllSelected().forEach((instance) => {
-          const componentNode = engine.componentNode.get(instance.id);
-          if (componentNode) {
-            engine.componentNode.update(instance.id, {
-              level: minLevel,
-            });
-          }
-        });
-      },
-    },
-    {
-      key: "levelUp",
-      icon: <ArrowUpOutlined />,
-      title: "上移一层",
-      onSelect() {
-        const maxLevel = engine.componentNode.getMaxLevel();
-        engine.instance.getAllSelected().forEach((instance) => {
-          const componentNode = engine.componentNode.get(instance.id);
-          if (componentNode) {
-            engine.componentNode.update(instance.id, {
-              level: Math.min(maxLevel, (componentNode?.level || 0) + 1),
-            });
-          }
-        });
-      },
-    },
-    {
-      key: "levelDown",
-      icon: <ArrowDownOutlined />,
-      title: "下移一层",
-      style: { borderBottom: "1px solid #e8e8e8" },
-      onSelect() {
-        const minLevel = engine.componentNode.getMinLevel();
-        engine.instance.getAllSelected().forEach((instance) => {
-          const componentNode = engine.componentNode.get(instance.id);
-          if (componentNode) {
-            engine.componentNode.update(instance.id, {
-              level: Math.max(minLevel, (componentNode?.level || 0) - 1),
-            });
-          }
-        });
-      },
-    },
-    {
-      key: "delete",
-      icon: <DeleteOutlined />,
-      title: "删除",
-      titleStyle: { gap: 6 },
-      onSelect() {
-        const selectInstanceIds: string[] = engine.instance.getAllSelected().map((ins) => ins.id);
-        engine.componentNode.delete(selectInstanceIds);
-      },
-    },
-  ];
 
   return (
     <MoveItem
