@@ -83,11 +83,20 @@ export default class ComponentNode {
     });
   }
 
-  // 新增一个 componentNode
-  public add(componentNode: ComponentNodeType) {
+  // 新增 componentNode
+  public add(componentNode: ComponentNodeType | ComponentNodeType[]) {
+    const componentNodes: ComponentNodeType[] = (
+      Array.isArray(componentNode) ? componentNode : [componentNode]
+    ).reduce((list, current) => {
+      if (current) {
+        this.maxLevel = Math.max(this.maxLevel, current?.level || 1);
+        list.push(current);
+      }
+      return list;
+    }, [] as ComponentNodeType[]);
     setGlobalState((state) => {
       return {
-        componentNodes: [...state.componentNodes, componentNode],
+        componentNodes: [...state.componentNodes, ...componentNodes],
       };
     });
   }

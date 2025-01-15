@@ -13,13 +13,13 @@ import {
   VerticalAlignBottomOutlined,
   VerticalAlignTopOutlined,
 } from "@ant-design/icons";
-import engine, { ComponentNodeType } from "@/engine";
+import engine from "@/engine";
+import { copySelectedComponentNodes, deleteSelectedComponentNodes } from "@/shortCutKeys";
 
 /**
  * 创建右键菜单配置项
- * @param componentNode 当前实例数据
  */
-export function createContextMenu(componentNode: ComponentNodeType): RenderListItem[] {
+export function createContextMenu(): RenderListItem[] {
   return [
     {
       key: "top",
@@ -91,23 +91,14 @@ export function createContextMenu(componentNode: ComponentNodeType): RenderListI
       key: "copy",
       icon: <CopyOutlined />,
       title: "复制",
-      onSelect() {
-        const newComponentNode = engine.componentNode.createFromComponentNode(componentNode);
-        engine.componentNode.add(newComponentNode);
-        setTimeout(() => {
-          engine.instance.select(newComponentNode.id, true); // 选中新实例
-        });
-      },
+      onSelect: copySelectedComponentNodes,
     },
     {
       key: "delete",
       icon: <DeleteOutlined />,
       title: "删除",
       titleStyle: { gap: 6 },
-      onSelect() {
-        const selectInstanceIds: string[] = engine.instance.getAllSelected().map((ins) => ins.id);
-        engine.componentNode.delete(selectInstanceIds);
-      },
+      onSelect: deleteSelectedComponentNodes,
     },
   ] as RenderListItem[];
 }

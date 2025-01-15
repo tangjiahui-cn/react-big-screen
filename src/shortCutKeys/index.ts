@@ -13,7 +13,10 @@ import {
   selectedMoveRight,
   selectedMoveUp,
   selectedMoveDown,
+  copySelectedComponentNodes,
 } from "./behaviors";
+
+export * from "./behaviors";
 
 /**
  * 判断某些key是否按下
@@ -35,5 +38,6 @@ export function useGlobalShortCutKeys() {
     right: selectedMoveRight,
     up: selectedMoveUp,
     down: selectedMoveDown,
+    "Shift + C": copySelectedComponentNodes,
   });
 }

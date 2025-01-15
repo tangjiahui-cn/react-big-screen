@@ -46,6 +46,13 @@ export default function ShortCutKeysDescription() {
       </Space>
 
       <Space>
+        <span>复制：</span>
+        <Key>Shift</Key>
+        <span>+</span>
+        <Key>C</Key>
+      </Space>
+
+      <Space>
         <span>多选：</span>
         <span>按住</span>
         <Key>Shift</Key>

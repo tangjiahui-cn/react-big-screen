@@ -36,8 +36,9 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
   const { component, componentNode } = props;
   const Component = component.component;
   const moveItemRef = useRef<MoveItemRefType>(null);
+
   // 右键菜单配置项
-  const contextMenuItems: RenderListItem[] = useMemo(() => createContextMenu(componentNode), []);
+  const contextMenuItems: RenderListItem[] = useMemo(() => createContextMenu(), []);
 
   // 注册行为实例（只能改变内部属性）
   const instance = useRegisterInstance({
