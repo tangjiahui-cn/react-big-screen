@@ -11,3 +11,5 @@ docs-dist
 /es
 /cjs
 /types
+
+tsconfig.tsbuildinfo

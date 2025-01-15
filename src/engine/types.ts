@@ -12,8 +12,8 @@ export interface ComponentProps<Option = any> {
 export interface BaseComponent {
   cId: string; // 组件id
   cName: string; // 组件名称
-  x?: number; // 坐标 x
-  y?: number; // 坐标 y
+  x: number; // 坐标 x
+  y: number; // 坐标 y
   width: number; // 宽度
   height: number; // 高度
   level?: number; // 层级

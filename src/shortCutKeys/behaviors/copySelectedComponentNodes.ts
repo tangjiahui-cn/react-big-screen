@@ -11,7 +11,10 @@ export function copySelectedComponentNodes() {
   const newComponentNodes = engine.instance.getAllSelected().reduce((list, current) => {
     const componentNode = engine.componentNode.get(current.id);
     if (componentNode) {
-      const newComponentNode = engine.componentNode.createFromComponentNode(componentNode);
+      const newComponentNode = engine.componentNode.createFromComponentNode(componentNode, {
+        x: componentNode.x + 10,
+        y: componentNode.y + 10,
+      });
       list.push(newComponentNode);
     }
     return list;

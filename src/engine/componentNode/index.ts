@@ -173,12 +173,9 @@ export default class ComponentNode {
     originComponentNode: ComponentNodeType,
     extComponentNode?: Partial<ComponentNodeType>,
   ): ComponentNodeType {
-    const { x = 0, y = 0 } = originComponentNode || {};
     const componentNode: ComponentNodeType = {
       ...originComponentNode,
       ...extComponentNode,
-      x: x + 10,
-      y: y + 10,
     };
     // 如果未指定id，则自动创建一个uuid作为id
     if (!extComponentNode?.id) {
@@ -215,6 +212,14 @@ export default class ComponentNode {
     // 如果未指定层级，则自动取最大层级
     if (!componentNode?.level) {
       componentNode.level = ++this.maxLevel;
+    }
+    // 如果未指定x，则自动取x
+    if (!componentNode.x) {
+      componentNode.x = 0;
+    }
+    // 如果未指定y，则自动取y
+    if (!componentNode.y) {
+      componentNode.y = 0;
     }
 
     // 计算最大层级
