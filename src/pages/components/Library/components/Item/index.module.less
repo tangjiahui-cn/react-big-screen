@@ -8,10 +8,7 @@
   cursor: move;
 
   &:hover {
-    @boxShadowRadius: 10px;
-    @boxShadowColor: @borderColor;
-    box-shadow: 2px 0 @boxShadowRadius @boxShadowColor, -2px 0 @boxShadowRadius @boxShadowColor,
-      0 2px @boxShadowRadius @boxShadowColor;
+    box-shadow: @boxShadow;
   }
 
   &_body {

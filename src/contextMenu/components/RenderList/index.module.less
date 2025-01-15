@@ -1,0 +1,26 @@
+.renderList {
+  position: relative;
+
+  &_item {
+    width: 120px;
+    background: white;
+    padding: 6px 8px;
+    position: relative;
+    border-left: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+    cursor: pointer;
+
+    &:hover{
+      font-weight: bold;
+      background: whitesmoke;
+      border-left-color: @primaryHover;
+    }
+
+    &_unselectable {
+      cursor: default;
+    }
+  }
+}

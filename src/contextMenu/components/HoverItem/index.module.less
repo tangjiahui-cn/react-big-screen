@@ -1,0 +1,16 @@
+
+.hoverItem {
+  &_overlay {
+    @boxShadowRadius: 10px;
+    @boxShadowColor: rgba(0, 0, 0, 0.05);
+    position: fixed;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.55);
+    width: 120px;
+    max-height: 280px;
+    box-shadow:
+      2px 0 @boxShadowRadius @boxShadowColor,
+      -2px 0 @boxShadowRadius @boxShadowColor,
+      0 2px @boxShadowRadius @boxShadowColor;;
+  }
+}

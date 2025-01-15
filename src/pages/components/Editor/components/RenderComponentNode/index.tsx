@@ -10,7 +10,7 @@ import classNames from "classnames";
 import MoveItem, { MoveItemRefType } from "./components/MoveItem";
 import { useEffect, useRef, useState } from "react";
 import { isKeyPressed } from "@/shortCutKeys";
-import { isClickMouseLeft } from "@/utils";
+import { isClickMouseLeft, isClickMouseRight } from "@/utils";
 
 interface RenderComponentProps {
   componentNode: ComponentNodeType;
@@ -42,12 +42,12 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
     handleHover() {},
     // 离开实例
     handleUnHover() {},
-    // 选中实例
+    // 选中实例样式
     handleSelected() {
       // 内部样式选中
       moveItemRef?.current?.handleSelected?.();
     },
-    // 取消选中实例
+    // 取消选中实例样式
     handleUnSelected() {
       // 移除内部样式选中
       moveItemRef?.current?.handleUnSelected?.();
@@ -58,14 +58,19 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
     },
   });
 
-  // 选中当前组件
-  function handleSelect() {
-    if (engine.instance.isSelected(componentNode.id)) {
-      return;
+  // 右键菜单配置项
+  const contextMenuItems = [{ key: "delete", title: "删除" }];
+
+  // 右键菜单操作
+  function handleSelectContextMenu(key: string) {
+    switch (key) {
+      case "delete":
+        const selectInstanceIds: string[] = engine.instance.getAllSelected().map((ins) => ins.id);
+        engine.componentNode.delete(selectInstanceIds);
+        break;
+      default:
+        break;
     }
-    // 是否按住多选键
-    const isHoldMultiple: boolean = isKeyPressed("shift");
-    engine.instance.select(instance, !isHoldMultiple);
   }
 
   return (
@@ -86,12 +91,22 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
         instance.handleUnHover();
       }}
       onMouseDown={(e) => {
-        if (isClickMouseLeft(e.nativeEvent)) {
-          // 选中当前组件
-          handleSelect();
-        }
         e.stopPropagation();
+
+        // 点击左键或右键，可选中当前组件
+        if (isClickMouseLeft(e.nativeEvent) || isClickMouseRight(e.nativeEvent)) {
+          if (engine.instance.isSelected(componentNode.id)) {
+            return;
+          }
+          // 是否按住多选键
+          const isHoldMultiple: boolean = isKeyPressed("shift");
+          engine.instance.select(instance, !isHoldMultiple);
+        }
       }}
+      // 右键菜单配置项
+      contextMenuItems={contextMenuItems}
+      // 右键菜单选中回调
+      onSelectContextMenu={handleSelectContextMenu}
     >
       {/* 渲染组件 */}
       <Component

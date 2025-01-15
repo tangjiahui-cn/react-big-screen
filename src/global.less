@@ -13,6 +13,13 @@
 @borderDeepColor: #ccc;
 @borderDeep: 1px solid @borderDeepColor;
 
+@boxShadowRadius: 10px;
+@boxShadowColor: @borderColor;
+@boxShadow:
+  2px 0 @boxShadowRadius @boxShadowColor,
+  -2px 0 @boxShadowRadius @boxShadowColor,
+  0 2px @boxShadowRadius @boxShadowColor;
+
 .flexCenter {
   display: flex;
   align-items: center;

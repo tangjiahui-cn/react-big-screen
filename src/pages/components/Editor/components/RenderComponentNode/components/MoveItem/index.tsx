@@ -11,6 +11,7 @@ import classNames from "classnames";
 import { moveableDom } from "@/utils";
 import engine, { InstanceType } from "@/engine";
 import { useEffectOnce } from "@/hooks";
+import { useContextMenu, RenderListItem } from "@/contextMenu";
 
 export interface MoveItemRefType {
   // 容器dom
@@ -21,10 +22,13 @@ export interface MoveItemRefType {
   handleUnSelected: () => void;
 }
 
-type MoveItemProps = React.HTMLProps<HTMLDivElement>;
+interface MoveItemProps extends React.HTMLProps<HTMLDivElement> {
+  contextMenuItems?: RenderListItem[]; // 右键菜单配置项
+  onSelectContextMenu?: (key: string) => void; // 右键菜单选中回调
+}
 
 const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveItemRefType>) => {
-  const { className, ...rest } = props;
+  const { className, contextMenuItems, onSelectContextMenu, ...rest } = props;
   const containerDomRef = useRef<HTMLDivElement>(null);
   const boxDomRef = useRef<HTMLDivElement>(null);
 
@@ -83,6 +87,13 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
     return () => {
       unmountMoveableDom();
     };
+  });
+
+  // 绑定右键菜单
+  useContextMenu(containerDomRef, contextMenuItems, {
+    onSelect(key) {
+      onSelectContextMenu?.(key);
+    },
   });
 
   return (

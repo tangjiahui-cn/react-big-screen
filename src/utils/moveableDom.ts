@@ -29,9 +29,9 @@ export function moveableDom(dom: HTMLDivElement, options: moveableDomOptions): U
     moveInfo.isMoving = true;
     moveInfo.startX = e.clientX;
     moveInfo.startY = e.clientY;
-    options?.onStart?.();
     window.addEventListener("mouseup", mouseup);
     window.addEventListener("mousemove", mousemove);
+    options?.onStart?.();
   }
 
   function mousemove(e: MouseEvent) {
