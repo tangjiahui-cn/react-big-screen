@@ -1,3 +1,3 @@
 export * from "./useVirtualDrag";
 export * from "./useVirtualDrop";
-export * from "./useIsDragging";
+export * from "./useIsVirtualDragging";

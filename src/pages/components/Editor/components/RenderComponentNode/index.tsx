@@ -54,7 +54,7 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
     },
     // 获取容器dom
     getContainerDom(): HTMLDivElement {
-      return moveItemRef.current.containerDom;
+      return moveItemRef.current?.containerDom!;
     },
   });
 
@@ -92,7 +92,6 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
         }
         e.stopPropagation();
       }}
-      onContextMenu={(e) => e.preventDefault()}
     >
       {/* 渲染组件 */}
       <Component

@@ -5,11 +5,12 @@
  * @date 2025/1/8
  * @description 用于改变组件的x、y、width、height。
  */
-import React, { ForwardedRef, useEffect, useImperativeHandle, useRef } from "react";
+import React, { ForwardedRef, useImperativeHandle, useRef } from "react";
 import styles from "./index.module.less";
 import classNames from "classnames";
 import { moveableDom } from "@/utils";
 import engine, { InstanceType } from "@/engine";
+import { useEffectOnce } from "@/hooks";
 
 export interface MoveItemRefType {
   // 容器dom
@@ -23,13 +24,13 @@ export interface MoveItemRefType {
 type MoveItemProps = React.HTMLProps<HTMLDivElement>;
 
 const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveItemRefType>) => {
-  const { onMoveEnd, className, ...rest } = props;
+  const { className, ...rest } = props;
   const containerDomRef = useRef<HTMLDivElement>(null);
   const boxDomRef = useRef<HTMLDivElement>(null);
 
   useImperativeHandle(ref, () => {
     return {
-      containerDom: containerDomRef.current,
+      containerDom: containerDomRef.current!,
       handleSelected() {
         if (!boxDomRef.current) return;
         boxDomRef.current.classList.add(styles.moveItem_box_selected);
@@ -41,7 +42,7 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
     };
   });
 
-  useEffect(() => {
+  useEffectOnce(() => {
     const currentDOM = containerDomRef.current;
     if (!currentDOM) return;
 
@@ -56,7 +57,7 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
           selectedContainerDomList = selectedInstanceList.map((x) => x.getContainerDom());
         });
       },
-      onMove(deltaX: number, deltaY: numbe) {
+      onMove(deltaX: number, deltaY: number) {
         selectedContainerDomList.forEach((dom: HTMLDivElement) => {
           // 开启硬件GPU加速，变成合成层，不会触发页面 layout 和 paint。
           dom.style.transform = `translate3d(${deltaX}px,${deltaY}px, 0)`;
@@ -82,7 +83,7 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
     return () => {
       unmountMoveableDom();
     };
-  }, []);
+  });
 
   return (
     <div {...rest} className={classNames(className, styles.moveItem)} ref={containerDomRef}>

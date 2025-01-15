@@ -5,7 +5,7 @@
  * @date 2025/1/8
  */
 import React, { useRef } from "react";
-import { useIsDragging, useVirtualDrop } from "@/virtual-drag";
+import { useIsVirtualDragging, useVirtualDrop } from "@/virtual-drag";
 import engine from "@/engine";
 import classNames from "classnames";
 import styles from "./index.module.less";
@@ -17,7 +17,7 @@ interface Props {
 
 export default function EditorMask(props: Props) {
   const domRef = useRef<HTMLDivElement>(null);
-  const isDragging = useIsDragging({
+  const isVirtualDragging = useIsVirtualDragging({
     accept: ["create-component"],
   });
 
@@ -58,7 +58,7 @@ export default function EditorMask(props: Props) {
       className={classNames(
         props?.className,
         styles.editorMask,
-        isDragging && styles.editorMask_show,
+        isVirtualDragging && styles.editorMask_show,
       )}
     />
   );

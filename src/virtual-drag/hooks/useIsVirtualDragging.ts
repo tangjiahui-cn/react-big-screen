@@ -1,5 +1,5 @@
 /**
- * useIsDragging
+ * useIsVirtualDragging
  *
  * @author tangjiahui
  * @date 2025/1/7
@@ -12,7 +12,7 @@ interface IsDraggingOptions {
   accept?: string[]; // 只接受accept类型的拖拽中监测（空则表示接受全部类型的拖拽变更）
 }
 
-export function useIsDragging(isDraggingOptions?: IsDraggingOptions) {
+export function useIsVirtualDragging(isDraggingOptions?: IsDraggingOptions) {
   const [isDragging, setIsDragging] = React.useState(false);
 
   useEffect(() => {
