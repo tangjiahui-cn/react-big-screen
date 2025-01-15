@@ -10,6 +10,7 @@ import React, { useMemo, useRef } from "react";
 import { useComponentNodes } from "@/engine";
 import RenderComponentNode from "./components/RenderComponentNode";
 import EditorMask from "./components/EditorMask";
+import { isClickMouseLeft } from "@/utils";
 
 export default React.memo(() => {
   const config = useConfig();
@@ -38,8 +39,10 @@ export default React.memo(() => {
       ref={editorDomRef}
       className={styles.editor}
       onContextMenu={(e) => e.preventDefault()}
-      onMouseDown={() => {
-        engine.instance.unselectAll();
+      onMouseDown={(e) => {
+        if (isClickMouseLeft(e.nativeEvent)) {
+          engine.instance.unselectAll();
+        }
       }}
     >
       <div className={styles.editor_render} style={{ width: config.width, height: config.height }}>
