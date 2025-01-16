@@ -47,10 +47,10 @@ const operates: OperateItem[] = [
   },
   { key: "export", description: "导出", icon: <UploadOutlined /> },
   { key: "import", description: "导入", icon: <VerticalAlignBottomOutlined /> },
-  { key: "preview", description: "预览", disabled: true, icon: <DesktopOutlined /> },
   { key: "save", description: "保存到本地", icon: <SaveOutlined /> },
   { key: "clear", description: "清空", icon: <ClearOutlined /> },
   { key: "settings", description: "设置", disabled: true, icon: <SettingOutlined /> },
+  { key: "preview", description: "预览", icon: <DesktopOutlined /> },
 ];
 
 export default function Header() {
@@ -84,6 +84,8 @@ export default function Header() {
         });
         break;
       case "preview": // 预览
+        saveLocal(true);
+        window.open(`${window.location.origin}/preview`);
         break;
       case "save": // 保存
         saveLocal();

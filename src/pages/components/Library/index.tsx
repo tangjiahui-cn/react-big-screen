@@ -6,7 +6,7 @@
  */
 import { ComponentType, useComponents } from "@/engine";
 import { Input } from "antd";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useUpdateEffect } from "ahooks";
 import IEmpty from "@/components/IEmpty";
 import styles from "./index.module.less";
@@ -36,7 +36,7 @@ export default function Library() {
     }, 500);
   }, []);
 
-  useUpdateEffect(() => {
+  useEffect(() => {
     setDisplayComponents(filterComponents(components, keyword));
   }, [components]);
 

@@ -28,6 +28,7 @@ import Instance from "./instance";
 import ComponentNode from "./componentNode";
 import Config from "./config";
 import type { JsonType } from "./types";
+import { builtInComponents } from "./built-in";
 
 export type * from "./types";
 export * from "./store";
@@ -42,6 +43,11 @@ class Engine {
   instance: Instance = new Instance();
   // 全局配置
   config: Config = new Config();
+
+  constructor() {
+    // 注册内置组件
+    this.component.register(builtInComponents);
+  }
 
   // 加载json对象
   public loadJSON(json: JsonType): void {

@@ -10,7 +10,6 @@ import Attributes from "./components/Attributes";
 import Editor from "./components/Editor";
 import Library from "./components/Library";
 import engine from "@/engine";
-import { builtInComponents } from "@/built-in";
 import { useEffectOnce } from "@/hooks";
 import { useGlobalShortCutKeys } from "@/shortCutKeys";
 
@@ -19,8 +18,6 @@ export default function Page() {
   useGlobalShortCutKeys();
 
   useEffectOnce(() => {
-    // 注册静态组件
-    engine.component.register(builtInComponents);
     // 读取本地json
     engine.loadJSONString(localStorage.getItem("json"));
     // unmount
