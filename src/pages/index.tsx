@@ -23,15 +23,7 @@ export default function Page() {
     engine.component.register(builtInComponents);
     // 读取本地json
     engine.loadJSONString(localStorage.getItem("json"));
-
-    // 默认选中第一个（用于测试）
-    setTimeout(() => {
-      const first = engine.componentNode.getAll()[0];
-      if (first) {
-        engine.instance.select(first.id);
-      }
-    });
-
+    // unmount
     return () => {
       engine.component.unRegisterAll();
     };

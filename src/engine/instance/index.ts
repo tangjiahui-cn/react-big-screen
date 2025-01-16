@@ -50,7 +50,7 @@ export default class Instance extends BaseInstance {
     if (cover) {
       // 取消选中全部
       this.selectedInstances.getAll().forEach((instance) => {
-        instance.handleUnSelected?.();
+        instance?.handleUnSelected?.();
       });
     }
 

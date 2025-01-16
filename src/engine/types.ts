@@ -53,6 +53,8 @@ export interface JsonType {
   config: GlobalConfig;
   // 已使用组件列表统计
   used: ComponentUsed;
+  // 选中组件id列表
+  selectedIds?: string[];
 }
 
 // 数据行为实例类型

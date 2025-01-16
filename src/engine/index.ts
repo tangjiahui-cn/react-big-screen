@@ -47,6 +47,13 @@ class Engine {
   public loadJSON(json: JsonType): void {
     this.config.setConfig(json.config);
     this.componentNode.init(json.componentNodes);
+
+    // 读取默认选中
+    if (json.selectedIds) {
+      setTimeout(() => {
+        this.instance.select(json.selectedIds as string[]);
+      });
+    }
   }
 
   // 加载json字符串对象
@@ -65,6 +72,7 @@ class Engine {
       used: this.componentNode.getComponentUsed(),
       componentNodes: this.componentNode.getAll(),
       config: this.config.getConfig(),
+      selectedIds: this.instance.getAllSelected().map((instance) => instance.id),
     };
   }
 }
