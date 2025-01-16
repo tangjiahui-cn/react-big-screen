@@ -15,9 +15,12 @@
       background: rgba(9, 109, 217, 0.05);
     }
 
-    &_selected,
+    &_selected {
+      border: 2px solid @primary !important;
+    }
+
     &:hover {
-      border: 2px solid @primary;
+      border: 1px dashed @primary;
     }
   }
 }
