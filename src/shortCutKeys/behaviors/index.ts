@@ -5,3 +5,6 @@ export * from "./selectedMoveRight";
 export * from "./selectedMoveUp";
 export * from "./selectedMoveDown";
 export * from "./copySelectedComponentNodes";
+export * from "./clearComponentNodes";
+export * from "./saveLocal";
+export * from "./unSelectAllComponentNodes";

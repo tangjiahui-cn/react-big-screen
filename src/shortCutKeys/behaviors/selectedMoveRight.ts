@@ -6,8 +6,7 @@
  */
 import engine from "@/engine";
 
-export function selectedMoveRight(e: KeyboardEvent) {
-  e.preventDefault();
+export function selectedMoveRight() {
   engine.instance.getAllSelected().forEach((instance) => {
     const componentNode = engine.componentNode.get(instance.id);
     if (componentNode) {

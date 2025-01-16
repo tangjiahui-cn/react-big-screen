@@ -11,6 +11,8 @@ import { useComponentNodes } from "@/engine";
 import RenderComponentNode from "./components/RenderComponentNode";
 import EditorMask from "./components/EditorMask";
 import { isClickMouseLeft } from "@/utils";
+import { useContextMenu } from "@/contextMenu";
+import { createEditorContextMenu } from "./contextMenu";
 
 export default React.memo(() => {
   const config = useConfig();
@@ -33,6 +35,10 @@ export default React.memo(() => {
       );
     });
   }, [componentNodes]);
+
+  // 右键菜单
+  const contextMenu = useMemo(() => createEditorContextMenu(), []);
+  useContextMenu(editorDomRef, contextMenu);
 
   return (
     <div

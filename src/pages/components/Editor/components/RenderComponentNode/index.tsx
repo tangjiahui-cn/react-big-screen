@@ -12,7 +12,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { isKeyPressed } from "@/shortCutKeys";
 import { isClickMouseLeft, isClickMouseRight } from "@/utils";
 import { createContextMenu } from "./data/contextMenuItems";
-import { RenderListItem } from "@/contextMenu";
+import { ContextMenuItem } from "@/contextMenu";
 
 interface RenderComponentProps {
   componentNode: ComponentNodeType;
@@ -38,7 +38,7 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
   const moveItemRef = useRef<MoveItemRefType>(null);
 
   // 右键菜单配置项
-  const contextMenuItems: RenderListItem[] = useMemo(() => createContextMenu(), []);
+  const contextMenuItems: ContextMenuItem[] = useMemo(() => createContextMenu(), []);
 
   // 注册行为实例（只能改变内部属性）
   const instance = useRegisterInstance({

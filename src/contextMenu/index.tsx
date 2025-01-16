@@ -10,7 +10,7 @@ import { createRoot } from "react-dom/client";
 import RenderContextMenu, { RenderListItem } from "./components/RenderContextMenu";
 import engine from "@/engine";
 
-export type { RenderListItem };
+export type { RenderListItem as ContextMenuItem };
 
 // 全局销毁函数
 let unmounts: (() => void)[] = [];
@@ -44,6 +44,7 @@ export function useContextMenu(
       // 清除其他右键菜单
       clearGlobal();
       e.preventDefault();
+      e.stopPropagation();
 
       // 如果右键菜单列表为空则不显示
       if (!menuItemsRef.current) {

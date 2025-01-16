@@ -11,7 +11,7 @@ import classNames from "classnames";
 import { moveableDom } from "@/utils";
 import engine, { InstanceType } from "@/engine";
 import { useEffectOnce } from "@/hooks";
-import { useContextMenu, RenderListItem } from "@/contextMenu";
+import { useContextMenu, ContextMenuItem } from "@/contextMenu";
 
 export interface MoveItemRefType {
   // 容器dom
@@ -23,7 +23,7 @@ export interface MoveItemRefType {
 }
 
 interface MoveItemProps extends React.HTMLProps<HTMLDivElement> {
-  contextMenuItems?: RenderListItem[]; // 右键菜单配置项
+  contextMenuItems?: ContextMenuItem[]; // 右键菜单配置项
   onSelectContextMenu?: (key: string) => void; // 右键菜单选中回调
 }
 

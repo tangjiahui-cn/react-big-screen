@@ -46,6 +46,13 @@ export default function ShortCutKeysDescription() {
       </Space>
 
       <Space>
+        <span>反选：</span>
+        <Key>Shift</Key>
+        <span>+</span>
+        <Key>D</Key>
+      </Space>
+
+      <Space>
         <span>复制：</span>
         <Key>Shift</Key>
         <span>+</span>
@@ -53,10 +60,16 @@ export default function ShortCutKeysDescription() {
       </Space>
 
       <Space>
+        <span>保存：</span>
+        <Key>Shift</Key>
+        <span>+</span>
+        <Key>S</Key>
+      </Space>
+
+      <Space>
         <span>多选：</span>
         <span>按住</span>
         <Key>Shift</Key>
-        <span>选中</span>
       </Space>
 
       <Space>

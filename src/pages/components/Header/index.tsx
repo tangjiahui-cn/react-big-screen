@@ -23,6 +23,7 @@ import SizeBar from "./components/SizeBar";
 import engine from "@/engine";
 import { getLocalFileText, saveToFile } from "@/utils";
 import ShortCutKeysDescription from "./components/ShortCutKeysDescription";
+import { clearComponentNodes, saveLocal } from "@/shortCutKeys";
 
 interface OperateItem {
   key: string;
@@ -85,11 +86,10 @@ export default function Header() {
       case "preview": // 预览
         break;
       case "save": // 保存
-        localStorage.setItem("json", JSON.stringify(engine.getJSON()));
-        message.success("保存成功");
+        saveLocal();
         break;
       case "clear":
-        engine.componentNode.clear();
+        clearComponentNodes();
         break;
       case "settings":
         break;

@@ -14,6 +14,8 @@ import {
   selectedMoveUp,
   selectedMoveDown,
   copySelectedComponentNodes,
+  saveLocal,
+  unSelectAllComponentNodes,
 } from "./behaviors";
 
 export * from "./behaviors";
@@ -31,13 +33,27 @@ export function isKeyPressed(key: "command" | "ctrl" | "shift"): boolean {
  */
 export function useGlobalShortCutKeys() {
   useShortCutKeys({
-    backspace: deleteSelectedComponentNodes,
-    delete: deleteSelectedComponentNodes,
-    "Shift + A": selectAllComponentNodes,
-    left: selectedMoveLeft,
-    right: selectedMoveRight,
-    up: selectedMoveUp,
-    down: selectedMoveDown,
-    "Shift + C": copySelectedComponentNodes,
+    backspace: () => deleteSelectedComponentNodes(),
+    delete: () => deleteSelectedComponentNodes(),
+    "Shift + A": () => selectAllComponentNodes(),
+    left: (e) => {
+      e.preventDefault();
+      selectedMoveLeft();
+    },
+    right: (e) => {
+      e.preventDefault();
+      selectedMoveRight();
+    },
+    up: (e) => {
+      e.preventDefault();
+      selectedMoveUp();
+    },
+    down: (e) => {
+      e.preventDefault();
+      selectedMoveDown();
+    },
+    "Shift + C": () => copySelectedComponentNodes(),
+    "Shift + S": () => saveLocal(),
+    "Shift + D": () => unSelectAllComponentNodes(),
   });
 }

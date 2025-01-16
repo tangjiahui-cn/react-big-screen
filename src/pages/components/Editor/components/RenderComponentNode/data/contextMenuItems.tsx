@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2025/1/15
  */
-import { RenderListItem } from "@/contextMenu";
+import { ContextMenuItem } from "@/contextMenu";
 import {
   ArrowDownOutlined,
   ArrowUpOutlined,
@@ -19,7 +19,7 @@ import { copySelectedComponentNodes, deleteSelectedComponentNodes } from "@/shor
 /**
  * 创建右键菜单配置项
  */
-export function createContextMenu(): RenderListItem[] {
+export function createContextMenu(): ContextMenuItem[] {
   return [
     {
       key: "top",
@@ -91,14 +91,14 @@ export function createContextMenu(): RenderListItem[] {
       key: "copy",
       icon: <CopyOutlined />,
       title: "复制",
-      onSelect: copySelectedComponentNodes,
+      onSelect: () => copySelectedComponentNodes(),
     },
     {
       key: "delete",
       icon: <DeleteOutlined />,
       title: "删除",
       titleStyle: { gap: 6 },
-      onSelect: deleteSelectedComponentNodes,
+      onSelect: () => deleteSelectedComponentNodes(),
     },
-  ] as RenderListItem[];
+  ];
 }
