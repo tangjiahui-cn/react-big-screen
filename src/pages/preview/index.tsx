@@ -2,10 +2,12 @@
  * 预览页面
  */
 import styles from "./index.module.less";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import engine, { ComponentNodeType, GlobalConfig, JsonType } from "@/engine";
 import RenderPreviewComponentNode from "./components/RenderPreviewComponentNode";
+import FitScreen from "@/pages/preview/components/FitScreen";
 import { Empty } from "antd";
+import { useEffectOnce } from "@/hooks";
 
 export default function Preview() {
   const [json, setJson] = useState<JsonType>();
@@ -40,27 +42,20 @@ export default function Preview() {
     });
   }
 
-  useEffect(() => {
+  useEffectOnce(() => {
     // 读取本地json
     getLocalJson().then((json) => {
       setJson(json);
     });
-  }, []);
+  });
 
-  return json ? (
-    <div className={styles.preview}>
-      <div
-        className={styles.preview_board}
-        style={{
-          width: config?.width || 1920,
-          height: config?.height || 1080,
-          background: "white",
-        }}
-      >
-        {renderComponentNodes}
-      </div>
-    </div>
-  ) : (
-    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={"暂无数据"} />
+  return (
+    <FitScreen className={styles.preview} dw={config?.width || 1920} dh={config?.height || 1080}>
+      {json ? (
+        renderComponentNodes
+      ) : (
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={"暂无数据"} />
+      )}
+    </FitScreen>
   );
 }
