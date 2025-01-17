@@ -4,6 +4,9 @@
 
 > 状态：`开发中`
 
+## 在线预览
+[https://tangjiahui-cn.github.io/big-screen](https://tangjiahui-cn.github.io/big-screen)
+
 ## 如何运行 
 ```shell
 # 安装依赖（pnpm@16.20.1、pnpm@7.30.5）
