@@ -35,7 +35,7 @@ function Key({ children }: { children: React.ReactNode }) {
 
 export default function ShortCutKeysDescription() {
   return (
-    <Space direction={"vertical"} style={{ padding: 6 }}>
+    <Space direction={"vertical"} style={{ padding: 6, userSelect: "none" }}>
       <b>快捷键</b>
 
       <Space>
