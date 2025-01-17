@@ -46,6 +46,7 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
     };
   });
 
+  // 拖拽移动
   useEffectOnce(() => {
     const currentDOM = containerDomRef.current;
     if (!currentDOM) return;

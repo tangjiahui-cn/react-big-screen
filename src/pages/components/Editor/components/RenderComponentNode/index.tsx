@@ -5,8 +5,6 @@
  * @date 2024/12/25
  */
 import engine, { ComponentNodeType, ComponentType, useRegisterInstance } from "@/engine";
-import styles from "./index.module.less";
-import classNames from "classnames";
 import MoveItem, { MoveItemRefType } from "./components/MoveItem";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { isKeyPressed } from "@/shortCutKeys";
@@ -66,7 +64,6 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
   return (
     <MoveItem
       ref={moveItemRef}
-      className={classNames(styles.renderComponentNode)}
       style={{
         left: componentNode.x,
         top: componentNode.y,
