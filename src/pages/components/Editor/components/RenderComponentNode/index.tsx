@@ -92,6 +92,12 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
       }}
       // 右键菜单配置项
       contextMenuItems={contextMenuItems}
+      // 更新位置坐标信息
+      onChangeUpdateMoveInfo={(moveInfo) => {
+        engine.componentNode.update(componentNode.id, {
+          ...moveInfo,
+        });
+      }}
     >
       {/* 渲染组件 */}
       <Component

@@ -1,11 +1,11 @@
-import { isClickMouseLeft } from "@/utils/mouse";
-
 /**
- * 可移动dom
+ * 拖拽节点位移
  *
  * @author tangjiahui
  * @date 2025/1/9
  */
+import { isClickMouseLeft } from "@/utils/mouse";
+
 interface moveableDomOptions {
   onStart?: () => void; // 开始移动
   onMove?: (deltaX: number, deltaY: number) => void; // 移动中
@@ -14,7 +14,7 @@ interface moveableDomOptions {
 
 type UnmountMoveableDom = () => void;
 
-export function moveableDom(dom: HTMLDivElement, options: moveableDomOptions): UnmountMoveableDom {
+export function moveableDom(dom: HTMLElement, options: moveableDomOptions): UnmountMoveableDom {
   let moveInfo = {
     startX: 0,
     startY: 0,

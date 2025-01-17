@@ -1,0 +1,82 @@
+
+.dragPointCommon {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: white;
+  border: 1px solid #c5c5c5;
+}
+
+.dragPoint {
+  &_top {
+    .dragPointCommon();
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: n-resize;
+
+    &_left {
+      .dragPointCommon();
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translate(-50%, -50%);
+      cursor: nw-resize;
+    }
+
+    &_right {
+      .dragPointCommon();
+      position: absolute;
+      top: 0;
+      left: 100%;
+      transform: translate(-50%, -50%);
+      cursor: ne-resize;
+    }
+  }
+
+  &_bottom {
+    .dragPointCommon();
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: s-resize;
+
+    &_left {
+      .dragPointCommon();
+      position: absolute;
+      top: 100%;
+      left: 0;
+      transform: translate(-50%, -50%);
+      cursor: sw-resize;
+    }
+
+    &_right {
+      .dragPointCommon();
+      position: absolute;
+      top: 100%;
+      left: 100%;
+      transform: translate(-50%, -50%);
+      cursor: se-resize;
+    }
+  }
+
+  &_left {
+    .dragPointCommon();
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translate(-50%, -50%);
+    cursor: w-resize;
+  }
+
+  &_right {
+    .dragPointCommon();
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translate(-50%, -50%);
+    cursor: e-resize;
+  }
+}
