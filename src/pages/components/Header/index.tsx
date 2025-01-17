@@ -85,7 +85,7 @@ export default function Header() {
         break;
       case "preview": // 预览
         saveLocal(true);
-        window.open(`${window.location.origin}/preview`);
+        window.open(`${window.location.origin}/#/preview`);
         break;
       case "save": // 保存
         saveLocal();

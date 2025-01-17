@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2025/1/16
  */
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createHashRouter, Navigate } from "react-router-dom";
 import React from "react";
 
 function resolve(resolvePromise: () => Promise<any>) {
@@ -12,7 +12,7 @@ function resolve(resolvePromise: () => Promise<any>) {
   return <Component />;
 }
 
-export default createBrowserRouter(
+export default createHashRouter(
   [
     {
       path: "/",
