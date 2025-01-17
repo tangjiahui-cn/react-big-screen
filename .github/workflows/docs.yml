@@ -28,7 +28,7 @@ jobs:
         run: pnpm install
 
       - name: Build Dist.
-        run: pnpm docs:build-github
+        run: pnpm build
 
       - name: Deploy To GitHub Page.🚀
         uses: crazy-max/ghaction-github-pages@v4
