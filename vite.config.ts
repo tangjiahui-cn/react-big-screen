@@ -4,8 +4,16 @@ import path from "path";
 import { createHtmlPlugin } from "vite-plugin-html";
 import pkg from "./package.json";
 
-const dayjs = require("dayjs");
+// 是否构建为github部署页面
 const isDeployGithub = process.env.deploy === "github";
+
+// dayjs设置utc时区
+const dayjs = require("dayjs");
+const utc = require("dayjs/plugin/utc");
+const tz = require("dayjs/plugin/timezone");
+dayjs.extend(utc);
+dayjs.extend(tz);
+dayjs.tz.setDefault("Asia/Shanghai");
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -37,10 +45,10 @@ export default defineConfig({
           template: "index.html",
           injectOptions: {
             data: {
-              injectScript: isDeployGithub
+              injectScript: !isDeployGithub
                 ? `<script>console.log('version ${pkg.version}\t(Last build：${dayjs().format(
                     "YYYY-MM-DD HH:mm:ss",
-                  )})')</script>`
+                  )} China/ShangHai)')</script>`
                 : "",
             },
           },
