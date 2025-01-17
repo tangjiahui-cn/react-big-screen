@@ -54,6 +54,6 @@ export function useGlobalShortCutKeys() {
     },
     "Shift + C": () => copySelectedComponentNodes(),
     "Shift + S": () => saveLocal(),
-    "Shift + D": () => unSelectAllComponentNodes(),
+    "Shift + R": () => unSelectAllComponentNodes(),
   });
 }

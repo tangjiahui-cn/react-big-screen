@@ -49,7 +49,7 @@ export default function ShortCutKeysDescription() {
         <span>反选：</span>
         <Key>Shift</Key>
         <span>+</span>
-        <Key>D</Key>
+        <Key>R</Key>
       </Space>
 
       <Space>
