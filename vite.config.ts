@@ -12,7 +12,7 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 11000,
   },
-  base: isDeployGithub ? `/${pkg.name}` : "/",
+  base: isDeployGithub ? `/${pkg.name}/` : "/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
