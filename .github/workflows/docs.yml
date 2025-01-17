@@ -1,0 +1,39 @@
+name: build website
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Copy Codes
+        uses: actions/checkout@v4
+
+      - name: setup node@16.20.1
+        uses: actions/setup-node@v4
+        with:
+          node-version: "16.20.1"
+
+      - name: Install pnpm@7.30.5
+        uses: pnpm/action-setup@v4
+        with:
+          version: 7.30.5
+
+      - name: Install Dependencies.
+        run: pnpm install
+
+      - name: Build Dist.
+        run: pnpm docs:build-github
+
+      - name: Deploy To GitHub Page.🚀
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: gh-page
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
