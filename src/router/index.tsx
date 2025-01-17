@@ -12,26 +12,21 @@ function resolve(resolvePromise: () => Promise<any>) {
   return <Component />;
 }
 
-export default createHashRouter(
-  [
-    {
-      path: "/",
-      element: <Navigate to={"/create"} replace />,
-    },
-    {
-      path: "/create", // 编辑页面
-      element: resolve(() => import("@/pages")),
-    },
-    {
-      path: "/preview", // 预览页面
-      element: resolve(() => import("@/pages/preview")),
-    },
-    {
-      path: "*",
-      element: <div>404 not found</div>,
-    },
-  ],
+export default createHashRouter([
   {
-    basename: BASE,
+    path: "/",
+    element: <Navigate to={"/create"} replace />,
   },
-);
+  {
+    path: "/create", // 编辑页面
+    element: resolve(() => import("@/pages")),
+  },
+  {
+    path: "/preview", // 预览页面
+    element: resolve(() => import("@/pages/preview")),
+  },
+  {
+    path: "*",
+    element: <div>404 not found</div>,
+  },
+]);
