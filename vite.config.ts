@@ -45,11 +45,11 @@ export default defineConfig({
           template: "index.html",
           injectOptions: {
             data: {
-              injectScript: !isDeployGithub
-                ? `<script>console.log('version ${pkg.version}\t(Last build：${dayjs().format(
-                    "YYYY-MM-DD HH:mm:ss",
-                  )} China/ShangHai)')</script>`
-                : "",
+              injectScript:
+                isDeployGithub &&
+                `<script>console.log('version ${pkg.version}\t(Last build：${dayjs().format(
+                  "YYYY-MM-DD HH:mm:ss",
+                )} China/ShangHai)')</script>`,
             },
           },
         },
