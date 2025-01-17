@@ -25,6 +25,12 @@ import { getLocalFileText, saveToFile } from "@/utils";
 import ShortCutKeysDescription from "./components/ShortCutKeysDescription";
 import { clearComponentNodes, saveLocal } from "@/shortCutKeys";
 
+// 打开新路由页面
+function openRoute(routePath: string) {
+  routePath = routePath.startsWith("/") ? routePath : `/${routePath}`;
+  window.open(`${window.location.origin}${window.location.pathname}#${routePath}`);
+}
+
 interface OperateItem {
   key: string;
   disabled?: boolean;
@@ -85,7 +91,7 @@ export default function Header() {
         break;
       case "preview": // 预览
         saveLocal(true);
-        window.open(`${window.location.origin}/#/preview`);
+        openRoute("/preview");
         break;
       case "save": // 保存
         saveLocal();
