@@ -38,11 +38,11 @@ export default defineConfig({
           template: "index.html",
           injectOptions: {
             data: {
-              injectScript:
-                !isDeployGithub &&
-                `<script>console.log('version ${pkg.version}\t(Last build：${dayjs().format(
-                  "YYYY-MM-DD HH:mm:ss",
-                )} ${Intl.DateTimeFormat().resolvedOptions().timeZone})')</script>`,
+              injectScript: isDeployGithub
+                ? `<script>console.log('version ${pkg.version}\t(Last build：${dayjs().format(
+                    "YYYY-MM-DD HH:mm:ss",
+                  )} ${Intl.DateTimeFormat().resolvedOptions().timeZone})')</script>`
+                : "",
             },
           },
         },
