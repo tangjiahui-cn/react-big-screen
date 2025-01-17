@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "postinstall": "husky install",
-    "commit": "git add . && git-cz"
+    "commit": "git add . && git-cz",
+    "build:github-page": "cross-env deploy=github pnpm build"
   },
   "config": {
     "commitizen": {
@@ -29,6 +30,7 @@
     "ahooks": "^3.8.4",
     "antd": "4.24.1",
     "classnames": "^2.5.1",
+    "cross-env": "^7.0.3",
     "hotkeys-js": "^3.13.9",
     "lodash-es": "^4.17.21",
     "react": "^18.3.1",
