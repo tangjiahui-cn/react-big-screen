@@ -1,6 +1,6 @@
+@size: 8px;
 
 .dragPointCommon {
-  @size: 8px;
   width: @size;
   height: @size;
   position: absolute;
@@ -10,60 +10,67 @@
   background: white;
 }
 
+.p_top { top: 1px; }
+.p_left { left: 1px; }
+.p_right { left: calc(100% - 1px) }
+.p_bottom { top: calc(100% - 1px); }
+.p_horizontal_mid {left: 50%}
+.p_vertical_mid {top: 50%}
+
 .dragPoint {
   &_top {
     .dragPointCommon();
-    top: 0;
-    left: 50%;
+    .p_top();
+    .p_horizontal_mid();
     cursor: n-resize;
 
     &_left {
       .dragPointCommon();
-      top: 0;
-      left: 0;
+      .p_top();
+      .p_left();
       cursor: nw-resize;
     }
 
     &_right {
       .dragPointCommon();
-      top: 0;
-      left: 100%;
+      .p_top();
+      .p_right();
       cursor: ne-resize;
     }
   }
 
   &_bottom {
     .dragPointCommon();
-    top: 100%;
-    left: 50%;
+    .p_bottom();
+    .p_horizontal_mid();
     cursor: s-resize;
 
     &_left {
       .dragPointCommon();
-      top: 100%;
-      left: 0;
+      .p_bottom();
+      .p_left();
       cursor: sw-resize;
     }
 
     &_right {
       .dragPointCommon();
-      top: 100%;
-      left: 100%;
+      .p_bottom();
+      .p_right();
       cursor: se-resize;
     }
   }
 
   &_left {
     .dragPointCommon();
-    top: 50%;
-    left: 0;
+    .p_vertical_mid();
+    .p_left();
     cursor: w-resize;
   }
 
   &_right {
     .dragPointCommon();
-    top: 50%;
-    left: 100%;
+    .p_vertical_mid();
+    .p_right();
     cursor: e-resize;
   }
 }
