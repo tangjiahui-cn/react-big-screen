@@ -54,6 +54,14 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
     getContainerDom(): HTMLDivElement {
       return moveItemRef.current?.containerDom!;
     },
+    // 获取对应的 componentNode
+    getComponentNode(): ComponentNodeType {
+      return componentNode;
+    },
+    // 获取实例的 component
+    getComponent(): ComponentType {
+      return component;
+    },
   });
 
   return (

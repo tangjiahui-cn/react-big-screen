@@ -66,4 +66,6 @@ export interface InstanceType {
   handleSelected: () => void; // 选中实例
   handleUnSelected: () => void; // 取消选中实例
   getContainerDom: () => HTMLDivElement; // 获取容器dom
+  getComponentNode: () => ComponentNodeType; // 获取实例对应的 componentNode
+  getComponent: () => ComponentType; // 获取实例的 component
 }

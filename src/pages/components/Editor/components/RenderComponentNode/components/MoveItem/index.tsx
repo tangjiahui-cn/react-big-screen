@@ -58,7 +58,6 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
     if (!currentDOM) return;
 
     // 给当前dom增加拖拽支持
-    let selectedContainerDomList: HTMLDivElement[] = [];
     let selectedInstanceList: InstanceType[] = [];
     const unmountMoveableDom = moveableDom(currentDOM, {
       onStart() {
@@ -67,21 +66,20 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
         // 等待选中时设置选中实例后，再获取
         setTimeout(() => {
           selectedInstanceList = engine.instance.getAllSelected();
-          selectedContainerDomList = selectedInstanceList.map((x) => x.getContainerDom());
         });
       },
       onMove(deltaX: number, deltaY: number) {
-        selectedContainerDomList.forEach((dom: HTMLDivElement) => {
+        selectedInstanceList.forEach((instance: InstanceType) => {
           // 开启硬件GPU加速，变成合成层，不会触发页面 layout 和 paint。
-          dom.style.transform = `translate3d(${deltaX}px,${deltaY}px, 0)`;
+          instance.getContainerDom().style.transform = `translate3d(${deltaX}px,${deltaY}px, 0)`;
         });
       },
       onEnd(deltaX: number, deltaY: number) {
         // 恢复全局光标
         globalCursor.revoke();
-        selectedInstanceList.forEach((instance, index) => {
+        selectedInstanceList.forEach((instance) => {
           // 删除 transform
-          selectedContainerDomList[index].style.removeProperty("transform");
+          instance.getContainerDom().style.removeProperty("transform");
           // 更新 componentNode
           const componentNode = engine.componentNode.get(instance.id);
           if (componentNode) {
