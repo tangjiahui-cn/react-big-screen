@@ -11,8 +11,9 @@ import classNames from "classnames";
 import engine, { InstanceType } from "@/engine";
 import { useEffectOnce } from "@/hooks";
 import { useContextMenu, ContextMenuItem } from "@/contextMenu";
-import { dragMoveSize, moveableDom } from "@/dragMove";
-import { createContextMenu } from "@/pages/components/Editor/components/RenderComponentNode/data/contextMenuItems";
+import { dragDirectionMapToCursor, dragMoveSize, moveableDom } from "@/dragMove";
+import { createContextMenu } from "../../data/contextMenuItems";
+import globalCursor from "@/globalCursor";
 
 export interface MoveItemRefType {
   // 容器dom
@@ -60,6 +61,8 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
     let selectedInstanceList: InstanceType[] = [];
     const unmountMoveableDom = moveableDom(currentDOM, {
       onStart() {
+        // 修改全局光标
+        globalCursor.set("move");
         // 等待选中时设置选中实例后，再获取
         setTimeout(() => {
           selectedInstanceList = engine.instance.getAllSelected();
@@ -73,6 +76,8 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
         });
       },
       onEnd(deltaX: number, deltaY: number) {
+        // 恢复全局光标
+        globalCursor.revoke();
         selectedInstanceList.forEach((instance, index) => {
           // 删除 transform
           selectedContainerDomList[index].style.removeProperty("transform");
@@ -107,7 +112,9 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
       height: dom.offsetHeight,
     };
     return dragMoveSize(dom, {
-      onMoveStart() {
+      onStart(direction) {
+        // 修改全局光标
+        globalCursor.set(dragDirectionMapToCursor[direction]);
         baseInfo = {
           x: dom.offsetLeft,
           y: dom.offsetTop,
@@ -126,6 +133,10 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
           height: Math.max(height, 0),
           width: Math.max(width, 0),
         });
+      },
+      onEnd() {
+        // 恢复全局光标
+        globalCursor.revoke();
       },
     });
   }, [isSelected]);

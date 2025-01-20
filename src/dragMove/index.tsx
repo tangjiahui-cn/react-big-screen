@@ -4,8 +4,32 @@
 import styles from "./index.module.less";
 import { createRoot } from "react-dom/client";
 import { moveableDom } from "@/dragMove/utils";
+import React from "react";
 
 export * from "./utils";
+
+export const dragDirectionMapToCursor: {
+  [K in DragDirection]: React.CSSProperties["cursor"];
+} = {
+  topLeft: "nw-resize",
+  top: "n-resize",
+  topRight: "ne-resize",
+  left: "w-resize",
+  right: "e-resize",
+  bottomLeft: "sw-resize",
+  bottom: "s-resize",
+  bottomRight: "se-resize",
+};
+
+export type DragDirection =
+  | "topLeft"
+  | "top"
+  | "topRight"
+  | "left"
+  | "right"
+  | "bottomLeft"
+  | "bottom"
+  | "bottomRight";
 
 export interface MoveInfo {
   dx: number; // deltaX
@@ -15,9 +39,9 @@ export interface MoveInfo {
 }
 
 interface DragSizeOptions {
-  onMoveStart?: () => void;
+  onStart?: (type: DragDirection) => void;
   onMove?: (moveInfo: MoveInfo) => void;
-  onMoveEnd?: (moveInfo: MoveInfo) => void;
+  onEnd?: (moveInfo: MoveInfo) => void;
 }
 
 export function dragMoveSize(dom: HTMLElement, options: DragSizeOptions): () => void {
@@ -45,18 +69,7 @@ export function dragMoveSize(dom: HTMLElement, options: DragSizeOptions): () => 
   }
 
   // 监听移动
-  function listenMove(
-    dom: HTMLElement,
-    type:
-      | "topLeft"
-      | "top"
-      | "topRight"
-      | "left"
-      | "right"
-      | "bottomLeft"
-      | "bottom"
-      | "bottomRight",
-  ): () => void {
+  function listenMove(dom: HTMLElement, direction: DragDirection): () => void {
     function getMoveInfo(deltaX: number, deltaY: number) {
       const moveInfo: MoveInfo = {
         dx: 0,
@@ -83,7 +96,7 @@ export function dragMoveSize(dom: HTMLElement, options: DragSizeOptions): () => 
         moveInfo.dw = deltaX; // 宽度变化
       }
 
-      switch (type) {
+      switch (direction) {
         case "top":
           top();
           break;
@@ -118,13 +131,13 @@ export function dragMoveSize(dom: HTMLElement, options: DragSizeOptions): () => 
 
     return moveableDom(dom, {
       onStart() {
-        options?.onMoveStart?.();
+        options?.onStart?.(direction);
       },
       onMove(deltaX, deltaY) {
         options?.onMove?.(getMoveInfo(deltaX, deltaY));
       },
       onEnd(deltaX, deltaY) {
-        options?.onMove?.(getMoveInfo(deltaX, deltaY));
+        options?.onEnd?.(getMoveInfo(deltaX, deltaY));
       },
     });
   }
