@@ -5,13 +5,14 @@
  * @date 2025/1/8
  * @description 用于改变组件的x、y、width、height。
  */
-import React, { ForwardedRef, useEffect, useImperativeHandle, useRef } from "react";
+import React, { ForwardedRef, useEffect, useImperativeHandle, useMemo, useRef } from "react";
 import styles from "./index.module.less";
 import classNames from "classnames";
 import engine, { InstanceType } from "@/engine";
 import { useEffectOnce } from "@/hooks";
 import { useContextMenu, ContextMenuItem } from "@/contextMenu";
 import { dragMoveSize, moveableDom } from "@/dragMove";
+import { createContextMenu } from "@/pages/components/Editor/components/RenderComponentNode/data/contextMenuItems";
 
 export interface MoveItemRefType {
   // 容器dom
@@ -23,8 +24,6 @@ export interface MoveItemRefType {
 }
 
 interface MoveItemProps extends React.HTMLProps<HTMLDivElement> {
-  contextMenuItems?: ContextMenuItem[]; // 右键菜单配置项
-  onSelectContextMenu?: (key: string) => void; // 右键菜单选中回调
   onChangeUpdateMoveInfo: (moveInfo: {
     x: number;
     y: number;
@@ -34,8 +33,7 @@ interface MoveItemProps extends React.HTMLProps<HTMLDivElement> {
 }
 
 const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveItemRefType>) => {
-  const { className, contextMenuItems, onSelectContextMenu, onChangeUpdateMoveInfo, ...rest } =
-    props;
+  const { className, onChangeUpdateMoveInfo, ...rest } = props;
   const containerDomRef = useRef<HTMLDivElement>(null);
   const boxDomRef = useRef<HTMLDivElement>(null);
   const [isSelected, setIsSelected] = React.useState(false);
@@ -130,11 +128,8 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
   }, [isSelected]);
 
   // 绑定右键菜单
-  useContextMenu(containerDomRef, contextMenuItems, {
-    onSelect(key) {
-      onSelectContextMenu?.(key);
-    },
-  });
+  const contextMenuItems: ContextMenuItem[] = useMemo(() => createContextMenu(), []);
+  useContextMenu(containerDomRef, contextMenuItems);
 
   return (
     <div {...rest} className={classNames(className, styles.moveItem)} ref={containerDomRef}>

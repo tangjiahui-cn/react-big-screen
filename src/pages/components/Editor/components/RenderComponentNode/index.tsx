@@ -6,11 +6,9 @@
  */
 import engine, { ComponentNodeType, ComponentType, useRegisterInstance } from "@/engine";
 import MoveItem, { MoveItemRefType } from "./components/MoveItem";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { isKeyPressed } from "@/shortCutKeys";
 import { isClickMouseLeft, isClickMouseRight } from "@/utils";
-import { createContextMenu } from "./data/contextMenuItems";
-import { ContextMenuItem } from "@/contextMenu";
 
 interface RenderComponentProps {
   componentNode: ComponentNodeType;
@@ -34,9 +32,6 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
   const { component, componentNode } = props;
   const Component = component.component;
   const moveItemRef = useRef<MoveItemRefType>(null);
-
-  // 右键菜单配置项
-  const contextMenuItems: ContextMenuItem[] = useMemo(() => createContextMenu(), []);
 
   // 注册行为实例（只能改变内部属性）
   const instance = useRegisterInstance({
@@ -90,8 +85,6 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
           engine.instance.select(instance, !isHoldMultiple);
         }
       }}
-      // 右键菜单配置项
-      contextMenuItems={contextMenuItems}
       // 更新位置坐标信息
       onChangeUpdateMoveInfo={(moveInfo) => {
         engine.componentNode.update(componentNode.id, {
