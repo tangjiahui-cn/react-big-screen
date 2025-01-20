@@ -1,5 +1,5 @@
 /**
- * cover antd style.
+ * cover global antd style.
  */
 
 :global {
@@ -11,7 +11,9 @@
     font-size: 12px;
   }
 
-  .ant-input-affix-wrapper {
+  // 避免拖拽大小时，视觉上不能立即生效。
+  .ant-input-affix-wrapper,
+  .ant-btn{
     transition: none !important;
   }
 }

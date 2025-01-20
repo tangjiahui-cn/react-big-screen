@@ -117,11 +117,14 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
         dom.style.zIndex = `${engine.componentNode.getMaxLevel()}`;
       },
       onMove(moveInfo) {
+        const width = baseInfo.width + moveInfo.dw;
+        const height = baseInfo.height + moveInfo.dh;
+        if (width < 0 || height < 0) return;
         onChangeUpdateMoveInfo?.({
           x: baseInfo.x + moveInfo.dx,
           y: baseInfo.y + moveInfo.dy,
-          height: baseInfo.height + moveInfo.dh,
-          width: baseInfo.width + moveInfo.dw,
+          height: Math.max(height, 0),
+          width: Math.max(width, 0),
         });
       },
     });
