@@ -30,6 +30,7 @@ export interface ComponentType<Option = any> extends BaseComponent {
 export interface ComponentNodeType extends BaseComponent {
   id: string; // 实例id
   name: string; // 实例名称
+  lock?: boolean; // 是否锁定（仅用于编辑模式）
 }
 
 // 全局配置类型

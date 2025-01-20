@@ -8,3 +8,5 @@ export * from "./copySelectedComponentNodes";
 export * from "./clearComponentNodes";
 export * from "./saveLocal";
 export * from "./unSelectAllComponentNodes";
+export * from "./lockAllSelectedComponentNodes";
+export * from "./unlockAllSelectedComponentNodes";

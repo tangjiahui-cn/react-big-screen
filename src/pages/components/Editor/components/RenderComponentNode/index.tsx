@@ -58,8 +58,10 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
 
   return (
     <MoveItem
+      lock={componentNode.lock}
       ref={moveItemRef}
       style={{
+        opacity: componentNode.lock ? 0.75 : 1,
         left: componentNode.x,
         top: componentNode.y,
         width: componentNode.width,
@@ -77,6 +79,11 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
 
         // 点击左键或右键，可选中当前组件
         if (isClickMouseLeft(e.nativeEvent) || isClickMouseRight(e.nativeEvent)) {
+          // 锁定时且点击左键时不能选中
+          if (componentNode.lock && isClickMouseLeft(e.nativeEvent)) {
+            return;
+          }
+          // 不可重复选中
           if (engine.instance.isSelected(componentNode.id)) {
             return;
           }

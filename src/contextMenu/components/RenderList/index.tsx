@@ -14,6 +14,7 @@ export interface RenderListItem {
   key: string; // 唯一key
   icon?: React.ReactNode; // 图标
   title?: React.ReactNode; // 展示标题
+  disabled?: boolean; // 是否禁用
   selectable?: boolean; // 是否可选中自身（undefined可选中，null不可选中）
   onSelect?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void; // 选中触发函数
   children?: RenderListItem[]; // 子元素列表
@@ -30,7 +31,8 @@ export default function RenderList(props: RenderListProps) {
   return (
     <div className={styles.renderList}>
       {props?.items?.map?.((item) => {
-        const isSelectable = item?.selectable ?? item?.selectable === undefined;
+        const isSelectable =
+          !item?.disabled && (item?.selectable ?? item?.selectable === undefined);
         return (
           <HoverItem
             key={item?.key}
@@ -38,6 +40,7 @@ export default function RenderList(props: RenderListProps) {
             style={item?.style}
             className={classNames(
               styles.renderList_item,
+              item?.disabled && styles.renderList_disabled,
               !isSelectable && styles.renderList_item_unselectable,
             )}
             // 浮层元素选中

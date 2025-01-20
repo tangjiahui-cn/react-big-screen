@@ -27,7 +27,7 @@ export function createEditorContextMenu(): ContextMenuItem[] {
       onSelect: () => selectAllComponentNodes(),
     },
     {
-      key: "selectAll",
+      key: "unselectAll",
       title: "反选",
       icon: <BorderBottomOutlined />,
       onSelect: () => unSelectAllComponentNodes(),

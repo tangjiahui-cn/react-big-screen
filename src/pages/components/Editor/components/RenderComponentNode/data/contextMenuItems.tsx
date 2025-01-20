@@ -10,11 +10,18 @@ import {
   ArrowUpOutlined,
   CopyOutlined,
   DeleteOutlined,
+  LockOutlined,
+  UnlockOutlined,
   VerticalAlignBottomOutlined,
   VerticalAlignTopOutlined,
 } from "@ant-design/icons";
 import engine from "@/engine";
-import { copySelectedComponentNodes, deleteSelectedComponentNodes } from "@/shortCutKeys";
+import {
+  copySelectedComponentNodes,
+  deleteSelectedComponentNodes,
+  lockAllSelectedComponentNodes,
+  unlockAllSelectedComponentNodes,
+} from "@/shortCutKeys";
 
 /**
  * 创建右键菜单配置项
@@ -88,9 +95,22 @@ export function createContextMenu(): ContextMenuItem[] {
       },
     },
     {
+      key: "lock",
+      icon: <LockOutlined />,
+      title: "锁定",
+      onSelect: () => lockAllSelectedComponentNodes(),
+    },
+    {
+      key: "unlock",
+      icon: <UnlockOutlined />,
+      title: "解锁",
+      onSelect: () => unlockAllSelectedComponentNodes(),
+    },
+    {
       key: "copy",
       icon: <CopyOutlined />,
       title: "复制",
+      style: { borderTop: "1px solid #e8e8e8", marginBottom: 4 },
       onSelect: () => copySelectedComponentNodes(),
     },
     {

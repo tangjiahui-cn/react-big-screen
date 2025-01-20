@@ -25,8 +25,9 @@ function clearGlobal() {
 
 export function useContextMenu(
   domRef: RefObject<HTMLDivElement | null>, // dom的ref值
-  menuItems?: (RenderListItem | Boolean)[], // 菜单配置项
+  menuItems?: RenderListItem[], // 菜单配置项
   options?: {
+    onBeforeOpen?: (menuItems: RenderListItem[]) => RenderListItem[] | void; // 打开右键菜单之前（支持修改menuItems）
     onSelect?: (key: string, item: RenderListItem) => void; // 选中项
   },
 ) {
@@ -46,8 +47,18 @@ export function useContextMenu(
       e.preventDefault();
       e.stopPropagation();
 
+      // 处理 onBeforeOpen
+      if (options?.onBeforeOpen) {
+        const newMenuItems: void | RenderListItem[] = options?.onBeforeOpen?.(
+          menuItemsRef.current || [],
+        );
+        if (newMenuItems) {
+          menuItemsRef.current = newMenuItems?.filter(Boolean) as RenderListItem[];
+        }
+      }
+
       // 如果右键菜单列表为空则不显示
-      if (!menuItemsRef.current) {
+      if (!menuItemsRef.current?.length) {
         return;
       }
 
@@ -73,8 +84,8 @@ export function useContextMenu(
       );
 
       unmounts.push(() => {
-        app.unmount();
-        div.remove();
+        app?.unmount?.();
+        div?.remove?.();
       });
     }
 

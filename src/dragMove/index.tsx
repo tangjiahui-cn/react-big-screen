@@ -60,8 +60,10 @@ export function dragMoveSize(dom: HTMLElement, options: DragSizeOptions): () => 
     app.render(<div className={className} onMouseDown={(e) => e.stopPropagation()} />);
 
     unmountList.push(() => {
-      app.unmount();
-      div.remove();
+      setTimeout(() => {
+        app?.unmount?.();
+        div?.remove?.();
+      });
     });
 
     dom?.appendChild(div);

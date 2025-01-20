@@ -25,6 +25,7 @@ export interface MoveItemRefType {
 }
 
 interface MoveItemProps extends React.HTMLProps<HTMLDivElement> {
+  lock?: boolean; // 是否锁定(锁定只能通过右键菜单操作，不能左键选中)
   onChangeUpdateMoveInfo: (moveInfo: {
     x: number;
     y: number;
@@ -34,7 +35,7 @@ interface MoveItemProps extends React.HTMLProps<HTMLDivElement> {
 }
 
 const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveItemRefType>) => {
-  const { className, onChangeUpdateMoveInfo, ...rest } = props;
+  const { className, onChangeUpdateMoveInfo, lock, ...rest } = props;
   const containerDomRef = useRef<HTMLDivElement>(null);
   const boxDomRef = useRef<HTMLDivElement>(null);
   const [isSelected, setIsSelected] = React.useState(false);
@@ -143,7 +144,28 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
 
   // 绑定右键菜单
   const contextMenuItems: ContextMenuItem[] = useMemo(() => createContextMenu(), []);
-  useContextMenu(containerDomRef, contextMenuItems);
+  useContextMenu(containerDomRef, contextMenuItems, {
+    onBeforeOpen(menuItems) {
+      // 判断选中组件 锁定/解锁
+      let lockCount = 0;
+      const allSelectedInstances = engine.instance.getAllSelected();
+      const allSelectedComponents = allSelectedInstances.map((ins) => {
+        const componentNode = engine.componentNode.get(ins.id);
+        if (componentNode?.lock) {
+          lockCount++;
+        }
+        return componentNode;
+      });
+      if (allSelectedComponents.length) {
+        return menuItems.filter((menuItem) => {
+          if (menuItem.key === "lock") return lockCount !== allSelectedComponents.length;
+          if (menuItem.key === "unlock") return !!lockCount;
+          return true;
+        });
+      }
+      return menuItems;
+    },
+  });
 
   return (
     <div {...rest} className={classNames(className, styles.moveItem)} ref={containerDomRef}>
@@ -152,7 +174,11 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
 
       {/* 遮罩层 */}
       <div
-        className={classNames(styles.moveItem_box, isSelected && styles.moveItem_box_selected)}
+        className={classNames(
+          styles.moveItem_box,
+          isSelected && styles.moveItem_box_selected,
+          lock && styles.moveItem_box_lock,
+        )}
         ref={boxDomRef}
       />
     </div>
