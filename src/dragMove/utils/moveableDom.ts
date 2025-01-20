@@ -7,7 +7,7 @@
 import { isClickMouseLeft } from "@/utils/mouse";
 
 interface moveableDomOptions {
-  onStart?: () => void; // 开始移动
+  onStart?: (e: MouseEvent) => void; // 开始移动
   onMove?: (deltaX: number, deltaY: number) => void; // 移动中
   onEnd?: (deltaX: number, deltaY: number) => void; // 移动结束
 }
@@ -31,7 +31,7 @@ export function moveableDom(dom: HTMLElement, options: moveableDomOptions): Unmo
     moveInfo.startY = e.clientY;
     window.addEventListener("mouseup", mouseup);
     window.addEventListener("mousemove", mousemove);
-    options?.onStart?.();
+    options?.onStart?.(e);
   }
 
   function mousemove(e: MouseEvent) {

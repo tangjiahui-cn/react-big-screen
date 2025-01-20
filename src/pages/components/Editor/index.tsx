@@ -10,14 +10,18 @@ import React, { useMemo, useRef } from "react";
 import { useComponentNodes } from "@/engine";
 import RenderComponentNode from "./components/RenderComponentNode";
 import EditorMask from "./components/EditorMask";
-import { isClickMouseLeft } from "@/utils";
+import { isClickMouseLeft, isIntersect } from "@/utils";
 import { useContextMenu } from "@/contextMenu";
 import { createEditorContextMenu } from "./contextMenu";
+import { RangeInfo, useRangeBox } from "@/rangeBox";
 
+// 右键菜单项
+const contextMenu = createEditorContextMenu();
 export default React.memo(() => {
   const config = useConfig();
   const componentNodes: ComponentNodeType[] = useComponentNodes();
   const editorDomRef = useRef<HTMLDivElement>(null);
+  const innerEditorDomRef = useRef<HTMLDivElement>(null);
 
   // 渲染实例列表
   const renderComponentNodes = useMemo(() => {
@@ -36,8 +40,43 @@ export default React.memo(() => {
     });
   }, [componentNodes]);
 
-  // 右键菜单
-  const contextMenu = useMemo(() => createEditorContextMenu(), []);
+  // 范围框选
+  function handleSelectRangeInfo(rangeInfo: RangeInfo) {
+    // 过滤框选实例
+    const selectedIds = engine.componentNode.getAll().reduce((result, componentNode) => {
+      const p1 = {
+        x1: componentNode.x,
+        y1: componentNode.y,
+        x2: componentNode.x + componentNode.width,
+        y2: componentNode.y + componentNode.height,
+      };
+      const p2 = {
+        x1: rangeInfo.x,
+        y1: rangeInfo.y,
+        x2: rangeInfo.x + rangeInfo.width,
+        y2: rangeInfo.y + rangeInfo.height,
+      };
+      // 两个矩形是否相交
+      if (isIntersect(p1, p2)) {
+        result.push(componentNode.id);
+      }
+      return result;
+    }, [] as string[]);
+    // 选中框选的实例
+    engine.instance.select(selectedIds, true);
+  }
+
+  // 注册范围框选组件
+  useRangeBox(innerEditorDomRef, {
+    onMove(rangeInfo) {
+      handleSelectRangeInfo(rangeInfo);
+    },
+    onEnd(rangeInfo) {
+      handleSelectRangeInfo(rangeInfo);
+    },
+  });
+
+  // 注册右键菜单
   useContextMenu(editorDomRef, contextMenu);
 
   return (
@@ -51,7 +90,11 @@ export default React.memo(() => {
         }
       }}
     >
-      <div className={styles.editor_render} style={{ width: config.width, height: config.height }}>
+      <div
+        ref={innerEditorDomRef}
+        className={styles.editor_render}
+        style={{ width: config.width, height: config.height }}
+      >
         {/* 渲染实例 */}
         {renderComponentNodes}
 

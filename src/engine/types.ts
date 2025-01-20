@@ -69,3 +69,8 @@ export interface InstanceType {
   getComponentNode: () => ComponentNodeType; // 获取实例对应的 componentNode
   getComponent: () => ComponentType; // 获取实例的 component
 }
+
+// 全局运行时配置
+export interface GlobalRuntime {
+  isDragging: boolean; // 是否拖拽中
+}

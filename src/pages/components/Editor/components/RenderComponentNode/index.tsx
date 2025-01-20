@@ -82,7 +82,7 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
       onMouseLeave={() => {
         instance.handleUnHover();
       }}
-      onMouseDown={(e) => {
+      onPointerDown={(e) => {
         e.stopPropagation();
 
         // 点击左键或右键，可选中当前组件

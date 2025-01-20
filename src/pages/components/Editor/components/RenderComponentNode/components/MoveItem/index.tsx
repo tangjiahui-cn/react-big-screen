@@ -60,7 +60,8 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
     // 给当前dom增加拖拽支持
     let selectedInstanceList: InstanceType[] = [];
     const unmountMoveableDom = moveableDom(currentDOM, {
-      onStart() {
+      onStart(e) {
+        e.stopPropagation();
         // 修改全局光标
         globalCursor.set("move");
         // 等待选中时设置选中实例后，再获取

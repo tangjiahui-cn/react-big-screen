@@ -4,9 +4,9 @@
  * @author tangjiahui
  * @date 2025/1/8
  */
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useIsVirtualDragging, useVirtualDrop } from "@/virtual-drag";
-import engine from "@/engine";
+import engine, { useGlobalSelector } from "@/engine";
 import classNames from "classnames";
 import styles from "./index.module.less";
 
@@ -20,6 +20,13 @@ export default function EditorMask(props: Props) {
   const isVirtualDragging = useIsVirtualDragging({
     accept: ["create-component"],
   });
+
+  // 全局运行时dragging
+  const runtimeDragging = useGlobalSelector((state) => state.runtime.isDragging);
+  useEffect(() => {
+    if (!runtimeDragging || !domRef.current) return;
+    domRef.current.style.zIndex = `${engine.componentNode.getMaxLevel()}`;
+  }, [runtimeDragging]);
 
   useVirtualDrop(domRef, {
     accept: ["create-component"],
@@ -58,7 +65,7 @@ export default function EditorMask(props: Props) {
       className={classNames(
         props?.className,
         styles.editorMask,
-        isVirtualDragging && styles.editorMask_show,
+        (runtimeDragging || isVirtualDragging) && styles.editorMask_show,
       )}
     />
   );

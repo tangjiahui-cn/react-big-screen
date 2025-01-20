@@ -6,7 +6,7 @@
  * @description 存储的数据会导致引用位置全局更新，故避免存储需要经常变动的数据。
  */
 import { create } from "zustand";
-import type { GlobalConfig, ComponentType, ComponentNodeType } from "..";
+import { GlobalConfig, ComponentType, ComponentNodeType, GlobalRuntime } from "..";
 
 export type ComponentMap = Record<string, ComponentType>;
 
@@ -14,6 +14,7 @@ export interface GlobalState {
   componentNodes: ComponentNodeType[]; // componentNodes
   componentMap: ComponentMap; // 组件模板映射 (cId => component)
   config: GlobalConfig; // 全局配置
+  runtime: GlobalRuntime; // 全局运行时配置
 }
 
 export const useGlobalSelector = create<GlobalState>(() => ({
@@ -22,6 +23,9 @@ export const useGlobalSelector = create<GlobalState>(() => ({
   config: {
     width: 1920,
     height: 1080,
+  },
+  runtime: {
+    isDragging: false,
   },
 }));
 
