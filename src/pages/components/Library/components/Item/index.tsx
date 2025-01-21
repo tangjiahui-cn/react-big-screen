@@ -8,7 +8,7 @@ import styles from "./index.module.less";
 import { ComponentType } from "@/engine";
 import classNames from "classnames";
 import { useRef } from "react";
-import { useVirtualDrag } from "@/virtual-drag";
+import { useVirtualDrag } from "../../../../../packages/virtual-drag";
 
 interface Props {
   className?: string;

@@ -7,7 +7,7 @@
 import { RefObject, useEffect } from "react";
 import styles from "./index.module.less";
 import engine from "@/engine";
-import { moveableDom } from "@/dragMove";
+import { moveableDom } from "../dragMove";
 
 export interface RangeInfo {
   x: number;

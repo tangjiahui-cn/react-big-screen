@@ -11,9 +11,9 @@ import { useComponentNodes } from "@/engine";
 import RenderComponentNode from "./components/RenderComponentNode";
 import EditorMask from "./components/EditorMask";
 import { isClickMouseLeft, isIntersect } from "@/utils";
-import { useContextMenu } from "@/contextMenu";
+import { useContextMenu } from "../../../packages/contextMenu";
 import { createEditorContextMenu } from "./contextMenu";
-import { RangeInfo, useRangeBox } from "@/rangeBox";
+import { RangeInfo, useRangeBox } from "../../../packages/rangeBox";
 
 // 右键菜单项
 const contextMenu = createEditorContextMenu();

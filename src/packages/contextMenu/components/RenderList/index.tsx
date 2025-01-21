@@ -7,7 +7,7 @@
 import React from "react";
 import styles from "./index.module.less";
 import { RightOutlined } from "@ant-design/icons";
-import HoverItem from "@/contextMenu/components/HoverItem";
+import HoverItem from "@/packages/contextMenu/components/HoverItem";
 import classNames from "classnames";
 
 export interface RenderListItem {

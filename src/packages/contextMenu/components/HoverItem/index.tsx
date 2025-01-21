@@ -7,7 +7,7 @@
 import React, { HTMLAttributes, useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./index.module.less";
-import RenderList from "@/contextMenu/components/RenderList";
+import RenderList from "@/packages/contextMenu/components/RenderList";
 import type { RenderListItem } from "../RenderList";
 import engine from "@/engine";
 

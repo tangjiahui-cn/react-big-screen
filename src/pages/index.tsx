@@ -11,7 +11,7 @@ import Editor from "./components/Editor";
 import Library from "./components/Library";
 import engine from "@/engine";
 import { useEffectOnce } from "@/hooks";
-import { useGlobalShortCutKeys } from "@/shortCutKeys";
+import { useGlobalShortCutKeys } from "../packages/shortCutKeys";
 
 export default function Page() {
   // 注册全局快捷键

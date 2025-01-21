@@ -23,7 +23,7 @@ import SizeBar from "./components/SizeBar";
 import engine from "@/engine";
 import { getLocalFileText, saveToFile } from "@/utils";
 import ShortCutKeysDescription from "./components/ShortCutKeysDescription";
-import { clearComponentNodes, saveLocal } from "@/shortCutKeys";
+import { clearComponentNodes, saveLocal } from "../../../packages/shortCutKeys";
 
 // 打开新路由页面
 function openRoute(routePath: string) {

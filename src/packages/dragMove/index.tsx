@@ -3,7 +3,7 @@
  */
 import styles from "./index.module.less";
 import { createRoot } from "react-dom/client";
-import { moveableDom } from "@/dragMove/utils";
+import { moveableDom } from "@/packages/dragMove/utils";
 import React from "react";
 
 export * from "./utils";

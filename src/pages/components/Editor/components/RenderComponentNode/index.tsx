@@ -7,7 +7,7 @@
 import engine, { ComponentNodeType, ComponentType, useRegisterInstance } from "@/engine";
 import MoveItem, { MoveItemRefType } from "./components/MoveItem";
 import { useEffect, useRef, useState } from "react";
-import { isKeyPressed } from "@/shortCutKeys";
+import { isKeyPressed } from "../../../../../packages/shortCutKeys";
 import { isClickMouseLeft, isClickMouseRight } from "@/utils";
 
 interface RenderComponentProps {

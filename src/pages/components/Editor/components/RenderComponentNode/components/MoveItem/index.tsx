@@ -10,10 +10,14 @@ import styles from "./index.module.less";
 import classNames from "classnames";
 import engine, { InstanceType } from "@/engine";
 import { useEffectOnce } from "@/hooks";
-import { useContextMenu, ContextMenuItem } from "@/contextMenu";
-import { dragDirectionMapToCursor, dragMoveSize, moveableDom } from "@/dragMove";
+import { useContextMenu, ContextMenuItem } from "../../../../../../../packages/contextMenu";
+import {
+  dragDirectionMapToCursor,
+  dragMoveSize,
+  moveableDom,
+} from "../../../../../../../packages/dragMove";
 import { createContextMenu } from "../../data/contextMenuItems";
-import globalCursor from "@/globalCursor";
+import globalCursor from "../../../../../../../packages/globalCursor";
 
 export interface MoveItemRefType {
   // 容器dom

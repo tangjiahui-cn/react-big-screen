@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2025/1/15
  */
-import { ContextMenuItem } from "@/contextMenu";
+import { ContextMenuItem } from "../../../../../../packages/contextMenu";
 import {
   ArrowDownOutlined,
   ArrowUpOutlined,
@@ -21,7 +21,7 @@ import {
   deleteSelectedComponentNodes,
   lockAllSelectedComponentNodes,
   unlockAllSelectedComponentNodes,
-} from "@/shortCutKeys";
+} from "../../../../../../packages/shortCutKeys";
 
 /**
  * 创建右键菜单配置项

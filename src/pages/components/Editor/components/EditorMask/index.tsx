@@ -5,7 +5,7 @@
  * @date 2025/1/8
  */
 import React, { useEffect, useRef } from "react";
-import { useIsVirtualDragging, useVirtualDrop } from "@/virtual-drag";
+import { useIsVirtualDragging, useVirtualDrop } from "../../../../../packages/virtual-drag";
 import engine, { useGlobalSelector } from "@/engine";
 import classNames from "classnames";
 import styles from "./index.module.less";

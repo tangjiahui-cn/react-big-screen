@@ -5,7 +5,7 @@
  * @date 2024/12/26
  */
 import React, { useEffect } from "react";
-import { virtualDragData, VirtualDragOptions } from "@/virtual-drag/data";
+import { virtualDragData, VirtualDragOptions } from "@/packages/virtual-drag/data";
 
 type DomRef<T extends HTMLElement> = React.RefObject<T>;
 
