@@ -52,6 +52,7 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
     };
   });
 
+  // todo: 后续优化（已知问题，同时选中一百以上组件会内存溢出）
   // 拖拽位移
   useEffectOnce(() => {
     const currentDOM = containerDomRef.current;
@@ -99,6 +100,7 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
     };
   });
 
+  // todo: 后续优化（已知问题，同时选中一百以上组件会内存溢出）
   // 拖拽大小
   useEffect(() => {
     if (!isSelected) {
@@ -141,6 +143,7 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
     });
   }, [isSelected]);
 
+  // todo: 后续优化（已知问题，同时选中一百以上组件会内存溢出）
   // 绑定右键菜单
   const contextMenuItems: ContextMenuItem[] = useMemo(() => createContextMenu(), []);
   useContextMenu(containerDomRef, contextMenuItems, {
