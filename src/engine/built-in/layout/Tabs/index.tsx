@@ -1,5 +1,5 @@
 /**
- * Tabs
+ * Tabs（标签页）
  *
  * @author tangjiahui
  * @date 2024/1/7
@@ -7,7 +7,7 @@
 import { Tabs } from "antd";
 import { ComponentProps } from "@/engine";
 
-type InputProps = ComponentProps<{
+type Props = ComponentProps<{
   // 标签页头部配置列表
   items?: {
     key: string; // 标签页 key
@@ -15,7 +15,7 @@ type InputProps = ComponentProps<{
   }[];
 }>;
 
-export default function (props: InputProps) {
+export default function (props: Props) {
   const { options, width, height } = props;
   return (
     <div style={{ width, height, background: "white" }}>
