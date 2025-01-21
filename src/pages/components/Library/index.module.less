@@ -6,6 +6,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  background: whitesmoke;
 
   * {
     box-sizing: border-box;
@@ -13,25 +14,51 @@
 
   &_header {
     padding: 12px;
-    border-bottom: @border;
+    background: white;
   }
 
-  &_main {
-    flex: 1;
+  &_components {
     width: 100%;
-    overflow-y: auto;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-content: flex-start;
   }
 
-  &_item {
-    border-right: @border;
-    border-bottom: @border;
+  &_main {
+    flex: 1;
+    width: 100%;
+    overflow-y: auto;
+  }
 
-    &:nth-child(3n) {
-      border-right: none;
+  :global {
+    .ant-collapse-header {
+      background: white;
+      font-weight: bold;
+    }
+
+    .ant-collapse {
+      font-size: 12px;
+      border: none;
+      border-top: @border !important;
+    }
+
+    .ant-collapse>.ant-collapse-item>.ant-collapse-header .ant-collapse-arrow {
+      font-size: 10px;
+      color: #a5a5a5;
+    }
+
+    .ant-collapse>.ant-collapse-item {
+      border-bottom: @border !important;
+    }
+
+    .ant-collapse-content {
+      border-top: @border !important;
+    }
+
+    .ant-collapse-content-box {
+      padding: 0;
+      font-size: 12px;
     }
   }
 }

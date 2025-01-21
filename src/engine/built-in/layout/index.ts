@@ -13,7 +13,7 @@ export const layout: ComponentType[] = [
     cId: "tabs",
     cName: "标签页",
     icon: ICON_TABS,
-    group: "charts",
+    group: "layout",
     x: 0,
     y: 0,
     width: 100,
