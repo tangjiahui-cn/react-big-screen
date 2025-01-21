@@ -1,5 +1,5 @@
 /**
- * Pie (饼形图)
+ * Radar (雷达图)
  *
  * @author tangjiahui
  * @date 2025/1/21
@@ -15,20 +15,25 @@ export default function (props: Props) {
   const { ...style } = options;
 
   const chartOption: EChartsOption = {
-    tooltip: {
-      trigger: "item",
+    radar: {
+      indicator: [
+        { name: "Sales", max: 100 },
+        { name: "Administration", max: 100 },
+        { name: "Information Technology", max: 100 },
+        { name: "Customer Support", max: 100 },
+        { name: "Development", max: 100 },
+        { name: "Marketing", max: 100 },
+      ],
     },
     series: [
       {
-        name: "Access From",
-        type: "pie",
-        radius: "50%",
+        name: "Budget vs spending",
+        type: "radar",
         data: [
-          { value: 1048, name: "Search Engine" },
-          { value: 735, name: "Direct" },
-          { value: 580, name: "Email" },
-          { value: 484, name: "Union Ads" },
-          { value: 300, name: "Video Ads" },
+          {
+            value: [50, 50, 50, 50, 50, 50],
+            name: "Allocated Budget",
+          },
         ],
       },
     ],

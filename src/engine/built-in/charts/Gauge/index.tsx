@@ -1,5 +1,5 @@
 /**
- * Pie (饼形图)
+ * Gauge (雷达图)
  *
  * @author tangjiahui
  * @date 2025/1/21
@@ -16,19 +16,20 @@ export default function (props: Props) {
 
   const chartOption: EChartsOption = {
     tooltip: {
-      trigger: "item",
+      formatter: "{a} <br/>{b} : {c}%",
     },
     series: [
       {
-        name: "Access From",
-        type: "pie",
-        radius: "50%",
+        name: "Pressure",
+        type: "gauge",
+        detail: {
+          formatter: "{value}",
+        },
         data: [
-          { value: 1048, name: "Search Engine" },
-          { value: 735, name: "Direct" },
-          { value: 580, name: "Email" },
-          { value: 484, name: "Union Ads" },
-          { value: 300, name: "Video Ads" },
+          {
+            value: 50,
+            name: "SCORE",
+          },
         ],
       },
     ],

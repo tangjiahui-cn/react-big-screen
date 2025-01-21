@@ -1,5 +1,5 @@
 /**
- * Pie (饼形图)
+ * Bar (柱形图)
  *
  * @author tangjiahui
  * @date 2025/1/21
@@ -15,21 +15,18 @@ export default function (props: Props) {
   const { ...style } = options;
 
   const chartOption: EChartsOption = {
-    tooltip: {
-      trigger: "item",
+    xAxis: {
+      type: "category",
+      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    },
+    yAxis: {
+      type: "value",
     },
     series: [
       {
-        name: "Access From",
-        type: "pie",
-        radius: "50%",
-        data: [
-          { value: 1048, name: "Search Engine" },
-          { value: 735, name: "Direct" },
-          { value: 580, name: "Email" },
-          { value: 484, name: "Union Ads" },
-          { value: 300, name: "Video Ads" },
-        ],
+        data: [120, 200, 150, 80, 70, 110, 130],
+        type: "bar",
+        barWidth: 12,
       },
     ],
   };
