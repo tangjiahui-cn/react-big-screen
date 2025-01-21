@@ -28,7 +28,7 @@ export default function ImageIcon(props: ImageIconProps) {
       default:
         break;
     }
-  }, []);
+  }, [src]);
 
   return src ? (
     <img style={props?.style} src={iconUrl} draggable={false} />
