@@ -23,7 +23,7 @@ export interface BaseComponent {
 // 组件模板类型
 export type ComponentGroup = "base" | "charts" | "layout";
 export interface ComponentType<Option = any> extends BaseComponent {
-  icon: string; // 组件图标
+  icon: string | (() => Promise<typeof import("*.png")>); // 组件图标
   group: ComponentGroup; // 组件分类
   component: React.FC<ComponentProps<Option>>; // 组件模板
 }

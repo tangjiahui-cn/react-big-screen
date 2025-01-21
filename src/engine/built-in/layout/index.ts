@@ -6,13 +6,12 @@
  * */
 import type { ComponentType } from "@/engine";
 import Tabs from "./Tabs";
-import ICON_TABS from "@/static/built-in/tabs.png";
 
 export const layout: ComponentType[] = [
   {
     cId: "tabs",
     cName: "标签页",
-    icon: ICON_TABS,
+    icon: () => import("@/static/built-in/tabs.png"),
     group: "layout",
     x: 0,
     y: 0,

@@ -7,8 +7,9 @@
 import styles from "./index.module.less";
 import { ComponentType } from "@/engine";
 import classNames from "classnames";
-import { useRef } from "react";
+import React, { useRef } from "react";
 import { useVirtualDrag } from "@/packages/virtual-drag";
+import ImageIcon from "./ImageIcon";
 
 interface Props {
   style?: React.CSSProperties;
@@ -34,7 +35,7 @@ export default function (props: Props) {
       ref={domRef}
     >
       <div className={styles.componentItem_body}>
-        {component.icon ? <img src={component.icon} draggable={false} /> : <span>None</span>}
+        <ImageIcon src={component.icon} style={{ maxWidth: "50%", maxHeight: "50%" }} />
       </div>
       <div className={styles.componentItem_footer}>{component.cName}</div>
     </div>

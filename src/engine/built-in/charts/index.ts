@@ -5,11 +5,6 @@
  * @date 2025/1/21
  * */
 import type { ComponentType } from "@/engine";
-import ICON_PIE from "@/static/built-in/pie.png";
-import ICON_LINE from "@/static/built-in/line.png";
-import ICON_BAR from "@/static/built-in/bar.png";
-import ICON_RADAR from "@/static/built-in/radar.png";
-import ICON_GAUGE from "@/static/built-in/gauge.png";
 import Pie from "./Pie";
 import Line from "./Line";
 import Bar from "./Bar";
@@ -20,7 +15,7 @@ export const charts: ComponentType[] = [
   {
     cId: "pie",
     cName: "饼形图",
-    icon: ICON_PIE,
+    icon: () => import("@/static/built-in/pie.png"),
     group: "charts",
     x: 0,
     y: 0,
@@ -32,7 +27,7 @@ export const charts: ComponentType[] = [
   {
     cId: "line",
     cName: "折线图",
-    icon: ICON_LINE,
+    icon: () => import("@/static/built-in/line.png"),
     group: "charts",
     x: 0,
     y: 0,
@@ -44,7 +39,7 @@ export const charts: ComponentType[] = [
   {
     cId: "bar",
     cName: "柱形图",
-    icon: ICON_BAR,
+    icon: () => import("@/static/built-in/bar.png"),
     group: "charts",
     x: 0,
     y: 0,
@@ -56,7 +51,7 @@ export const charts: ComponentType[] = [
   {
     cId: "radar",
     cName: "雷达图",
-    icon: ICON_RADAR,
+    icon: () => import("@/static/built-in/radar.png"),
     group: "charts",
     x: 0,
     y: 0,
@@ -68,7 +63,7 @@ export const charts: ComponentType[] = [
   {
     cId: "gauge",
     cName: "仪表盘",
-    icon: ICON_GAUGE,
+    icon: () => import("@/static/built-in/gauge.png"),
     group: "charts",
     x: 0,
     y: 0,

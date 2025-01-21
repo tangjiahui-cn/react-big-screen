@@ -5,11 +5,6 @@
  * @date 2025/1/21
  * */
 import type { ComponentType } from "@/engine";
-import ICON_TEXT from "@/static/built-in/text.png";
-import ICON_TITLE from "@/static/built-in/title.png";
-import ICON_IMAGE from "@/static/built-in/image.png";
-import ICON_BUTTON from "@/static/built-in/button.png";
-import ICON_BACKGROUND from "@/static/built-in/background.png";
 import Text from "./Text";
 import Title from "./Title";
 import Image from "./Image";
@@ -20,7 +15,7 @@ export const base: ComponentType[] = [
   {
     cId: "text",
     cName: "文字",
-    icon: ICON_TEXT,
+    icon: () => import("@/static/built-in/text.png"),
     group: "base",
     x: 0,
     y: 0,
@@ -36,7 +31,7 @@ export const base: ComponentType[] = [
   {
     cId: "title",
     cName: "标题",
-    icon: ICON_TITLE,
+    icon: () => import("@/static/built-in/title.png"),
     group: "base",
     x: 0,
     y: 0,
@@ -54,7 +49,7 @@ export const base: ComponentType[] = [
   {
     cId: "button",
     cName: "按钮",
-    icon: ICON_BUTTON,
+    icon: () => import("@/static/built-in/button.png"),
     group: "base",
     x: 0,
     y: 0,
@@ -69,7 +64,7 @@ export const base: ComponentType[] = [
   {
     cId: "background",
     cName: "背景",
-    icon: ICON_BACKGROUND,
+    icon: () => import("@/static/built-in/background.png"),
     group: "base",
     x: 0,
     y: 0,
@@ -83,7 +78,7 @@ export const base: ComponentType[] = [
   {
     cId: "image",
     cName: "图片",
-    icon: ICON_IMAGE,
+    icon: () => import("@/static/built-in/image.png"),
     group: "base",
     x: 0,
     y: 0,
