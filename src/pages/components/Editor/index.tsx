@@ -57,7 +57,7 @@ export default React.memo(() => {
         y2: rangeInfo.y + rangeInfo.height,
       };
       // 两个矩形是否相交
-      if (isIntersect(p1, p2)) {
+      if (isIntersect(p1, p2) && !componentNode.lock) {
         result.push(componentNode.id);
       }
       return result;
