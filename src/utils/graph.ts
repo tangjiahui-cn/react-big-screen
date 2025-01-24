@@ -18,7 +18,7 @@ export function isIntersect(p1: RectPoint, p2: RectPoint) {
     (
       p1.x2 < p2.x1 ||
       // 右侧
-      p1.x1 > p1.x2 ||
+      p1.x1 > p2.x2 ||
       // 上方
       p1.y2 < p2.y1 ||
       // 下方
