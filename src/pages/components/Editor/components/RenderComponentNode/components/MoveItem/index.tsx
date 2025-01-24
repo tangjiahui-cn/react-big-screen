@@ -62,8 +62,10 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
     const currentDOM = containerDomRef.current;
     if (!currentDOM) return;
 
-    // 给当前dom增加拖拽支持
+    // 选中实例列表
     let selectedInstanceList: InstanceType[] = [];
+    // 是否启用transform（启用则开启硬件GPU加速，变成合成层，不会触发页面 layout 和 paint）
+    let enableTransform = false;
     const unmountMoveableDom = moveableDom(currentDOM, {
       onStart(e) {
         e.stopPropagation();
@@ -72,12 +74,20 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
         // 等待选中时设置选中实例后，再获取
         setTimeout(() => {
           selectedInstanceList = engine.instance.getAllSelected();
+          // 不超过50个组件使用transform，避免内存溢出（使用了transform会流畅，代价是占用内存）
+          enableTransform = selectedInstanceList.length < 50;
         });
       },
       onMove(deltaX: number, deltaY: number) {
         selectedInstanceList.forEach((instance: InstanceType) => {
-          // 开启硬件GPU加速，变成合成层，不会触发页面 layout 和 paint。
-          instance.getContainerDom().style.transform = `translate3d(${deltaX}px,${deltaY}px, 0)`;
+          if (enableTransform) {
+            instance.getContainerDom().style.transform = `translate3d(${deltaX}px,${deltaY}px, 0)`;
+          } else {
+            const componentNode = instance.getComponentNode();
+            const dom = instance.getContainerDom();
+            dom.style.left = `${componentNode.x + deltaX}px`;
+            dom.style.top = `${componentNode.y + deltaY}px`;
+          }
         });
       },
       onEnd(deltaX: number, deltaY: number) {
@@ -85,7 +95,9 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
         globalCursor.revoke();
         selectedInstanceList.forEach((instance) => {
           // 删除 transform
-          instance.getContainerDom().style.removeProperty("transform");
+          if (enableTransform) {
+            instance.getContainerDom().style.removeProperty("transform");
+          }
           // 更新 componentNode
           const componentNode = engine.componentNode.get(instance.id);
           if (componentNode) {
