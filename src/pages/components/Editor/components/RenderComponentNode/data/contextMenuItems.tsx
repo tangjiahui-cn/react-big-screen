@@ -81,7 +81,7 @@ export function createContextMenu(): ContextMenuItem[] {
       key: "levelDown",
       icon: <ArrowDownOutlined />,
       title: "下移一层",
-      style: { borderBottom: "1px solid #e8e8e8", marginBottom: 4 },
+      style: { borderBottom: "1px solid #e8e8e8" },
       onSelect() {
         const minLevel = engine.componentNode.getMinLevel();
         engine.instance.getAllSelected().forEach((instance) => {
@@ -110,7 +110,7 @@ export function createContextMenu(): ContextMenuItem[] {
       key: "copy",
       icon: <CopyOutlined />,
       title: "复制",
-      style: { borderTop: "1px solid #e8e8e8", marginBottom: 4 },
+      style: { borderTop: "1px solid #e8e8e8" },
       onSelect: () => copySelectedComponentNodes(),
     },
     {
