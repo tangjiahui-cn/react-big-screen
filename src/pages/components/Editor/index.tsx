@@ -14,6 +14,7 @@ import { isClickMouseLeft, isIntersect } from "@/utils";
 import { useContextMenu } from "../../../packages/contextMenu";
 import { createEditorContextMenu } from "./contextMenu";
 import { RangeInfo, useRangeBox } from "../../../packages/rangeBox";
+import { throttle } from "lodash-es";
 
 // 右键菜单项
 const contextMenu = createEditorContextMenu();
@@ -41,30 +42,32 @@ export default React.memo(() => {
   }, [componentNodes]);
 
   // 范围框选
-  function handleSelectRangeInfo(rangeInfo: RangeInfo) {
-    // 过滤框选实例
-    const selectedIds = engine.componentNode.getAll().reduce((result, componentNode) => {
-      const p1 = {
-        x1: componentNode.x,
-        y1: componentNode.y,
-        x2: componentNode.x + componentNode.width,
-        y2: componentNode.y + componentNode.height,
-      };
-      const p2 = {
-        x1: rangeInfo.x,
-        y1: rangeInfo.y,
-        x2: rangeInfo.x + rangeInfo.width,
-        y2: rangeInfo.y + rangeInfo.height,
-      };
-      // 两个矩形是否相交
-      if (isIntersect(p1, p2) && !componentNode.lock) {
-        result.push(componentNode.id);
-      }
-      return result;
-    }, [] as string[]);
-    // 选中框选的实例
-    engine.instance.select(selectedIds, true);
-  }
+  const handleSelectRangeInfo: (rangeInfo: RangeInfo) => void = useMemo(() => {
+    return throttle((rangeInfo: RangeInfo) => {
+      // 过滤框选实例
+      const selectedIds = engine.componentNode.getAll().reduce((result, componentNode) => {
+        const p1 = {
+          x1: componentNode.x,
+          y1: componentNode.y,
+          x2: componentNode.x + componentNode.width,
+          y2: componentNode.y + componentNode.height,
+        };
+        const p2 = {
+          x1: rangeInfo.x,
+          y1: rangeInfo.y,
+          x2: rangeInfo.x + rangeInfo.width,
+          y2: rangeInfo.y + rangeInfo.height,
+        };
+        // 两个矩形是否相交
+        if (isIntersect(p1, p2) && !componentNode.lock) {
+          result.push(componentNode.id);
+        }
+        return result;
+      }, [] as string[]);
+      // 选中框选的实例
+      engine.instance.select(selectedIds, true);
+    }, 100);
+  }, []);
 
   // 注册范围框选组件
   useRangeBox(innerEditorDomRef, {
