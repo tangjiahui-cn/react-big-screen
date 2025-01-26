@@ -9,7 +9,6 @@ import React, { ForwardedRef, useEffect, useImperativeHandle, useMemo, useRef } 
 import styles from "./index.module.less";
 import classNames from "classnames";
 import engine, { InstanceType } from "@/engine";
-import { useEffectOnce } from "@/hooks";
 import { useContextMenu, ContextMenuItem } from "../../../../../../../packages/contextMenu";
 import {
   dragDirectionMapToCursor,
@@ -58,7 +57,9 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
 
   // todo: 后续优化（已知问题，同时选中一百以上组件会内存溢出）
   // 拖拽位移
-  useEffectOnce(() => {
+  useEffect(() => {
+    if (lock) return;
+
     const currentDOM = containerDomRef.current;
     if (!currentDOM) return;
 
@@ -114,12 +115,12 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
     return () => {
       unmountMoveableDom();
     };
-  });
+  }, [lock]);
 
   // todo: 后续优化（已知问题，同时选中一百以上组件会内存溢出）
   // 拖拽大小
   useEffect(() => {
-    if (!isSelected) {
+    if (!isSelected || lock) {
       return;
     }
     const dom = containerDomRef.current!;
@@ -157,7 +158,7 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
         globalCursor.revoke();
       },
     });
-  }, [isSelected]);
+  }, [isSelected, lock]);
 
   // todo: 后续优化（已知问题，同时选中一百以上组件会内存溢出）
   // 绑定右键菜单
