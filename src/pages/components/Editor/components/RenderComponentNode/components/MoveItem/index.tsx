@@ -100,7 +100,7 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
             instance.getContainerDom().style.removeProperty("transform");
           }
           // 更新 componentNode
-          const componentNode = engine.componentNode.get(instance.id);
+          const componentNode = instance.getComponentNode();
           if (componentNode) {
             engine.componentNode.update(componentNode.id, {
               x: deltaX + (componentNode?.x || 0),
@@ -168,8 +168,8 @@ const MoveItem = React.forwardRef((props: MoveItemProps, ref: ForwardedRef<MoveI
       // 判断选中组件 锁定/解锁
       let lockCount = 0;
       const allSelectedInstances = engine.instance.getAllSelected();
-      const allSelectedComponents = allSelectedInstances.map((ins) => {
-        const componentNode = engine.componentNode.get(ins.id);
+      const allSelectedComponents = allSelectedInstances.map((instance) => {
+        const componentNode = instance.getComponentNode();
         if (componentNode?.lock) {
           lockCount++;
         }
