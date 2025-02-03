@@ -78,7 +78,7 @@ export default React.memo(() => {
       ref={editorDomRef}
       className={styles.editor}
       onContextMenu={(e) => e.preventDefault()}
-      onPointerDown={(e) => {
+      onMouseDown={(e) => {
         if (isClickMouseLeft(e.nativeEvent)) {
           engine.instance.unselectAll();
         }

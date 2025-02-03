@@ -43,9 +43,9 @@ export function useVirtualDrop<T extends HTMLElement>(
       options?.onDrop?.(e, dragOptions);
     };
 
-    dom.addEventListener("pointerup", mouseup);
+    dom.addEventListener("mouseup", mouseup);
     return () => {
-      dom.removeEventListener("pointerup", mouseup);
+      dom.removeEventListener("mouseup", mouseup);
     };
   }, []);
 }

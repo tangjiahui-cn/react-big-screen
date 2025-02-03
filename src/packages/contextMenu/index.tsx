@@ -24,7 +24,7 @@ function clearGlobal() {
 }
 
 export function useContextMenu(
-  domRef: RefObject<HTMLDivElement | null>, // dom的ref值
+  domRef: RefObject<HTMLElement | null>, // dom的ref值
   menuItems?: RenderListItem[], // 菜单配置项
   options?: {
     onBeforeOpen?: (menuItems: RenderListItem[]) => RenderListItem[] | void; // 打开右键菜单之前（支持修改menuItems）
