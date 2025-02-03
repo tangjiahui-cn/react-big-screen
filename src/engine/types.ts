@@ -73,6 +73,4 @@ export interface InstanceType {
 }
 
 // 全局运行时配置
-export interface GlobalRuntime {
-  isDragging: boolean; // 是否拖拽中
-}
+export interface GlobalRuntime {}

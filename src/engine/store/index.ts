@@ -24,9 +24,7 @@ export const useGlobalSelector = create<GlobalState>(() => ({
     width: 1920,
     height: 1080,
   },
-  runtime: {
-    isDragging: false,
-  },
+  runtime: {},
 }));
 
 export function setGlobalState(

@@ -56,7 +56,6 @@ export function useRangeBox(
         div.style.borderWidth = "0px";
         div.style.zIndex = `${engine.componentNode.getMaxLevel()}`;
         dom.appendChild(div);
-        engine.config.setRuntime({ isDragging: true });
       },
       onMove(deltaX: number, deltaY: number) {
         const rangeInfo = getRangeInfo(deltaX, deltaY);
@@ -72,7 +71,6 @@ export function useRangeBox(
         if (rangeInfo.width || rangeInfo.height) {
           options?.onEnd?.(getRangeInfo(deltaX, deltaY));
         }
-        engine.config.setRuntime({ isDragging: false });
         dom.removeChild(div);
       },
     });
