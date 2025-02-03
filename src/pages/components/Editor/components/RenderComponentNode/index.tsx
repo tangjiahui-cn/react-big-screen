@@ -5,10 +5,13 @@
  * @date 2024/12/25
  */
 import engine, { ComponentNodeType, ComponentType, useRegisterInstance } from "@/engine";
-import MoveItem, { MoveItemRefType } from "./components/MoveItem";
-import { useEffect, useRef, useState } from "react";
-import { isKeyPressed } from "../../../../../packages/shortCutKeys";
+import React, { useEffect, useRef, useState } from "react";
+import { isKeyPressed } from "@/packages/shortCutKeys";
 import { isClickMouseLeft, isClickMouseRight } from "@/utils";
+import { useItemContextMenu, useItemDragMove, useItemDragSize } from "./hooks";
+import classNames from "classnames";
+import styles from "./index.module.less";
+import { useDomEvents } from "@/hooks";
 
 interface RenderComponentProps {
   componentNode: ComponentNodeType;
@@ -31,7 +34,10 @@ export default function RenderComponentNode(props: RenderComponentProps) {
 function ScopeRenderComponentNode(props: RenderComponentProps) {
   const { component, componentNode } = props;
   const Component = component.component;
-  const moveItemRef = useRef<MoveItemRefType>(null);
+  const containerDomRef = useRef<HTMLDivElement>(null);
+
+  // 是否选中
+  const [isSelected, setIsSelected] = React.useState(false);
 
   // 注册行为实例（只能改变内部属性）
   const instance = useRegisterInstance({
@@ -43,16 +49,16 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
     // 选中实例样式
     handleSelected() {
       // 内部样式选中
-      moveItemRef?.current?.handleSelected?.();
+      setIsSelected(true);
     },
     // 取消选中实例样式
     handleUnSelected() {
       // 移除内部样式选中
-      moveItemRef?.current?.handleUnSelected?.();
+      setIsSelected(false);
     },
     // 获取容器dom
     getContainerDom(): HTMLDivElement {
-      return moveItemRef.current?.containerDom!;
+      return containerDomRef.current!;
     },
     // 获取对应的 componentNode
     getComponentNode(): ComponentNodeType {
@@ -64,10 +70,50 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
     },
   });
 
+  // 注册拖拽位移
+  useItemDragMove(containerDomRef, { lock: componentNode.lock });
+
+  // 注册拖拽大小
+  useItemDragSize(containerDomRef, {
+    isSelected,
+    lock: componentNode.lock,
+    onChange: (moveInfo) => {
+      engine.componentNode.update(componentNode.id, {
+        ...moveInfo,
+      });
+    },
+  });
+
+  // 注册右键菜单
+  useItemContextMenu(containerDomRef);
+
+  // 注册原生dom事件
+  useDomEvents(containerDomRef, {
+    // mousedown事件（因为原生使用了stopPropagation，react的合成onMouseDown会接受不到，所以直接绑定到原生事件）
+    mousedown(e) {
+      const isClickLeft = isClickMouseLeft(e);
+      // 锁定状态下，点击左键不进行任何操作
+      if (componentNode.lock && isClickLeft) {
+        return;
+      }
+      const isClickRight = isClickMouseRight(e);
+      // 点击左键或右键，可选中当前组件
+      if (isClickLeft || isClickRight) {
+        // 不可重复选中
+        if (engine.instance.isSelected(componentNode.id)) {
+          return;
+        }
+        // 是否按住多选键
+        const isHoldMultiple: boolean = isKeyPressed("shift");
+        engine.instance.select(instance, !isHoldMultiple);
+      }
+    },
+  });
+
   return (
-    <MoveItem
-      lock={componentNode.lock}
-      ref={moveItemRef}
+    <div
+      ref={containerDomRef}
+      className={classNames(styles.moveItem)}
       style={{
         opacity: componentNode.lock ? 0.75 : 1,
         left: componentNode.x,
@@ -77,37 +123,11 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
         zIndex: componentNode.level,
       }}
       onMouseEnter={() => {
+        // 手动控制样式（实现禁用等其他状态下不显示选中效果）
         instance.handleHover();
       }}
       onMouseLeave={() => {
         instance.handleUnHover();
-      }}
-      onPointerDown={(e) => {
-        const isClickLeft = isClickMouseLeft(e.nativeEvent);
-        // 锁定状态下，点击左键不进行任何操作
-        if (componentNode.lock && isClickLeft) {
-          return;
-        }
-
-        e.stopPropagation();
-
-        const isClickRight = isClickMouseRight(e.nativeEvent);
-        // 点击左键或右键，可选中当前组件
-        if (isClickLeft || isClickRight) {
-          // 不可重复选中
-          if (engine.instance.isSelected(componentNode.id)) {
-            return;
-          }
-          // 是否按住多选键
-          const isHoldMultiple: boolean = isKeyPressed("shift");
-          engine.instance.select(instance, !isHoldMultiple);
-        }
-      }}
-      // 更新位置坐标信息
-      onChangeUpdateMoveInfo={(moveInfo) => {
-        engine.componentNode.update(componentNode.id, {
-          ...moveInfo,
-        });
       }}
     >
       {/* 渲染组件 */}
@@ -116,6 +136,15 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
         width={componentNode.width}
         height={componentNode.height}
       />
-    </MoveItem>
+
+      {/* 遮罩层 */}
+      <div
+        className={classNames(
+          styles.moveItem_box,
+          isSelected && styles.moveItem_box_selected,
+          componentNode.lock && styles.moveItem_box_lock,
+        )}
+      />
+    </div>
   );
 }

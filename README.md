@@ -44,6 +44,9 @@ pnpm dev
 - store：存储全局数据（不做复杂action，仅用作响应式变量触发引用位置更新）。
 - 实例：等于component + componentNode + instance。
 
+## 处理事件
+点击事件只涉及到: `click`、`mousedown`、`mousemove`、`mouseup`。
+
 ## 相关项目
 - [lowcode-engine](https://github.com/tangjiahui-cn/lowcode-engine)
 
