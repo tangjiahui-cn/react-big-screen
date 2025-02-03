@@ -47,8 +47,10 @@ export function useRangeBox(
 
     return moveableDom(dom, {
       onStart(e) {
-        div.style.top = `${(startPos.x = e.layerX)}px`;
-        div.style.left = `${(startPos.y = e.layerY)}px`;
+        const domRect = dom.getBoundingClientRect();
+        // 计算点击位置在dom容器内部的绝对位坐标
+        div.style.top = `${(startPos.x = e.x - domRect.x)}px`;
+        div.style.left = `${(startPos.y = e.y - domRect.y)}px`;
         div.style.width = `${0}px`;
         div.style.height = `${0}px`;
         div.style.borderWidth = "0px";
