@@ -54,16 +54,16 @@ export default function Library() {
   // displayComponents 根据group属性分组
   const groups = useMemo(() => {
     const groupKeys: ComponentGroup[] = [];
-    const groups = Object.entries(groupBy(displayComponents, (item) => item.group || "base")).map(
-      ([key, components]) => {
-        groupKeys.push(key as ComponentGroup);
-        return {
-          key,
-          components,
-          label: groupNameMap[key as ComponentGroup],
-        };
-      },
-    );
+    const groups = Object.entries(
+      groupBy(displayComponents, (item) => item.category || "base"),
+    ).map(([key, components]) => {
+      groupKeys.push(key as ComponentGroup);
+      return {
+        key,
+        components,
+        label: groupNameMap[key as ComponentGroup],
+      };
+    });
     setActiveKeys(groupKeys);
     return groups;
   }, [displayComponents]);

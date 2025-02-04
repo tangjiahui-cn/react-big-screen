@@ -12,7 +12,7 @@ export const layout: ComponentType[] = [
     cId: "tabs",
     cName: "标签页",
     icon: () => import("@/static/built-in/tabs.png"),
-    group: "layout",
+    category: "layout",
     x: 0,
     y: 0,
     width: 100,
