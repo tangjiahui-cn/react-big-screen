@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2025/2/3
  */
-import { createContextMenu } from "@/pages/components/Editor/components/RenderComponentNode/data/contextMenuItems";
+import { createContextMenu } from "../data/contextMenuItems";
 import engine from "@/engine";
 import { RefObject } from "react";
 import { useContextMenu } from "@/packages/contextMenu";
@@ -25,7 +25,9 @@ export function useItemContextMenu(domRef: RefObject<HTMLElement | null>) {
       });
       if (allSelectedComponents.length) {
         return menuItems.filter((menuItem) => {
+          // 不是所有元素都锁定时，显示“锁定”菜单项
           if (menuItem.key === "lock") return lockCount !== allSelectedComponents.length;
+          // 存在锁定元素时，显示“解锁”菜单项
           if (menuItem.key === "unlock") return !!lockCount;
           return true;
         });
