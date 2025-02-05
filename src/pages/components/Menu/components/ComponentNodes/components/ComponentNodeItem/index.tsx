@@ -67,7 +67,7 @@ export default function ComponentNodeItem(props: Props) {
       }}
     >
       <div className={styles.componentNodeItem_icon}>
-        <ComponentNodeImage src={component?.icon} style={{ maxWidth: "70%", maxHeight: "50%" }} />
+        <ComponentNodeImage src={component?.icon} style={{ height: "75%" }} />
       </div>
       <div className={styles.componentNodeItem_name}>{componentNode?.name}</div>
       <div className={styles.componentNodeItem_tail}>
