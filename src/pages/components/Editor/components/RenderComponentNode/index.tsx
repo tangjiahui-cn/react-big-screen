@@ -108,9 +108,10 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
 
         // 待选中组件实例ids
         const selectedIds: string[] = componentNode.group
-          ? engine.componentNode.getGroup(componentNode.group)?.children || []
+          ? engine.componentNode.getGroupComponentNodeIds(componentNode.group)
           : [instance.id];
 
+        console.log("zz --> ", selectedIds);
         // 是否按住多选键（按住多选，则cover为true，不会取消选中其他实例）
         engine.instance.select(selectedIds, !isPressedShift);
       }
