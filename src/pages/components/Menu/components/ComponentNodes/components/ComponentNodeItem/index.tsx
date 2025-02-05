@@ -33,7 +33,7 @@ export default function ComponentNodeItem(props: Props) {
     const isPressedShift = isKeyPressed("shift");
     // 如果已选中
     if (engine.instance.isSelected(componentNode.id)) {
-      // 如果点击鼠标左键，则不进行其他操作
+      // 仅点击鼠标左键可进行其他操作
       if (!isClickMouseLeft(e.nativeEvent)) {
         return;
       }
