@@ -12,6 +12,7 @@ import {
   ComponentType,
   BaseComponent,
   ComponentUsed,
+  ComponentNodeGroup,
 } from "..";
 import { omit } from "lodash-es";
 import { createUUID } from "../utils";
@@ -32,6 +33,7 @@ const INIT_COMPONENT: BaseComponent = {
 export default class ComponentNode {
   private maxLevel: number = 1; // 最大层级
   private eventMap: Record<string, ComponentNodeChangeEventCallback[]> = {}; // 数据节点变更回调事件 （id => callback）
+  private groupMap: Record<string, ComponentNodeGroup> = {};
 
   // 触发onChange事件
   private notifyChange(componentNode: ComponentNodeType) {
@@ -73,30 +75,33 @@ export default class ComponentNode {
     return 1;
   }
 
+  // 管道化处理componentNodes
+  private pipeComponentNodes(componentNodes: ComponentNodeType[]): ComponentNodeType[] {
+    componentNodes.forEach((componentNode) => {
+      // 成组（group）
+      if (componentNode.group) {
+        this.insertGroup(componentNode.group, componentNode.id);
+      }
+      // 计算 maxLevel
+      this.maxLevel = Math.max(this.maxLevel, componentNode?.level || 1);
+    });
+    return componentNodes;
+  }
+
   // 初始化componentNodes
   public init(componentNodes: ComponentNodeType[] = []) {
-    this.maxLevel = componentNodes.reduce((maxValue, current) => {
-      return Math.max(maxValue, current?.level || 1);
-    }, 1);
+    this.maxLevel = 1;
     setGlobalState({
-      componentNodes,
+      componentNodes: this.pipeComponentNodes(componentNodes),
     });
   }
 
   // 新增 componentNode
   public add(componentNode: ComponentNodeType | ComponentNodeType[]) {
-    const componentNodes: ComponentNodeType[] = (
-      Array.isArray(componentNode) ? componentNode : [componentNode]
-    ).reduce((list, current) => {
-      if (current) {
-        this.maxLevel = Math.max(this.maxLevel, current?.level || 1);
-        list.push(current);
-      }
-      return list;
-    }, [] as ComponentNodeType[]);
+    const list = Array.isArray(componentNode) ? componentNode : [componentNode];
     setGlobalState((state) => {
       return {
-        componentNodes: [...state.componentNodes, ...componentNodes],
+        componentNodes: [...state.componentNodes, ...this.pipeComponentNodes(list)],
       };
     });
   }
@@ -225,5 +230,53 @@ export default class ComponentNode {
     // 计算最大层级
     this.maxLevel = Math.max(this.maxLevel, componentNode.level);
     return componentNode;
+  }
+
+  /************************* 成组 (group) *************************/
+  // 创建一个组
+  public createGroup(componentNodes: ComponentNodeType[], groupId: string = createUUID()) {
+    const ids: string[] = [];
+    componentNodes.forEach((componentNode) => {
+      ids.push(componentNode.id);
+      this.update(componentNode.id, {
+        group: groupId,
+      });
+    });
+    this.groupMap[groupId] = {
+      children: ids,
+    };
+  }
+
+  // 解散一个/多个组
+  public unlinkGroup(groupId: string | string[]) {
+    const groupIds: string[] = Array.isArray(groupId) ? groupId : [groupId];
+    // 从group中移除全部元素，并删除componentNode的group字段
+    groupIds.forEach((groupId: string) => {
+      const group = this.groupMap[groupId];
+      group.children.forEach((id: string) => {
+        this.update(id, {
+          group: undefined,
+        });
+      });
+      delete this.groupMap[groupId];
+    });
+  }
+
+  // 从一个组中删除一个实例id
+  public unlinkFromGroup(groupId: string, id: string) {
+    const group = this.groupMap[groupId];
+    if (groupId) {
+      group.children = group.children.filter((componentNodeId: string) => componentNodeId !== id);
+    }
+  }
+
+  // 插入一个实例id到group中
+  public insertGroup(groupId: string, id: string) {
+    (this.groupMap[groupId] ||= { children: [] }).children.push(id);
+  }
+
+  // 获取一个组
+  public getGroup(groupId?: string): ComponentNodeGroup | undefined {
+    return groupId ? this.groupMap[groupId] : undefined;
   }
 }

@@ -27,8 +27,10 @@ export function useContextMenu(
   domRef: RefObject<HTMLElement | null>, // dom的ref值
   menuItems?: RenderListItem[], // 菜单配置项
   options?: {
-    onBeforeOpen?: (menuItems: RenderListItem[]) => RenderListItem[] | void; // 打开右键菜单之前（支持修改menuItems）
-    onSelect?: (key: string, item: RenderListItem) => void; // 选中项
+    // 打开右键菜单之前处理一次（支持重新修改 menuItems 菜单项）
+    onBeforeOpen?: (menuItems: RenderListItem[]) => RenderListItem[] | void;
+    // 选中一项回调
+    onSelect?: (key: string, item: RenderListItem) => void;
   },
 ) {
   const menuItemsRef = useRef<RenderListItem[]>();

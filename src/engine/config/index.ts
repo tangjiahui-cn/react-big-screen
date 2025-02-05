@@ -7,7 +7,7 @@
  */
 
 import { getGlobalState, setGlobalState } from "../store";
-import { GlobalConfig, GlobalRuntime } from "../types";
+import { GlobalConfig } from "../types";
 
 export default class Config {
   // 获取配置
@@ -22,23 +22,6 @@ export default class Config {
         config: {
           ...state.config,
           ...(typeof config === "function" ? config(this.getConfig()) : config),
-        },
-      };
-    });
-  }
-
-  // 获取运行时
-  getRuntime(): GlobalRuntime {
-    return getGlobalState().runtime;
-  }
-
-  // 设置运行时
-  setRuntime(runtime: GlobalRuntime | ((value: GlobalRuntime) => GlobalRuntime)) {
-    setGlobalState((state) => {
-      return {
-        runtime: {
-          ...state.runtime,
-          ...(typeof runtime === "function" ? runtime(this.getRuntime()) : runtime),
         },
       };
     });
