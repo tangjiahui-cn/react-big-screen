@@ -4,6 +4,7 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  padding-top: 10px;
 
   &_item {
     display: flex;
@@ -16,11 +17,11 @@
     cursor: pointer;
 
     &:hover {
-      background: whitesmoke;
+      color: #6face4;
     }
 
     &_selected {
-      color: @primaryHover;
+      color: @primaryHover !important;
     }
   }
 }
