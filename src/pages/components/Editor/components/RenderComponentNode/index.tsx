@@ -111,7 +111,6 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
           ? engine.componentNode.getGroupComponentNodeIds(componentNode.group)
           : [instance.id];
 
-        console.log("zz --> ", selectedIds);
         // 是否按住多选键（按住多选，则cover为true，不会取消选中其他实例）
         engine.instance.select(selectedIds, !isPressedShift);
       }
