@@ -3,12 +3,12 @@
   width: 100%;
   height: 100%;
   overflow-y: auto;
-  color: rgba(0, 0, 0, 0.5);
+  color: @color;
 
   :global{
     // 重置antd字体颜色、大小
     [class^="ant"] {
-      color: rgba(0, 0, 0, 0.5);
+      color: @color;
       font-size: 12px;
     }
   }

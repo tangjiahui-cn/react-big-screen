@@ -35,7 +35,10 @@ function Key({ children }: { children: React.ReactNode }) {
 
 export default function ShortCutKeysDescription() {
   return (
-    <Space direction={"vertical"} style={{ padding: 6, userSelect: "none" }}>
+    <Space
+      direction={"vertical"}
+      style={{ padding: 6, userSelect: "none", whiteSpace: "nowrap", width: 300 }}
+    >
       <b>快捷键</b>
 
       <Space>
@@ -70,6 +73,7 @@ export default function ShortCutKeysDescription() {
         <span>多选：</span>
         <span>按住</span>
         <Key>Shift</Key>
+        <span>选中</span>
       </Space>
 
       <Space>
@@ -93,6 +97,13 @@ export default function ShortCutKeysDescription() {
         <Key>
           <ArrowLeftOutlined />
         </Key>
+      </Space>
+
+      <Space>
+        <span>强制：</span>
+        <span>按住</span>
+        <Key>Shift</Key>
+        <span>框选锁定组件</span>
       </Space>
     </Space>
   );

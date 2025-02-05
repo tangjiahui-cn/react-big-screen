@@ -1,0 +1,29 @@
+.componentNodeItem {
+  display: flex;
+  height: 48px;
+  align-items: center;
+  cursor: pointer;
+
+  &_selected {
+    background: rgba(0, 119, 255, 0.1) !important;
+  }
+
+  &:hover {
+    background: rgba(0, 119, 255, 0.06)
+  }
+
+  &_icon {
+    flex: 0 0 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &_name {
+    flex: 1;
+  }
+
+  &_tail {
+    flex: 0 0 20px;
+  }
+}

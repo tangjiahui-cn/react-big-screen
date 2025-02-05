@@ -9,7 +9,7 @@ import { ComponentType } from "@/engine";
 import classNames from "classnames";
 import React, { useRef } from "react";
 import { useVirtualDrag } from "@/packages/virtual-drag";
-import ImageIcon from "./ImageIcon";
+import ComponentNodeImage from "@/components/ComponentNodeImage";
 
 interface Props {
   style?: React.CSSProperties;
@@ -35,7 +35,7 @@ export default function (props: Props) {
       ref={domRef}
     >
       <div className={styles.componentItem_body}>
-        <ImageIcon src={component.icon} style={{ maxWidth: "50%", maxHeight: "50%" }} />
+        <ComponentNodeImage src={component.icon} style={{ maxWidth: "50%", maxHeight: "50%" }} />
       </div>
       <div className={styles.componentItem_footer}>{component.cName}</div>
     </div>

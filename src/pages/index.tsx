@@ -8,10 +8,10 @@ import styles from "./index.module.less";
 import Header from "./components/Header";
 import Attributes from "./components/Attributes";
 import Editor from "./components/Editor";
-import Library from "./components/Library";
+import Menu from "./components/Menu";
 import engine from "@/engine";
 import { useEffectOnce } from "@/hooks";
-import { useGlobalShortCutKeys } from "../packages/shortCutKeys";
+import { useGlobalShortCutKeys } from "@/packages/shortCutKeys";
 
 export default function Page() {
   // 注册全局快捷键
@@ -33,7 +33,7 @@ export default function Page() {
       </div>
       <div className={styles.page_body}>
         <div className={styles.page_body_left}>
-          <Library />
+          <Menu />
         </div>
         <div className={styles.page_body_main}>
           <Editor />

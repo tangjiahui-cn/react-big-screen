@@ -90,12 +90,14 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
   // 注册原生dom事件
   useDomEvents(containerDomRef, {
     // mousedown事件（因为原生使用了stopPropagation，react的合成onMouseDown会接受不到，所以直接绑定到原生事件）
-    mousedown(e) {
+    mousedown(e: MouseEvent) {
       const isClickLeft = isClickMouseLeft(e);
-      // 锁定状态下，点击左键不进行任何操作
-      if (componentNode.lock && isClickLeft) {
+      const isPressedShift = isKeyPressed("shift");
+      // 锁定状态下，不可单独选中，但是可以多选中
+      if (componentNode.lock && isClickLeft && !isPressedShift) {
         return;
       }
+      e.stopPropagation();
       const isClickRight = isClickMouseRight(e);
       // 点击左键或右键，可选中当前组件
       if (isClickLeft || isClickRight) {
@@ -103,9 +105,8 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
         if (engine.instance.isSelected(componentNode.id)) {
           return;
         }
-        // 是否按住多选键
-        const isHoldMultiple: boolean = isKeyPressed("shift");
-        engine.instance.select(instance, !isHoldMultiple);
+        // 是否按住多选键（按住多选，则cover为true，不会取消选中其他实例）
+        engine.instance.select(instance, !isPressedShift);
       }
     },
   });
