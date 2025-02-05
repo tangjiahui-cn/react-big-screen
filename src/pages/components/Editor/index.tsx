@@ -10,8 +10,8 @@ import React, { useMemo, useRef } from "react";
 import { useComponentNodes } from "@/engine";
 import RenderComponentNode from "./components/RenderComponentNode";
 import { isClickMouseLeft } from "@/utils";
-import { useContextMenu } from "../../../packages/contextMenu";
-import { createEditorContextMenu } from "./contextMenu";
+import { useContextMenu } from "@/packages/contextMenu";
+import { createEditorContextMenu } from "./data/contextMenu";
 import { useVirtualDrop } from "@/packages/virtual-drag";
 
 // 右键菜单项

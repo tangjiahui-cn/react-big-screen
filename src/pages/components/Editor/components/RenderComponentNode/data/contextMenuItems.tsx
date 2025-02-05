@@ -4,24 +4,31 @@
  * @author tangjiahui
  * @date 2025/1/15
  */
-import { ContextMenuItem } from "../../../../../../packages/contextMenu";
+import { ContextMenuItem } from "@/packages/contextMenu";
 import {
   ArrowDownOutlined,
   ArrowUpOutlined,
+  BlockOutlined,
   CopyOutlined,
   DeleteOutlined,
+  DisconnectOutlined,
   LockOutlined,
   UnlockOutlined,
   VerticalAlignBottomOutlined,
   VerticalAlignTopOutlined,
 } from "@ant-design/icons";
-import engine from "@/engine";
 import {
   copySelectedComponentNodes,
   deleteSelectedComponentNodes,
+  selectedGroup,
   lockAllSelectedComponentNodes,
+  selectedToBottom,
+  selectedToTop,
+  selectedUnGroup,
   unlockAllSelectedComponentNodes,
-} from "../../../../../../packages/shortCutKeys";
+  selectedLevelUp,
+  selectedLevelDown,
+} from "@/packages/shortCutKeys";
 
 /**
  * 创建右键菜单配置项
@@ -33,66 +40,26 @@ export function createContextMenu(): ContextMenuItem[] {
       icon: <VerticalAlignTopOutlined />,
       title: "置顶",
       style: { borderTop: "1px solid #e8e8e8" },
-      onSelect() {
-        const maxLevel = engine.componentNode.getMaxLevel();
-        engine.instance.getAllSelected().forEach((instance) => {
-          const componentNode = engine.componentNode.get(instance.id);
-          if (componentNode) {
-            engine.componentNode.update(instance.id, {
-              level: maxLevel,
-            });
-          }
-        });
-      },
+      onSelect: () => selectedToTop(),
     },
     {
       key: "bottom",
       icon: <VerticalAlignBottomOutlined />,
       title: "置底",
-      onSelect() {
-        const minLevel = engine.componentNode.getMinLevel();
-        engine.instance.getAllSelected().forEach((instance) => {
-          const componentNode = engine.componentNode.get(instance.id);
-          if (componentNode) {
-            engine.componentNode.update(instance.id, {
-              level: minLevel,
-            });
-          }
-        });
-      },
+      onSelect: () => selectedToBottom(),
     },
     {
       key: "levelUp",
       icon: <ArrowUpOutlined />,
       title: "上移一层",
-      onSelect() {
-        const maxLevel = engine.componentNode.getMaxLevel();
-        engine.instance.getAllSelected().forEach((instance) => {
-          const componentNode = engine.componentNode.get(instance.id);
-          if (componentNode) {
-            engine.componentNode.update(instance.id, {
-              level: Math.min(maxLevel, (componentNode?.level || 0) + 1),
-            });
-          }
-        });
-      },
+      onSelect: () => selectedLevelUp(),
     },
     {
       key: "levelDown",
       icon: <ArrowDownOutlined />,
       title: "下移一层",
       style: { borderBottom: "1px solid #e8e8e8" },
-      onSelect() {
-        const minLevel = engine.componentNode.getMinLevel();
-        engine.instance.getAllSelected().forEach((instance) => {
-          const componentNode = engine.componentNode.get(instance.id);
-          if (componentNode) {
-            engine.componentNode.update(instance.id, {
-              level: Math.max(minLevel, (componentNode?.level || 0) - 1),
-            });
-          }
-        });
-      },
+      onSelect: () => selectedLevelDown(),
     },
     {
       key: "lock",
@@ -105,6 +72,18 @@ export function createContextMenu(): ContextMenuItem[] {
       icon: <UnlockOutlined />,
       title: "解锁",
       onSelect: () => unlockAllSelectedComponentNodes(),
+    },
+    {
+      key: "group",
+      icon: <BlockOutlined />,
+      title: "成组",
+      onSelect: () => selectedGroup(),
+    },
+    {
+      key: "ungroup",
+      icon: <DisconnectOutlined />,
+      title: "取消成组",
+      onSelect: () => selectedUnGroup(),
     },
     {
       key: "copy",

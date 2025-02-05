@@ -23,10 +23,10 @@ export function IColorPicker(props: Props) {
 
   return (
     <Dropdown
-      visible={visible}
+      open={visible}
       trigger={["click"]}
       overlayClassName={styles.IColorPicker_overlay}
-      onVisibleChange={(v) => {
+      onOpenChange={(v) => {
         if (!v) setVisible(false);
       }}
       menu={{

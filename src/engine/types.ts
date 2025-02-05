@@ -40,6 +40,7 @@ export interface ComponentNodeType extends BaseComponent {
   id: string; // 实例id
   name: string; // 实例名称
   lock?: boolean; // 是否锁定（仅用于编辑模式）
+  group?: string; // 所属成组的id
 }
 
 // 全局配置类型
@@ -79,5 +80,7 @@ export interface InstanceType {
   getComponent: () => ComponentType; // 获取实例的 component
 }
 
-// 全局运行时配置
-export interface GlobalRuntime {}
+// 组件分组
+export interface ComponentNodeGroup {
+  children: string[]; // 存储所有的组件id
+}

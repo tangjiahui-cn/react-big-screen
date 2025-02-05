@@ -4,13 +4,13 @@
  * @author tangjiahui
  * @date 2025/1/16
  */
-import { ContextMenuItem } from "../../../packages/contextMenu";
+import { ContextMenuItem } from "../../../../packages/contextMenu";
 import {
   clearComponentNodes,
   saveLocal,
   selectAllComponentNodes,
   unSelectAllComponentNodes,
-} from "../../../packages/shortCutKeys";
+} from "../../../../packages/shortCutKeys";
 import {
   BorderBottomOutlined,
   BorderOuterOutlined,

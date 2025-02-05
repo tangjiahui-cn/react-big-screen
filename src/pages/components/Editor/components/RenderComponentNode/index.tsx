@@ -93,7 +93,7 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
     mousedown(e: MouseEvent) {
       const isClickLeft = isClickMouseLeft(e);
       const isPressedShift = isKeyPressed("shift");
-      // 锁定状态下，不可单独选中，但是可以多选中
+      // 锁定状态下，不可单独选中
       if (componentNode.lock && isClickLeft && !isPressedShift) {
         return;
       }
@@ -101,12 +101,18 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
       const isClickRight = isClickMouseRight(e);
       // 点击左键或右键，可选中当前组件
       if (isClickLeft || isClickRight) {
-        // 不可重复选中
+        // 已选中组件，不可重复选中
         if (engine.instance.isSelected(componentNode.id)) {
           return;
         }
+
+        // 待选中组件实例ids
+        const selectedIds: string[] = componentNode.group
+          ? engine.componentNode.getGroup(componentNode.group)?.children || []
+          : [instance.id];
+
         // 是否按住多选键（按住多选，则cover为true，不会取消选中其他实例）
-        engine.instance.select(instance, !isPressedShift);
+        engine.instance.select(selectedIds, !isPressedShift);
       }
     },
   });
