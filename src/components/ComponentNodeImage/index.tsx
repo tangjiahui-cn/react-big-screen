@@ -1,5 +1,5 @@
 /**
- * 图标展示组件
+ * ComponentNode 图标展示组件
  *
  * @author tangjiahui
  * @date 2025/1/21
@@ -8,10 +8,10 @@ import { ComponentType } from "@/engine";
 import React, { useEffect, useState } from "react";
 
 interface ImageIconProps {
-  src: ComponentType["icon"];
+  src?: ComponentType["icon"];
   style?: React.CSSProperties;
 }
-export default function ImageIcon(props: ImageIconProps) {
+export default function ComponentNodeImage(props: ImageIconProps) {
   const { src } = props;
   const [iconUrl, setIconUrl] = useState<string>("");
 
