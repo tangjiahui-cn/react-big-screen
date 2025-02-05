@@ -9,6 +9,7 @@ import { isIntersect } from "@/utils";
 import { RefObject, useMemo } from "react";
 import { throttle } from "lodash-es";
 import engine from "..";
+import { isKeyPressed } from "@/packages/shortCutKeys";
 
 export function useRangeSelect(domRef: RefObject<HTMLDivElement | null>) {
   // 范围框选
@@ -29,8 +30,10 @@ export function useRangeSelect(domRef: RefObject<HTMLDivElement | null>) {
           y2: rangeInfo.y + rangeInfo.height,
         };
         // 两个矩形是否相交
-        if (isIntersect(p1, p2) && !componentNode.lock) {
-          result.push(componentNode.id);
+        if (isIntersect(p1, p2)) {
+          if (!componentNode.lock || (componentNode.lock && isKeyPressed("shift"))) {
+            result.push(componentNode.id);
+          }
         }
         return result;
       }, [] as string[]);
