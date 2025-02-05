@@ -26,6 +26,24 @@ export default function ComponentNodeItem(props: Props) {
     return engine.component.get(componentNode?.cId);
   }, [componentNode]);
 
+  function handleClick() {
+    // 按住shift支持取消选中该项
+    const isPressedShift = isKeyPressed("shift");
+    // 如果已选中
+    if (engine.instance.isSelected(componentNode.id)) {
+      if (isPressedShift) {
+        // 如果按住shift，则取消选中该项
+        engine.instance.unselect(componentNode.id);
+      } else {
+        // 否则，只选中该项
+        engine.instance.select(componentNode?.id, true);
+      }
+      return;
+    }
+    // 未选中，点击则直接选中
+    engine.instance.select(componentNode?.id, !isPressedShift);
+  }
+
   // 监听对应实例的componentNode变化
   useEffect(() => {
     return engine.componentNode.onChange(componentNode.id, ({ payload }) => {
@@ -45,24 +63,7 @@ export default function ComponentNodeItem(props: Props) {
       )}
       onMouseDown={(e) => {
         e.stopPropagation();
-
-        // 按住shift支持取消选中该项
-        const isPressedShift = isKeyPressed("shift");
-
-        // 如果已选中
-        if (engine.instance.isSelected(componentNode.id)) {
-          if (isPressedShift) {
-            // 如果按住shift，则取消选中该项
-            engine.instance.unselect(componentNode.id);
-          } else {
-            // 否则，只选中该项
-            engine.instance.select(componentNode?.id, true);
-          }
-          return;
-        }
-
-        // 未选中，点击则直接选中
-        engine.instance.select(componentNode?.id, !isPressedShift);
+        handleClick();
       }}
     >
       <div className={styles.componentNodeItem_icon}>
