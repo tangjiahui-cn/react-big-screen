@@ -4,15 +4,20 @@
  * @authorn tangjiahui
  * @date 2025/1/14
  */
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Col, Form, InputNumber, Row } from "antd";
 import { useSingleSelectedInstance } from "../..";
 import engine, { ComponentNodeType } from "@/engine";
 import styles from "./index.module.less";
+import { Line } from "@/components/Attributes";
 
 export default function () {
   const { componentNode } = useSingleSelectedInstance();
   const [form] = Form.useForm<Partial<ComponentNodeType>>();
+  const component = useMemo(() => {
+    return engine.component.get(componentNode?.cId);
+  }, [componentNode?.cId]);
+  const AttributesComponent = component?.attributesComponent;
 
   useEffect(() => {
     if (componentNode) {
@@ -28,6 +33,7 @@ export default function () {
         engine.componentNode.update(componentNode?.id, changedValues);
       }}
     >
+      {/* 选中组件信息 */}
       <div className={styles.singleInstanceAttributesBase_description}>
         <Row>
           <Col span={24} style={{ marginBottom: 6 }}>
@@ -38,6 +44,8 @@ export default function () {
           <Col span={24}>cName：{componentNode?.cName || "-"}</Col>
         </Row>
       </div>
+
+      {/* 公共Attributes配置项 */}
       <div>
         <Row gutter={[8, 8]} style={{ fontSize: 12 }}>
           <Col span={3} className={styles.singleInstanceAttributesBase_label}>
@@ -75,17 +83,32 @@ export default function () {
               <InputNumber size={"small"} style={{ width: "100%" }} />
             </Form.Item>
           </Col>
-
-          <Col span={3} className={styles.singleInstanceAttributesBase_label}>
-            层级
-          </Col>
-          <Col span={21}>
-            <Form.Item name={"level"} noStyle>
-              <InputNumber size={"small"} style={{ width: "100%" }} />
-            </Form.Item>
-          </Col>
         </Row>
+        <Line label={"层级"} style={{ marginTop: 8 }} labelSpan={3}>
+          <Form.Item name={"level"} noStyle>
+            <InputNumber size={"small"} style={{ width: "100%" }} />
+          </Form.Item>
+        </Line>
       </div>
+
+      {/* 组件Attributes配置项 */}
+      {AttributesComponent && (
+        <div style={{ paddingTop: 8 }}>
+          <AttributesComponent
+            options={componentNode?.options}
+            onChange={(options, cover) => {
+              engine.componentNode.update(componentNode?.id, {
+                options: cover
+                  ? options
+                  : {
+                      ...componentNode?.options,
+                      ...options,
+                    },
+              });
+            }}
+          />
+        </div>
+      )}
     </Form>
   );
 }

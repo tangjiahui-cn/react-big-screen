@@ -2,10 +2,16 @@
 import React from "react";
 
 // 组件传入参数
-export interface ComponentProps<Option = any> {
+export interface ComponentProps<Option extends any> {
   width: number;
   height: number;
   options: Option; // 配置数据
+}
+
+// 组件属性配置模板参数
+export interface AttributesComponentProps<Option = any> {
+  options: Option; // 配置数据
+  onChange: (options: Option, cover?: boolean) => void; // 配置数据修改回调 （cover：默认false。true覆盖，false则修改部分属性）
 }
 
 // 基础组件类型（组件模板、组件数据实例公共的属性）
@@ -26,6 +32,7 @@ export interface ComponentType<Option = any> extends BaseComponent {
   icon: string | (() => Promise<typeof import("*.png")>); // 组件图标
   category: ComponentGroup; // 组件分类
   component: React.FC<ComponentProps<Option>>; // 组件模板
+  attributesComponent?: React.FC<AttributesComponentProps<Option>>; // 属性配置页面模板
 }
 
 // 组件数据实例类型

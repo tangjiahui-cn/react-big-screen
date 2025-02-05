@@ -6,6 +6,7 @@
  * */
 import type { ComponentType } from "@/engine";
 import Text from "./Text";
+import TextAttributes from "./Text/attributes";
 import Title from "./Title";
 import Image from "./Image";
 import Button from "./Button";
@@ -27,6 +28,7 @@ export const base: ComponentType[] = [
       lineHeight: "32px",
     },
     component: Text,
+    attributesComponent: TextAttributes,
   },
   {
     cId: "title",

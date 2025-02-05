@@ -1,0 +1,29 @@
+.IColorPicker {
+  height: 22px;
+  border-radius: 2px;
+  border: 1px solid #d9d9d9;
+  cursor: pointer;
+  transition: all .3s;
+}
+
+.IColorPicker_overlay {
+  :global {
+    .ant-dropdown-menu-item, .ant-dropdown-menu-submenu-title {
+      padding: 0;
+      line-height: 16px;
+    }
+
+    .ant-dropdown-menu-title-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white !important;
+    }
+
+    .sketch-picker {
+      padding: 8px 0 0 !important;
+      width: 210px !important;
+      box-shadow: none !important;
+    }
+  }
+}

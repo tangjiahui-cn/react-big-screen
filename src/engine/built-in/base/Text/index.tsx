@@ -5,25 +5,26 @@
  * @date 2025/1/21
  */
 import { ComponentProps } from "@/engine";
-import React from "react";
+import { TextOptions } from "./attributes";
 
-type Props = ComponentProps<{
-  value: string; // 文字内容
-}> &
-  React.CSSProperties;
+type Props = ComponentProps<TextOptions>;
 
 export default function Text(props: Props) {
   const { options, width, height } = props;
-  const { value, ...style } = options;
+  const { value } = options;
   return (
     <div
       style={{
         width,
         height,
-        ...style,
+        color: options?.color || "black",
+        fontWeight: options?.fontWeight,
+        fontStyle: options?.fontStyle,
+        fontSize: options?.fontSize,
+        lineHeight: options?.lineHeight ? `${options?.lineHeight}px` : undefined,
       }}
       dangerouslySetInnerHTML={{
-        __html: options?.value,
+        __html: value || "",
       }}
     />
   );
