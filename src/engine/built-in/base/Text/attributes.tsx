@@ -43,13 +43,13 @@ export default function (props: AttributesComponentProps<TextOptions>) {
         <IInputNumber
           min={8}
           style={{ width: "100%" }}
-          value={options?.lineHeight}
+          value={options?.fontSize}
           onChange={(fontSize) => {
             onChange({ fontSize });
           }}
         />
       </Line>
-      <Line label={"行高"}>
+      <Line label={"行高"} labelTip={"单位px"}>
         <IInputNumber
           style={{ width: "100%" }}
           value={options?.lineHeight}
