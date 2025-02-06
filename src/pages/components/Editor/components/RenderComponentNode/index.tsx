@@ -35,17 +35,26 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
   const { component, componentNode } = props;
   const Component = component.component;
   const containerDomRef = useRef<HTMLDivElement>(null);
+  const boxDomRef = useRef<HTMLDivElement>(null);
 
   // 是否选中
   const [isSelected, setIsSelected] = React.useState(false);
+  // 是否hover中（不希望hover时渲染组件，此处仅仅用来在组件重新渲染时，保留之前的hover状态。例如：选中实例又取消选中时仍然有hover状态）
+  const isHoverRef = useRef<boolean>(false);
 
   // 注册行为实例（只能改变内部属性）
   const instance = useRegisterInstance({
     id: componentNode.id,
     // 经过实例
-    handleHover() {},
+    handleHover() {
+      isHoverRef.current = true;
+      boxDomRef.current?.classList?.add?.(styles.moveItem_box_hover);
+    },
     // 离开实例
-    handleUnHover() {},
+    handleUnHover() {
+      isHoverRef.current = false;
+      boxDomRef.current?.classList?.remove?.(styles.moveItem_box_hover);
+    },
     // 选中实例样式
     handleSelected() {
       // 内部样式选中
@@ -146,8 +155,10 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
 
       {/* 遮罩层 */}
       <div
+        ref={boxDomRef}
         className={classNames(
           styles.moveItem_box,
+          isHoverRef.current && styles.moveItem_box_hover,
           isSelected && styles.moveItem_box_selected,
           componentNode.lock && styles.moveItem_box_lock,
         )}

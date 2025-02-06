@@ -23,8 +23,11 @@ export default function ComponentNodeItem(props: Props) {
   const domRef = useRef<HTMLDivElement | null>(null);
   const [componentNode, setComponentNode] = useState(props?.componentNode);
 
-  const component = useMemo(() => {
-    return engine.component.get(componentNode?.cId);
+  const { component, instance } = useMemo(() => {
+    return {
+      component: engine.component.get(componentNode?.cId),
+      instance: engine.instance.get(componentNode?.id),
+    };
   }, [componentNode]);
 
   function handleClick(e: React.MouseEvent) {
@@ -69,6 +72,12 @@ export default function ComponentNodeItem(props: Props) {
       )}
       onMouseDown={(e) => {
         handleClick(e);
+      }}
+      onMouseEnter={() => {
+        instance?.handleHover?.();
+      }}
+      onMouseLeave={() => {
+        instance?.handleUnHover?.();
       }}
     >
       <div className={styles.componentNodeItem_icon}>

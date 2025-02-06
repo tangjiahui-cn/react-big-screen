@@ -129,7 +129,8 @@ export default class ComponentNode {
   }
 
   /**
-   * 更新componentNode（触发局部更新）
+   * 更新componentNode（默认触发局部更新）
+   *
    * @param id 待更新实例id
    * @param extComponentNode 合并更新项
    * @param options 额外配置项
