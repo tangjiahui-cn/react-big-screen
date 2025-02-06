@@ -9,11 +9,15 @@ import { SketchPicker } from "react-color";
 import { Dropdown } from "antd";
 import styles from "./IColorPicker.module.less";
 
+type Hex = string;
+type RGBA = string;
+type ColorType = Hex | RGBA;
+
 interface Props {
   // 颜色（默认白色）
-  value?: string;
-  // 回调 (hex值颜色)
-  onChange?: (value: string) => void;
+  value?: ColorType;
+  // 回调 (hex | rgba)
+  onChange?: (value: ColorType) => void;
   // 样式
   style?: React.CSSProperties;
 }
@@ -38,7 +42,10 @@ export function IColorPicker(props: Props) {
                 <SketchPicker
                   color={value}
                   onChange={(value) => {
-                    props?.onChange?.(value?.hex || "#fff");
+                    const { rgb } = value;
+                    const color =
+                      rgb.a === 1 ? value.hex : `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${rgb.a})`;
+                    props?.onChange?.(`${color}` || "#fff");
                   }}
                 />
               </div>
