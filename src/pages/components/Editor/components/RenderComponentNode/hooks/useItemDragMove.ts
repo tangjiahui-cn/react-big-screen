@@ -24,9 +24,12 @@ export function useItemDragMove(domRef: RefObject<HTMLElement | null>, options: 
     let selectedInstanceList: InstanceType[] = [];
     // 是否启用transform（启用则开启硬件GPU加速，变成合成层，不会触发页面 layout 和 paint）
     let enableTransform = false;
+    let oldPointEvents: string = currentDOM.style.pointerEvents;
     return moveableDom(currentDOM, {
       onStart(e) {
         e.stopPropagation();
+        // 拖拽时可以透传事件
+        currentDOM.style.pointerEvents = "none";
         // 修改全局光标
         globalCursor.set("move");
         // 等待选中时设置选中实例后，再获取
@@ -49,8 +52,11 @@ export function useItemDragMove(domRef: RefObject<HTMLElement | null>, options: 
         });
       },
       onEnd(deltaX: number, deltaY: number) {
+        // 回复事件穿透
+        currentDOM.style.pointerEvents = oldPointEvents;
         // 恢复全局光标
         globalCursor.revoke();
+        // 处理选中实例
         selectedInstanceList.forEach((instance) => {
           // 删除 transform
           if (enableTransform) {
