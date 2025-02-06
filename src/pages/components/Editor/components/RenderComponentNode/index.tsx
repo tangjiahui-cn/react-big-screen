@@ -35,17 +35,26 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
   const { component, componentNode } = props;
   const Component = component.component;
   const containerDomRef = useRef<HTMLDivElement>(null);
+  const boxDomRef = useRef<HTMLDivElement>(null);
 
   // 是否选中
   const [isSelected, setIsSelected] = React.useState(false);
+  // 是否hover中（不希望hover时渲染组件，此处仅仅用来在组件重新渲染时，保留之前的hover状态。例如：选中实例又取消选中时仍然有hover状态）
+  const isHoverRef = useRef<boolean>(false);
 
   // 注册行为实例（只能改变内部属性）
   const instance = useRegisterInstance({
     id: componentNode.id,
     // 经过实例
-    handleHover() {},
+    handleHover() {
+      isHoverRef.current = true;
+      boxDomRef.current?.classList?.add?.(styles.moveItem_box_hover);
+    },
     // 离开实例
-    handleUnHover() {},
+    handleUnHover() {
+      isHoverRef.current = false;
+      boxDomRef.current?.classList?.remove?.(styles.moveItem_box_hover);
+    },
     // 选中实例样式
     handleSelected() {
       // 内部样式选中
@@ -101,14 +110,18 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
       const isClickRight = isClickMouseRight(e);
       // 点击左键或右键，可选中当前组件
       if (isClickLeft || isClickRight) {
-        // 已选中组件，不可重复选中
+        // 当前组件已选中
         if (engine.instance.isSelected(componentNode.id)) {
+          // 如果按住 shift 则取消选中
+          if (isPressedShift) {
+            engine.instance.unselect(componentNode.id);
+          }
           return;
         }
 
         // 待选中组件实例ids
         const selectedIds: string[] = componentNode.group
-          ? engine.componentNode.getGroup(componentNode.group)?.children || []
+          ? engine.componentNode.getGroupComponentNodeIds(componentNode.group)
           : [instance.id];
 
         // 是否按住多选键（按住多选，则cover为true，不会取消选中其他实例）
@@ -146,8 +159,10 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
 
       {/* 遮罩层 */}
       <div
+        ref={boxDomRef}
         className={classNames(
           styles.moveItem_box,
+          isHoverRef.current && styles.moveItem_box_hover,
           isSelected && styles.moveItem_box_selected,
           componentNode.lock && styles.moveItem_box_lock,
         )}

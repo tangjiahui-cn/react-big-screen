@@ -36,22 +36,33 @@ export * from "./hooks";
 
 class Engine {
   // 组件模板
-  component: Component = new Component();
+  public component: Component = new Component();
   // 组件数据实例
-  componentNode: ComponentNode = new ComponentNode();
+  public componentNode: ComponentNode = new ComponentNode();
   // 组件行为实例
-  instance: Instance = new Instance();
+  public instance: Instance = new Instance();
   // 全局配置
-  config: Config = new Config();
+  public config: Config = new Config();
 
   constructor() {
-    // 注册内置组件
+    // （初始化时）注册内置组件
+    this.registerBuiltInComponents();
+  }
+
+  // 注册内置组件
+  private registerBuiltInComponents() {
     this.component.register(builtInComponents);
   }
 
   // 加载json对象
   public loadJSON(json: JsonType): void {
+    if (__DEV__) {
+      // 注册内置组件 (解决hmr时，内存注册的components丢失问题)
+      this.registerBuiltInComponents();
+    }
+    // 设置config
     this.config.setConfig(json.config);
+    // 载入componentNode
     this.componentNode.init(json.componentNodes);
 
     // 读取默认选中

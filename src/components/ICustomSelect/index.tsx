@@ -1,4 +1,5 @@
 import { default as CustomSelect, CustomSelectProps } from "./CustomSelect";
+import { DataMapType, ValueType } from "./type";
 
 type OmitKeys = "value" | "onChange" | "defaultFirst";
 export type ICustomMultipleSelectProps = Omit<CustomSelectProps, OmitKeys> & {
@@ -7,9 +8,9 @@ export type ICustomMultipleSelectProps = Omit<CustomSelectProps, OmitKeys> & {
   /** max tag count */
   maxTagCount?: number;
   /** value */
-  value?: string[];
+  value?: ValueType[];
   /** onChange */
-  onChange?: (key?: string[], value?: string[], dataMap?: any) => void;
+  onChange?: (values?: ValueType[], labels?: string[], dataMap?: DataMapType) => void;
 };
 
 export type ICustomSelectProps = CustomSelectProps | ICustomMultipleSelectProps;

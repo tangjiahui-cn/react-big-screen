@@ -91,6 +91,7 @@ export default class ComponentNode {
   // 初始化componentNodes
   public init(componentNodes: ComponentNodeType[] = []) {
     this.maxLevel = 1;
+    this.groupMap = {};
     setGlobalState({
       componentNodes: this.pipeComponentNodes(componentNodes),
     });
@@ -128,7 +129,8 @@ export default class ComponentNode {
   }
 
   /**
-   * 更新componentNode（触发局部更新）
+   * 更新componentNode（默认触发局部更新）
+   *
    * @param id 待更新实例id
    * @param extComponentNode 合并更新项
    * @param options 额外配置项
@@ -164,13 +166,10 @@ export default class ComponentNode {
   // 删除 componentNode
   public delete(id: string | string[]) {
     const ids: string[] = Array.isArray(id) ? id : [id];
-    setGlobalState((config) => {
-      return {
-        componentNodes: config.componentNodes.filter((item) => {
-          return !ids.includes(item.id);
-        }),
-      };
+    const componentNodes = getGlobalState().componentNodes.filter((componentNode) => {
+      return !ids.includes(componentNode.id);
     });
+    this.init(componentNodes);
   }
 
   // 从实例数据创建新的数据实例
@@ -202,7 +201,7 @@ export default class ComponentNode {
   ): ComponentNodeType {
     const componentNode: ComponentNodeType = {
       ...INIT_COMPONENT, // 基础默认组件数据
-      ...omit(component, ["icon", "component"]), // 自定义组件默认数据
+      ...omit(component, ["icon", "category", "component", "attributesComponent"]), // 自定义组件默认数据
       ...extComponentNode, // 扩展组件数据
     } as ComponentNodeType;
 
@@ -235,9 +234,9 @@ export default class ComponentNode {
   /************************* 成组 (group) *************************/
   // 创建一个组
   public createGroup(componentNodes: ComponentNodeType[], groupId: string = createUUID()) {
-    const ids: string[] = [];
+    const ids: Set<string> = new Set();
     componentNodes.forEach((componentNode) => {
-      ids.push(componentNode.id);
+      ids.add(componentNode.id);
       this.update(componentNode.id, {
         group: groupId,
       });
@@ -266,17 +265,26 @@ export default class ComponentNode {
   public unlinkFromGroup(groupId: string, id: string) {
     const group = this.groupMap[groupId];
     if (groupId) {
-      group.children = group.children.filter((componentNodeId: string) => componentNodeId !== id);
+      group.children.delete(id);
+      // 如果组为空，则删除这个组
+      if (!group.children.size) {
+        delete this.groupMap[groupId];
+      }
     }
   }
 
   // 插入一个实例id到group中
   public insertGroup(groupId: string, id: string) {
-    (this.groupMap[groupId] ||= { children: [] }).children.push(id);
+    (this.groupMap[groupId] ||= { children: new Set() }).children.add(id);
   }
 
   // 获取一个组
   public getGroup(groupId?: string): ComponentNodeGroup | undefined {
     return groupId ? this.groupMap[groupId] : undefined;
+  }
+
+  // 获取一个组包含的实例id列表
+  public getGroupComponentNodeIds(groupId?: string): string[] {
+    return Array.from(this.getGroup(groupId)?.children || []);
   }
 }

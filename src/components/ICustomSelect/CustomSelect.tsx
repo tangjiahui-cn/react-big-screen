@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import { Select, SelectProps } from "antd";
 import { useDebounceEffect, useUpdateEffect } from "ahooks";
 import { useEffectOnce, useStateWithRef } from "@/hooks";
-import { IOption, localSearchFn } from "./type";
+import { IOption, localSearchFn, ValueType, DataMapType } from "./type";
 
 export interface CustomSelectProps {
   /** select size. */
@@ -26,7 +26,7 @@ export interface CustomSelectProps {
   /** the name of all. */
   allName?: string;
   /** value */
-  value?: string;
+  value?: ValueType;
   /** placeholder */
   placeholder?: string;
   /** style */
@@ -38,13 +38,13 @@ export interface CustomSelectProps {
   /** if enable local search。（true：yes。false：use [requestFn] with debounce） */
   isLocalSearch?: boolean;
   /** local search filter function */
-  filterOption?: (inputV: string, option: any, dataMap: any) => boolean;
+  filterOption?: (inputV: string, option: any, dataMap: DataMapType) => boolean;
   /** a params array, which change maybe cause the select reQuery */
   effectParams?: any[];
   /** a function to request the select options */
-  requestFn?: (keyword?: string) => PromiseLike<IOption[]>;
+  requestFn?: (keyword?: ValueType) => PromiseLike<IOption[]>;
   /** onChange callback */
-  onChange?: (key?: string, value?: string, dataMap?: any) => void;
+  onChange?: (value?: ValueType, label?: string, dataMap?: DataMapType) => void;
   /** custom select option render */
   optionRender?: (selectOption: any) => React.ReactNode;
   /** extend antd origin props */
@@ -52,6 +52,8 @@ export interface CustomSelectProps {
 }
 export default function CustomSelect(props: CustomSelectProps) {
   const {
+    allowClear = true,
+    size = "small",
     defaultFirst,
     disabled,
     all,
@@ -75,19 +77,19 @@ export default function CustomSelect(props: CustomSelectProps) {
 
   const [keyword, setKeyword] = useState<string>("");
   const [optionList, setOptionList] = useState<IOption[]>([]);
-  const [currentValue, setCurrentValue] = useState<string | undefined>(undefined);
-  const [dataMap, setDataMap] = useState<any>({});
+  const [currentValue, setCurrentValue] = useState<ValueType>(undefined);
+  const [dataMap, setDataMap] = useState<DataMapType>({});
 
   const [_, setIsFirstSet, isFirstSetRef] = useStateWithRef<boolean>(false); // 是否设置过第一次值了
 
   function query(keyword: string = "", isUpdateByEffect?: boolean) {
     requestFn?.(keyword).then((list: IOption[] = []) => {
-      const dataMap: Record<string, any> = {};
+      const dataMap: DataMapType = {};
       list.forEach((x: IOption) => {
         dataMap[`${x?.value}`] = x;
       });
       setDataMap(dataMap);
-      setOptionList(list?.map((x: any) => ({ ...x, value: `${x?.value || ""}` })));
+      setOptionList(list);
 
       // 是否初次查询设置 defaultFirst
       if (!isFirstSetRef.current && defaultFirst) {
@@ -107,12 +109,12 @@ export default function CustomSelect(props: CustomSelectProps) {
   useDebounceEffect(
     () => {
       requestFn?.(keyword)?.then((list: IOption[] = []) => {
-        const dataMap: any = {};
+        const dataMap: DataMapType = {};
         list.forEach((x: IOption) => {
           dataMap[`${x?.value}`] = x;
         });
         setDataMap(dataMap);
-        setOptionList(list?.map((x: any) => ({ ...x, value: `${x?.value || ""}` })));
+        setOptionList(list);
       });
     },
     [keyword],
@@ -143,8 +145,8 @@ export default function CustomSelect(props: CustomSelectProps) {
 
   return (
     <Select
-      size={props?.size}
-      allowClear={props?.allowClear}
+      size={size}
+      allowClear={allowClear}
       disabled={disabled}
       style={style}
       value={currentValue}
@@ -172,12 +174,12 @@ export default function CustomSelect(props: CustomSelectProps) {
     >
       {all && (
         <Select.Option key={optionAll.value} value={optionAll.value}>
-          {props?.optionRender ? props.optionRender(optionAll) : optionAll.label}
+          {props?.optionRender ? props.optionRender(optionAll) : optionAll?.label}
         </Select.Option>
       )}
       {optionList?.map((x: IOption) => {
         return (
-          <Select.Option key={`${x.value || ""}`} value={`${x.value || ""}`}>
+          <Select.Option key={x.value} value={x.value}>
             {props?.optionRender ? props.optionRender(x) : x?.label}
           </Select.Option>
         );

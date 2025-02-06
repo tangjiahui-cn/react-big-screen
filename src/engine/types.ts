@@ -82,5 +82,5 @@ export interface InstanceType {
 
 // 组件分组
 export interface ComponentNodeGroup {
-  children: string[]; // 存储所有的组件id
+  children: Set<string>; // 存储包含的组件id
 }

@@ -25,7 +25,7 @@ export const base: ComponentType[] = [
     options: {
       value: "一段文字",
       fontSize: 14,
-      lineHeight: "32px",
+      lineHeight: 32,
     },
     component: Text,
     attributesComponent: TextAttributes,
