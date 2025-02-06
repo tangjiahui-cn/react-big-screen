@@ -110,8 +110,12 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
       const isClickRight = isClickMouseRight(e);
       // 点击左键或右键，可选中当前组件
       if (isClickLeft || isClickRight) {
-        // 已选中组件，不可重复选中
+        // 当前组件已选中
         if (engine.instance.isSelected(componentNode.id)) {
+          // 如果按住 shift 则取消选中
+          if (isPressedShift) {
+            engine.instance.unselect(componentNode.id);
+          }
           return;
         }
 
