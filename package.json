@@ -6,7 +6,7 @@
   "description": "一个前端大屏看板项目",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "cross-env vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",

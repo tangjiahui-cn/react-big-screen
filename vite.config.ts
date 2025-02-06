@@ -15,6 +15,9 @@ export default defineConfig({
     port: 11000,
   },
   base: "./",
+  define: {
+    __DEV__: process.env.NODE_ENV === "development",
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),

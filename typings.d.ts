@@ -8,3 +8,4 @@ declare module "*.json";
 
 declare const BASE: string;
 declare const PUBLIC_PATH: string;
+declare const __DEV__: boolean;

@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2025/2/5
  */
-import { useState } from "react";
+import React, { useState } from "react";
 import { SketchPicker } from "react-color";
 import { Dropdown } from "antd";
 import styles from "./IColorPicker.module.less";
@@ -14,13 +14,13 @@ interface Props {
   value?: string;
   // 回调 (hex值颜色)
   onChange?: (value: string) => void;
+  // 样式
+  style?: React.CSSProperties;
 }
 
 export function IColorPicker(props: Props) {
   const { value = "white" } = props;
-
   const [visible, setVisible] = useState(false);
-
   return (
     <Dropdown
       open={visible}
@@ -32,7 +32,7 @@ export function IColorPicker(props: Props) {
       menu={{
         items: [
           {
-            key: "1",
+            key: "color",
             label: (
               <div>
                 <SketchPicker
@@ -49,7 +49,7 @@ export function IColorPicker(props: Props) {
     >
       <div
         className={styles.IColorPicker}
-        style={{ backgroundColor: value }}
+        style={{ backgroundColor: value, ...props?.style }}
         onClick={() => {
           if (!visible) setVisible(true);
         }}

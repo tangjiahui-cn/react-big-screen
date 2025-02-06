@@ -62,7 +62,7 @@ export default function (props: AttributesComponentProps<TextOptions>) {
         <FontWeightSelect
           style={{ width: "100%" }}
           value={options?.fontWeight}
-          onChange={(fontWeight?: string) => {
+          onChange={(fontWeight?: any) => {
             onChange({ fontWeight });
           }}
         />

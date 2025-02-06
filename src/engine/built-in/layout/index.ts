@@ -6,6 +6,8 @@
  * */
 import type { ComponentType } from "@/engine";
 import Tabs from "./Tabs";
+import Carousel from "./Carousel";
+import CarouselAttributes from "./Carousel/attributes";
 
 export const layout: ComponentType[] = [
   {
@@ -24,5 +26,20 @@ export const layout: ComponentType[] = [
       ],
     },
     component: Tabs,
+  },
+  {
+    cId: "carousel",
+    cName: "走马灯",
+    icon: () => import("@/static/built-in/carousel.png"),
+    category: "layout",
+    x: 0,
+    y: 0,
+    width: 500,
+    height: 250,
+    options: {
+      borderColor: "#ccc",
+    },
+    component: Carousel,
+    attributesComponent: CarouselAttributes,
   },
 ];
