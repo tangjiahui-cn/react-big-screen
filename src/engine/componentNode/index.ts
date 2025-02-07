@@ -35,7 +35,8 @@ const INIT_COMPONENT: BaseComponent = {
 export default class ComponentNode {
   private maxLevel: number = 1; // 最大层级
   private eventMap: Record<string, ComponentNodeChangeEventCallback[]> = {}; // 数据节点变更回调事件 （id => callback）
-  private groupMap: Record<string, ComponentNodeGroup> = {};
+  private groupMap: Record<string, ComponentNodeGroup> = {}; // 成组映射（groupId => 对应元素）
+  private layoutMap: Record<string, ComponentNodeGroup> = {}; // 布局容器映射（id => 包含子元素）
 
   // 触发onChange事件
   private notifyChange(componentNode: ComponentNodeType) {
@@ -84,6 +85,12 @@ export default class ComponentNode {
       if (componentNode.group) {
         this.insertGroup(componentNode.group, componentNode.id);
       }
+      // layout
+      if (componentNode.parentId) {
+        (this.layoutMap[componentNode.parentId] ||= { children: new Set() }).children.add(
+          componentNode.id,
+        );
+      }
       // 计算 maxLevel
       this.maxLevel = Math.max(this.maxLevel, componentNode?.level || 1);
     });
@@ -94,6 +101,7 @@ export default class ComponentNode {
   public init(componentNodes: ComponentNodeType[] = []) {
     this.maxLevel = 1;
     this.groupMap = {};
+    this.layoutMap = {};
     setGlobalState({
       componentNodes: this.pipeComponentNodes(componentNodes),
     });
@@ -170,12 +178,7 @@ export default class ComponentNode {
   public delete(id: string | string[]) {
     const ids: string[] = Array.isArray(id) ? id : [id];
     const componentNodes = getGlobalState().componentNodes.filter((componentNode) => {
-      if (ids.includes(componentNode.id)) {
-        // 从对应的layout中删除
-        this.removeFromLayout(componentNode.id);
-        return false;
-      }
-      return true;
+      return !ids.includes(componentNode.id);
     });
     this.init(componentNodes);
   }
@@ -330,17 +333,14 @@ export default class ComponentNode {
   public removeFromLayout(source: string | ComponentNodeType, auto?: boolean) {
     // 原componentNode
     const sourceComponentNode = typeof source === "string" ? this.get(source) : source;
-    // 原layout
-    const lastParentComponentNode = this.get(sourceComponentNode?.parentId);
-    // 从原layout中移除
-    if (lastParentComponentNode) {
-      this.update(sourceComponentNode?.parentId, {
-        childrenIds: lastParentComponentNode?.childrenIds?.filter(
-          (id) => id !== sourceComponentNode?.id,
-        ),
-      });
+    if (!sourceComponentNode) {
+      return;
     }
-
+    // 移出layout
+    if (sourceComponentNode?.parentId) {
+      this.layoutMap[sourceComponentNode?.parentId]?.children?.delete?.(sourceComponentNode.id);
+    }
+    // 是否自动更新source
     if (auto) {
       this.update(sourceComponentNode?.id, {
         parentId: undefined,
@@ -359,32 +359,36 @@ export default class ComponentNode {
   ) {
     // 原componentNode
     const sourceComponentNode = typeof source === "string" ? this.get(source) : source;
-
     if (!sourceComponentNode) {
       return;
     }
 
-    // 原layout
-    const lastParentComponentNode = this.get(sourceComponentNode?.parentId);
-    // 从原layout中移除
-    if (lastParentComponentNode) {
-      this.update(sourceComponentNode?.parentId, {
-        childrenIds: lastParentComponentNode?.childrenIds?.filter(
-          (id) => id !== sourceComponentNode?.id,
-        ),
-      });
+    // 新的layout
+    const targetComponentNode =
+      typeof targetLayout === "string" ? this.get(targetLayout) : targetLayout;
+    // 如果是layout不存在，或是同一个layout，则不处理
+    if (!targetComponentNode || targetComponentNode.id === sourceComponentNode.parentId) {
+      return;
+    }
+
+    // 移出上一个layout
+    if (sourceComponentNode?.parentId) {
+      this.layoutMap[sourceComponentNode.parentId]?.children?.delete?.(sourceComponentNode.id);
     }
 
     // 移入新的layout
-    const targetComponentNode =
-      typeof targetLayout === "string" ? this.get(targetLayout) : targetLayout;
     if (targetComponentNode) {
       this.update(sourceComponentNode?.id, {
         parentId: targetComponentNode.id,
       });
-      this.update(targetComponentNode.id, {
-        childrenIds: [...(targetComponentNode?.childrenIds || []), sourceComponentNode?.id],
-      });
+      (this.layoutMap[targetComponentNode.id] ||= { children: new Set() }).children.add(
+        sourceComponentNode.id,
+      );
     }
+  }
+
+  // 获取layout的childrenIds
+  public getLayoutChildrenIds(id?: string): string[] {
+    return id ? Array.from(this.layoutMap[id]?.children || []) : [];
   }
 }

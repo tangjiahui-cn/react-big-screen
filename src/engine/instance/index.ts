@@ -122,8 +122,10 @@ export default class Instance extends BaseInstance {
     return instances.reduce((result, source) => {
       const instance = typeof source === "string" ? this.get(source) : source;
       const componentNode = instance?.getComponentNode?.();
+      // 如果是layout类型组件，则将其包含的children全部添加
       if (componentNode && componentNode.category === "layout") {
-        componentNode.childrenIds?.forEach?.((id) => {
+        const childrenIds: string[] = engine.componentNode.getLayoutChildrenIds(componentNode.id);
+        childrenIds?.forEach?.((id) => {
           const childInstance = engine.instance.get(id);
           if (childInstance) {
             result.push(childInstance);
