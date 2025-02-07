@@ -170,7 +170,12 @@ export default class ComponentNode {
   public delete(id: string | string[]) {
     const ids: string[] = Array.isArray(id) ? id : [id];
     const componentNodes = getGlobalState().componentNodes.filter((componentNode) => {
-      return !ids.includes(componentNode.id);
+      if (ids.includes(componentNode.id)) {
+        // 从对应的layout中删除
+        this.removeFromLayout(componentNode.id);
+        return false;
+      }
+      return true;
     });
     this.init(componentNodes);
   }
