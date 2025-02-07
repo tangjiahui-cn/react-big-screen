@@ -5,7 +5,7 @@
  * @date 2024/12/25
  * @description 用来控制运行时的每个实例的各种行为，例如：鼠标经过、鼠标选中效果等。
  */
-import { InstanceType } from "..";
+import engine, { InstanceType } from "..";
 import BaseInstance, {
   BaseInstanceDataChangeCallback,
   BaseInstanceDataChangeUnmount,
@@ -112,5 +112,25 @@ export default class Instance extends BaseInstance {
     super.delete(id);
     // 同时删除选中实例
     this.selectedInstances.delete(id);
+  }
+
+  // 获取所有的子实例
+  public getChildren(instanceIds: string[]): InstanceType[];
+  public getChildren(instances: InstanceType[]): InstanceType[];
+  public getChildren(instances: (string | InstanceType)[]): InstanceType[];
+  public getChildren(instances: string[] | InstanceType[]): InstanceType[] {
+    return instances.reduce((result, source) => {
+      const instance = typeof source === "string" ? this.get(source) : source;
+      const componentNode = instance?.getComponentNode?.();
+      if (componentNode && componentNode.category === "layout") {
+        componentNode.childrenIds?.forEach?.((id) => {
+          const childInstance = engine.instance.get(id);
+          if (childInstance) {
+            result.push(childInstance);
+          }
+        });
+      }
+      return result;
+    }, [] as InstanceType[]);
   }
 }

@@ -9,7 +9,7 @@ import { ComponentProps } from "@/engine";
 import styles from "./index.module.less";
 import { CarouselOptions } from "./attributes";
 import classNames from "classnames";
-import React, { RefObject, useEffect, useRef } from "react";
+import React, { RefObject, useEffect, useMemo, useRef } from "react";
 import { CarouselRef } from "antd/lib/carousel";
 
 export default function (props: ComponentProps<CarouselOptions>) {
@@ -19,13 +19,21 @@ export default function (props: ComponentProps<CarouselOptions>) {
     width,
     height,
     position: "relative",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: 50,
     color: "rgba(0,0,0,0.65)",
-    fontWeight: "bold",
   };
+
+  // 显示空的面板列表
+  const renderPanels = useMemo(() => {
+    return Array(options?.count)
+      .fill(null)
+      .map((_, index) => {
+        return (
+          <div key={index}>
+            <div style={itemStyle} />
+          </div>
+        );
+      });
+  }, [options.count]);
 
   // 跳转指定索引位置面板（索引从0开始）
   useEffect(() => {
@@ -45,15 +53,7 @@ export default function (props: ComponentProps<CarouselOptions>) {
         style={{ width, height }}
         dotPosition={"bottom"}
       >
-        <div>
-          <div style={itemStyle} />
-        </div>
-        <div>
-          <div style={itemStyle} />
-        </div>
-        <div>
-          <div style={itemStyle} />
-        </div>
+        {renderPanels}
       </Carousel>
     </div>
   );

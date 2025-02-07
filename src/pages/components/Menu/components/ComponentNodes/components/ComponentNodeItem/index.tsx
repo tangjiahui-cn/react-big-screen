@@ -30,7 +30,8 @@ export default function ComponentNodeItem(props: Props) {
     };
   }, [componentNode]);
 
-  function handleClick(e: React.MouseEvent) {
+  // 选中当前
+  function handleSelect(e: React.MouseEvent) {
     e.stopPropagation();
     // 按住shift支持取消选中该项
     const isPressedShift = isKeyPressed("shift");
@@ -71,7 +72,7 @@ export default function ComponentNodeItem(props: Props) {
         props?.isSelected && styles.componentNodeItem_selected,
       )}
       onMouseDown={(e) => {
-        handleClick(e);
+        handleSelect(e);
       }}
       onMouseEnter={() => {
         instance?.handleHover?.();

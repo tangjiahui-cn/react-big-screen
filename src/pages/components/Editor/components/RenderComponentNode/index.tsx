@@ -5,21 +5,26 @@
  * @date 2024/12/25
  */
 import engine, { ComponentNodeType, ComponentType, useRegisterInstance } from "@/engine";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { isKeyPressed } from "@/packages/shortCutKeys";
-import { isClickMouseLeft, isClickMouseRight } from "@/utils";
+import { isClickMouseLeft, isClickMouseRight, isInRect } from "@/utils";
 import { useItemContextMenu, useItemDragMove, useItemDragSize } from "./hooks";
 import classNames from "classnames";
 import styles from "./index.module.less";
 import { useDomEvents } from "@/hooks";
+import { ask } from "@/components/Ask";
 
 interface RenderComponentProps {
   componentNode: ComponentNodeType;
+}
+
+interface ScopeRenderComponentNode extends RenderComponentProps {
   component: ComponentType;
 }
 
 export default function RenderComponentNode(props: RenderComponentProps) {
   const [componentNode, setComponentNode] = useState(props?.componentNode);
+  const component = useMemo(() => engine.component.get(componentNode.cId), [componentNode?.cId]);
 
   useEffect(() => {
     // 监听当前节点变更事件
@@ -28,10 +33,14 @@ export default function RenderComponentNode(props: RenderComponentProps) {
     });
   }, []);
 
-  return <ScopeRenderComponentNode componentNode={componentNode} component={props?.component} />;
+  return component ? (
+    <ScopeRenderComponentNode componentNode={componentNode} component={component} />
+  ) : (
+    <></>
+  );
 }
 
-function ScopeRenderComponentNode(props: RenderComponentProps) {
+function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
   const { component, componentNode } = props;
   const Component = component.component;
   const containerDomRef = useRef<HTMLDivElement>(null);
@@ -79,8 +88,72 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
     },
   });
 
+  // 找到点在layout区域内的 “layout组件”
+  function getInRectLayoutComponentNode(point: {
+    x: number;
+    y: number;
+  }): ComponentNodeType | undefined {
+    return engine.componentNode.getAll().find?.((otherComponentNode) => {
+      const isLayout = otherComponentNode.category === "layout";
+      if (isLayout && otherComponentNode.id !== componentNode.id) {
+        return isInRect(point, engine.componentNode.getCoordinate(otherComponentNode));
+      }
+      return false;
+    });
+  }
+
   // 注册拖拽位移
-  useItemDragMove(containerDomRef, { lock: componentNode.lock });
+  useItemDragMove(containerDomRef, {
+    lock: componentNode.lock,
+    onEnd(_, __, e) {
+      // （处理layout相关）
+      // 结束放置，判断是否放在布局里
+      setTimeout(() => {
+        // 相交的最近layout组件
+        const { x: domX = 0, y: domY = 0 } =
+          containerDomRef.current?.getBoundingClientRect?.() || {};
+        const layoutComponentNode = getInRectLayoutComponentNode({
+          x: e.x - domX + componentNode.x, // 鼠标点击位置在编辑器上的坐标
+          y: e.y - domY + componentNode.y,
+        });
+
+        // 放在layout的上方
+        if (layoutComponentNode) {
+          // 如果已经属于该 layout 则不操作
+          if (componentNode.parentId === layoutComponentNode.id) {
+            return;
+          }
+          // 询问是否加入layout
+          ask({
+            title: "移入提醒",
+            content: `确定放入布局组件${layoutComponentNode.cName}？`,
+            onOk(close) {
+              // 加入到layout
+              engine.componentNode.insertLayout(componentNode, layoutComponentNode);
+              close();
+            },
+          });
+          return;
+        }
+
+        // 如果不在layout的上方
+        // 且自己所属一个layout，则询问是否移出
+        if (componentNode.parentId) {
+          const parentComponentNode = engine.componentNode.get(componentNode.parentId);
+          if (parentComponentNode) {
+            ask({
+              title: "移出提醒",
+              content: `是否移出布局组件${parentComponentNode.cName}?`,
+              onOk(close) {
+                engine.componentNode.removeFromLayout(componentNode, true);
+                close();
+              },
+            });
+          }
+        }
+      });
+    },
+  });
 
   // 注册拖拽大小
   useItemDragSize(containerDomRef, {
@@ -143,7 +216,7 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
         zIndex: componentNode.level,
       }}
       onMouseEnter={() => {
-        // 手动控制样式（实现禁用等其他状态下不显示选中效果）
+        // 手动控制样式（实现其他地方可以控制当前组件hover效果）
         instance.handleHover();
       }}
       onMouseLeave={() => {
@@ -155,6 +228,7 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
         options={componentNode.options}
         width={componentNode.width}
         height={componentNode.height}
+        componentNode={componentNode}
       />
 
       {/* 遮罩层 */}
