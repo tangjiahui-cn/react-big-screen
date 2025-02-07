@@ -21,7 +21,7 @@ export function useItemContextMenu(domRef: RefObject<HTMLElement | null>) {
         if (componentNode?.lock) {
           lockCount++;
         }
-        if (componentNode.group) {
+        if (componentNode.groupId) {
           isHasGroup = true;
         }
         return componentNode;

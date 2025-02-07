@@ -41,8 +41,8 @@ export interface ComponentNodeType extends BaseComponent {
   id: string; // 实例id
   name: string; // 实例名称
   lock?: boolean; // 是否锁定（仅用于编辑模式）
-  group?: string; // 所属成组的id
-  parentId?: string; // 父组件id（用于layout组件）
+  groupId?: string; // 所属成组的id
+  parentId?: string; // 父组件id（保存layout组件的id）
 }
 
 // 全局配置类型

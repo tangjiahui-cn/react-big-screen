@@ -82,8 +82,8 @@ export default class ComponentNode {
   private pipeComponentNodes(componentNodes: ComponentNodeType[]): ComponentNodeType[] {
     componentNodes.forEach((componentNode) => {
       // 成组（group）
-      if (componentNode.group) {
-        this.insertGroup(componentNode.group, componentNode.id);
+      if (componentNode.groupId) {
+        this.insertGroup(componentNode.groupId, componentNode.id);
       }
       // layout
       if (componentNode.parentId) {
@@ -274,7 +274,7 @@ export default class ComponentNode {
     componentNodes.forEach((componentNode) => {
       ids.add(componentNode.id);
       this.update(componentNode.id, {
-        group: groupId,
+        groupId,
       });
     });
     this.groupMap[groupId] = {
@@ -290,7 +290,7 @@ export default class ComponentNode {
       const group = this.groupMap[groupId];
       group.children.forEach((id: string) => {
         this.update(id, {
-          group: undefined,
+          groupId: undefined,
         });
       });
       delete this.groupMap[groupId];
