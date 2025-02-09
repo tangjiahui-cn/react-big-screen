@@ -8,8 +8,8 @@ import { isClickMouseLeft } from "@/utils/mouse";
 
 interface moveableDomOptions {
   onStart?: (e: MouseEvent) => void; // 开始移动
-  onMove?: (deltaX: number, deltaY: number) => void; // 移动中
-  onEnd?: (deltaX: number, deltaY: number) => void; // 移动结束
+  onMove?: (deltaX: number, deltaY: number, e: MouseEvent) => void; // 移动中
+  onEnd?: (deltaX: number, deltaY: number, e: MouseEvent) => void; // 移动结束
 }
 
 type UnmountMoveableDom = () => void;
@@ -37,13 +37,13 @@ export function moveableDom(dom: HTMLElement, options: moveableDomOptions): Unmo
   function mousemove(e: MouseEvent) {
     const deltaX = e.clientX - moveInfo.startX;
     const deltaY = e.clientY - moveInfo.startY;
-    options?.onMove?.(deltaX, deltaY);
+    options?.onMove?.(deltaX, deltaY, e);
   }
 
   function mouseup(e: MouseEvent) {
     const deltaX = Math.round(e.clientX - moveInfo.startX);
     const deltaY = Math.round(e.clientY - moveInfo.startY);
-    options?.onEnd?.(deltaX, deltaY);
+    options?.onEnd?.(deltaX, deltaY, e);
     clear();
   }
 

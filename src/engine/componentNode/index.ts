@@ -16,6 +16,7 @@ import {
 } from "..";
 import { omit } from "lodash-es";
 import { createUUID } from "../utils";
+import { RectCoordinate } from "@/utils";
 
 type ComponentNodeChangeEventCallback = (options: { payload: ComponentNodeType }) => void;
 type ComponentNodeChangeEventUnmount = () => void;
@@ -28,12 +29,21 @@ const INIT_COMPONENT: BaseComponent = {
   y: 0,
   width: 100,
   height: 100,
+  category: "base",
 };
 
 export default class ComponentNode {
   private maxLevel: number = 1; // 最大层级
   private eventMap: Record<string, ComponentNodeChangeEventCallback[]> = {}; // 数据节点变更回调事件 （id => callback）
-  private groupMap: Record<string, ComponentNodeGroup> = {};
+  private groupMap: Record<string, ComponentNodeGroup> = {}; // 成组映射（groupId => 对应元素）
+  private panelMap: Record<
+    string,
+    {
+      label: string; // 名称
+      parentId: string; // 父组件id
+      children: Set<string>; // 包含子组件id
+    }
+  > = {}; // 面板映射（panelId => {children: [id, id, ...]}）
 
   // 触发onChange事件
   private notifyChange(componentNode: ComponentNodeType) {
@@ -75,12 +85,40 @@ export default class ComponentNode {
     return 1;
   }
 
-  // 管道化处理componentNodes
-  private pipeComponentNodes(componentNodes: ComponentNodeType[]): ComponentNodeType[] {
+  /**
+   * 管道化处理componentNodes
+   * @param componentNodes 要通过的componentNodes
+   * @param init 是否初始化操作
+   */
+  private pipeComponentNodes(
+    componentNodes: ComponentNodeType[],
+    init?: boolean,
+  ): ComponentNodeType[] {
     componentNodes.forEach((componentNode) => {
       // 成组（group）
-      if (componentNode.group) {
-        this.insertGroup(componentNode.group, componentNode.id);
+      if (componentNode.groupId) {
+        this.insertGroup(componentNode.groupId, componentNode.id);
+      }
+      // 如果属于一个layout则隐藏（由layout类组件内部控制显示）
+      if (componentNode.panelId) {
+        componentNode.show = !init;
+        (this.panelMap[componentNode.panelId] ||= {
+          parentId: "",
+          label: "",
+          children: new Set(),
+        }).children.add(componentNode.id);
+      }
+      // 如果是layout组件，则注册
+      if (componentNode.panels) {
+        componentNode.panels.forEach((panel) => {
+          const currentPanel = (this.panelMap[`${panel.value}`] ||= {
+            label: panel.label,
+            parentId: componentNode.id,
+            children: new Set(),
+          });
+          currentPanel.parentId = componentNode.id;
+          currentPanel.label = panel.label;
+        });
       }
       // 计算 maxLevel
       this.maxLevel = Math.max(this.maxLevel, componentNode?.level || 1);
@@ -88,12 +126,17 @@ export default class ComponentNode {
     return componentNodes;
   }
 
-  // 初始化componentNodes
-  public init(componentNodes: ComponentNodeType[] = []) {
+  /**
+   * 初始化componentNodes
+   * @param componentNodes 要设置的 componentNodes
+   * @param init 是否是初始化操作
+   */
+  public init(componentNodes: ComponentNodeType[] = [], init: boolean = true) {
     this.maxLevel = 1;
     this.groupMap = {};
+    this.panelMap = {};
     setGlobalState({
-      componentNodes: this.pipeComponentNodes(componentNodes),
+      componentNodes: this.pipeComponentNodes(componentNodes, init),
     });
   }
 
@@ -122,10 +165,25 @@ export default class ComponentNode {
   }
 
   // 获取一个componentNode
-  public get(id: string): ComponentNodeType | undefined {
+  public get(id?: string): ComponentNodeType | undefined {
+    if (!id) return undefined;
     return this.getAll().find((componentNode) => {
       return componentNode.id === id;
     });
+  }
+
+  // 获取一些componentNode
+  public getSome(
+    id?: string | ComponentNodeType | (string | ComponentNodeType)[],
+  ): ComponentNodeType[] {
+    const list = Array.isArray(id) ? id : [id];
+    return list.reduce((result, current) => {
+      const componentNode = typeof current === "string" ? this.get(current) : current;
+      if (componentNode) {
+        result.push(componentNode);
+      }
+      return result;
+    }, [] as ComponentNodeType[]);
   }
 
   /**
@@ -137,7 +195,9 @@ export default class ComponentNode {
    */
   public update(
     id?: string,
-    extComponentNode?: Partial<ComponentNodeType>,
+    extComponentNode?:
+      | Partial<ComponentNodeType>
+      | ((origin: ComponentNodeType) => Partial<ComponentNodeType>),
     options?: {
       silent?: boolean; // 是否不触发更新，而仅仅是修改值。（默认false，true不触发，false触发）
     },
@@ -145,7 +205,10 @@ export default class ComponentNode {
     if (!id || !extComponentNode) return;
     const componentNode = this.get(id);
     if (componentNode) {
-      Object.assign(componentNode, extComponentNode);
+      Object.assign(
+        componentNode,
+        typeof extComponentNode === "function" ? extComponentNode(componentNode) : extComponentNode,
+      );
       if (!options?.silent) {
         this.notifyChange(componentNode);
       }
@@ -165,11 +228,46 @@ export default class ComponentNode {
 
   // 删除 componentNode
   public delete(id: string | string[]) {
-    const ids: string[] = Array.isArray(id) ? id : [id];
-    const componentNodes = getGlobalState().componentNodes.filter((componentNode) => {
-      return !ids.includes(componentNode.id);
+    const list: string[] = Array.isArray(id) ? id : [id];
+    const deleteIds = new Set<string>();
+
+    list.forEach((id) => {
+      const componentNode = this.get(id);
+      if (!componentNode) {
+        return;
+      }
+      deleteIds.add(id);
+      // 如果是layout组件，则删除所有子组件
+      if (componentNode?.panels?.length) {
+        this.getLayoutChildrenIds(componentNode.id).forEach((childId) => {
+          deleteIds.add(childId);
+        });
+      }
     });
-    this.init(componentNodes);
+
+    const componentNodes = getGlobalState().componentNodes.filter((componentNode) => {
+      return !deleteIds.has(componentNode.id);
+    });
+
+    this.init(componentNodes, false);
+  }
+
+  // 计算一个componentNode的矩形坐标
+  public getCoordinate(id?: string | ComponentNodeType): RectCoordinate {
+    const componentNode = typeof id === "string" ? this.get(id) : id;
+    const rectCoordinate = {
+      x1: 0,
+      y1: 0,
+      x2: 0,
+      y2: 0,
+    };
+    if (componentNode) {
+      rectCoordinate.x1 = componentNode.x;
+      rectCoordinate.y1 = componentNode.y;
+      rectCoordinate.x2 = componentNode.x + componentNode.width;
+      rectCoordinate.y2 = componentNode.y + componentNode.height;
+    }
+    return rectCoordinate;
   }
 
   // 从实例数据创建新的数据实例
@@ -189,6 +287,10 @@ export default class ComponentNode {
     if (!componentNode?.level) {
       componentNode.level = ++this.maxLevel;
     }
+    // 如果无分类，分配 unknown
+    if (!componentNode.category) {
+      componentNode.category = "unknown";
+    }
     // 计算最大层级
     this.maxLevel = Math.max(this.maxLevel, componentNode.level);
     return componentNode;
@@ -201,7 +303,7 @@ export default class ComponentNode {
   ): ComponentNodeType {
     const componentNode: ComponentNodeType = {
       ...INIT_COMPONENT, // 基础默认组件数据
-      ...omit(component, ["icon", "category", "component", "attributesComponent"]), // 自定义组件默认数据
+      ...omit(component, ["icon", "component", "attributesComponent"]), // 自定义组件默认数据
       ...extComponentNode, // 扩展组件数据
     } as ComponentNodeType;
 
@@ -225,6 +327,20 @@ export default class ComponentNode {
     if (!componentNode.y) {
       componentNode.y = 0;
     }
+    // 如果无分类，分配 unknown
+    if (!componentNode.category) {
+      componentNode.category = "unknown";
+    }
+    // 如果有panels，则赋值value
+    if (component.panels) {
+      componentNode.panels = component.panels.map((panel) => {
+        return {
+          label: panel.label,
+          value: createUUID(),
+        };
+      });
+      componentNode.currentPanelId = componentNode.panels?.[0]?.value;
+    }
 
     // 计算最大层级
     this.maxLevel = Math.max(this.maxLevel, componentNode.level);
@@ -238,7 +354,7 @@ export default class ComponentNode {
     componentNodes.forEach((componentNode) => {
       ids.add(componentNode.id);
       this.update(componentNode.id, {
-        group: groupId,
+        groupId,
       });
     });
     this.groupMap[groupId] = {
@@ -254,7 +370,7 @@ export default class ComponentNode {
       const group = this.groupMap[groupId];
       group.children.forEach((id: string) => {
         this.update(id, {
-          group: undefined,
+          groupId: undefined,
         });
       });
       delete this.groupMap[groupId];
@@ -286,5 +402,103 @@ export default class ComponentNode {
   // 获取一个组包含的实例id列表
   public getGroupComponentNodeIds(groupId?: string): string[] {
     return Array.from(this.getGroup(groupId)?.children || []);
+  }
+
+  /************************* 布局 (layout) *************************/
+  // 获取layout类组件包含的所有组件Ids
+  public getLayoutChildrenIds(id?: string): string[] {
+    const panels = this.get(id)?.panels;
+    if (!panels?.length) return [];
+    return panels.reduce((ids, panel) => {
+      return ids.concat(Array.from(this.panelMap[panel.value].children || []));
+    }, [] as string[]);
+  }
+
+  // 获取layout类组件包含的所有可展示组件Ids
+  public getLayoutVisibleChildrenIds(id?: string): string[] {
+    const currentPanelId = this.get(id)?.currentPanelId;
+    if (!currentPanelId) return [];
+    return Array.from(this.panelMap[currentPanelId].children || []);
+  }
+
+  // 判断当前组件是否在面板内
+  public isInPanel(panelId?: string, source?: string | ComponentNodeType): boolean {
+    const sourceComponentNode = typeof source === "string" ? this.get(source) : source;
+    if (!panelId || !sourceComponentNode) {
+      return false;
+    }
+    return this.panelMap[panelId].children.has(sourceComponentNode.id);
+  }
+
+  // 将组件移入面板内
+  public insertPanel(panelId: string, source?: string | ComponentNodeType): void {
+    const sourceComponentNode = typeof source === "string" ? this.get(source) : source;
+    if (!panelId || !sourceComponentNode) {
+      return;
+    }
+
+    // 从原面板移除
+    this.removeFromPanel(panelId, sourceComponentNode);
+    // 移入新面板
+    const panel = this.panelMap[panelId];
+    panel?.children?.add?.(sourceComponentNode.id);
+
+    // 更新componentNode的panelId
+    this.update(sourceComponentNode.id, {
+      panelId,
+    });
+  }
+
+  // 将组件移出面板
+  public removeFromPanel(
+    panelId: string, // 面板id
+    source?: string | ComponentNodeType, // 原组件
+    autoUpdateComponentNode: boolean = true, // 自动更新componentNode
+  ): void {
+    const sourceComponentNode = typeof source === "string" ? this.get(source) : source;
+    if (!panelId || !sourceComponentNode) {
+      return;
+    }
+    const panel = this.panelMap[panelId];
+    panel?.children?.delete?.(sourceComponentNode.id);
+
+    if (autoUpdateComponentNode) {
+      // 删除componentNode的panelId
+      this.update(sourceComponentNode.id, {
+        panelId: undefined,
+      });
+    }
+  }
+
+  // 获取面板名称
+  public getPanelName(panelId?: string): string {
+    if (!panelId) return "";
+    return this.panelMap[panelId]?.label || "";
+  }
+
+  // 获取面板包含的子组件id
+  public getPanelChildrenIds(panelId?: string): string[] {
+    if (!panelId) return [];
+    return Array.from(this.panelMap[panelId].children || []);
+  }
+
+  // 显示面板下全部组件
+  public showPanel(panelId?: string): void {
+    if (!panelId) return;
+    this.panelMap[panelId].children.forEach((id) => {
+      this.update(id, {
+        show: true,
+      });
+    });
+  }
+
+  // 隐藏面板下全部组件
+  public hidePanel(panelId?: string): void {
+    if (!panelId) return;
+    this.panelMap[panelId].children.forEach((id) => {
+      this.update(id, {
+        show: false,
+      });
+    });
   }
 }

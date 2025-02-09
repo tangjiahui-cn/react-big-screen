@@ -12,7 +12,7 @@ export function selectedUnGroup() {
   const groupIds: string[] = Array.from(
     allSelectedInstances.reduce((resultSet, instance) => {
       const componentNode = instance.getComponentNode();
-      if (componentNode.group) resultSet.add(componentNode.group);
+      if (componentNode.groupId) resultSet.add(componentNode.groupId);
       return resultSet;
     }, new Set<string>()),
   );

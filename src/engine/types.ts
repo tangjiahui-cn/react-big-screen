@@ -6,15 +6,27 @@ export interface ComponentProps<Option extends any> {
   width: number;
   height: number;
   options: Option; // 配置数据
+  componentNode: ComponentNodeType; // 对应的componentNode
 }
 
 // 组件属性配置模板参数
 export interface AttributesComponentProps<Option = any> {
+  componentNode: ComponentNodeType;
+  onChangeComponentNode: (
+    componentNode:
+      | Partial<ComponentNodeType>
+      | ((origin: ComponentNodeType) => Partial<ComponentNodeType>),
+  ) => void;
   options: Option; // 配置数据
   onChange: (options: Option, cover?: boolean) => void; // 配置数据修改回调 （cover：默认false。true覆盖，false则修改部分属性）
 }
 
 // 基础组件类型（组件模板、组件数据实例公共的属性）
+export interface PanelData {
+  label: string; // (父) 包含的panel名称
+  value: string; // (父) 包含的panel的id
+}
+export type ComponentCategory = "base" | "charts" | "layout" | "unknown";
 export interface BaseComponent {
   cId: string; // 组件id
   cName: string; // 组件名称
@@ -24,13 +36,17 @@ export interface BaseComponent {
   height: number; // 高度
   level?: number; // 层级
   options?: Record<string, any>; // 配置数据
+  category: ComponentCategory; // 组件分类
+
+  // layout相关
+  panelId?: PanelData["value"]; // (子) 所属panelId
+  currentPanelId?: PanelData["value"]; // (父) 当前展示panel
+  panels?: PanelData[];
 }
 
 // 组件模板类型
-export type ComponentGroup = "base" | "charts" | "layout";
 export interface ComponentType<Option = any> extends BaseComponent {
   icon: string | (() => Promise<typeof import("*.png")>); // 组件图标
-  category: ComponentGroup; // 组件分类
   component: React.FC<ComponentProps<Option>>; // 组件模板
   attributesComponent?: React.FC<AttributesComponentProps<Option>>; // 属性配置页面模板
 }
@@ -40,7 +56,8 @@ export interface ComponentNodeType extends BaseComponent {
   id: string; // 实例id
   name: string; // 实例名称
   lock?: boolean; // 是否锁定（仅用于编辑模式）
-  group?: string; // 所属成组的id
+  groupId?: string; // 所属成组的id
+  show?: boolean; // 控制组件是否显示
 }
 
 // 全局配置类型

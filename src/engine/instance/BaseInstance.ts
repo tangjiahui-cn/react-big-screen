@@ -47,13 +47,13 @@ export default class BaseInstance {
   }
 
   // 取出实例
-  public get(id: string): InstanceType | undefined;
-  public get(id: string[]): (InstanceType | undefined)[];
-  public get(id: string | string[]): InstanceType | (InstanceType | undefined)[] | undefined {
+  public get(id?: string): InstanceType | undefined;
+  public get(id?: string[]): (InstanceType | undefined)[];
+  public get(id?: string | string[]): InstanceType | (InstanceType | undefined)[] | undefined {
     if (Array.isArray(id)) {
       return id.map((value) => this.get(value)) as (InstanceType | undefined)[];
     }
-    return this._data[id];
+    return this._data[`${id}`];
   }
 
   // 取出全部实例

@@ -37,9 +37,19 @@ export const layout: ComponentType[] = [
     width: 500,
     height: 250,
     options: {
-      borderColor: "#ccc",
+      borderColor: "#ccc", // 边框颜色
     },
     component: Carousel,
     attributesComponent: CarouselAttributes,
+    panels: [
+      {
+        label: "面板一",
+        value: "",
+      },
+      {
+        label: "面板二",
+        value: "",
+      },
+    ],
   },
 ];

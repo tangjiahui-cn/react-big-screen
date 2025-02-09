@@ -5,21 +5,27 @@
  * @date 2024/12/25
  */
 import engine, { ComponentNodeType, ComponentType, useRegisterInstance } from "@/engine";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { isKeyPressed } from "@/packages/shortCutKeys";
-import { isClickMouseLeft, isClickMouseRight } from "@/utils";
+import { isClickMouseLeft, isClickMouseRight, isInRect } from "@/utils";
 import { useItemContextMenu, useItemDragMove, useItemDragSize } from "./hooks";
 import classNames from "classnames";
 import styles from "./index.module.less";
-import { useDomEvents } from "@/hooks";
+import { useDomEvents, useListenRef } from "@/hooks";
+import { ask } from "@/components/Ask";
 
 interface RenderComponentProps {
   componentNode: ComponentNodeType;
+}
+
+interface ScopeRenderComponentNode extends RenderComponentProps {
   component: ComponentType;
 }
 
 export default function RenderComponentNode(props: RenderComponentProps) {
   const [componentNode, setComponentNode] = useState(props?.componentNode);
+  const componentNodeShow = componentNode?.show ?? true;
+  const component = useMemo(() => engine.component.get(componentNode.cId), [componentNode?.cId]);
 
   useEffect(() => {
     // 监听当前节点变更事件
@@ -28,11 +34,17 @@ export default function RenderComponentNode(props: RenderComponentProps) {
     });
   }, []);
 
-  return <ScopeRenderComponentNode componentNode={componentNode} component={props?.component} />;
+  return component && componentNodeShow ? (
+    <ScopeRenderComponentNode componentNode={componentNode} component={component} />
+  ) : (
+    <></>
+  );
 }
 
-function ScopeRenderComponentNode(props: RenderComponentProps) {
+function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
   const { component, componentNode } = props;
+  const componentNodeRef = useListenRef<ComponentNodeType>(componentNode);
+
   const Component = component.component;
   const containerDomRef = useRef<HTMLDivElement>(null);
   const boxDomRef = useRef<HTMLDivElement>(null);
@@ -71,7 +83,7 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
     },
     // 获取对应的 componentNode
     getComponentNode(): ComponentNodeType {
-      return componentNode;
+      return componentNodeRef.current;
     },
     // 获取实例的 component
     getComponent(): ComponentType {
@@ -79,8 +91,81 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
     },
   });
 
+  // 找到点在layout区域内的 “layout组件”
+  function getInRectLayoutComponentNode(point: {
+    x: number;
+    y: number;
+  }): ComponentNodeType | undefined {
+    return engine.componentNode.getAll().find?.((otherComponentNode) => {
+      const isLayout = otherComponentNode.category === "layout";
+      if (isLayout && otherComponentNode.id !== componentNode.id) {
+        return isInRect(point, engine.componentNode.getCoordinate(otherComponentNode));
+      }
+      return false;
+    });
+  }
+
   // 注册拖拽位移
-  useItemDragMove(containerDomRef, { lock: componentNode.lock });
+  useItemDragMove(containerDomRef, {
+    lock: componentNode.lock,
+    onEnd(_, __, e) {
+      // （处理layout相关）
+      // 结束放置，判断是否放在布局里
+      setTimeout(() => {
+        // 相交的最近layout组件
+        const { x: domX = 0, y: domY = 0 } =
+          containerDomRef.current?.getBoundingClientRect?.() || {};
+        const layoutComponentNode = getInRectLayoutComponentNode({
+          x: e.x - domX + componentNodeRef.current.x, // 鼠标点击位置在编辑器上的坐标
+          y: e.y - domY + componentNodeRef.current.y,
+        });
+
+        // 如果在layout类型组件上方
+        if (layoutComponentNode) {
+          const targetPanelId = layoutComponentNode?.currentPanelId;
+          // 如果在该layout类型组件的“当前面板”上，则返回
+          if (
+            !targetPanelId ||
+            engine.componentNode.isInPanel(targetPanelId, componentNodeRef.current)
+          ) {
+            return;
+          }
+          // 如果不在，则询问是否移入
+          ask({
+            title: "移入提醒",
+            content: `确定放入面板“${
+              engine.componentNode.getPanelName(targetPanelId) || "目标"
+            }”？`,
+            onOk(close) {
+              // 移入到panelId
+              engine.componentNode.insertPanel(targetPanelId, componentNodeRef.current);
+
+              // 选中目标layout组件
+              setTimeout(() => {
+                engine.instance.select(layoutComponentNode.id, true);
+              });
+              close();
+            },
+          });
+          return;
+        }
+
+        // 如果不在layout类型组件上方，则判断是否之前已经在layout类型组件中，如果在，则询问移出
+        const panelId = componentNodeRef.current.panelId;
+        if (panelId) {
+          ask({
+            title: "移出提醒",
+            content: `是否移出面板“${engine.componentNode.getPanelName(panelId) || "目标"}”?`,
+            onOk(close) {
+              // 从面板移除
+              engine.componentNode.removeFromPanel(panelId, componentNodeRef.current);
+              close();
+            },
+          });
+        }
+      });
+    },
+  });
 
   // 注册拖拽大小
   useItemDragSize(containerDomRef, {
@@ -120,8 +205,8 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
         }
 
         // 待选中组件实例ids
-        const selectedIds: string[] = componentNode.group
-          ? engine.componentNode.getGroupComponentNodeIds(componentNode.group)
+        const selectedIds: string[] = componentNode.groupId
+          ? engine.componentNode.getGroupComponentNodeIds(componentNode.groupId)
           : [instance.id];
 
         // 是否按住多选键（按住多选，则cover为true，不会取消选中其他实例）
@@ -143,7 +228,7 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
         zIndex: componentNode.level,
       }}
       onMouseEnter={() => {
-        // 手动控制样式（实现禁用等其他状态下不显示选中效果）
+        // 手动控制样式（实现其他地方可以控制当前组件hover效果）
         instance.handleHover();
       }}
       onMouseLeave={() => {
@@ -155,6 +240,7 @@ function ScopeRenderComponentNode(props: RenderComponentProps) {
         options={componentNode.options}
         width={componentNode.width}
         height={componentNode.height}
+        componentNode={componentNode}
       />
 
       {/* 遮罩层 */}

@@ -18,9 +18,9 @@ export function selectedGroup() {
   // 从其他group中移除关联
   const componentNodes: ComponentNodeType[] = allSelectedInstances.map((instance) => {
     const componentNode: ComponentNodeType = instance.getComponentNode();
-    if (componentNode.group) {
-      engine.componentNode.unlinkFromGroup(componentNode.group, componentNode.id);
-      componentNode.group = undefined;
+    if (componentNode.groupId) {
+      engine.componentNode.unlinkFromGroup(componentNode.groupId, componentNode.id);
+      componentNode.groupId = undefined;
     }
     return componentNode;
   });

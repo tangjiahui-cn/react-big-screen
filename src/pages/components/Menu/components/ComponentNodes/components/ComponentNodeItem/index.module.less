@@ -25,6 +25,24 @@
   }
 
   &_tail {
-    flex: 0 0 20px;
+    gap: 8px;
+    display: flex;
+    flex: 0 0 40px;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.3);
+    cursor: default;
+
+    & > div {
+      width: 12px;
+    }
+
+    &_operatable {
+      color: @color;
+      cursor: pointer;
+
+      &:hover {
+        color: @primaryHover;
+      }
+    }
   }
 }
