@@ -37,6 +37,7 @@ export const layout: ComponentType[] = [
     width: 500,
     height: 250,
     options: {
+      bordered: true,
       borderColor: "#ccc", // 边框颜色
     },
     component: Carousel,
