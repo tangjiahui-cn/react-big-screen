@@ -24,6 +24,7 @@ interface ScopeRenderComponentNode extends RenderComponentProps {
 
 export default function RenderComponentNode(props: RenderComponentProps) {
   const [componentNode, setComponentNode] = useState(props?.componentNode);
+  const componentNodeShow = componentNode?.show ?? true;
   const component = useMemo(() => engine.component.get(componentNode.cId), [componentNode?.cId]);
 
   useEffect(() => {
@@ -33,7 +34,7 @@ export default function RenderComponentNode(props: RenderComponentProps) {
     });
   }, []);
 
-  return component ? (
+  return component && componentNodeShow ? (
     <ScopeRenderComponentNode componentNode={componentNode} component={component} />
   ) : (
     <></>

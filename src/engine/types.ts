@@ -43,6 +43,7 @@ export interface ComponentNodeType extends BaseComponent {
   lock?: boolean; // 是否锁定（仅用于编辑模式）
   groupId?: string; // 所属成组的id
   parentId?: string; // 父组件id（保存layout组件的id）
+  show?: boolean; // 控制组件是否显示
 }
 
 // 全局配置类型
