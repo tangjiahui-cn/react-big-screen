@@ -485,7 +485,7 @@ export default class ComponentNode {
   // 显示面板下全部组件
   public showPanel(panelId?: string): void {
     if (!panelId) return;
-    this.panelMap[panelId].children.forEach((id) => {
+    this.panelMap[panelId]?.children?.forEach?.((id) => {
       this.update(id, {
         show: true,
       });
@@ -495,7 +495,7 @@ export default class ComponentNode {
   // 隐藏面板下全部组件
   public hidePanel(panelId?: string): void {
     if (!panelId) return;
-    this.panelMap[panelId].children.forEach((id) => {
+    this.panelMap[panelId]?.children?.forEach?.((id) => {
       this.update(id, {
         show: false,
       });
