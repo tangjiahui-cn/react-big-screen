@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2024/12/19
  */
-import { ComponentGroup, ComponentType, useComponents } from "@/engine";
+import { ComponentCategory, ComponentType, useComponents } from "@/engine";
 import { Collapse, Input } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { useUpdateEffect } from "ahooks";
@@ -13,10 +13,11 @@ import ComponentsBlock from "./components/ComponentsBlock";
 import { debounce, groupBy } from "lodash-es";
 import IEmpty from "@/components/IEmpty";
 
-const groupNameMap: Record<ComponentGroup, string> = {
+const groupNameMap: Record<ComponentCategory, string> = {
   base: "基础组件",
   charts: "图表组件",
   layout: "布局组件",
+  unknown: "未知组件",
 };
 
 function filterComponents(componentList: ComponentType[], keyword: string = ""): ComponentType[] {
@@ -53,15 +54,15 @@ export default function Library() {
 
   // displayComponents 根据group属性分组
   const groups = useMemo(() => {
-    const groupKeys: ComponentGroup[] = [];
+    const groupKeys: ComponentCategory[] = [];
     const groups = Object.entries(
       groupBy(displayComponents, (item) => item.category || "base"),
     ).map(([key, components]) => {
-      groupKeys.push(key as ComponentGroup);
+      groupKeys.push(key as ComponentCategory);
       return {
         key,
         components,
-        label: groupNameMap[key as ComponentGroup],
+        label: groupNameMap[key as ComponentCategory],
       };
     });
     setActiveKeys(groupKeys);
