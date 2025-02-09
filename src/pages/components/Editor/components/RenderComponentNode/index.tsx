@@ -11,7 +11,7 @@ import { isClickMouseLeft, isClickMouseRight, isInRect } from "@/utils";
 import { useItemContextMenu, useItemDragMove, useItemDragSize } from "./hooks";
 import classNames from "classnames";
 import styles from "./index.module.less";
-import { useDomEvents } from "@/hooks";
+import { useDomEvents, useListenRef } from "@/hooks";
 import { ask } from "@/components/Ask";
 
 interface RenderComponentProps {
@@ -43,6 +43,8 @@ export default function RenderComponentNode(props: RenderComponentProps) {
 
 function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
   const { component, componentNode } = props;
+  const componentNodeRef = useListenRef<ComponentNodeType>(componentNode);
+
   const Component = component.component;
   const containerDomRef = useRef<HTMLDivElement>(null);
   const boxDomRef = useRef<HTMLDivElement>(null);
@@ -81,7 +83,7 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
     },
     // 获取对应的 componentNode
     getComponentNode(): ComponentNodeType {
-      return componentNode;
+      return componentNodeRef.current;
     },
     // 获取实例的 component
     getComponent(): ComponentType {
@@ -114,43 +116,47 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
         const { x: domX = 0, y: domY = 0 } =
           containerDomRef.current?.getBoundingClientRect?.() || {};
         const layoutComponentNode = getInRectLayoutComponentNode({
-          x: e.x - domX + componentNode.x, // 鼠标点击位置在编辑器上的坐标
-          y: e.y - domY + componentNode.y,
+          x: e.x - domX + componentNodeRef.current.x, // 鼠标点击位置在编辑器上的坐标
+          y: e.y - domY + componentNodeRef.current.y,
         });
 
-        // 放在layout的上方
+        // 如果在layout类型组件上方
         if (layoutComponentNode) {
-          // 如果已经属于该 layout 则不操作
-          if (componentNode.parentId === layoutComponentNode.id) {
+          const targetPanelId = layoutComponentNode?.currentPanelId;
+          // 如果在该layout类型组件的“当前面板”上，则返回
+          if (
+            !targetPanelId ||
+            engine.componentNode.isInPanel(targetPanelId, componentNodeRef.current)
+          ) {
             return;
           }
-          // 询问是否加入layout
+          // 如果不在，则询问是否移入
           ask({
             title: "移入提醒",
-            content: `确定放入布局组件${layoutComponentNode.cName}？`,
+            content: `确定放入面板“${
+              engine.componentNode.getPanelName(targetPanelId) || "目标"
+            }”？`,
             onOk(close) {
-              // 加入到layout
-              engine.componentNode.insertLayout(componentNode, layoutComponentNode);
+              // 移入到panelId
+              engine.componentNode.insertPanel(targetPanelId, componentNodeRef.current);
               close();
             },
           });
           return;
         }
 
-        // 如果不在layout的上方
-        // 且自己所属一个layout，则询问是否移出
-        if (componentNode.parentId) {
-          const parentComponentNode = engine.componentNode.get(componentNode.parentId);
-          if (parentComponentNode) {
-            ask({
-              title: "移出提醒",
-              content: `是否移出布局组件${parentComponentNode.cName}?`,
-              onOk(close) {
-                engine.componentNode.removeFromLayout(componentNode, true);
-                close();
-              },
-            });
-          }
+        // 如果不在layout类型组件上方，则判断是否之前已经在layout类型组件中，如果在，则询问移出
+        const panelId = componentNodeRef.current.panelId;
+        if (panelId) {
+          ask({
+            title: "移出提醒",
+            content: `是否移出面板“${engine.componentNode.getPanelName(panelId) || "目标"}”?`,
+            onOk(close) {
+              // 从面板移除
+              engine.componentNode.removeFromPanel(panelId, componentNodeRef.current);
+              close();
+            },
+          });
         }
       });
     },

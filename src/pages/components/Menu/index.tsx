@@ -31,7 +31,7 @@ const panelList: PanelItem[] = [
 ];
 
 export default function Menu() {
-  const [activeKey, setActiveKey] = useState<string>("componentNodes");
+  const [activeKey, setActiveKey] = useState<string>("library");
 
   const children: React.ReactNode = useMemo(() => {
     return panelList.find((item) => item.key === activeKey)?.children;

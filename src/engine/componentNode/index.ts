@@ -36,7 +36,14 @@ export default class ComponentNode {
   private maxLevel: number = 1; // 最大层级
   private eventMap: Record<string, ComponentNodeChangeEventCallback[]> = {}; // 数据节点变更回调事件 （id => callback）
   private groupMap: Record<string, ComponentNodeGroup> = {}; // 成组映射（groupId => 对应元素）
-  private layoutMap: Record<string, ComponentNodeGroup> = {}; // 布局容器映射（id => 包含子元素）
+  private panelMap: Record<
+    string,
+    {
+      label: string; // 名称
+      parentId: string; // 父组件id
+      children: Set<string>; // 包含子组件id
+    }
+  > = {}; // 面板映射（panelId => {children: [id, id, ...]}）
 
   // 触发onChange事件
   private notifyChange(componentNode: ComponentNodeType) {
@@ -85,11 +92,26 @@ export default class ComponentNode {
       if (componentNode.groupId) {
         this.insertGroup(componentNode.groupId, componentNode.id);
       }
-      // layout
-      if (componentNode.parentId) {
-        (this.layoutMap[componentNode.parentId] ||= { children: new Set() }).children.add(
-          componentNode.id,
-        );
+      // 如果属于一个layout则隐藏（由layout类组件内部控制显示）
+      if (componentNode.panelId) {
+        componentNode.show = false;
+        (this.panelMap[componentNode.panelId] ||= {
+          parentId: "",
+          label: "",
+          children: new Set(),
+        }).children.add(componentNode.id);
+      }
+      // 如果是layout组件，则注册
+      if (componentNode.panels) {
+        componentNode.panels.forEach((panel) => {
+          const currentPanel = (this.panelMap[`${panel.value}`] ||= {
+            label: panel.label,
+            parentId: componentNode.id,
+            children: new Set(),
+          });
+          currentPanel.parentId = componentNode.id;
+          currentPanel.label = panel.label;
+        });
       }
       // 计算 maxLevel
       this.maxLevel = Math.max(this.maxLevel, componentNode?.level || 1);
@@ -101,7 +123,7 @@ export default class ComponentNode {
   public init(componentNodes: ComponentNodeType[] = []) {
     this.maxLevel = 1;
     this.groupMap = {};
-    this.layoutMap = {};
+    this.panelMap = {};
     setGlobalState({
       componentNodes: this.pipeComponentNodes(componentNodes),
     });
@@ -148,7 +170,9 @@ export default class ComponentNode {
    */
   public update(
     id?: string,
-    extComponentNode?: Partial<ComponentNodeType>,
+    extComponentNode?:
+      | Partial<ComponentNodeType>
+      | ((origin: ComponentNodeType) => Partial<ComponentNodeType>),
     options?: {
       silent?: boolean; // 是否不触发更新，而仅仅是修改值。（默认false，true不触发，false触发）
     },
@@ -156,7 +180,10 @@ export default class ComponentNode {
     if (!id || !extComponentNode) return;
     const componentNode = this.get(id);
     if (componentNode) {
-      Object.assign(componentNode, extComponentNode);
+      Object.assign(
+        componentNode,
+        typeof extComponentNode === "function" ? extComponentNode(componentNode) : extComponentNode,
+      );
       if (!options?.silent) {
         this.notifyChange(componentNode);
       }
@@ -262,6 +289,17 @@ export default class ComponentNode {
     if (!componentNode.category) {
       componentNode.category = "unknown";
     }
+    // 如果有panels，则赋值value
+    if (component.panels) {
+      componentNode.panels = component.panels.map((panel) => {
+        return {
+          label: panel.label,
+          value: createUUID(),
+        };
+      });
+      componentNode.currentPanelId = componentNode.panels?.[0]?.value;
+    }
+
     // 计算最大层级
     this.maxLevel = Math.max(this.maxLevel, componentNode.level);
     return componentNode;
@@ -325,70 +363,94 @@ export default class ComponentNode {
   }
 
   /************************* 布局 (layout) *************************/
-  /**
-   * 从layout中移除
-   * @param source id 或 componentNode
-   * @param auto 是否自动修改source（默认false不修改）
-   */
-  public removeFromLayout(source: string | ComponentNodeType, auto?: boolean) {
-    // 原componentNode
-    const sourceComponentNode = typeof source === "string" ? this.get(source) : source;
-    if (!sourceComponentNode) {
-      return;
-    }
-    // 移出layout
-    if (sourceComponentNode?.parentId) {
-      this.layoutMap[sourceComponentNode?.parentId]?.children?.delete?.(sourceComponentNode.id);
-    }
-    // 是否自动更新source
-    if (auto) {
-      this.update(sourceComponentNode?.id, {
-        parentId: undefined,
-      });
-    }
-  }
-
-  /**
-   * 插入layout
-   * @param source id 或 componentNode
-   * @param targetLayout id 或 componentNode
-   */
-  public insertLayout(
-    source: string | ComponentNodeType,
-    targetLayout: string | ComponentNodeType,
-  ) {
-    // 原componentNode
-    const sourceComponentNode = typeof source === "string" ? this.get(source) : source;
-    if (!sourceComponentNode) {
-      return;
-    }
-
-    // 新的layout
-    const targetComponentNode =
-      typeof targetLayout === "string" ? this.get(targetLayout) : targetLayout;
-    // 如果是layout不存在，或是同一个layout，则不处理
-    if (!targetComponentNode || targetComponentNode.id === sourceComponentNode.parentId) {
-      return;
-    }
-
-    // 移出上一个layout
-    if (sourceComponentNode?.parentId) {
-      this.layoutMap[sourceComponentNode.parentId]?.children?.delete?.(sourceComponentNode.id);
-    }
-
-    // 移入新的layout
-    if (targetComponentNode) {
-      this.update(sourceComponentNode?.id, {
-        parentId: targetComponentNode.id,
-      });
-      (this.layoutMap[targetComponentNode.id] ||= { children: new Set() }).children.add(
-        sourceComponentNode.id,
-      );
-    }
-  }
-
-  // 获取layout的childrenIds
+  // 获取layout类组件包含的所有组件Ids
   public getLayoutChildrenIds(id?: string): string[] {
-    return id ? Array.from(this.layoutMap[id]?.children || []) : [];
+    const panels = this.get(id)?.panels;
+    if (!panels?.length) return [];
+    return panels.reduce((ids, panel) => {
+      return ids.concat(Array.from(this.panelMap[panel.value].children || []));
+    }, [] as string[]);
+  }
+
+  // 获取layout类组件包含的所有可展示组件Ids
+  public getLayoutVisibleChildrenIds(id?: string): string[] {
+    const currentPanelId = this.get(id)?.currentPanelId;
+    if (!currentPanelId) return [];
+    return Array.from(this.panelMap[currentPanelId].children || []);
+  }
+
+  // 判断当前组件是否在面板内
+  public isInPanel(panelId?: string, source?: string | ComponentNodeType): boolean {
+    const sourceComponentNode = typeof source === "string" ? this.get(source) : source;
+    if (!panelId || !sourceComponentNode) {
+      return false;
+    }
+    return this.panelMap[panelId].children.has(sourceComponentNode.id);
+  }
+
+  // 将组件移入面板内
+  public insertPanel(panelId: string, source?: string | ComponentNodeType): void {
+    const sourceComponentNode = typeof source === "string" ? this.get(source) : source;
+    if (!panelId || !sourceComponentNode) {
+      return;
+    }
+
+    // 从原面板移除
+    this.removeFromPanel(panelId, sourceComponentNode);
+    // 移入新面板
+    const panel = this.panelMap[panelId];
+    panel?.children?.add?.(sourceComponentNode.id);
+
+    // 更新componentNode的panelId
+    this.update(sourceComponentNode.id, {
+      panelId,
+    });
+  }
+
+  // 将组件移出面板
+  public removeFromPanel(
+    panelId: string, // 面板id
+    source?: string | ComponentNodeType, // 原组件
+    autoUpdateComponentNode: boolean = true, // 自动更新componentNode
+  ): void {
+    const sourceComponentNode = typeof source === "string" ? this.get(source) : source;
+    if (!panelId || !sourceComponentNode) {
+      return;
+    }
+    const panel = this.panelMap[panelId];
+    panel?.children?.delete?.(sourceComponentNode.id);
+
+    if (autoUpdateComponentNode) {
+      // 删除componentNode的panelId
+      this.update(sourceComponentNode.id, {
+        panelId: undefined,
+      });
+    }
+  }
+
+  // 获取面板名称
+  public getPanelName(panelId?: string): string {
+    if (!panelId) return "";
+    return this.panelMap[panelId]?.label || "";
+  }
+
+  // 显示面板下全部组件
+  public showPanel(panelId?: string): void {
+    if (!panelId) return;
+    this.panelMap[panelId].children.forEach((id) => {
+      this.update(id, {
+        show: true,
+      });
+    });
+  }
+
+  // 隐藏面板下全部组件
+  public hidePanel(panelId?: string): void {
+    if (!panelId) return;
+    this.panelMap[panelId].children.forEach((id) => {
+      this.update(id, {
+        show: false,
+      });
+    });
   }
 }

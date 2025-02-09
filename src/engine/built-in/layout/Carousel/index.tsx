@@ -5,7 +5,7 @@
  * @date 2024/1/7
  */
 import { Carousel } from "antd";
-import { ComponentProps } from "@/engine";
+import engine, { ComponentProps } from "@/engine";
 import styles from "./index.module.less";
 import { CarouselOptions } from "./attributes";
 import classNames from "classnames";
@@ -13,7 +13,7 @@ import React, { RefObject, useEffect, useMemo, useRef } from "react";
 import { CarouselRef } from "antd/lib/carousel";
 
 export default function (props: ComponentProps<CarouselOptions>) {
-  const { options, width, height } = props;
+  const { options, width, height, componentNode } = props;
   const carouselRef: RefObject<CarouselRef> = useRef<CarouselRef>(null);
   const itemStyle: React.CSSProperties = {
     width,
@@ -22,25 +22,52 @@ export default function (props: ComponentProps<CarouselOptions>) {
     color: "rgba(0,0,0,0.65)",
   };
 
+  // 上一个panelId
+  const lastPanelId = useRef<string>();
+
   // 显示空的面板列表
   const renderPanels = useMemo(() => {
-    return Array(options?.count)
-      .fill(null)
-      .map((_, index) => {
-        return (
-          <div key={index}>
-            <div style={itemStyle} />
-          </div>
-        );
+    return componentNode.panels?.map((_, index) => {
+      return (
+        <div key={index}>
+          <div style={itemStyle} />
+        </div>
+      );
+    });
+  }, [componentNode.panels]);
+
+  // 打开指定index的panel
+  function jumpPanel(panelIndex: number) {
+    // 跳转面板
+    carouselRef.current?.goTo?.(panelIndex);
+
+    // 展示指定panels下的所有组件
+    // 放入宏任务中，是为了等渲染完毕后再显示（因为初次渲染时layout类组件可能会先渲染）
+    const panelId = componentNode.panels?.[panelIndex]?.value;
+    if (panelId) {
+      setTimeout(() => {
+        // 先隐藏上一个panel的所有组件
+        engine.componentNode.hidePanel(lastPanelId.current);
+        lastPanelId.current = panelId;
+        // 显示当前panel的组件
+        engine.componentNode.showPanel(panelId);
       });
-  }, [options.count]);
+    }
+  }
 
   // 跳转指定索引位置面板（索引从0开始）
   useEffect(() => {
-    if (options?.value !== undefined) {
-      carouselRef.current?.goTo?.(options?.value);
+    const panelIndex = componentNode.panels?.findIndex?.((panel) => {
+      return panel?.value === componentNode?.currentPanelId;
+    });
+
+    if (panelIndex === undefined) {
+      return;
     }
-  }, [options?.value]);
+
+    // 跳转指定面板
+    jumpPanel(panelIndex);
+  }, [componentNode.currentPanelId, componentNode.panels]);
 
   return (
     <div
@@ -48,10 +75,14 @@ export default function (props: ComponentProps<CarouselOptions>) {
       className={classNames(styles.carousel, options?.bordered && styles.carousel_bordered)}
     >
       <Carousel
+        speed={0}
         ref={carouselRef}
         autoplay={options?.autoplay}
         style={{ width, height }}
         dotPosition={"bottom"}
+        afterChange={(currentIndex) => {
+          jumpPanel(currentIndex);
+        }}
       >
         {renderPanels}
       </Carousel>

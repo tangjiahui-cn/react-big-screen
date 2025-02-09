@@ -2,17 +2,15 @@
  * 预览页面
  */
 import styles from "./index.module.less";
-import React, { useMemo, useState } from "react";
-import engine, { ComponentNodeType, GlobalConfig, JsonType } from "@/engine";
+import React, { useMemo } from "react";
+import engine, { ComponentNodeType, useComponentNodes, useConfig } from "@/engine";
 import RenderPreviewComponentNode from "./components/RenderPreviewComponentNode";
 import FitScreen from "@/pages/preview/components/FitScreen";
-import { Empty } from "antd";
 import { useEffectOnce } from "@/hooks";
 
 export default function Preview() {
-  const [json, setJson] = useState<JsonType>();
-  const config: GlobalConfig | undefined = useMemo(() => json?.config, [json]);
-  const componentNodes: ComponentNodeType[] = useMemo(() => json?.componentNodes || [], [json]);
+  const config = useConfig();
+  const componentNodes: ComponentNodeType[] = useComponentNodes();
 
   // 渲染组件节点
   const renderComponentNodes: React.ReactNode[] = useMemo(() => {
@@ -45,17 +43,13 @@ export default function Preview() {
   useEffectOnce(() => {
     // 读取本地json
     getLocalJson().then((json) => {
-      setJson(json);
+      engine.loadJSON(json);
     });
   });
 
   return (
     <FitScreen className={styles.preview} dw={config?.width || 1920} dh={config?.height || 1080}>
-      {json ? (
-        renderComponentNodes
-      ) : (
-        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={"暂无数据"} />
-      )}
+      {renderComponentNodes}
     </FitScreen>
   );
 }

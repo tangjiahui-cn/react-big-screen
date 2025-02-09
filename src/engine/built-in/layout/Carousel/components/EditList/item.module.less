@@ -1,0 +1,64 @@
+.editItem {
+  height: 24px;
+  display: flex;
+  overflow: hidden;
+  line-height: 24px;
+  align-items: center;
+
+  &_left {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-right: 8px;
+    cursor: pointer;
+  }
+
+  &_body {
+    flex: 1;
+    overflow: hidden;
+
+    &_text {
+      cursor: pointer;
+      .text-ellipsis();
+
+      &_hover {
+        color: rgba(0,0,0,0.4);
+      }
+    }
+  }
+
+  &_right {
+    margin-left: 8px;
+  }
+}
+
+.editRadio {
+  @size: 12px;
+  width: @size;
+  height: @size;
+  border: @border;
+  box-sizing: border-box;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+  transition: all .3s;
+
+  &_hover {
+    border-color: @primaryHover;
+  }
+
+  &_selected {
+    border-color: @primaryHover;
+    &::after {
+      top: 50%;
+      left: 50%;
+      content: "";
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: @primaryHover;
+    }
+  }
+}

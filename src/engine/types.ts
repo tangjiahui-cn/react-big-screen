@@ -11,11 +11,21 @@ export interface ComponentProps<Option extends any> {
 
 // 组件属性配置模板参数
 export interface AttributesComponentProps<Option = any> {
+  componentNode: ComponentNodeType;
+  onChangeComponentNode: (
+    componentNode:
+      | Partial<ComponentNodeType>
+      | ((origin: ComponentNodeType) => Partial<ComponentNodeType>),
+  ) => void;
   options: Option; // 配置数据
   onChange: (options: Option, cover?: boolean) => void; // 配置数据修改回调 （cover：默认false。true覆盖，false则修改部分属性）
 }
 
 // 基础组件类型（组件模板、组件数据实例公共的属性）
+export interface PanelData {
+  label: string; // (父) 包含的panel名称
+  value: string; // (父) 包含的panel的id
+}
 export type ComponentCategory = "base" | "charts" | "layout" | "unknown";
 export interface BaseComponent {
   cId: string; // 组件id
@@ -27,6 +37,11 @@ export interface BaseComponent {
   level?: number; // 层级
   options?: Record<string, any>; // 配置数据
   category: ComponentCategory; // 组件分类
+
+  // layout相关
+  panelId?: PanelData["value"]; // (子) 所属panelId
+  currentPanelId?: PanelData["value"]; // (父) 当前展示panel
+  panels?: PanelData[];
 }
 
 // 组件模板类型
@@ -42,7 +57,6 @@ export interface ComponentNodeType extends BaseComponent {
   name: string; // 实例名称
   lock?: boolean; // 是否锁定（仅用于编辑模式）
   groupId?: string; // 所属成组的id
-  parentId?: string; // 父组件id（保存layout组件的id）
   show?: boolean; // 控制组件是否显示
 }
 

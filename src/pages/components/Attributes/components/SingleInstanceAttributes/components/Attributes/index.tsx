@@ -92,9 +92,13 @@ export default function () {
       </div>
 
       {/* 组件Attributes配置项 */}
-      {AttributesComponent && (
+      {componentNode && AttributesComponent && (
         <div style={{ paddingTop: 8 }}>
           <AttributesComponent
+            componentNode={componentNode}
+            onChangeComponentNode={(target) => {
+              engine.componentNode.update(componentNode?.id, target);
+            }}
             options={componentNode?.options}
             onChange={(options, cover) => {
               engine.componentNode.update(componentNode?.id, {
