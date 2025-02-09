@@ -26,6 +26,16 @@ interface Props {
 export default function EditorList(props: Props) {
   const { value, onSelect, list = [], onChange } = props;
 
+  // 仅删除面板
+  function handleDeletePanel(key: string) {
+    const targetList = list?.filter?.((item) => item.value !== key) || [];
+    if (value === key) {
+      onSelect?.(targetList?.[0]?.value);
+    }
+    onChange?.(targetList);
+  }
+
+  // 删除操作
   function handleDelete(key: string) {
     // 至少保留一个数据
     if (list.length <= 1) {
@@ -40,16 +50,15 @@ export default function EditorList(props: Props) {
         title: "提醒",
         content: `该面板下包含${containChildrenIds?.length}个组件，确定删除？`,
         onOk(close) {
-          const targetList = list?.filter?.((item) => item.value !== key) || [];
-          if (value === key) {
-            onSelect?.(targetList?.[0]?.value);
-          }
-          onChange?.(targetList);
+          // 删除面板
+          handleDeletePanel(key);
           // 删除包含的组件
           engine.componentNode.delete(containChildrenIds);
           close();
         },
       });
+    } else {
+      handleDeletePanel(key);
     }
   }
 
