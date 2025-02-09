@@ -410,7 +410,7 @@ export default class ComponentNode {
     const panels = this.get(id)?.panels;
     if (!panels?.length) return [];
     return panels.reduce((ids, panel) => {
-      return ids.concat(Array.from(this.panelMap[panel.value].children || []));
+      return ids.concat(Array.from(this.panelMap[panel.value]?.children || []));
     }, [] as string[]);
   }
 
@@ -418,7 +418,7 @@ export default class ComponentNode {
   public getLayoutVisibleChildrenIds(id?: string): string[] {
     const currentPanelId = this.get(id)?.currentPanelId;
     if (!currentPanelId) return [];
-    return Array.from(this.panelMap[currentPanelId].children || []);
+    return Array.from(this.panelMap[currentPanelId]?.children || []);
   }
 
   // 判断当前组件是否在面板内
@@ -427,7 +427,7 @@ export default class ComponentNode {
     if (!panelId || !sourceComponentNode) {
       return false;
     }
-    return this.panelMap[panelId].children.has(sourceComponentNode.id);
+    return this.panelMap[panelId]?.children?.has?.(sourceComponentNode.id);
   }
 
   // 将组件移入面板内
@@ -479,7 +479,7 @@ export default class ComponentNode {
   // 获取面板包含的子组件id
   public getPanelChildrenIds(panelId?: string): string[] {
     if (!panelId) return [];
-    return Array.from(this.panelMap[panelId].children || []);
+    return Array.from(this.panelMap[panelId]?.children || []);
   }
 
   // 显示面板下全部组件
