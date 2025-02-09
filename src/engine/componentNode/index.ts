@@ -85,8 +85,15 @@ export default class ComponentNode {
     return 1;
   }
 
-  // 管道化处理componentNodes
-  private pipeComponentNodes(componentNodes: ComponentNodeType[]): ComponentNodeType[] {
+  /**
+   * 管道化处理componentNodes
+   * @param componentNodes 要通过的componentNodes
+   * @param init 是否初始化操作
+   */
+  private pipeComponentNodes(
+    componentNodes: ComponentNodeType[],
+    init?: boolean,
+  ): ComponentNodeType[] {
     componentNodes.forEach((componentNode) => {
       // 成组（group）
       if (componentNode.groupId) {
@@ -94,7 +101,7 @@ export default class ComponentNode {
       }
       // 如果属于一个layout则隐藏（由layout类组件内部控制显示）
       if (componentNode.panelId) {
-        componentNode.show = false;
+        componentNode.show = !init;
         (this.panelMap[componentNode.panelId] ||= {
           parentId: "",
           label: "",
@@ -119,13 +126,17 @@ export default class ComponentNode {
     return componentNodes;
   }
 
-  // 初始化componentNodes
-  public init(componentNodes: ComponentNodeType[] = []) {
+  /**
+   * 初始化componentNodes
+   * @param componentNodes 要设置的 componentNodes
+   * @param init 是否是初始化操作
+   */
+  public init(componentNodes: ComponentNodeType[] = [], init: boolean = true) {
     this.maxLevel = 1;
     this.groupMap = {};
     this.panelMap = {};
     setGlobalState({
-      componentNodes: this.pipeComponentNodes(componentNodes),
+      componentNodes: this.pipeComponentNodes(componentNodes, init),
     });
   }
 
@@ -159,6 +170,20 @@ export default class ComponentNode {
     return this.getAll().find((componentNode) => {
       return componentNode.id === id;
     });
+  }
+
+  // 获取一些componentNode
+  public getSome(
+    id?: string | ComponentNodeType | (string | ComponentNodeType)[],
+  ): ComponentNodeType[] {
+    const list = Array.isArray(id) ? id : [id];
+    return list.reduce((result, current) => {
+      const componentNode = typeof current === "string" ? this.get(current) : current;
+      if (componentNode) {
+        result.push(componentNode);
+      }
+      return result;
+    }, [] as ComponentNodeType[]);
   }
 
   /**
@@ -203,11 +228,28 @@ export default class ComponentNode {
 
   // 删除 componentNode
   public delete(id: string | string[]) {
-    const ids: string[] = Array.isArray(id) ? id : [id];
-    const componentNodes = getGlobalState().componentNodes.filter((componentNode) => {
-      return !ids.includes(componentNode.id);
+    const list: string[] = Array.isArray(id) ? id : [id];
+    const deleteIds = new Set<string>();
+
+    list.forEach((id) => {
+      const componentNode = this.get(id);
+      if (!componentNode) {
+        return;
+      }
+      deleteIds.add(id);
+      // 如果是layout组件，则删除所有子组件
+      if (componentNode?.panels?.length) {
+        this.getLayoutChildrenIds(componentNode.id).forEach((childId) => {
+          deleteIds.add(childId);
+        });
+      }
     });
-    this.init(componentNodes);
+
+    const componentNodes = getGlobalState().componentNodes.filter((componentNode) => {
+      return !deleteIds.has(componentNode.id);
+    });
+
+    this.init(componentNodes, false);
   }
 
   // 计算一个componentNode的矩形坐标
@@ -432,6 +474,12 @@ export default class ComponentNode {
   public getPanelName(panelId?: string): string {
     if (!panelId) return "";
     return this.panelMap[panelId]?.label || "";
+  }
+
+  // 获取面板包含的子组件id
+  public getPanelChildrenIds(panelId?: string): string[] {
+    if (!panelId) return [];
+    return Array.from(this.panelMap[panelId].children || []);
   }
 
   // 显示面板下全部组件

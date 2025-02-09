@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2025/2/9
  */
-import { PanelData } from "@/engine";
+import engine, { PanelData } from "@/engine";
 import styles from "./index.module.less";
 import { Button, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
@@ -12,6 +12,7 @@ import { createUUID } from "@/engine/utils";
 import Item from "./item";
 import React from "react";
 import classNames from "classnames";
+import { ask } from "@/components/Ask";
 
 interface Props {
   value?: string; // 选中值
@@ -31,11 +32,25 @@ export default function EditorList(props: Props) {
       message.warn("至少保留一个面板");
       return;
     }
-    const targetList = list?.filter?.((item) => item.value !== key) || [];
-    if (value === key) {
-      onSelect?.(targetList?.[0]?.value);
+
+    // 当前面板如果有组件，则提示
+    const containChildrenIds = engine.componentNode.getPanelChildrenIds(key);
+    if (containChildrenIds?.length) {
+      ask({
+        title: "提醒",
+        content: `该面板下包含${containChildrenIds?.length}个组件，确定删除？`,
+        onOk(close) {
+          const targetList = list?.filter?.((item) => item.value !== key) || [];
+          if (value === key) {
+            onSelect?.(targetList?.[0]?.value);
+          }
+          onChange?.(targetList);
+          // 删除包含的组件
+          engine.componentNode.delete(containChildrenIds);
+          close();
+        },
+      });
     }
-    onChange?.(targetList);
   }
 
   function handleAdd() {

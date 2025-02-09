@@ -139,6 +139,11 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
             onOk(close) {
               // 移入到panelId
               engine.componentNode.insertPanel(targetPanelId, componentNodeRef.current);
+
+              // 选中目标layout组件
+              setTimeout(() => {
+                engine.instance.select(layoutComponentNode.id, true);
+              });
               close();
             },
           });
