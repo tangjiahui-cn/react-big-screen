@@ -422,9 +422,10 @@ export default class ComponentNode {
       return;
     }
 
-    // 从原面板移除
-    this.removeFromPanel(panelId, sourceComponentNode);
-    // 移入新面板
+    // 从原面板中移除
+    this.removeFromPanel(sourceComponentNode, false);
+
+    // 插入panelMap
     const panel = this.panelMap[panelId];
     panel?.children?.add?.(sourceComponentNode.id);
 
@@ -436,14 +437,16 @@ export default class ComponentNode {
 
   // 将组件移出面板
   public removeFromPanel(
-    panelId: string, // 面板id
     source?: string | ComponentNodeType, // 原组件
     autoUpdateComponentNode: boolean = true, // 自动更新componentNode
   ): void {
     const sourceComponentNode = typeof source === "string" ? this.get(source) : source;
+    const panelId = sourceComponentNode?.panelId;
     if (!panelId || !sourceComponentNode) {
       return;
     }
+
+    // 从panelMap中删除
     const panel = this.panelMap[panelId];
     panel?.children?.delete?.(sourceComponentNode.id);
 

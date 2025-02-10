@@ -148,7 +148,6 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
             onOk(close) {
               // 移入到panelId
               engine.componentNode.insertPanel(targetPanelId, componentNodeRef.current);
-
               // 选中目标layout组件
               setTimeout(() => {
                 engine.instance.select(layoutComponentNode.id, true);
@@ -167,7 +166,7 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
             content: `是否移出面板“${engine.componentNode.getPanelName(panelId) || "目标"}”?`,
             onOk(close) {
               // 从面板移除
-              engine.componentNode.removeFromPanel(panelId, componentNodeRef.current);
+              engine.componentNode.removeFromPanel(componentNodeRef.current);
               close();
             },
           });
