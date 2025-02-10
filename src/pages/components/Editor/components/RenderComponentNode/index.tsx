@@ -4,7 +4,12 @@
  * @author tangjiahui
  * @date 2024/12/25
  */
-import engine, { ComponentNodeType, ComponentType, useRegisterInstance } from "@/engine";
+import engine, {
+  ComponentNodeType,
+  ComponentType,
+  useComponentNodeRequest,
+  useRegisterInstance,
+} from "@/engine";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { isKeyPressed } from "@/packages/shortCutKeys";
 import { isClickMouseLeft, isClickMouseRight, isInRect } from "@/utils";
@@ -13,6 +18,11 @@ import classNames from "classnames";
 import styles from "./index.module.less";
 import { useDomEvents, useListenRef } from "@/hooks";
 import { ask } from "@/components/Ask";
+
+interface Coordinate {
+  x: number;
+  y: number;
+}
 
 interface RenderComponentProps {
   componentNode: ComponentNodeType;
@@ -54,6 +64,9 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
   // 是否hover中（不希望hover时渲染组件，此处仅仅用来在组件重新渲染时，保留之前的hover状态。例如：选中实例又取消选中时仍然有hover状态）
   const isHoverRef = useRef<boolean>(false);
 
+  // 注册接口请求相关
+  const { dataSource, requestInstance } = useComponentNodeRequest(componentNode);
+
   // 注册行为实例（只能改变内部属性）
   const instance = useRegisterInstance({
     id: componentNode.id,
@@ -89,13 +102,18 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
     getComponent(): ComponentType {
       return component;
     },
+    // 重新载入request配置
+    reloadRequest() {
+      requestInstance.reload();
+    },
+    // 立刻请求一次
+    request: (params?: Record<string, any>) => {
+      requestInstance.request(params);
+    },
   });
 
-  // 找到包含点击位置的“层级最大”、“最后渲染”的layout类型组件（也就是最靠近上方渲染的）。
-  function getLatestLayoutComponentNode(point: {
-    x: number;
-    y: number;
-  }): ComponentNodeType | undefined {
+  // 找到包含点击位置的“层级最大”、“最后渲染”的layout类型组件（也就是最靠近用户屏幕上方的）。
+  function getLatestLayoutComponentNode(point: Coordinate): ComponentNodeType | undefined {
     const layoutMap = engine.componentNode.getAll().reduce((result, current) => {
       if (
         (current.show ?? true) &&
@@ -113,7 +131,7 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
   }
 
   // 处理移动布局相关
-  function moveLayout(clickPos: { x: number; y: number }): void {
+  function moveLayout(clickPos: Coordinate): void {
     // 获取离用户屏幕最近的layout类型组件
     const layoutComponentNode = getLatestLayoutComponentNode({
       x: clickPos.x,
@@ -252,6 +270,7 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
     >
       {/* 渲染组件 */}
       <Component
+        dataSource={dataSource}
         options={componentNode.options}
         width={componentNode.width}
         height={componentNode.height}

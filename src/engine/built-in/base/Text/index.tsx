@@ -6,12 +6,18 @@
  */
 import { ComponentProps } from "@/engine";
 import { TextOptions } from "./attributes";
+import { useMemo } from "react";
 
 type Props = ComponentProps<TextOptions>;
 
 export default function Text(props: Props) {
-  const { options, width, height } = props;
+  const { options, width, height, dataSource } = props;
   const { value } = options;
+
+  useMemo(() => {
+    console.log("zz Text组件 dataSource:  ", dataSource);
+  }, [dataSource]);
+
   return (
     <div
       style={{

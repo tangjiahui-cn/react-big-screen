@@ -7,4 +7,4 @@
 export * from "./font";
 export * from "./base";
 
-export { default as Line } from "./Line";
+export { default as Line, LineConfigProvider } from "./Line";

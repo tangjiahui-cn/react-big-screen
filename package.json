@@ -38,6 +38,7 @@
     "react-color": "^2.19.3",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6",
+    "umi-request": "^1.4.0",
     "zustand": "^5.0.2"
   },
   "devDependencies": {

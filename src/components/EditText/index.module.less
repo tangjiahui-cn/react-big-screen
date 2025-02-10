@@ -1,0 +1,19 @@
+.editText {
+  gap: 8px;
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+
+  &_text {
+    .text-ellipsis();
+  }
+
+  & a {
+    opacity: 0;
+    transition: all .3s;
+  }
+
+  &:hover a {
+    opacity: 1;
+  }
+}
