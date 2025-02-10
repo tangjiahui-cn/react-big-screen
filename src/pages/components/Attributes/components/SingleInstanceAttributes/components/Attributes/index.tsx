@@ -10,6 +10,7 @@ import { useSingleSelectedInstance } from "../..";
 import engine, { ComponentNodeType } from "@/engine";
 import styles from "./index.module.less";
 import { Line } from "@/components/Attributes";
+import EditText from "@/components/EditText";
 
 export default function () {
   const { componentNode } = useSingleSelectedInstance();
@@ -37,7 +38,15 @@ export default function () {
       <div className={styles.singleInstanceAttributesBase_description}>
         <Row>
           <Col span={24} style={{ marginBottom: 6 }}>
-            <b>{componentNode?.name}</b>
+            <EditText
+              emptyMessage={"请填写名称"}
+              value={componentNode?.name}
+              onChange={(name) => {
+                engine.componentNode.update(componentNode?.id, {
+                  name,
+                });
+              }}
+            />
           </Col>
           <Col span={24}>id：{componentNode?.id || "-"}</Col>
           <Col span={24}>cId：{componentNode?.cId || "-"}</Col>

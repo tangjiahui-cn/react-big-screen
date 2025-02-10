@@ -11,6 +11,7 @@ import { CarouselOptions } from "./attributes";
 import classNames from "classnames";
 import React, { RefObject, useEffect, useMemo, useRef } from "react";
 import { CarouselRef } from "antd/lib/carousel";
+import { useUnmount } from "ahooks";
 
 export default function (props: ComponentProps<CarouselOptions>) {
   const { options, width, height, componentNode } = props;
@@ -42,7 +43,7 @@ export default function (props: ComponentProps<CarouselOptions>) {
     carouselRef.current?.goTo?.(panelIndex);
 
     // 展示指定panels下的所有组件
-    // 放入宏任务中，是为了等渲染完毕后再显示（因为初次渲染时layout类组件可能会先渲染）
+    // 放入宏任务中是为了等渲染完毕后再显示（因为初次渲染时layout类组件可能会先渲染）
     const panelId = componentNode.panels?.[panelIndex]?.value;
     if (panelId) {
       setTimeout(() => {
@@ -68,6 +69,11 @@ export default function (props: ComponentProps<CarouselOptions>) {
     // 跳转指定面板
     jumpPanel(panelIndex);
   }, [componentNode.currentPanelId, componentNode.panels]);
+
+  useUnmount(() => {
+    // 卸载时隐藏当前面板
+    engine.componentNode.hidePanel(lastPanelId.current);
+  });
 
   return (
     <div

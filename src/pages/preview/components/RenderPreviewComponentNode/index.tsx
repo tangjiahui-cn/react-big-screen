@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2025/1/16
  */
-import engine, { ComponentNodeType, ComponentType } from "@/engine";
+import engine, { ComponentNodeType, ComponentType, useComponentNodeRequest } from "@/engine";
 import { useEffect, useMemo, useState } from "react";
 
 interface RenderPreviewComponentNodeProps {
@@ -33,6 +33,10 @@ export default function RenderPreviewComponentNode(props: RenderPreviewComponent
 
 function ScopeRenderPreviewComponentNode(props: RenderPreviewComponentNodeProps) {
   const { component, componentNode } = props;
+
+  // 注册请求
+  const { dataSource } = useComponentNodeRequest(componentNode);
+
   return (
     <div
       style={{
@@ -45,6 +49,7 @@ function ScopeRenderPreviewComponentNode(props: RenderPreviewComponentNodeProps)
       }}
     >
       <component.component
+        dataSource={dataSource}
         componentNode={componentNode}
         options={componentNode.options}
         width={componentNode.width}

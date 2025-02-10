@@ -4,7 +4,12 @@
  * @author tangjiahui
  * @date 2024/12/25
  */
-import engine, { ComponentNodeType, ComponentType, useRegisterInstance } from "@/engine";
+import engine, {
+  ComponentNodeType,
+  ComponentType,
+  useComponentNodeRequest,
+  useRegisterInstance,
+} from "@/engine";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { isKeyPressed } from "@/packages/shortCutKeys";
 import { isClickMouseLeft, isClickMouseRight, isInRect } from "@/utils";
@@ -13,6 +18,11 @@ import classNames from "classnames";
 import styles from "./index.module.less";
 import { useDomEvents, useListenRef } from "@/hooks";
 import { ask } from "@/components/Ask";
+
+interface Coordinate {
+  x: number;
+  y: number;
+}
 
 interface RenderComponentProps {
   componentNode: ComponentNodeType;
@@ -54,6 +64,9 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
   // 是否hover中（不希望hover时渲染组件，此处仅仅用来在组件重新渲染时，保留之前的hover状态。例如：选中实例又取消选中时仍然有hover状态）
   const isHoverRef = useRef<boolean>(false);
 
+  // 注册接口请求相关
+  const { dataSource, requestInstance } = useComponentNodeRequest(componentNode);
+
   // 注册行为实例（只能改变内部属性）
   const instance = useRegisterInstance({
     id: componentNode.id,
@@ -89,80 +102,100 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
     getComponent(): ComponentType {
       return component;
     },
+    // 重新载入request配置
+    reloadRequest() {
+      requestInstance.reload();
+    },
+    // 立刻请求一次
+    request: (params?: Record<string, any>) => {
+      requestInstance.request(params);
+    },
   });
 
-  // 找到点在layout区域内的 “layout组件”
-  function getInRectLayoutComponentNode(point: {
-    x: number;
-    y: number;
-  }): ComponentNodeType | undefined {
-    return engine.componentNode.getAll().find?.((otherComponentNode) => {
-      const isLayout = otherComponentNode.category === "layout";
-      if (isLayout && otherComponentNode.id !== componentNode.id) {
-        return isInRect(point, engine.componentNode.getCoordinate(otherComponentNode));
+  // 找到包含点击位置的“层级最大”、“最后渲染”的layout类型组件（也就是最靠近用户屏幕上方的）。
+  function getLatestLayoutComponentNode(point: Coordinate): ComponentNodeType | undefined {
+    const layoutMap = engine.componentNode.getAll().reduce((result, current) => {
+      if (
+        (current.show ?? true) &&
+        current.category === "layout" && // layout类组件
+        current.id !== componentNode.id && // 不能拖拽到自身（如果自身拖拽组件是layout类型时）
+        isInRect(point, engine.componentNode.getCoordinate(current)) // 是否在点击位置内
+      ) {
+        (result[`${current.level}`] ||= []).push(current);
       }
-      return false;
+      return result;
+    }, {} as Record<string, ComponentNodeType[]>);
+    const values = Object.values(layoutMap);
+    const latest = values[values.length - 1];
+    return latest?.[latest?.length - 1];
+  }
+
+  // 处理移动布局相关
+  function moveLayout(clickPos: Coordinate): void {
+    // 获取离用户屏幕最近的layout类型组件
+    const layoutComponentNode = getLatestLayoutComponentNode({
+      x: clickPos.x,
+      y: clickPos.y,
     });
+
+    // 如果在layout类型组件上方
+    if (layoutComponentNode) {
+      const targetPanelId = layoutComponentNode?.currentPanelId;
+      // 如果在该layout类型组件的“当前面板”上，则返回
+      if (
+        !targetPanelId ||
+        engine.componentNode.isInPanel(targetPanelId, componentNodeRef.current)
+      ) {
+        return;
+      }
+      // 如果不在，则询问是否移入
+      ask({
+        title: "移入提醒",
+        content: `确定放入面板“${engine.componentNode.getPanelName(targetPanelId) || "目标"}”？`,
+        onOk(close) {
+          // 选中组件都移入到panelId
+          engine.instance.getAllSelected().forEach((instance) => {
+            const selectedComponentNode = engine.componentNode.get(instance.id);
+            engine.componentNode.insertPanel(targetPanelId, selectedComponentNode);
+          });
+          // 选中目标layout组件
+          engine.instance.select(layoutComponentNode.id, true);
+          close();
+        },
+      });
+      return;
+    }
+
+    // 如果不在layout类型组件上方，则判断是否之前已经在layout类型组件中，如果在，则询问移出
+    const panelId = componentNodeRef.current.panelId;
+    if (panelId) {
+      ask({
+        title: "移出提醒",
+        content: `是否移出面板“${engine.componentNode.getPanelName(panelId) || "目标"}”?`,
+        onOk(close) {
+          // 选中组件都从面板移除
+          engine.instance.getAllSelected().forEach((instance) => {
+            const selectedComponentNode = engine.componentNode.get(instance.id);
+            engine.componentNode.removeFromPanel(selectedComponentNode);
+          });
+          close();
+        },
+      });
+    }
   }
 
   // 注册拖拽位移
   useItemDragMove(containerDomRef, {
     lock: componentNode.lock,
     onEnd(_, __, e) {
-      // （处理layout相关）
-      // 结束放置，判断是否放在布局里
       setTimeout(() => {
-        // 相交的最近layout组件
-        const { x: domX = 0, y: domY = 0 } =
-          containerDomRef.current?.getBoundingClientRect?.() || {};
-        const layoutComponentNode = getInRectLayoutComponentNode({
-          x: e.x - domX + componentNodeRef.current.x, // 鼠标点击位置在编辑器上的坐标
-          y: e.y - domY + componentNodeRef.current.y,
+        // 点击位置在编辑器上的坐标
+        const containerRect = containerDomRef.current?.getBoundingClientRect?.() || { x: 0, y: 0 };
+        // 判断是否放置在layout类组件上方
+        moveLayout({
+          x: e.x - containerRect.x + componentNodeRef.current.x, // 鼠标点击位置在编辑器上的坐标
+          y: e.y - containerRect.y + componentNodeRef.current.y,
         });
-
-        // 如果在layout类型组件上方
-        if (layoutComponentNode) {
-          const targetPanelId = layoutComponentNode?.currentPanelId;
-          // 如果在该layout类型组件的“当前面板”上，则返回
-          if (
-            !targetPanelId ||
-            engine.componentNode.isInPanel(targetPanelId, componentNodeRef.current)
-          ) {
-            return;
-          }
-          // 如果不在，则询问是否移入
-          ask({
-            title: "移入提醒",
-            content: `确定放入面板“${
-              engine.componentNode.getPanelName(targetPanelId) || "目标"
-            }”？`,
-            onOk(close) {
-              // 移入到panelId
-              engine.componentNode.insertPanel(targetPanelId, componentNodeRef.current);
-
-              // 选中目标layout组件
-              setTimeout(() => {
-                engine.instance.select(layoutComponentNode.id, true);
-              });
-              close();
-            },
-          });
-          return;
-        }
-
-        // 如果不在layout类型组件上方，则判断是否之前已经在layout类型组件中，如果在，则询问移出
-        const panelId = componentNodeRef.current.panelId;
-        if (panelId) {
-          ask({
-            title: "移出提醒",
-            content: `是否移出面板“${engine.componentNode.getPanelName(panelId) || "目标"}”?`,
-            onOk(close) {
-              // 从面板移除
-              engine.componentNode.removeFromPanel(panelId, componentNodeRef.current);
-              close();
-            },
-          });
-        }
       });
     },
   });
@@ -237,6 +270,7 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
     >
       {/* 渲染组件 */}
       <Component
+        dataSource={dataSource}
         options={componentNode.options}
         width={componentNode.width}
         height={componentNode.height}

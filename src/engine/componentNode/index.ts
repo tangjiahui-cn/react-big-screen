@@ -39,7 +39,6 @@ export default class ComponentNode {
   private panelMap: Record<
     string,
     {
-      label: string; // 名称
       parentId: string; // 父组件id
       children: Set<string>; // 包含子组件id
     }
@@ -104,7 +103,6 @@ export default class ComponentNode {
         componentNode.show = !init;
         (this.panelMap[componentNode.panelId] ||= {
           parentId: "",
-          label: "",
           children: new Set(),
         }).children.add(componentNode.id);
       }
@@ -112,12 +110,10 @@ export default class ComponentNode {
       if (componentNode.panels) {
         componentNode.panels.forEach((panel) => {
           const currentPanel = (this.panelMap[`${panel.value}`] ||= {
-            label: panel.label,
             parentId: componentNode.id,
             children: new Set(),
           });
           currentPanel.parentId = componentNode.id;
-          currentPanel.label = panel.label;
         });
       }
       // 计算 maxLevel
@@ -213,17 +209,6 @@ export default class ComponentNode {
         this.notifyChange(componentNode);
       }
     }
-  }
-
-  // 批量更新componentNode
-  public updateSome(extComponentNodes: ComponentNodeType[]) {
-    extComponentNodes.forEach((extComponentNode) => {
-      const componentNode = this.get(extComponentNode.id);
-      if (componentNode) {
-        Object.assign(componentNode, extComponentNode);
-        this.notifyChange(componentNode);
-      }
-    });
   }
 
   // 删除 componentNode
@@ -437,9 +422,10 @@ export default class ComponentNode {
       return;
     }
 
-    // 从原面板移除
-    this.removeFromPanel(panelId, sourceComponentNode);
-    // 移入新面板
+    // 从原面板中移除
+    this.removeFromPanel(sourceComponentNode, false);
+
+    // 插入panelMap
     const panel = this.panelMap[panelId];
     panel?.children?.add?.(sourceComponentNode.id);
 
@@ -451,14 +437,16 @@ export default class ComponentNode {
 
   // 将组件移出面板
   public removeFromPanel(
-    panelId: string, // 面板id
     source?: string | ComponentNodeType, // 原组件
     autoUpdateComponentNode: boolean = true, // 自动更新componentNode
   ): void {
     const sourceComponentNode = typeof source === "string" ? this.get(source) : source;
+    const panelId = sourceComponentNode?.panelId;
     if (!panelId || !sourceComponentNode) {
       return;
     }
+
+    // 从panelMap中删除
     const panel = this.panelMap[panelId];
     panel?.children?.delete?.(sourceComponentNode.id);
 
@@ -473,7 +461,8 @@ export default class ComponentNode {
   // 获取面板名称
   public getPanelName(panelId?: string): string {
     if (!panelId) return "";
-    return this.panelMap[panelId]?.label || "";
+    const panels = this.get(this.panelMap[panelId]?.parentId)?.panels;
+    return panels?.find?.((panel) => panel.value === panelId)?.label || "";
   }
 
   // 获取面板包含的子组件id

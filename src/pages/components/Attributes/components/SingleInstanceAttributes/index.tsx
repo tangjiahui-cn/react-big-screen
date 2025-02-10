@@ -6,6 +6,8 @@
  */
 import { Empty, Tabs } from "antd";
 import Attributes from "./components/Attributes";
+import DataSource from "./components/DataSource";
+import Interactive from "./components/Interactive";
 import engine, { ComponentNodeType, InstanceType } from "@/engine";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -36,6 +38,7 @@ export default function SingleInstanceAttributes(props: Props) {
   return componentNode ? (
     <SingleSelectedContext.Provider value={{ instance, componentNode }}>
       <Tabs
+        defaultActiveKey={"1"}
         style={{ padding: "0 16px" }}
         size={"small"}
         items={[
@@ -43,12 +46,12 @@ export default function SingleInstanceAttributes(props: Props) {
           {
             key: "2",
             label: "数据",
-            children: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={"暂未开发"} />,
+            children: <DataSource />,
           },
           {
             key: "3",
             label: "交互",
-            children: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={"暂未开发"} />,
+            children: <Interactive />,
           },
         ]}
       />
