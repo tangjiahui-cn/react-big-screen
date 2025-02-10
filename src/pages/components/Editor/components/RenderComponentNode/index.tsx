@@ -112,69 +112,72 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
     return latest?.[latest?.length - 1];
   }
 
+  // 处理移动布局相关
+  function moveLayout(clickPos: { x: number; y: number }): void {
+    // 获取离用户屏幕最近的layout类型组件
+    const layoutComponentNode = getLatestLayoutComponentNode({
+      x: clickPos.x,
+      y: clickPos.y,
+    });
+
+    // 如果在layout类型组件上方
+    if (layoutComponentNode) {
+      const targetPanelId = layoutComponentNode?.currentPanelId;
+      // 如果在该layout类型组件的“当前面板”上，则返回
+      if (
+        !targetPanelId ||
+        engine.componentNode.isInPanel(targetPanelId, componentNodeRef.current)
+      ) {
+        return;
+      }
+      // 如果不在，则询问是否移入
+      ask({
+        title: "移入提醒",
+        content: `确定放入面板“${engine.componentNode.getPanelName(targetPanelId) || "目标"}”？`,
+        onOk(close) {
+          // 选中组件都移入到panelId
+          engine.instance.getAllSelected().forEach((instance) => {
+            const selectedComponentNode = engine.componentNode.get(instance.id);
+            engine.componentNode.insertPanel(targetPanelId, selectedComponentNode);
+          });
+          // 选中目标layout组件
+          engine.instance.select(layoutComponentNode.id, true);
+          close();
+        },
+      });
+      return;
+    }
+
+    // 如果不在layout类型组件上方，则判断是否之前已经在layout类型组件中，如果在，则询问移出
+    const panelId = componentNodeRef.current.panelId;
+    if (panelId) {
+      ask({
+        title: "移出提醒",
+        content: `是否移出面板“${engine.componentNode.getPanelName(panelId) || "目标"}”?`,
+        onOk(close) {
+          // 选中组件都从面板移除
+          engine.instance.getAllSelected().forEach((instance) => {
+            const selectedComponentNode = engine.componentNode.get(instance.id);
+            engine.componentNode.removeFromPanel(selectedComponentNode);
+          });
+          close();
+        },
+      });
+    }
+  }
+
   // 注册拖拽位移
   useItemDragMove(containerDomRef, {
     lock: componentNode.lock,
     onEnd(_, __, e) {
-      // （处理layout相关）
-      // 结束放置，判断是否放在布局里
       setTimeout(() => {
-        // 相交的最近layout组件
-        const { x: domX = 0, y: domY = 0 } =
-          containerDomRef.current?.getBoundingClientRect?.() || {};
-
-        // 获取离用户屏幕最近的layout类型组件
-        const layoutComponentNode = getLatestLayoutComponentNode({
-          x: e.x - domX + componentNodeRef.current.x, // 鼠标点击位置在编辑器上的坐标
-          y: e.y - domY + componentNodeRef.current.y,
+        // 点击位置在编辑器上的坐标
+        const containerRect = containerDomRef.current?.getBoundingClientRect?.() || { x: 0, y: 0 };
+        // 判断是否放置在layout类组件上方
+        moveLayout({
+          x: e.x - containerRect.x + componentNodeRef.current.x, // 鼠标点击位置在编辑器上的坐标
+          y: e.y - containerRect.y + componentNodeRef.current.y,
         });
-
-        // 如果在layout类型组件上方
-        if (layoutComponentNode) {
-          const targetPanelId = layoutComponentNode?.currentPanelId;
-          // 如果在该layout类型组件的“当前面板”上，则返回
-          if (
-            !targetPanelId ||
-            engine.componentNode.isInPanel(targetPanelId, componentNodeRef.current)
-          ) {
-            return;
-          }
-          // 如果不在，则询问是否移入
-          ask({
-            title: "移入提醒",
-            content: `确定放入面板“${
-              engine.componentNode.getPanelName(targetPanelId) || "目标"
-            }”？`,
-            onOk(close) {
-              // 选中组件都移入到panelId
-              engine.instance.getAllSelected().forEach((instance) => {
-                const selectedComponentNode = engine.componentNode.get(instance.id);
-                engine.componentNode.insertPanel(targetPanelId, selectedComponentNode);
-              });
-              // 选中目标layout组件
-              engine.instance.select(layoutComponentNode.id, true);
-              close();
-            },
-          });
-          return;
-        }
-
-        // 如果不在layout类型组件上方，则判断是否之前已经在layout类型组件中，如果在，则询问移出
-        const panelId = componentNodeRef.current.panelId;
-        if (panelId) {
-          ask({
-            title: "移出提醒",
-            content: `是否移出面板“${engine.componentNode.getPanelName(panelId) || "目标"}”?`,
-            onOk(close) {
-              // 选中组件都从面板移除
-              engine.instance.getAllSelected().forEach((instance) => {
-                const selectedComponentNode = engine.componentNode.get(instance.id);
-                engine.componentNode.removeFromPanel(selectedComponentNode);
-              });
-              close();
-            },
-          });
-        }
       });
     },
   });
