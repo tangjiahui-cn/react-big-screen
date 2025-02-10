@@ -146,12 +146,13 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
               engine.componentNode.getPanelName(targetPanelId) || "目标"
             }”？`,
             onOk(close) {
-              // 移入到panelId
-              engine.componentNode.insertPanel(targetPanelId, componentNodeRef.current);
-              // 选中目标layout组件
-              setTimeout(() => {
-                engine.instance.select(layoutComponentNode.id, true);
+              // 选中组件都移入到panelId
+              engine.instance.getAllSelected().forEach((instance) => {
+                const selectedComponentNode = engine.componentNode.get(instance.id);
+                engine.componentNode.insertPanel(targetPanelId, selectedComponentNode);
               });
+              // 选中目标layout组件
+              engine.instance.select(layoutComponentNode.id, true);
               close();
             },
           });
@@ -165,8 +166,11 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
             title: "移出提醒",
             content: `是否移出面板“${engine.componentNode.getPanelName(panelId) || "目标"}”?`,
             onOk(close) {
-              // 从面板移除
-              engine.componentNode.removeFromPanel(componentNodeRef.current);
+              // 选中组件都从面板移除
+              engine.instance.getAllSelected().forEach((instance) => {
+                const selectedComponentNode = engine.componentNode.get(instance.id);
+                engine.componentNode.removeFromPanel(selectedComponentNode);
+              });
               close();
             },
           });
