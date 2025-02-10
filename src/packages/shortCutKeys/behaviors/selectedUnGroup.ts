@@ -18,4 +18,5 @@ export function selectedUnGroup() {
   );
   // 解散选中元素的group
   engine.componentNode.unlinkGroup(groupIds);
+  engine.instance.unselectAll();
 }
