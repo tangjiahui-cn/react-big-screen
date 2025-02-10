@@ -30,6 +30,11 @@ export class RequestManager {
     const currentRequest = requestConfig
       ? (this.requestConfig = requestConfig)
       : this.requestConfig;
+
+    if (!currentRequest?.url) {
+      return;
+    }
+
     if (currentRequest?.first) {
       this.request().then((dataSource) => {
         this.notifyDataSource(dataSource);
@@ -55,6 +60,9 @@ export class RequestManager {
 
   // 立刻请求一次
   public async request(params?: Record<string, any>) {
+    if (!this.requestConfig?.url) {
+      return Promise.resolve("url not exist.");
+    }
     return requestFn(`${this.requestConfig?.url || ""}`, {
       method: `${this.requestConfig?.method || "get"}`,
       params,
