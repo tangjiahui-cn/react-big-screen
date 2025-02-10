@@ -91,18 +91,25 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
     },
   });
 
-  // 找到点在layout区域内的 “layout组件”
-  function getInRectLayoutComponentNode(point: {
+  // 找到包含点击位置的“层级最大”、“最后渲染”的layout类型组件（也就是最靠近上方渲染的）。
+  function getLatestLayoutComponentNode(point: {
     x: number;
     y: number;
   }): ComponentNodeType | undefined {
-    return engine.componentNode.getAll().find?.((otherComponentNode) => {
-      const isLayout = otherComponentNode.category === "layout";
-      if (isLayout && otherComponentNode.id !== componentNode.id) {
-        return isInRect(point, engine.componentNode.getCoordinate(otherComponentNode));
+    const layoutMap = engine.componentNode.getAll().reduce((result, current) => {
+      if (
+        (current.show ?? true) &&
+        current.category === "layout" && // layout类组件
+        current.id !== componentNode.id && // 不能拖拽到自身（如果自身拖拽组件是layout类型时）
+        isInRect(point, engine.componentNode.getCoordinate(current)) // 是否在点击位置内
+      ) {
+        (result[`${current.level}`] ||= []).push(current);
       }
-      return false;
-    });
+      return result;
+    }, {} as Record<string, ComponentNodeType[]>);
+    const values = Object.values(layoutMap);
+    const latest = values[values.length - 1];
+    return latest?.[latest?.length - 1];
   }
 
   // 注册拖拽位移
@@ -115,7 +122,9 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
         // 相交的最近layout组件
         const { x: domX = 0, y: domY = 0 } =
           containerDomRef.current?.getBoundingClientRect?.() || {};
-        const layoutComponentNode = getInRectLayoutComponentNode({
+
+        // 获取离用户屏幕最近的layout类型组件
+        const layoutComponentNode = getLatestLayoutComponentNode({
           x: e.x - domX + componentNodeRef.current.x, // 鼠标点击位置在编辑器上的坐标
           y: e.y - domY + componentNodeRef.current.y,
         });
