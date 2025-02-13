@@ -36,16 +36,12 @@ export class RequestManager {
     }
 
     if (currentRequest?.first) {
-      this.request().then((dataSource) => {
-        this.notifyDataSource(dataSource);
-      });
+      this.request();
     }
 
     if (currentRequest?.loop) {
       this.timerId = setInterval(() => {
-        this.request().then((dataSource) => {
-          this.notifyDataSource(dataSource);
-        });
+        this.request();
       }, currentRequest?.loopDelay || 1000);
     }
   }
@@ -78,6 +74,9 @@ export class RequestManager {
       ...requestOptions,
       method: `${currentRequestConfig?.method || "get"}`,
       params,
+    }).then((dataSource) => {
+      this.notifyDataSource(dataSource);
+      return dataSource;
     });
   }
 
