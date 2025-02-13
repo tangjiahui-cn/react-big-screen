@@ -61,7 +61,12 @@ export class RequestManager {
   // 立刻请求一次
   public async request(
     params?: Record<string, any>, // 查询参数
-    requestConfig?: RequestManagerRequest, // 使用其他requestConfig
+    requestConfig?: RequestManagerRequest, // 使用其他 requestConfig
+    requestOptions?: {
+      // request的options选项
+      useCache?: boolean; // 是否启用缓存
+      ttl?: number; // 缓存时间（单位：ms）
+    },
   ): Promise<any> {
     const currentRequestConfig = requestConfig || this.requestConfig;
     if (!currentRequestConfig?.url) {
@@ -70,6 +75,7 @@ export class RequestManager {
     }
     // 鉴于大屏的特殊性（简单/快速/统一），接口参数都采用url查询参数格式
     return requestFn(`${currentRequestConfig?.url || ""}`, {
+      ...requestOptions,
       method: `${currentRequestConfig?.method || "get"}`,
       params,
     });

@@ -9,6 +9,7 @@ import { Button, Modal, Space, Tooltip } from "antd";
 import CodeEditor from "@/components/CodeEditor";
 import React, { useMemo, useState } from "react";
 import { TRANSFORM_PLACEHOLDER } from "@/engine";
+import classNames from "classnames";
 
 interface Props {
   tooltip?: React.ReactNode;
@@ -33,7 +34,7 @@ export default function EditFunctionTextButton(props: Props) {
   return (
     <>
       <span
-        className={"icon_clickable"}
+        className={classNames("icon_clickable", props?.value && "icon_selected")}
         style={{ fontSize: 14 }}
         onClick={() => {
           setText(value);

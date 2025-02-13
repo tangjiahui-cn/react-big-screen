@@ -28,7 +28,7 @@ export default function () {
     refresh,
   } = useRequest(
     async () => {
-      return instance?.request?.()?.then((dataSource) => {
+      return instance?.request?.(undefined, true)?.then((dataSource) => {
         return typeof dataSource === "object" && dataSource
           ? JSON.stringify(dataSource, null, "  ")
           : `${dataSource ?? null}`;
