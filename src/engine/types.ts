@@ -176,7 +176,12 @@ export interface InstanceType {
   getComponentNode: () => ComponentNodeType; // 获取实例对应的 componentNode
   getComponent: () => ComponentType; // 获取实例的 component
   reloadRequest: () => void; // 重新载入request
-  request?: (params?: Record<string, any>) => Promise<any>; // 立刻请求一次
+  /**
+   * 立刻请求一次
+   * @param params 查询参数
+   * @param noCache 是否不启用缓存（默认false走缓存）
+   */
+  request?: (params?: Record<string, any>, noCache?: boolean) => Promise<any>;
 }
 
 // 组件分组
