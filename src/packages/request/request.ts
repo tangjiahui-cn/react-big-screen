@@ -8,7 +8,7 @@ import request from "umi-request";
 
 request.interceptors.request.use((url, options) => {
   options.useCache = true; // 启用接口缓存
-  options.ttl = 2000; // 缓存时间 2s
+  options.ttl = 1000; // 缓存时间 1s
   return {
     url,
     options,
