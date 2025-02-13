@@ -12,10 +12,32 @@ import { Checkbox, Tooltip } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
 import { useSingleSelectedInstance } from "../..";
 import engine, { ComponentNodeType, ComponentRequest } from "@/engine";
+import { useMemo } from "react";
+import CodeEditor from "@/components/CodeEditor";
+import { useRequest } from "ahooks";
 
 export default function () {
   const { componentNode } = useSingleSelectedInstance();
+  const instance = useMemo(() => engine.instance.get(componentNode?.id), [componentNode?.id]);
   const request: ComponentRequest | undefined = componentNode?.request;
+
+  // 调用一次request查询数据结果
+  const {
+    data: resultCode,
+    loading,
+    refresh,
+  } = useRequest(
+    async () => {
+      return instance?.request?.()?.then((dataSource) => {
+        return typeof dataSource === "object" && dataSource
+          ? JSON.stringify(dataSource, null, "  ")
+          : `${dataSource ?? null}`;
+      });
+    },
+    {
+      refreshDeps: [componentNode?.id],
+    },
+  );
 
   function handleChange(newRequest: Partial<ComponentNodeType["request"]>) {
     engine.componentNode.update(componentNode?.id, (config) => {
@@ -100,16 +122,24 @@ export default function () {
         <div style={{ marginTop: 12, display: "flex", gap: 8, alignItems: "center" }}>
           <b>数据结果</b>
           <span className={styles.clickableIcon}>
-            <Tooltip title={"立即生效"}>
+            <Tooltip title={"请求数据"}>
               <ReloadOutlined
                 onClick={() => {
-                  engine.instance.get(componentNode?.id)?.reloadRequest?.();
+                  refresh();
                 }}
               />
             </Tooltip>
           </span>
         </div>
-        <div className={styles.dataSource_result}></div>
+
+        {/* 展示返回结果 */}
+        <CodeEditor
+          readOnly
+          minimap={false}
+          language={"json"}
+          value={loading ? "" : resultCode}
+          style={{ height: 300 }}
+        />
       </div>
     </LineConfigProvider>
   );

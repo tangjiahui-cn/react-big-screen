@@ -176,7 +176,7 @@ export interface InstanceType {
   getComponentNode: () => ComponentNodeType; // 获取实例对应的 componentNode
   getComponent: () => ComponentType; // 获取实例的 component
   reloadRequest: () => void; // 重新载入request
-  request?: (params?: Record<string, any>) => void; // 立刻请求一次
+  request?: (params?: Record<string, any>) => Promise<any>; // 立刻请求一次
 }
 
 // 组件分组

@@ -82,8 +82,8 @@ function ScopeRenderPreviewComponentNode(props: RenderPreviewComponentNodeProps)
       requestInstance.reload();
     },
     // 立刻请求一次
-    request: (params?: Record<string, any>) => {
-      requestInstance.request(params);
+    request: (params?: Record<string, any>): Promise<any> => {
+      return requestInstance.request(params);
     },
   });
 

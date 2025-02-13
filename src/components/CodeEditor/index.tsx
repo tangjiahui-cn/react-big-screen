@@ -10,12 +10,17 @@ import React, { useEffect, useRef } from "react";
 import * as monaco from "monaco-editor";
 import { useUpdateEffect } from "ahooks";
 import "./useWorker";
+import { LoadingOutlined } from "@ant-design/icons";
 
 interface Props {
   value?: string;
   onChange?: (value: string) => void;
   style?: React.CSSProperties;
   language?: string | "javascript" | "json";
+
+  loading?: boolean; // 加载中
+  readOnly?: boolean; // 是否只读
+  minimap?: boolean; // 是否显示右侧小地图
 }
 
 export default function CodeEditor(props: Props) {
@@ -31,6 +36,14 @@ export default function CodeEditor(props: Props) {
       tabSize: 4,
       lineDecorationsWidth: 0,
       lineNumbersMinChars: 3,
+      readOnly: props?.readOnly,
+      minimap: {
+        enabled: props?.minimap ?? true,
+        showSlider: undefined,
+      },
+      readOnlyMessage: {
+        value: "禁止编辑",
+      },
     });
     editor.onDidChangeModelContent(() => {
       const code: string = editor.getValue();
@@ -54,6 +67,12 @@ export default function CodeEditor(props: Props) {
   return (
     <div className={styles.jsonEditor} style={props?.style}>
       <div ref={domRef} className={styles.jsonEditor_render} />
+
+      {props?.loading && (
+        <div className={styles.jsonEditor_loading}>
+          <LoadingOutlined style={{ fontSize: 20 }} />
+        </div>
+      )}
     </div>
   );
 }

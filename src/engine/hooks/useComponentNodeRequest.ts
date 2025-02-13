@@ -16,7 +16,7 @@ export function useComponentNodeRequest(componentNode: ComponentNodeType): {
     // 重新载入
     reload: () => void;
     // 立刻请求一次
-    request: (params?: Record<string, any>) => void;
+    request: (params?: Record<string, any>) => Promise<any>;
   };
 } {
   const requestManagerRef = useRef<RequestManager>();
@@ -47,8 +47,8 @@ export function useComponentNodeRequest(componentNode: ComponentNodeType): {
           // 更新原组件时，componentNode对象地址未变，所以可以取到实时的 request 属性值。
           getRequestManager()?.reload?.(componentNode.request);
         },
-        request(params?: Record<string, any>) {
-          getRequestManager()?.request?.(params);
+        request(params?: Record<string, any>): Promise<any> {
+          return Promise.resolve(getRequestManager()?.request?.(params, componentNode.request));
         },
       },
     };
