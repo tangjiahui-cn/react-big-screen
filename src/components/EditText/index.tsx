@@ -26,7 +26,8 @@ export default function EditText(props: Props) {
 
   function handleSave() {
     if (!str) {
-      return message.warn(props?.emptyMessage);
+      message.warn(props?.emptyMessage);
+      return;
     }
     setIsEdit(false);
     props?.onChange?.(str);
@@ -39,7 +40,17 @@ export default function EditText(props: Props) {
   return (
     <div className={styles.editText}>
       {isEdit ? (
-        <IInput style={{ width: "100%" }} value={str} onChange={(str) => setStr(str)} />
+        <IInput
+          value={str}
+          style={{ width: "100%" }}
+          onChange={(str) => setStr(str)}
+          onPressEnter={() => {
+            // 按下enter键
+            if (isEdit) {
+              handleSave();
+            }
+          }}
+        />
       ) : (
         <b className={styles.editText_text} title={`${props?.value || ""}`}>
           {props?.value}

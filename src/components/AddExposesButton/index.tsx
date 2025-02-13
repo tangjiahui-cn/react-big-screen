@@ -38,7 +38,8 @@ export default function AddExposesButton(props: Props) {
       }
       let items = [...INIT_EXPOSES];
       if (props?.cId) {
-        engine.component.get(props?.cId)?.exposes?.forEach?.((expose) => {
+        const component = engine.component.get(props?.cId);
+        component?.exposes?.forEach?.((expose) => {
           items.push({ label: expose.label, value: expose.value });
         });
       }

@@ -54,7 +54,7 @@ function createHandleTrigger(componentNodeId: string) {
         if (opt.exposeId === "visible") {
           const option = opt?.option as ComponentNodeEventTargetVisibleOption;
           engine.componentNode.update(id, {
-            show: option?.visible,
+            show: !!option?.visible,
           });
           return;
         }

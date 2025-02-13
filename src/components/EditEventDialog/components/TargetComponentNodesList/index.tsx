@@ -41,9 +41,6 @@ export default function TargetComponentNodesList(props: Props) {
       },
     ];
     props?.onChangeTargets?.(newTargets);
-    if (newTargets.length === 1) {
-      props?.onChange?.(componentNode.id);
-    }
   }
 
   function handleDelete(id: string) {

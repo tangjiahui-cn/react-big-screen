@@ -5,8 +5,9 @@
  * @date 2025/2/11
  * @author 编辑event弹窗。
  */
-import { Button, message, Modal } from "antd";
+import { message, Modal } from "antd";
 import engine, {
+  ComponentNodeEvent,
   ComponentNodeEventTarget,
   ComponentNodeEventTargetOpt,
   ComponentNodeType,
@@ -16,6 +17,7 @@ import EventOptions from "./components/EventOptions";
 import { useEffect, useMemo, useState } from "react";
 import TargetComponentNodesList from "./components/TargetComponentNodesList";
 import TargetOperateList from "./components/TargetOperateList";
+import { cloneDeep } from "lodash-es";
 
 interface Props {
   triggerId?: string;
@@ -27,95 +29,84 @@ interface Props {
 
 export default function EditEventDialog(props: Props) {
   const { componentNode, triggerId, triggerName } = props;
-  // 当前选中events.target
-  const [currentTargetId, setCurrentTargetId] = useState<string>();
-  // 当前选中events.target.opt
-  const [currentTargetOpt, setCurrentTargetOpt] = useState<ComponentNodeEventTargetOpt>();
+  const [currentEvent, setCurrentEvent] = useState<ComponentNodeEvent>();
+  const [currentEventTarget, setCurrentEventTarget] = useState<ComponentNodeEventTarget>();
+  const [currentEventTargetOpt, setCurrentEventTargetOpt] = useState<ComponentNodeEventTargetOpt>();
 
-  // 当前targets
-  const targets = useMemo(() => {
-    return props?.componentNode?.events?.find?.((x) => x.triggerId === triggerId)?.targets;
-  }, [componentNode, triggerId]);
-
-  // 当前target（其包含 opts: {operateId: '', options: {}}）
-  const currentTarget = useMemo(() => {
-    return targets?.find?.((target) => target.id === currentTargetId);
-  }, [targets, currentTargetId]);
-
+  // 当前target对应组件的cId
   const currentTargetCId = useMemo(() => {
-    return engine.componentNode.get(currentTarget?.id)?.cId;
-  }, [currentTarget]);
+    return engine.componentNode.get(currentEventTarget?.id)?.cId;
+  }, [currentEventTarget]);
 
-  function handleUpdateTargets(newTargets: ComponentNodeEventTarget[]) {
-    engine.componentNode.update(componentNode?.id, (config) => {
-      config?.events?.find?.((event) => {
-        if (event.triggerId !== triggerId) {
-          return false;
-        }
-        // 更新 targets
-        event.targets = newTargets;
-        return true;
-      });
-      return {
-        events: [...(config?.events || [])],
-      };
-    });
+  // 选中 event.targets 中的一项
+  function handleSelectEventTarget(targetId?: string) {
+    const target = currentEvent?.targets?.find?.((target) => target.id === targetId);
+    setCurrentEventTarget(target);
+    setCurrentEventTargetOpt(target?.opts?.[0]);
   }
 
-  function handleChangeTargetId(targetId?: string) {
-    if (targetId === currentTargetId) {
-      return;
+  // 选中 event.target[xx].opts 中的一项
+  function handleSelectEventTargetOpt(operateId?: string) {
+    setCurrentEventTargetOpt(
+      currentEventTarget?.opts?.find?.((opt) => opt?.operateId === operateId),
+    );
+  }
+
+  // 更新 event.targets
+  function handleUpdateTargets(targets: ComponentNodeEventTarget[]) {
+    setCurrentEvent({
+      ...currentEvent,
+      targets,
+    });
+
+    // 如果是新增的第一项
+    if (targets.length === 1) {
+      setCurrentEventTarget(targets?.[0]);
     }
-    setCurrentTargetId(targetId);
-    // 自动选中第一个opt
-    setCurrentTargetOpt(targets?.find?.((target) => target.id === targetId)?.opts?.[0]);
   }
 
-  function handleUpdateOpts(newOpts: ComponentNodeEventTargetOpt[]) {
-    engine.componentNode.update(componentNode?.id, (config) => {
-      config?.events?.find?.((event) => {
-        if (event.triggerId !== triggerId) return false;
-        // 找到 target
-        event.targets?.find?.((target) => {
-          if (target.id !== currentTargetId) return false;
-          // 更新 opts
-          target.opts = newOpts;
-          return true;
-        });
-        return true;
-      });
-      return {
-        events: [...(config?.events || [])],
-      };
+  // 更新 event.target[xx].opts
+  function handleUpdateOpts(opts: ComponentNodeEventTargetOpt[]) {
+    currentEvent?.targets?.find?.((target) => {
+      if (target.id !== currentEventTarget?.id) return false;
+      target.opts = opts;
+      return true;
     });
+    setCurrentEvent({ ...currentEvent });
+
+    // 如果是新增的第一项
+    if (opts.length === 1) {
+      setCurrentEventTargetOpt(opts?.[0]);
+    }
   }
 
+  // 更新 event.target[xx].opts[xx]
   function handleUpdateOpt(newOpt: ComponentNodeEventTargetOpt) {
+    currentEvent?.targets?.find?.((target) => {
+      if (target.id !== currentEventTarget?.id) return false;
+      target.opts?.find?.((opt: ComponentNodeEventTargetOpt) => {
+        if (opt?.operateId !== newOpt?.operateId) return false;
+        Object.assign(opt, newOpt);
+        return true;
+      });
+      return true;
+    });
+    setCurrentEvent({ ...currentEvent });
+  }
+
+  function handleSave() {
+    // 将 events 更新到 componentNode
     engine.componentNode.update(componentNode?.id, (config) => {
       config?.events?.find?.((event) => {
-        if (event.triggerId !== triggerId) return false;
-        // 找到 target
-        event.targets?.find?.((target) => {
-          if (target.id !== currentTargetId) return false;
-          // 找到 opts
-          target.opts.find((opt) => {
-            if (opt.operateId !== newOpt.operateId) return false;
-            // 更新opt
-            Object.assign(opt, newOpt);
-            return true;
-          });
-          return true;
-        });
+        if (event.triggerId !== currentEvent?.triggerId) return false;
+        Object.assign(event, currentEvent);
         return true;
       });
       return {
-        events: [...(config?.events || [])],
+        events: config?.events,
       };
     });
-  }
-
-  function handleChangeOperateId(operateId?: string) {
-    setCurrentTargetOpt(currentTarget?.opts?.find?.((opt) => opt.operateId === operateId));
+    props?.onClose?.();
   }
 
   useEffect(() => {
@@ -125,24 +116,19 @@ export default function EditEventDialog(props: Props) {
         return;
       }
 
-      if (!targets?.length) {
-        return;
-      }
+      let event = componentNode?.events?.find?.((event) => event?.triggerId === triggerId);
+      event = cloneDeep(event);
+      setCurrentEvent(event);
 
-      // 设置第一个 target
-      const firstTarget = targets[0];
-      setCurrentTargetId(firstTarget.id);
+      const firstTarget = event?.targets?.[0];
+      setCurrentEventTarget(firstTarget);
 
-      if (!firstTarget?.opts?.length) {
-        return;
-      }
-
-      // 设置第一个 target.opt
-      const firstOpt = firstTarget.opts[0];
-      setCurrentTargetOpt(firstOpt);
+      const firstTargetOpt = firstTarget?.opts?.[0];
+      setCurrentEventTargetOpt(firstTargetOpt);
     } else {
-      setCurrentTargetId(undefined);
-      setCurrentTargetOpt(undefined);
+      setCurrentEvent(undefined);
+      setCurrentEventTarget(undefined);
+      setCurrentEventTargetOpt(undefined);
     }
   }, [props?.visible]);
 
@@ -157,29 +143,29 @@ export default function EditEventDialog(props: Props) {
       title={`${triggerName || "-"} 事件`}
       bodyStyle={{ height: 500, display: "flex", padding: 16, userSelect: "none" }}
       onCancel={props?.onClose}
-      footer={<Button onClick={props?.onClose}>关闭</Button>}
+      onOk={handleSave}
     >
       <div className={styles.editEventDialog_menu}>
         {/* 目标组件列表 */}
         <TargetComponentNodesList
           className={"border-right"}
-          value={currentTargetId}
+          value={currentEventTarget?.id}
           onChange={(targetId) => {
-            handleChangeTargetId(targetId);
+            handleSelectEventTarget(targetId);
           }}
-          targets={targets}
+          targets={currentEvent?.targets}
           onChangeTargets={(newTargets) => {
             handleUpdateTargets(newTargets);
           }}
         />
         {/* 目标操作列表 */}
         <TargetOperateList
-          value={currentTargetOpt?.operateId}
+          value={currentEventTargetOpt?.operateId}
           onChange={(operateId) => {
-            handleChangeOperateId(operateId);
+            handleSelectEventTargetOpt(operateId);
           }}
           cId={currentTargetCId}
-          opts={currentTarget?.opts}
+          opts={currentEventTarget?.opts}
           onChangeOpts={(opts) => {
             handleUpdateOpts(opts);
           }}
@@ -188,7 +174,7 @@ export default function EditEventDialog(props: Props) {
       {/* 修改 opt 的 options */}
       <div className={styles.editEventDialog_body}>
         <EventOptions
-          value={currentTargetOpt}
+          value={currentEventTargetOpt}
           onChange={(opt) => {
             handleUpdateOpt(opt);
           }}

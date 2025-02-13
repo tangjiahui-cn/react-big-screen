@@ -25,16 +25,15 @@ interface Props {
 
 export default function TargetOperateList(props: Props) {
   const exposeNameMap = useMemo(() => {
-    return (
-      engine.component.get(props?.cId)?.exposes?.reduce?.(
-        (dataMap, expose) => {
-          dataMap[expose.value] = expose.label;
-          return dataMap;
-        },
-        { ...INIT_EXPOSE_MAP } as Record<string, string>,
-      ) || {}
-    );
-  }, [props?.opts, props?.cId]);
+    const component = engine.component.get(props?.cId);
+    return {
+      ...INIT_EXPOSE_MAP,
+      ...component?.exposes?.reduce?.((dataMap, expose) => {
+        dataMap[expose.value] = expose.label;
+        return dataMap;
+      }, {} as Record<string, string>),
+    };
+  }, [props?.cId]);
 
   const list = useMemo(() => {
     return props?.opts?.map?.((opt) => {
@@ -55,9 +54,6 @@ export default function TargetOperateList(props: Props) {
       },
     ];
     props?.onChangeOpts?.(newOpts);
-    if (newOpts.length === 1) {
-      props?.onChange?.(newOpts[0].operateId);
-    }
   }
 
   function handleDelete(operateId: string) {
@@ -79,6 +75,7 @@ export default function TargetOperateList(props: Props) {
       </AddExposesButton>
 
       <div className={styles.targetList_body}>
+        {!list?.length && <IEmpty />}
         {list?.map?.((item) => {
           const isSelected = item?.value === props?.value;
           return (
@@ -102,8 +99,6 @@ export default function TargetOperateList(props: Props) {
           );
         })}
       </div>
-
-      {!list?.length && <IEmpty />}
     </div>
   );
 }
