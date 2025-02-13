@@ -1,0 +1,61 @@
+.addComponentNodeButton {
+  background-color: white;
+  height: 300px;
+  box-sizing: border-box;
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  &_body {
+    flex: 1;
+    overflow: hidden auto;
+    padding-top: 6px;
+  }
+
+  &_item {
+    overflow: hidden;
+    color: @color;
+    height: 20px;
+    padding: 14px 6px;
+    font-size: 12px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    &_text {
+      .text-ellipsis();
+    }
+
+    &:hover {
+      background: whitesmoke;
+      font-weight: bold;
+    }
+  }
+}
+
+.dropdown_overlay {
+  :global {
+    .ant-dropdown-menu-item, .ant-dropdown-menu-submenu-title {
+      padding: 0;
+      line-height: 16px;
+      width: 150px !important;
+    }
+
+    .ant-dropdown-menu-title-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white !important;
+      overflow-x: hidden;
+      margin-top: -6px;
+    }
+
+    .sketch-picker {
+      padding: 8px 0 0 !important;
+      width: 230px !important;
+      box-shadow: none !important;
+    }
+  }
+}

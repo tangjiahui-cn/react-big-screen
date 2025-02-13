@@ -61,8 +61,10 @@ export class RequestManager {
   // 立刻请求一次
   public async request(params?: Record<string, any>) {
     if (!this.requestConfig?.url) {
-      return Promise.resolve("url not exist.");
+      console.warn("[bigScreen]: request.url not exist.");
+      return Promise.reject("url not exist.");
     }
+    // 鉴于大屏的特殊性（简单/快速/统一），接口参数都采用url查询参数格式
     return requestFn(`${this.requestConfig?.url || ""}`, {
       method: `${this.requestConfig?.method || "get"}`,
       params,

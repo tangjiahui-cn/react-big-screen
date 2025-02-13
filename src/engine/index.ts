@@ -29,10 +29,12 @@ import ComponentNode from "./componentNode";
 import Config from "./config";
 import type { JsonType } from "./types";
 import { builtInComponents } from "./built-in";
+import { BaseEvent } from "./model";
 
 export type * from "./types";
 export * from "./store";
 export * from "./hooks";
+export * from "./enum";
 
 class Engine {
   // 组件模板
@@ -43,6 +45,8 @@ class Engine {
   public instance: Instance = new Instance();
   // 全局配置
   public config: Config = new Config();
+  // 事件
+  public events: BaseEvent = new BaseEvent();
 
   constructor() {
     // （初始化时）注册内置组件

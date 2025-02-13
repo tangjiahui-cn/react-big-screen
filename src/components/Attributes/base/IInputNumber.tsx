@@ -20,7 +20,7 @@ export function IInputNumber(
       placeholder={"请输入"}
       {...rest}
       onChange={(e) => {
-        onChange?.((e as any) || undefined);
+        onChange?.((e as any) ?? undefined);
       }}
     />
   );

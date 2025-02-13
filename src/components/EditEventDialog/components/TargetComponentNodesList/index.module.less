@@ -1,0 +1,42 @@
+.targetList {
+  width: 150px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &_body {
+    flex: 1;
+    width: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &_item {
+    padding: 8px 12px;
+    width: 100%;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &_clickable {
+      cursor: pointer;
+      transition: all .3s;
+
+      &:hover {
+        color: @primaryHover;
+      }
+    }
+
+    &_selected {
+      background: #ececec !important;
+    }
+
+    &:hover {
+      background: whitesmoke;
+    }
+  }
+}

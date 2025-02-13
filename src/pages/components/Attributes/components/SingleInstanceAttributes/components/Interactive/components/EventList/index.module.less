@@ -1,0 +1,50 @@
+.eventList {
+  border: @border;
+
+  &_head {
+    line-height: 12px;
+    padding: 12px 10px;
+    background: #efefef;
+    border-bottom: @border;
+  }
+
+  &_body {
+    width: 100%;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+  }
+
+  &_item {
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 8px;
+
+    &:hover {
+      background: whitesmoke;
+    }
+
+    &_body {
+      flex: 1;
+      .text-ellipsis();
+    }
+
+    &_opt {
+      white-space: nowrap;
+      display: flex;
+      gap: 8px;
+
+      &_clickable {
+        cursor: pointer;
+        font-size: 14px !important;
+        transition: all .3s;
+
+        &:hover {
+          color: @primaryHover;
+        }
+      }
+    }
+  }
+}

@@ -5,33 +5,38 @@
  * @date 2025/2/10
  * @description 组件间交互
  */
-import { Line, LineConfigProvider } from "@/components/Attributes";
+import { LineConfigProvider } from "@/components/Attributes";
 import styles from "./index.module.less";
-// import { useSingleSelectedInstance } from "../..";
-import ComponentNodesSelect from "@/components/ComponentNodesSelect";
-import ICustomSelect from "@/components/ICustomSelect";
+import { useSingleSelectedInstance } from "../..";
+import TriggerEventButton from "./components/TriggerEventButton";
+import EventList from "./components/EventList";
+import engine from "@/engine";
 
 export default function () {
-  // const { componentNode } = useSingleSelectedInstance();
+  const { componentNode } = useSingleSelectedInstance();
 
   return (
     <LineConfigProvider labelSpan={5}>
       <div className={styles.interactive}>
-        <Line label={"触发组件"}>
-          <ComponentNodesSelect all allName={"全部组件"} multiple style={{ width: "100%" }} />
-        </Line>
-        <Line label={"触发操作"}>
-          <ICustomSelect
-            style={{ width: "100%" }}
-            requestFn={async () => {
-              return [
-                { label: "显隐", value: "1" },
-                { label: "请求", value: "2" },
-                { label: "自定义函数", value: "3" },
-              ];
-            }}
-          />
-        </Line>
+        {/* 新增按钮 */}
+        <TriggerEventButton
+          componentNode={componentNode}
+          onSelect={(key) => {
+            engine.componentNode.update(componentNode?.id, (config) => {
+              return {
+                events: [
+                  ...(config?.events || []),
+                  {
+                    triggerId: key,
+                    targets: [],
+                  },
+                ],
+              };
+            });
+          }}
+        />
+        {/* 展示events列表 */}
+        <EventList componentNode={componentNode} />
       </div>
     </LineConfigProvider>
   );

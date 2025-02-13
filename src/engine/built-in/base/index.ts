@@ -5,7 +5,7 @@
  * @date 2025/1/21
  * */
 import type { ComponentType } from "@/engine";
-import Text from "./Text";
+import Text, { buttonTriggers, buttonExposes } from "./Text";
 import TextAttributes from "./Text/attributes";
 import Title from "./Title";
 import Image from "./Image";
@@ -29,6 +29,8 @@ export const base: ComponentType[] = [
     },
     component: Text,
     attributesComponent: TextAttributes,
+    triggers: buttonTriggers,
+    exposes: buttonExposes,
   },
   {
     cId: "title",

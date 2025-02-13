@@ -5,15 +5,23 @@
  * @date 2024/12/25
  */
 import engine, {
+  ComponentHandleTrigger,
   ComponentNodeType,
   ComponentType,
+  ComponentUseExpose,
   useComponentNodeRequest,
   useRegisterInstance,
 } from "@/engine";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { isKeyPressed } from "@/packages/shortCutKeys";
 import { isClickMouseLeft, isClickMouseRight, isInRect } from "@/utils";
-import { useItemContextMenu, useItemDragMove, useItemDragSize } from "./hooks";
+import {
+  useCreateHandleTrigger,
+  useCreateUseExposeHook,
+  useItemContextMenu,
+  useItemDragMove,
+  useItemDragSize,
+} from "./hooks";
 import classNames from "classnames";
 import styles from "./index.module.less";
 import { useDomEvents, useListenRef } from "@/hooks";
@@ -54,8 +62,6 @@ export default function RenderComponentNode(props: RenderComponentProps) {
 function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
   const { component, componentNode } = props;
   const componentNodeRef = useListenRef<ComponentNodeType>(componentNode);
-
-  const Component = component.component;
   const containerDomRef = useRef<HTMLDivElement>(null);
   const boxDomRef = useRef<HTMLDivElement>(null);
 
@@ -66,6 +72,11 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
 
   // 注册接口请求相关
   const { dataSource, requestInstance } = useComponentNodeRequest(componentNode);
+
+  // 注册触发事件
+  const handleTrigger: ComponentHandleTrigger = useCreateHandleTrigger(componentNode.id);
+  // 注册暴露事件
+  const useExpose: ComponentUseExpose = useCreateUseExposeHook(componentNode.id);
 
   // 注册行为实例（只能改变内部属性）
   const instance = useRegisterInstance({
@@ -269,7 +280,9 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
       }}
     >
       {/* 渲染组件 */}
-      <Component
+      <component.component
+        useExpose={useExpose}
+        handleTrigger={handleTrigger}
         dataSource={dataSource}
         options={componentNode.options}
         width={componentNode.width}
