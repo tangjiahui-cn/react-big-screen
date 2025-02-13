@@ -4,22 +4,31 @@
  * @author tangjiahui
  * @date 2025/1/21
  */
-import { ComponentProps } from "@/engine";
+import { ComponentProps, EventData } from "@/engine";
 import { TextOptions } from "./attributes";
-import { useMemo } from "react";
+import { useState } from "react";
 
-type Props = ComponentProps<TextOptions>;
+type TriggerKeys = "onClick";
+type ExposeKeys = "setText";
 
-export default function Text(props: Props) {
-  const { options, width, height, dataSource } = props;
+export const buttonTriggers: EventData<TriggerKeys>[] = [{ label: "点击事件", value: "onClick" }];
+export const buttonExposes: EventData<ExposeKeys>[] = [{ label: "更新文本", value: "setText" }];
+
+export default function Text(props: ComponentProps<TextOptions, TriggerKeys, ExposeKeys>) {
+  const { options, width, height, useExpose, handleTrigger } = props;
   const { value } = options;
 
-  useMemo(() => {
-    console.log("zz Text组件 dataSource:  ", dataSource);
-  }, [dataSource]);
+  const [innerValue, setInnerValue] = useState<string>();
+
+  useExpose({
+    setText(value) {
+      setInnerValue(value);
+    },
+  });
 
   return (
     <div
+      onClick={() => handleTrigger("onClick")}
       style={{
         width,
         height,
@@ -30,7 +39,7 @@ export default function Text(props: Props) {
         lineHeight: options?.lineHeight ? `${options?.lineHeight}px` : undefined,
       }}
       dangerouslySetInnerHTML={{
-        __html: value || "",
+        __html: innerValue ?? (value || ""),
       }}
     />
   );

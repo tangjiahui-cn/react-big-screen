@@ -1,0 +1,44 @@
+.editEventDialog {
+  color: @color;
+  font-size: 12px;
+
+  &_menu {
+    border-radius: 4px;
+    border: @border;
+    font-size: 12px;
+    line-height: 1;
+    display: flex;
+    height: 100%;
+
+    &_children {
+      width: 120px;
+      height: 100%;
+
+      &:first-child {
+        border-right: @border;
+      }
+    }
+  }
+
+  &_body {
+    flex: 1;
+    font-size: 12px;
+    margin-left: 12px;
+    overflow: hidden auto;
+  }
+
+  &_item {
+    padding: 8px 12px;
+    cursor: pointer;
+
+    &:hover {
+      background: whitesmoke;
+    }
+  }
+
+  :global {
+    .ant-select {
+      font-size: 12px;
+    }
+  }
+}

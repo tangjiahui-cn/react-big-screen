@@ -24,6 +24,7 @@ import engine from "@/engine";
 import { getLocalFileText, saveToFile } from "@/utils";
 import ShortCutKeysDescription from "./components/ShortCutKeysDescription";
 import { clearComponentNodes, saveLocal } from "../../../packages/shortCutKeys";
+import { saveLocalPreviewJson } from "@/pages/preview";
 
 // 打开新路由页面
 function openRoute(routePath: string) {
@@ -90,7 +91,7 @@ export default function Header() {
         });
         break;
       case "preview": // 预览
-        saveLocal(true);
+        saveLocalPreviewJson(engine.getJSON());
         openRoute("/preview");
         break;
       case "save": // 保存

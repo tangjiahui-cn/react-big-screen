@@ -28,15 +28,10 @@ export default function Line(props: LineProps) {
   const childrenSpan = 24 - labelSpan;
   return (
     <Row style={props?.style} className={styles.line}>
-      <Col
-        span={labelSpan}
-        className={classNames(styles.line_label, props?.labelTip && styles.line_help)}
-      >
+      <Col span={labelSpan} className={classNames(props?.labelTip && styles.line_help)}>
         {props?.labelTip ? <Tooltip title={props?.labelTip}>{props?.label}</Tooltip> : props?.label}
       </Col>
-      <Col span={childrenSpan} style={{ lineHeight: "24px" }}>
-        {props?.children}
-      </Col>
+      <Col span={childrenSpan}>{props?.children}</Col>
     </Row>
   );
 }

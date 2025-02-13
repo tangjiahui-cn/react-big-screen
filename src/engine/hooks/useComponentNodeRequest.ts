@@ -22,8 +22,9 @@ export function useComponentNodeRequest(componentNode: ComponentNodeType): {
   const requestManagerRef = useRef<RequestManager>();
   const [dataSource, setDataSource] = useState<any>();
 
+  // 获取唯一 requestManager 实例
   const getRequestManager: () => RequestManager | undefined = useCallback(() => {
-    if (componentNode.request && !requestManagerRef.current) {
+    if (!requestManagerRef.current) {
       requestManagerRef.current = new RequestManager(componentNode.request);
       requestManagerRef.current?.onChangeDataSource((dataSource) => setDataSource(dataSource));
     }
@@ -31,6 +32,7 @@ export function useComponentNodeRequest(componentNode: ComponentNodeType): {
   }, []);
 
   useEffect(() => {
+    // 初始化一次request
     getRequestManager();
     return () => {
       requestManagerRef?.current?.unmount();
@@ -42,6 +44,7 @@ export function useComponentNodeRequest(componentNode: ComponentNodeType): {
       dataSource,
       requestInstance: {
         reload() {
+          // 更新原组件时，componentNode对象地址未变，所以可以取到实时的 request 属性值。
           getRequestManager()?.reload?.(componentNode.request);
         },
         request(params?: Record<string, any>) {

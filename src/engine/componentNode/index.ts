@@ -288,7 +288,7 @@ export default class ComponentNode {
   ): ComponentNodeType {
     const componentNode: ComponentNodeType = {
       ...INIT_COMPONENT, // 基础默认组件数据
-      ...omit(component, ["icon", "component", "attributesComponent"]), // 自定义组件默认数据
+      ...omit(component, ["icon", "component", "attributesComponent", "exposes", "triggers"]), // 自定义组件默认数据
       ...extComponentNode, // 扩展组件数据
     } as ComponentNodeType;
 

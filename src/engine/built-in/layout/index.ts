@@ -6,7 +6,7 @@
  * */
 import type { ComponentType } from "@/engine";
 import Tabs from "./Tabs";
-import Carousel from "./Carousel";
+import Carousel, { triggers as CarouselTriggers, exposes as CarouselExposes } from "./Carousel";
 import CarouselAttributes from "./Carousel/attributes";
 
 export const layout: ComponentType[] = [
@@ -52,5 +52,7 @@ export const layout: ComponentType[] = [
         value: "",
       },
     ],
+    triggers: CarouselTriggers,
+    exposes: CarouselExposes,
   },
 ];

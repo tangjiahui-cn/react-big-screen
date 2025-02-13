@@ -5,7 +5,7 @@
  * @date 2024/1/7
  */
 import { Carousel } from "antd";
-import engine, { ComponentProps } from "@/engine";
+import engine, { ComponentProps, EventData } from "@/engine";
 import styles from "./index.module.less";
 import { CarouselOptions } from "./attributes";
 import classNames from "classnames";
@@ -13,8 +13,16 @@ import React, { RefObject, useEffect, useMemo, useRef } from "react";
 import { CarouselRef } from "antd/lib/carousel";
 import { useUnmount } from "ahooks";
 
-export default function (props: ComponentProps<CarouselOptions>) {
-  const { options, width, height, componentNode } = props;
+type TriggerKeys = "onChange" | "onClick";
+type ExposeKeys = "changePanel";
+
+export const triggers: EventData<TriggerKeys>[] = [
+  { label: "面板切换", value: "onChange" },
+  { label: "面板点击", value: "onClick" },
+];
+export const exposes: EventData<ExposeKeys>[] = [{ label: "切换面板", value: "changePanel" }];
+export default function (props: ComponentProps<CarouselOptions, TriggerKeys, ExposeKeys>) {
+  const { options, width, height, componentNode, handleTrigger, useExpose } = props;
   const carouselRef: RefObject<CarouselRef> = useRef<CarouselRef>(null);
   const itemStyle: React.CSSProperties = {
     width,
@@ -39,12 +47,20 @@ export default function (props: ComponentProps<CarouselOptions>) {
 
   // 打开指定index的panel
   function jumpPanel(panelIndex: number) {
+    const panelId = componentNode.panels?.[panelIndex]?.value;
+
+    // 不能跳转自身
+    if (lastPanelId.current !== undefined && panelId === lastPanelId.current) {
+      return;
+    }
+
+    // 触发事件
+    handleTrigger("onChange", panelIndex);
+
     // 跳转面板
     carouselRef.current?.goTo?.(panelIndex);
-
     // 展示指定panels下的所有组件
-    // 放入宏任务中是为了等渲染完毕后再显示（因为初次渲染时layout类组件可能会先渲染）
-    const panelId = componentNode.panels?.[panelIndex]?.value;
+    // 放入宏任务中是为了等渲染完毕后再显示（因为初次渲染时layout类组件可能会先于子组件渲染）
     if (panelId) {
       setTimeout(() => {
         // 先隐藏上一个panel的所有组件
@@ -75,10 +91,18 @@ export default function (props: ComponentProps<CarouselOptions>) {
     engine.componentNode.hidePanel(lastPanelId.current);
   });
 
+  // 注册暴露事件
+  useExpose({
+    changePanel(panelIndex: number) {
+      jumpPanel(panelIndex);
+    },
+  });
+
   return (
     <div
       style={{ width, height, borderColor: options?.borderColor }}
       className={classNames(styles.carousel, options?.bordered && styles.carousel_bordered)}
+      onClick={() => handleTrigger("onClick")}
     >
       <Carousel
         speed={0}

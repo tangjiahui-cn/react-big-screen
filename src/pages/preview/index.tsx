@@ -3,10 +3,26 @@
  */
 import styles from "./index.module.less";
 import React, { useMemo } from "react";
-import engine, { ComponentNodeType, useComponentNodes, useConfig } from "@/engine";
+import engine, { ComponentNodeType, type JsonType, useComponentNodes, useConfig } from "@/engine";
 import RenderPreviewComponentNode from "./components/RenderPreviewComponentNode";
 import FitScreen from "@/pages/preview/components/FitScreen";
 import { useEffectOnce } from "@/hooks";
+
+// 保存本地预览json数据
+export function saveLocalPreviewJson(json: JsonType): void {
+  localStorage.setItem("preview_json", JSON.stringify(json));
+}
+
+// 读取本地预览json数据
+export function getLocalPreviewJson(): JsonType | undefined {
+  let json: JsonType | undefined;
+  try {
+    json = JSON.parse(localStorage.getItem("preview_json") || "");
+  } catch (e) {
+    console.error(e);
+  }
+  return json;
+}
 
 export default function Preview() {
   const config = useConfig();
@@ -29,22 +45,12 @@ export default function Preview() {
     }, [] as React.ReactNode[]);
   }, [componentNodes]);
 
-  function getLocalJson(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      try {
-        const json = JSON.parse(localStorage.getItem("json") || "");
-        resolve(json);
-      } catch (e) {
-        reject(e);
-      }
-    });
-  }
-
   useEffectOnce(() => {
     // 读取本地json
-    getLocalJson().then((json) => {
+    const json = getLocalPreviewJson();
+    if (json) {
       engine.loadJSON(json);
-    });
+    }
   });
 
   return (
