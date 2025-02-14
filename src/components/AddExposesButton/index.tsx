@@ -7,7 +7,7 @@
 import { Button, Dropdown } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import engine, { INIT_EXPOSES } from "@/engine";
+import engine, { INIT_EXPOSE_LIST } from "@/engine";
 import styles from "./index.module.less";
 import { IInput } from "@/components/Attributes/base/IInput";
 import IEmpty from "@/components/IEmpty";
@@ -36,7 +36,7 @@ export default function AddExposesButton(props: Props) {
         clearTimeout(timerIdRef.current);
         timerIdRef.current = null;
       }
-      let items = [...INIT_EXPOSES];
+      let items = [...INIT_EXPOSE_LIST];
       if (props?.cId) {
         const component = engine.component.get(props?.cId);
         component?.exposes?.forEach?.((expose) => {

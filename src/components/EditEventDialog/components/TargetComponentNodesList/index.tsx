@@ -19,7 +19,7 @@ interface Props {
   targets?: ComponentNodeEventTarget[];
   style?: React.CSSProperties;
   className?: string;
-  onChangeTargets: (value: ComponentNodeEventTarget[]) => void;
+  onChangeTargets: (value: ComponentNodeEventTarget[], type: "add" | "delete") => void;
 }
 
 export default function TargetComponentNodesList(props: Props) {
@@ -40,7 +40,7 @@ export default function TargetComponentNodesList(props: Props) {
         opts: [],
       },
     ];
-    props?.onChangeTargets?.(newTargets);
+    props?.onChangeTargets?.(newTargets, "add");
   }
 
   function handleDelete(id: string) {
@@ -56,7 +56,7 @@ export default function TargetComponentNodesList(props: Props) {
     const count = deleteTarget?.opts?.length || 0;
 
     function ensureDelete() {
-      props?.onChangeTargets?.(filterTargets);
+      props?.onChangeTargets?.(filterTargets, "delete");
       if (id === props?.value) {
         props?.onChange?.(filterTargets?.[0]?.id);
       }

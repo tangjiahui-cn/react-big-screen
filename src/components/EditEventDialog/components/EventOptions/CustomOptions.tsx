@@ -7,7 +7,7 @@ import { CHANGE_TARGET_PLACEHOLDER, ComponentNodeEventTargetCustomOption } from 
 import CodeEditor from "@/components/CodeEditor";
 import { message, Space, Tooltip } from "antd";
 import { useEffect, useState } from "react";
-import { RedoOutlined, SaveOutlined } from "@ant-design/icons";
+import { RedoOutlined } from "@ant-design/icons";
 
 interface Props {
   value: ComponentNodeEventTargetCustomOption;
@@ -30,11 +30,6 @@ export default function CustomOptions(props: Props) {
     message.success("重置成功");
   }
 
-  function handleSave() {
-    handleChange(text);
-    message.success("更新成功");
-  }
-
   useEffect(() => {
     setText(props?.value?.function);
   }, [props?.value?.function]);
@@ -51,9 +46,6 @@ export default function CustomOptions(props: Props) {
               justifyContent: "space-between",
             }}
           >
-            <Tooltip title={"更新"}>
-              <SaveOutlined onClick={handleSave} className={"icon_clickable"} />
-            </Tooltip>
             <Tooltip title={"重置"}>
               <RedoOutlined onClick={handleReset} className={"icon_clickable"} />
             </Tooltip>
@@ -64,7 +56,7 @@ export default function CustomOptions(props: Props) {
           language={"javascript"}
           style={{ height: 440 }}
           onChange={(text) => {
-            setText(text);
+            handleChange(text);
           }}
         />
       </Space>

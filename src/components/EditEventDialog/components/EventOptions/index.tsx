@@ -9,7 +9,11 @@ import VisibleOptions from "./VisibleOptions";
 import RequestOptions from "./RequestOptions";
 import CustomOptions from "./CustomOptions";
 import CommonOptions from "./CommonOptions";
-import { ComponentNodeEventTargetOpt, ComponentNodeEventTargetOption } from "@/engine";
+import {
+  ComponentNodeEventTargetOpt,
+  ComponentNodeEventTargetOption,
+  INIT_EXPOSES,
+} from "@/engine";
 import IEmpty from "@/components/IEmpty";
 
 export const selectWidth: number = 200;
@@ -36,17 +40,17 @@ export default function EventOptions(props: Props) {
   }
 
   // 显隐
-  if (props?.value?.exposeId === "visible") {
+  if (props?.value?.exposeId === INIT_EXPOSES.visible) {
     return <VisibleOptions value={options as any} onChange={handleChange} />;
   }
 
   // 请求
-  if (props?.value?.exposeId === "request") {
+  if (props?.value?.exposeId === INIT_EXPOSES.request) {
     return <RequestOptions value={options as any} onChange={handleChange} />;
   }
 
   // 自定义函数
-  if (props?.value?.exposeId === "custom") {
+  if (props?.value?.exposeId === INIT_EXPOSES.custom) {
     return <CustomOptions value={options as any} onChange={handleChange} />;
   }
 

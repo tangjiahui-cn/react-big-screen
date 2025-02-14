@@ -4,14 +4,15 @@
  * @author tangjiahui
  * @date 2025/2/11
  */
-import engine, { ComponentNodeType } from "@/engine";
+import engine, { ComponentNodeEvent, ComponentNodeType } from "@/engine";
 import styles from "./index.module.less";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { DeleteOutlined, SettingOutlined } from "@ant-design/icons";
 import IEmpty from "@/components/IEmpty";
 import EditEventDialog from "@/components/EditEventDialog";
 import { message } from "antd";
 import { ask } from "@/components/Ask";
+import { useBindModal } from "@/hooks";
 
 interface Item {
   label: string;
@@ -25,10 +26,23 @@ interface Props {
 export default function EventList(props: Props) {
   const { componentNode } = props;
   const component = useMemo(() => engine.component.get(componentNode?.cId), [componentNode]);
-  const [editVisible, setEditVisible] = useState<boolean>(false);
 
-  // 当前弹窗编辑的 triggerId
-  const [currentItem, setCurrentItem] = useState<Item>();
+  // 编辑事件弹窗
+  const editEventModal = useBindModal(EditEventDialog, {
+    onOk(currentEvent: ComponentNodeEvent) {
+      // 将 events 更新到 componentNode
+      engine.componentNode.update(componentNode?.id, (config) => {
+        config?.events?.find?.((event) => {
+          if (event.triggerId !== currentEvent?.triggerId) return false;
+          Object.assign(event, currentEvent);
+          return true;
+        });
+        return {
+          events: config?.events,
+        };
+      });
+    },
+  });
 
   const list: Item[] = useMemo(() => {
     return (
@@ -48,8 +62,11 @@ export default function EventList(props: Props) {
       message.warn("triggerId不存在");
       return;
     }
-    setCurrentItem(item);
-    setEditVisible(true);
+    editEventModal.open({
+      componentNode,
+      triggerId: item?.value,
+      triggerName: item?.label,
+    });
   }
 
   // 删除一个event
@@ -109,17 +126,7 @@ export default function EventList(props: Props) {
           );
         })}
       </div>
-
-      {/* 编辑event弹窗 */}
-      <EditEventDialog
-        visible={editVisible}
-        componentNode={componentNode}
-        triggerId={currentItem?.value}
-        triggerName={currentItem?.label}
-        onClose={() => {
-          setEditVisible(false);
-        }}
-      />
+      {editEventModal.children}
     </div>
   );
 }

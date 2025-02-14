@@ -5,11 +5,11 @@
  * @date 2025/2/12
  * @description 编辑函数字符串的按钮。
  */
-import { Button, Modal, Space, Tooltip } from "antd";
-import CodeEditor from "@/components/CodeEditor";
-import React, { useMemo, useState } from "react";
-import { TRANSFORM_PLACEHOLDER } from "@/engine";
+import { Tooltip } from "antd";
+import React, { useMemo } from "react";
 import classNames from "classnames";
+import EditModal, { EditorModalParams } from "./EditModal";
+import { useBindModal } from "@/hooks";
 
 interface Props {
   tooltip?: React.ReactNode;
@@ -18,9 +18,11 @@ interface Props {
 }
 
 export default function EditFunctionTextButton(props: Props) {
-  const { value } = props;
-  const [visible, setVisible] = useState(false);
-  const [text, setText] = useState<string>();
+  const editModal = useBindModal<EditorModalParams>(EditModal, {
+    onOk(text?: string) {
+      props?.onChange?.(text);
+    },
+  });
 
   const children = useMemo(() => {
     if (!props?.tooltip) return <span>{"{}"}</span>;
@@ -37,51 +39,14 @@ export default function EditFunctionTextButton(props: Props) {
         className={classNames("icon_clickable", props?.value && "icon_selected")}
         style={{ fontSize: 14 }}
         onClick={() => {
-          setText(value);
-          setVisible(true);
+          editModal.open({
+            text: props?.value,
+          });
         }}
       >
         {children}
       </span>
-
-      <Modal
-        centered
-        width={650}
-        title={false}
-        open={visible}
-        closable={false}
-        bodyStyle={{ padding: "12px 20px" }}
-        onCancel={() => setVisible(false)}
-        footer={
-          <Space>
-            <Button
-              onClick={() => {
-                props?.onChange?.(undefined);
-                setVisible(false);
-              }}
-            >
-              重置
-            </Button>
-            <Button
-              type={"primary"}
-              onClick={() => {
-                props?.onChange?.(text);
-                setVisible(false);
-              }}
-            >
-              保存
-            </Button>
-          </Space>
-        }
-      >
-        <h3>转换函数</h3>
-        <CodeEditor
-          language={"javascript"}
-          style={{ height: 450 }}
-          value={text ?? TRANSFORM_PLACEHOLDER}
-          onChange={setText}
-        />
-      </Modal>
+      {editModal.children}
     </>
   );
 }

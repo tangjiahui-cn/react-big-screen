@@ -1,5 +1,6 @@
 // 基础组件类型
 import React from "react";
+import { ComponentNodeEventTargetOpt } from "@/engine/enum";
 
 // 组件传入参数
 export type ComponentHandleTrigger<TriggerKeys extends string = string> = (
@@ -87,35 +88,6 @@ export interface ComponentType<Option = any> extends BaseComponent {
 export interface EventData<VALUE extends string = string> {
   label: string; // 事件名称
   value: VALUE; // 事件id
-}
-export interface ComponentNodeEventTargetVisibleOption {
-  visible?: boolean;
-}
-export interface ComponentNodeEventTargetRequestOption {
-  type: "default" | "json"; // 参数类型（默认、json对象）
-  params?: Record<string, any>; // 自定义参数
-  parserFunc?: string; // 转换函数
-}
-export interface ComponentNodeEventTargetCustomOption {
-  function?: string; // 自定义函数内容
-}
-export interface ComponentNodeEventTargetCommonOption {
-  type?: "default" | "number" | "text" | "json"; // 值类型 （默认、数字、文本值、json对象）
-  value?: any; // 自定义值
-  parserFunc?: string; // 转换函数
-}
-
-export type ComponentNodeEventTargetOption =
-  | ComponentNodeEventTargetVisibleOption
-  | ComponentNodeEventTargetRequestOption
-  | ComponentNodeEventTargetCustomOption
-  | ComponentNodeEventTargetCommonOption;
-
-export interface ComponentNodeEventTargetOpt {
-  // 目标组件操作
-  operateId: string; // 操作id
-  exposeId: "visible" | "request" | "custom" | string; // 目标expose事件Id
-  option: ComponentNodeEventTargetOption;
 }
 
 export interface ComponentNodeEventTarget {
