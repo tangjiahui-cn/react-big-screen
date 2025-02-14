@@ -18,17 +18,16 @@ import { useEffect, useMemo, useState } from "react";
 import TargetComponentNodesList from "./components/TargetComponentNodesList";
 import TargetOperateList from "./components/TargetOperateList";
 import { cloneDeep } from "lodash-es";
+import { BindModalProps } from "@/hooks";
 
-interface Props {
+export interface EditEventDialogParams {
   triggerId?: string;
   triggerName?: string;
   componentNode?: ComponentNodeType;
-  visible?: boolean;
-  onClose?: () => void;
 }
 
-export default function EditEventDialog(props: Props) {
-  const { componentNode, triggerId, triggerName } = props;
+export default function EditEventDialog(props: BindModalProps<EditEventDialogParams>) {
+  const { componentNode, triggerId, triggerName } = props?.params || {};
   const [currentEvent, setCurrentEvent] = useState<ComponentNodeEvent>();
   const [currentEventTarget, setCurrentEventTarget] = useState<ComponentNodeEventTarget>();
   const [currentEventTargetOpt, setCurrentEventTargetOpt] = useState<ComponentNodeEventTargetOpt>();
@@ -94,18 +93,7 @@ export default function EditEventDialog(props: Props) {
   }
 
   function handleSave() {
-    // 将 events 更新到 componentNode
-    engine.componentNode.update(componentNode?.id, (config) => {
-      config?.events?.find?.((event) => {
-        if (event.triggerId !== currentEvent?.triggerId) return false;
-        Object.assign(event, currentEvent);
-        return true;
-      });
-      return {
-        events: config?.events,
-      };
-    });
-    props?.onClose?.();
+    props?.onOk?.(currentEvent);
   }
 
   useEffect(() => {
@@ -141,7 +129,8 @@ export default function EditEventDialog(props: Props) {
       className={styles.editEventDialog}
       title={`${triggerName || "-"} 事件`}
       bodyStyle={{ height: 500, display: "flex", padding: 16, userSelect: "none" }}
-      onCancel={props?.onClose}
+      afterClose={props?.afterClose}
+      onCancel={props?.onCancel}
       onOk={handleSave}
     >
       <div className={styles.editEventDialog_menu}>
