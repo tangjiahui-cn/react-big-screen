@@ -10,9 +10,10 @@ import engine, {
   ComponentNodeEventTargetRequestOption,
   ComponentNodeEventTargetVisibleOption,
   GetUpdateTargetComponentNodeFunction,
+  INIT_EXPOSES,
   TransformFunction,
   TransformFunctionOptions,
-} from "@/engine";
+} from "..";
 import { ensureObject, getFunction } from "@/utils";
 import { message } from "antd";
 
@@ -51,7 +52,7 @@ function createHandleTrigger(componentNodeId: string) {
       }
       target.opts.forEach((opt: ComponentNodeEventTargetOpt) => {
         // visible option.
-        if (opt.exposeId === "visible") {
+        if (opt.exposeId === INIT_EXPOSES.visible) {
           const option = opt?.option as ComponentNodeEventTargetVisibleOption;
           engine.componentNode.update(id, {
             show: !!option?.visible,
@@ -60,7 +61,7 @@ function createHandleTrigger(componentNodeId: string) {
         }
 
         // request option.
-        if (opt.exposeId === "request") {
+        if (opt.exposeId === INIT_EXPOSES.request) {
           const option = opt?.option as ComponentNodeEventTargetRequestOption;
           let data = option?.type === "json" ? option?.params : payload;
           // 执行转换函数
@@ -76,7 +77,7 @@ function createHandleTrigger(componentNodeId: string) {
         }
 
         // custom option.
-        if (opt.exposeId === "custom") {
+        if (opt.exposeId === INIT_EXPOSES.custom) {
           const option = opt?.option as ComponentNodeEventTargetCustomOption;
           // 执行自定义函数
           if (option?.function) {

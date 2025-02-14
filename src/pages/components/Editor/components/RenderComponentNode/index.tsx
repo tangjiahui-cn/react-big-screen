@@ -11,17 +11,13 @@ import engine, {
   ComponentUseExpose,
   useComponentNodeRequest,
   useRegisterInstance,
+  useCreateHandleTrigger,
+  useCreateUseExposeHook,
 } from "@/engine";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { isKeyPressed } from "@/packages/shortCutKeys";
 import { isClickMouseLeft, isClickMouseRight, isInRect } from "@/utils";
-import {
-  useCreateHandleTrigger,
-  useCreateUseExposeHook,
-  useItemContextMenu,
-  useItemDragMove,
-  useItemDragSize,
-} from "./hooks";
+import { useItemContextMenu, useItemDragMove, useItemDragSize } from "./hooks";
 import classNames from "classnames";
 import styles from "./index.module.less";
 import { useDomEvents, useListenRef } from "@/hooks";

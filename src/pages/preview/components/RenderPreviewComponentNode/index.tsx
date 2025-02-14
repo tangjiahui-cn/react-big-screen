@@ -11,12 +11,10 @@ import engine, {
   ComponentUseExpose,
   useComponentNodeRequest,
   useRegisterInstance,
-} from "@/engine";
-import { useEffect, useMemo, useRef, useState } from "react";
-import {
   useCreateHandleTrigger,
   useCreateUseExposeHook,
-} from "@/pages/components/Editor/components/RenderComponentNode/hooks";
+} from "@/engine";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 interface RenderPreviewComponentNodeProps {
   componentNode: ComponentNodeType;

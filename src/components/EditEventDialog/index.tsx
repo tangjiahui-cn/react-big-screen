@@ -53,15 +53,14 @@ export default function EditEventDialog(props: Props) {
   }
 
   // 更新 event.targets
-  function handleUpdateTargets(targets: ComponentNodeEventTarget[]) {
+  function handleUpdateTargets(targets: ComponentNodeEventTarget[], isAdd: boolean) {
     setCurrentEvent({
       ...currentEvent,
       targets,
     });
 
-    // 如果是新增的第一项
-    if (targets.length === 1) {
-      setCurrentEventTarget(targets?.[0]);
+    if (isAdd && targets.length === 1) {
+      setCurrentEventTarget(targets[targets.length - 1]);
     }
   }
 
@@ -154,8 +153,8 @@ export default function EditEventDialog(props: Props) {
             handleSelectEventTarget(targetId);
           }}
           targets={currentEvent?.targets}
-          onChangeTargets={(newTargets) => {
-            handleUpdateTargets(newTargets);
+          onChangeTargets={(newTargets, type) => {
+            handleUpdateTargets(newTargets, type === "add");
           }}
         />
         {/* 目标操作列表 */}

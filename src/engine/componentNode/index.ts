@@ -98,7 +98,9 @@ export default class ComponentNode {
       if (componentNode.groupId) {
         this.insertGroup(componentNode.groupId, componentNode.id);
       }
-      // 如果属于一个layout则隐藏（由layout类组件内部控制显示）
+      // 后增的show属性，如果为undefined则手动设置true
+      componentNode.show ??= true;
+      // 如果属于一个layout,则隐藏（由layout类组件内部控制显示）
       if (componentNode.panelId) {
         componentNode.show = !init;
         (this.panelMap[componentNode.panelId] ||= {
@@ -326,6 +328,9 @@ export default class ComponentNode {
       });
       componentNode.currentPanelId = componentNode.panels?.[0]?.value;
     }
+
+    // 设置show
+    componentNode.show ??= true;
 
     // 计算最大层级
     this.maxLevel = Math.max(this.maxLevel, componentNode.level);

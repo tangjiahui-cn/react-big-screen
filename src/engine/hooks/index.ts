@@ -5,3 +5,5 @@ export * from "./useRegisterInstance";
 export * from "./useSelectedInstances";
 export * from "./useRangeSelect";
 export * from "./useComponentNodeRequest";
+export * from "./useCreateHandleTrigger";
+export * from "./useCreateUseExposeHook";
