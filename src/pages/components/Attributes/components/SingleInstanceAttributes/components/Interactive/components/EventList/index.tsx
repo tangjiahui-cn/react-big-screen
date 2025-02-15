@@ -9,10 +9,9 @@ import styles from "./index.module.less";
 import { useMemo } from "react";
 import { DeleteOutlined, SettingOutlined } from "@ant-design/icons";
 import IEmpty from "@/components/IEmpty";
-import EditEventDialog from "@/components/EditEventDialog";
+import useEditEventDialog from "@/components/EditEventDialog";
 import { message } from "antd";
 import { ask } from "@/components/Ask";
-import { useBindModal } from "@/hooks";
 
 interface Item {
   label: string;
@@ -28,7 +27,7 @@ export default function EventList(props: Props) {
   const component = useMemo(() => engine.component.get(componentNode?.cId), [componentNode]);
 
   // 编辑事件弹窗
-  const editEventModal = useBindModal(EditEventDialog, {
+  const editEventModal = useEditEventDialog({
     onOk(currentEvent: ComponentNodeEvent) {
       // 将 events 更新到 componentNode
       engine.componentNode.update(componentNode?.id, (config) => {

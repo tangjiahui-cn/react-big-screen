@@ -8,8 +8,7 @@
 import { Tooltip } from "antd";
 import React, { useMemo } from "react";
 import classNames from "classnames";
-import EditModal, { EditorModalParams } from "./EditModal";
-import { useBindModal } from "@/hooks";
+import useEditModal from "./EditModal";
 
 interface Props {
   tooltip?: React.ReactNode;
@@ -18,7 +17,7 @@ interface Props {
 }
 
 export default function EditFunctionTextButton(props: Props) {
-  const editModal = useBindModal<EditorModalParams>(EditModal, {
+  const editModal = useEditModal({
     onOk(text?: string) {
       props?.onChange?.(text);
     },

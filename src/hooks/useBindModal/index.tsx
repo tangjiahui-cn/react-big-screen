@@ -25,6 +25,7 @@ interface BindModalReturn<Params = any> {
   open: (params?: Params) => void; // 打开弹窗
 }
 
+// useBindModal （绑定modal）
 export function useBindModal<Params = any>(
   component: ModalFunctionComponent<Params>,
   options: BindModalOptions,
@@ -58,4 +59,11 @@ export function useBindModal<Params = any>(
       },
     };
   }, []);
+}
+
+// 创建 bindModal 的hook
+export function createBindModalHook<Params = any>(component: ModalFunctionComponent<Params>) {
+  return function (options: BindModalOptions) {
+    return useBindModal(component, options);
+  };
 }

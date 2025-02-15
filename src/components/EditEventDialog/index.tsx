@@ -18,7 +18,7 @@ import { useEffect, useMemo, useState } from "react";
 import TargetComponentNodesList from "./components/TargetComponentNodesList";
 import TargetOperateList from "./components/TargetOperateList";
 import { cloneDeep } from "lodash-es";
-import { BindModalProps } from "@/hooks";
+import { createBindModalHook } from "@/hooks";
 
 export interface EditEventDialogParams {
   triggerId?: string;
@@ -26,7 +26,7 @@ export interface EditEventDialogParams {
   componentNode?: ComponentNodeType;
 }
 
-export default function EditEventDialog(props: BindModalProps<EditEventDialogParams>) {
+export default createBindModalHook<EditEventDialogParams>((props) => {
   const { componentNode, triggerId, triggerName } = props?.params || {};
   const [currentEvent, setCurrentEvent] = useState<ComponentNodeEvent>();
   const [currentEventTarget, setCurrentEventTarget] = useState<ComponentNodeEventTarget>();
@@ -170,4 +170,4 @@ export default function EditEventDialog(props: BindModalProps<EditEventDialogPar
       </div>
     </Modal>
   );
-}
+});
