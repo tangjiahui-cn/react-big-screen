@@ -32,23 +32,24 @@ export function useBindModal<Params = any>(
   const renderRef = useRef<RenderModalRefType>(null);
   const onOkRef = useRef<BindModalOptions["onOk"]>();
   const onCancelRef = useRef<BindModalOptions["onCancel"]>();
+
   onCancelRef.current = options?.onCancel;
   onOkRef.current = options?.onOk;
 
-  const children = (
-    <RenderModal
-      ref={renderRef}
-      component={component}
-      onCancel={(...args: any) => {
-        onCancelRef.current?.(...args);
-      }}
-      onOk={(...args: any) => {
-        onOkRef.current?.(...args);
-      }}
-    />
-  );
-
   return useMemo(() => {
+    const children = (
+      <RenderModal
+        ref={renderRef}
+        component={component}
+        onCancel={(...args: any) => {
+          onCancelRef.current?.(...args);
+        }}
+        onOk={(...args: any) => {
+          onOkRef.current?.(...args);
+        }}
+      />
+    );
+
     return {
       children,
       open(params?: Params) {
