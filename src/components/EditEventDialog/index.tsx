@@ -104,7 +104,7 @@ export default createBindModalHook<EditEventDialogParams>((props) => {
       }
 
       let event = componentNode?.events?.find?.((event) => event?.triggerId === triggerId);
-      event = cloneDeep(event);
+      event = cloneDeep(event || {});
       setCurrentEvent(event);
 
       const firstTarget = event?.targets?.[0];
