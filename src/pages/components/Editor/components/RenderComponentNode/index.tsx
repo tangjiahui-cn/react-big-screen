@@ -21,7 +21,7 @@ import { useItemContextMenu, useItemDragMove, useItemDragSize } from "./hooks";
 import classNames from "classnames";
 import styles from "./index.module.less";
 import { useDomEvents, useListenRef } from "@/hooks";
-import { ask } from "@/components/Ask";
+import { useAsk } from "@/components/Ask";
 
 interface Coordinate {
   x: number;
@@ -60,6 +60,7 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
   const componentNodeRef = useListenRef<ComponentNodeType>(componentNode);
   const containerDomRef = useRef<HTMLDivElement>(null);
   const boxDomRef = useRef<HTMLDivElement>(null);
+  const ask = useAsk();
 
   // 是否选中
   const [isSelected, setIsSelected] = React.useState(false);

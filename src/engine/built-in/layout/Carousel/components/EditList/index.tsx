@@ -12,7 +12,7 @@ import { createUUID } from "@/engine/utils";
 import Item from "./item";
 import React from "react";
 import classNames from "classnames";
-import { ask } from "@/components/Ask";
+import { useAsk } from "@/components/Ask";
 
 interface Props {
   value?: string; // 选中值
@@ -25,6 +25,7 @@ interface Props {
 
 export default function EditorList(props: Props) {
   const { value, onSelect, list = [], onChange } = props;
+  const ask = useAsk();
 
   // 仅删除面板
   function handleDeletePanel(key: string) {

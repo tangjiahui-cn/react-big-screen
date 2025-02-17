@@ -11,7 +11,7 @@ import engine, { ComponentNodeEventTarget, ComponentNodeType } from "@/engine";
 import IEmpty from "@/components/IEmpty";
 import AddComponentNodeButton from "@/components/AddComponentNodeButton";
 import { DeleteOutlined } from "@ant-design/icons";
-import { ask } from "@/components/Ask";
+import { useAsk } from "@/components/Ask";
 
 interface Props {
   value?: string;
@@ -23,6 +23,8 @@ interface Props {
 }
 
 export default function TargetComponentNodesList(props: Props) {
+  const ask = useAsk();
+
   const list = useMemo(() => {
     return props?.targets?.map?.((target) => {
       return {

@@ -11,7 +11,7 @@ import { DeleteOutlined, SettingOutlined } from "@ant-design/icons";
 import IEmpty from "@/components/IEmpty";
 import useEditEventDialog from "@/components/EditEventDialog";
 import { message } from "antd";
-import { ask } from "@/components/Ask";
+import { useAsk } from "@/components/Ask";
 
 interface Item {
   label: string;
@@ -25,6 +25,7 @@ interface Props {
 export default function EventList(props: Props) {
   const { componentNode } = props;
   const component = useMemo(() => engine.component.get(componentNode?.cId), [componentNode]);
+  const ask = useAsk();
 
   // 编辑事件弹窗
   const editEventModal = useEditEventDialog({
