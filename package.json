@@ -1,10 +1,10 @@
 {
   "name": "big-screen",
-  "private": true,
+  "private": false,
   "homepage": "https://github.com/tangjiahui-cn/big-screen.git",
   "author": "tangjiahui-cn",
   "description": "一个前端大屏看板项目",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "dev": "cross-env vite",
     "build": "tsc -b && vite build",
