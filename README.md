@@ -1,11 +1,11 @@
-# Big-Screen
+# React-Big-Screen
 
 一个基于 React 的大屏看板 No-Code 搭建平台，用于快速验证原型。
 
 > 状态：`开发中`
 
 ## 在线预览
-[https://tangjiahui-cn.github.io/big-screen](https://tangjiahui-cn.github.io/big-screen)
+[https://tangjiahui-cn.github.io/react-big-screen](https://tangjiahui-cn.github.io/react-big-screen)
 
 ## 如何运行 
 ```shell
