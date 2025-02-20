@@ -16,6 +16,7 @@ export default defineConfig({
   },
   base: "./",
   define: {
+    VERSION: `"${pkg.version}"`,
     __DEV__: process.env.NODE_ENV === "development",
   },
   resolve: {

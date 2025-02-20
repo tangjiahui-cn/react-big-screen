@@ -135,6 +135,14 @@ export interface JsonType {
   used: ComponentUsed;
   // 选中组件id列表
   selectedIds?: string[];
+  // 存储非云端packages
+  localPackages?: JsonTypeLocalPackage[];
+}
+
+export interface JsonTypeLocalPackage {
+  id: string; // 包id
+  origin: ComponentPackage["origin"]; // 包来源
+  originData: ComponentPackage["originData"]; // 包来源数据
 }
 
 // 数据行为实例类型
@@ -159,4 +167,20 @@ export interface InstanceType {
 // 组件分组
 export interface ComponentNodeGroup {
   children: Set<string>; // 存储包含的组件id
+}
+
+// 组件包格式
+export interface ComponentPackage {
+  // 基础属性
+  id: string; // 包id
+  name: string; // 包名称
+  version: string; // 版本号
+  components: ComponentType[]; // 包含组件列表
+
+  // 数据来源(system系统默认、remote远程地址请求、local本地上传模块、user用户资产[待实现功能])
+  origin: "system" | "remote" | "local" | "user";
+  originData?: any; // 保存数据来源相关信息（remote地址、local本地源码、user用户资产信息）
+
+  // 其他属性
+  description?: string; // 描述
 }

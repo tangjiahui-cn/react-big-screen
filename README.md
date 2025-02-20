@@ -1,6 +1,6 @@
 # React-Big-Screen
 
-一个基于 React 的大屏看板 No-Code 搭建平台，用于快速验证原型。
+一个基于 React 实现的 `前端大屏拖拽平台`，用于快速验证原型。
 
 > 状态：`开发中`
 
@@ -27,11 +27,11 @@ pnpm dev
 - ✅ 鼠标范围框选。
 - ✅ 支持预览页面。
 - ✅ 成组/取消成组。
-- ✅ 布局组件。
+- ✅ 布局容器组件。
 - ✅ 数据源。
 - ✅ 多组件联动。
-- 支持子页面。
-- 支持远程组件包。
+- ✅ 支持远程组件包。
+- 支持多子页面切换。
 - 可撤销历史记录。
 - 收藏夹。
 - 国际化语言。
@@ -53,6 +53,15 @@ pnpm dev
 
 ## 处理事件
 点击事件只涉及到: `click`、`mousedown`、`mousemove`、`mouseup`。
+
+## 远程组件使用
+
+可在 `src/common-module.ts` 文件中配置公共模块配置。
+
+远程组件包：
+
+- 支持 UMD 模块包。
+- 支持 AMD 模块包。
 
 ## 相关项目
 - [lowcode-engine](https://github.com/tangjiahui-cn/lowcode-engine)

@@ -12,7 +12,9 @@ import { message } from "antd";
  * @param silent 是否静默（默认false。true无消息提示，false有消息提示）
  */
 export function saveLocal(silent?: boolean) {
-  localStorage.setItem("json", JSON.stringify(engine.getJSON()));
+  engine.getJSON().then((json) => {
+    localStorage.setItem("json", JSON.stringify(json));
+  });
   if (!silent) {
     message.success("保存成功");
   }

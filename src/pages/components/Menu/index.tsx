@@ -8,8 +8,9 @@ import styles from "./index.module.less";
 import Library from "./components/Library";
 import ComponentNodes from "./components/ComponentNodes";
 import MenuBar, { MenuBarItem } from "./components/MenuBar";
+import Property from "./components/Property";
 import React, { useMemo, useState } from "react";
-import { ApartmentOutlined, AppstoreOutlined } from "@ant-design/icons";
+import { ApartmentOutlined, AppstoreOutlined, BankOutlined } from "@ant-design/icons";
 
 type PanelItem = MenuBarItem & {
   children?: React.ReactNode;
@@ -28,10 +29,17 @@ const panelList: PanelItem[] = [
     title: "页面组件",
     children: <ComponentNodes />,
   },
+  {
+    key: "property",
+    icon: <BankOutlined />,
+    title: "个人资产",
+    children: <Property />,
+  },
 ];
 
+const FIRST_PANEL_KEY = panelList[0].key; // 默认 0
 export default function Menu() {
-  const [activeKey, setActiveKey] = useState<string>("library");
+  const [activeKey, setActiveKey] = useState<string>(FIRST_PANEL_KEY);
 
   const children: React.ReactNode = useMemo(() => {
     return panelList.find((item) => item.key === activeKey)?.children;

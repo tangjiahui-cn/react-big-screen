@@ -17,7 +17,7 @@ const groupNameMap: Record<ComponentCategory, string> = {
   base: "基础组件",
   charts: "图表组件",
   layout: "布局组件",
-  unknown: "未知组件",
+  unknown: "未分类组件",
 };
 
 function filterComponents(componentList: ComponentType[], keyword: string = ""): ComponentType[] {
@@ -56,7 +56,7 @@ export default function Library() {
   const groups = useMemo(() => {
     const groupKeys: ComponentCategory[] = [];
     const groups = Object.entries(
-      groupBy(displayComponents, (item) => item.category || "base"),
+      groupBy(displayComponents, (item) => item.category || "unknown"),
     ).map(([key, components]) => {
       groupKeys.push(key as ComponentCategory);
       return {
