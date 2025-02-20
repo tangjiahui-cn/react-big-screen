@@ -49,5 +49,16 @@
     height: 40px;
     background: white;
     border-top: @border;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & > a {
+      color: @color;
+
+      &:hover {
+        text-decoration: @color underline;
+      }
+    }
   }
 }
