@@ -82,16 +82,22 @@ export default class Component {
   }
 
   /*************************** 远程组件包相关 **************************/
-  // 获取默认package
-  public getDefaultPackage(): ComponentPackage {
-    return {
-      id: "default",
-      name: "默认组件包",
-      version: VERSION,
-      components: this.getAll(),
-      description: "由官方发布的组件库，随编辑器主版本迭代而更新。",
-      origin: "system",
-    };
+  // 清空packages
+  public clearPackages() {
+    this.pkgMap = new Map();
+    this.unRegisterAll();
+  }
+
+  // 初始化packages
+  public initPackages(pkgs: ComponentPackage | undefined | (ComponentPackage | undefined)[]) {
+    this.clearPackages();
+    if (!pkgs) return;
+    pkgs = Array.isArray(pkgs) ? pkgs : [pkgs];
+    pkgs.forEach((pkg) => {
+      if (!pkg) return;
+      this.pkgMap.set(pkg.id, pkg);
+      this.register(pkg.components);
+    });
   }
 
   // 触发package事件通知
