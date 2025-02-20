@@ -7,3 +7,4 @@ export * from "./useRangeSelect";
 export * from "./useComponentNodeRequest";
 export * from "./useCreateHandleTrigger";
 export * from "./useCreateUseExposeHook";
+export * from "./usePackages";

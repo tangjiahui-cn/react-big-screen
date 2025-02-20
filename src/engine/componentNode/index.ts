@@ -29,7 +29,7 @@ const INIT_COMPONENT: BaseComponent = {
   y: 0,
   width: 100,
   height: 100,
-  category: "base",
+  category: "unknown",
 };
 
 export default class ComponentNode {
@@ -138,6 +138,15 @@ export default class ComponentNode {
     });
   }
 
+  // 刷新
+  public refresh() {
+    setGlobalState((config) => {
+      return {
+        componentNodes: [...config.componentNodes],
+      };
+    });
+  }
+
   // 新增 componentNode
   public add(componentNode: ComponentNodeType | ComponentNodeType[]) {
     const list = Array.isArray(componentNode) ? componentNode : [componentNode];
@@ -163,8 +172,9 @@ export default class ComponentNode {
   }
 
   // 获取一个componentNode
-  public get(id?: string): ComponentNodeType | undefined {
+  public get(id?: string | ComponentNodeType): ComponentNodeType | undefined {
     if (!id) return undefined;
+    if (typeof id !== "string") return id;
     return this.getAll().find((componentNode) => {
       return componentNode.id === id;
     });
@@ -214,16 +224,16 @@ export default class ComponentNode {
   }
 
   // 删除 componentNode
-  public delete(id: string | string[]) {
-    const list: string[] = Array.isArray(id) ? id : [id];
+  public delete(id: string | ComponentNodeType | (string | ComponentNodeType)[]) {
+    const list: (string | ComponentNodeType)[] = Array.isArray(id) ? id : [id];
     const deleteIds = new Set<string>();
 
-    list.forEach((id) => {
-      const componentNode = this.get(id);
+    list.forEach((item) => {
+      const componentNode = this.get(item);
       if (!componentNode) {
         return;
       }
-      deleteIds.add(id);
+      deleteIds.add(componentNode.id);
       // 如果是layout组件，则删除所有子组件
       if (componentNode?.panels?.length) {
         this.getLayoutChildrenIds(componentNode.id).forEach((childId) => {

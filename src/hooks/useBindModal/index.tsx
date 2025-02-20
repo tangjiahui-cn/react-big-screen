@@ -16,15 +16,15 @@ import RenderModal, {
 
 export type { BindModalProps };
 
-// options
+// 绑定弹窗配置项
 type BindModalOptions = Pick<BindModalProps, "onOk" | "onCancel">;
 
 // 返回格式
-interface BindModalReturn<Params = any> {
+interface BindModalReturn<Params = any> extends RenderModalRefType<Params> {
   children: React.ReactNode; // 渲染弹窗内容
-  open: (params?: Params) => void; // 打开弹窗
 }
 
+// useBindModal （绑定modal）
 export function useBindModal<Params = any>(
   component: ModalFunctionComponent<Params>,
   options: BindModalOptions,
@@ -56,6 +56,17 @@ export function useBindModal<Params = any>(
         // 打开弹窗
         renderRef.current?.open?.(params);
       },
+      close(destroy: boolean = true) {
+        // 销毁弹窗
+        renderRef.current?.close?.(destroy);
+      },
     };
   }, []);
+}
+
+// 创建 bindModal 的hook
+export function createBindModalHook<Params = any>(component: ModalFunctionComponent<Params>) {
+  return function (options: BindModalOptions) {
+    return useBindModal(component, options);
+  };
 }

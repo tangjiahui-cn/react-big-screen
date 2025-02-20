@@ -10,10 +10,16 @@
  *
  * @return Promise<string>
  */
-export async function getLocalFileText(): Promise<string> {
+interface GetLocalFileTextOptions {
+  accept?: string; // 可打开文件类型
+}
+export async function getLocalFileText(options?: GetLocalFileTextOptions): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     let input = document.createElement("input");
     input.type = "file";
+    if (options?.accept) {
+      input.accept = options.accept;
+    }
     input.onchange = (e: any) => {
       const file = e.target?.files?.[0];
       if (!file) {

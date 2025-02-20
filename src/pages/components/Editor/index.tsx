@@ -5,7 +5,7 @@
  * @date 2024/12/19
  */
 import styles from "./index.module.less";
-import engine, { ComponentNodeType, useConfig, useRangeSelect } from "@/engine";
+import engine, { ComponentNodeType, useConfig, usePackages, useRangeSelect } from "@/engine";
 import React, { useMemo, useRef } from "react";
 import { useComponentNodes } from "@/engine";
 import RenderComponentNode from "./components/RenderComponentNode";
@@ -18,16 +18,29 @@ import { useVirtualDrop } from "@/packages/virtual-drag";
 const contextMenu = createEditorContextMenu();
 export default React.memo(() => {
   const config = useConfig();
-  const componentNodes: ComponentNodeType[] = useComponentNodes();
   const editorDomRef = useRef<HTMLDivElement>(null);
   const innerEditorDomRef = useRef<HTMLDivElement>(null);
 
+  // 组件包
+  const packages = usePackages();
+  // 展示的 componentNodes
+  const componentNodes: ComponentNodeType[] = useComponentNodes();
+
   // 渲染实例列表
   const renderComponentNodes = useMemo(() => {
+    if (!packages.length) {
+      return;
+    }
     return componentNodes?.map((componentNode: ComponentNodeType) => {
-      return <RenderComponentNode key={componentNode.id} componentNode={componentNode} />;
+      return (
+        <RenderComponentNode
+          key={componentNode.id}
+          componentNode={componentNode}
+          packages={packages}
+        />
+      );
     });
-  }, [componentNodes]);
+  }, [componentNodes, packages]);
 
   // 注册范围框选
   useRangeSelect(innerEditorDomRef);

@@ -6,9 +6,15 @@
  */
 import { createRoot } from "react-dom/client";
 import AskComponent, { AskComponentProps } from "./AskComponent";
+import { useEffect, useMemo, useRef } from "react";
 
 type UnmountCallback = () => void;
-type AskOptions = Omit<AskComponentProps, "onCancel">;
+type AskOptions = AskComponentProps;
+
+/**
+ * ask 命令式调用
+ * @param options 配置项
+ */
 export function ask(options: AskOptions): UnmountCallback {
   const {
     title = "提醒",
@@ -28,6 +34,7 @@ export function ask(options: AskOptions): UnmountCallback {
       onOk={options?.onOk}
       onCancel={() => {
         unmount();
+        options?.onCancel?.();
       }}
     />,
   );
@@ -40,4 +47,36 @@ export function ask(options: AskOptions): UnmountCallback {
   }
 
   return unmount;
+}
+
+/**
+ * useAsk
+ * @description 支持自动清除存储函数。
+ */
+export function useAsk(): (options: AskOptions) => void {
+  const unmountListRef = useRef<(() => void)[]>();
+
+  useEffect(() => {
+    return () => {
+      unmountListRef.current?.forEach((unmount) => unmount?.());
+      unmountListRef.current = undefined;
+    };
+  }, []);
+
+  return useMemo(() => {
+    return function (options: AskOptions) {
+      const unmount = ask({
+        ...options,
+        onOk(close) {
+          options?.onOk?.(close);
+          unmountListRef.current = unmountListRef.current?.filter?.((cb) => cb !== unmount);
+        },
+        onCancel() {
+          options?.onCancel?.();
+          unmountListRef.current = unmountListRef.current?.filter?.((cb) => cb !== unmount);
+        },
+      });
+      (unmountListRef.current ||= [])?.push(unmount);
+    };
+  }, []);
 }

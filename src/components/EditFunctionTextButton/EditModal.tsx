@@ -1,14 +1,14 @@
-import { BindModalProps } from "@/hooks";
 import { Button, Modal, Space } from "antd";
 import CodeEditor from "@/components/CodeEditor";
 import { TRANSFORM_PLACEHOLDER } from "@/engine";
 import React, { useEffect } from "react";
+import { createBindModalHook } from "@/hooks";
 
 export interface EditorModalParams {
   text?: string;
 }
 
-export default function EditModal(props: BindModalProps<EditorModalParams>) {
+export default createBindModalHook<EditorModalParams>((props) => {
   const [text, setText] = React.useState<string>();
 
   useEffect(() => {
@@ -56,4 +56,4 @@ export default function EditModal(props: BindModalProps<EditorModalParams>) {
       />
     </Modal>
   );
-}
+});

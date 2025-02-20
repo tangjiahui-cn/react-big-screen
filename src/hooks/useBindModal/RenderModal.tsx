@@ -1,5 +1,6 @@
 import React, { ForwardedRef, forwardRef, useImperativeHandle, useState } from "react";
 
+// 绑定弹窗传入参数
 export interface BindModalProps<Params = any> {
   visible?: boolean; // 弹窗显隐
   params?: Params; // 查询参数
@@ -7,9 +8,14 @@ export interface BindModalProps<Params = any> {
   onOk?: (data?: any) => void; // 确定完成操作回调
   afterClose?: () => void; // 传入此参数（会完整业务弹窗的渲染）
 }
+
+// 弹窗组件函数类型
 export type ModalFunctionComponent<Params = any> = React.FC<BindModalProps<Params>>;
+
+// 弹窗ref属性
 export type RenderModalRefType<Params = any> = {
-  open: (params?: Params) => void;
+  open: (params?: Params) => void; // 打开弹窗
+  close: (destroy: boolean) => void; // 关闭弹窗 (destroy是否销毁，默认true)
 };
 
 // 渲染弹窗
@@ -31,6 +37,10 @@ export default forwardRef(
           setParams(queryParams);
           setVisible(true);
           setDestroy(false);
+        },
+        close(destroy: boolean = true) {
+          setVisible(false);
+          setDestroy(destroy);
         },
       };
     });

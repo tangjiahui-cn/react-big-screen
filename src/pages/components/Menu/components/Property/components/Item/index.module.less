@@ -1,0 +1,73 @@
+.propertyItem {
+  display: flex;
+  padding: 12px;
+  align-items: center;
+  justify-content: space-between;
+
+  &:hover {
+    background: whitesmoke;
+  }
+
+  &_icon {
+    cursor: pointer;
+    font-size: 12px;
+
+    &:hover {
+      color: @primaryHover;
+    }
+
+    &_disabled {
+      cursor: not-allowed !important;
+      color: rgba(0,0,0,0.15) !important;
+    }
+  }
+}
+
+.propertyItemPopover {
+  margin: -12px -16px 0;
+  color: @color;
+  font-size: 12px;
+
+  &_description {
+    width: 300px;
+    padding: 0 16px;
+    font-size: 12px;
+  }
+
+  &_statistic {
+    padding: 0 16px;
+  }
+
+  &_body {
+    font-size: 12px;
+
+    &_item {
+      gap: 8px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+
+      &:hover {
+        background-color: whitesmoke;
+      }
+
+      &_icon {
+        flex: 0 0 32px;
+      }
+    }
+  }
+}
+
+.propertyItemPopover_title {
+  padding: 8px 0;
+
+  & > b {
+    color: rgba(0,0,0,0.85);
+  }
+
+  & > span {
+    margin-left: 8px;
+    font-size: 0.75em;
+  }
+}

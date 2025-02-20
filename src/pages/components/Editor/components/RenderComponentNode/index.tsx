@@ -13,6 +13,7 @@ import engine, {
   useRegisterInstance,
   useCreateHandleTrigger,
   useCreateUseExposeHook,
+  ComponentPackage,
 } from "@/engine";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { isKeyPressed } from "@/packages/shortCutKeys";
@@ -21,7 +22,7 @@ import { useItemContextMenu, useItemDragMove, useItemDragSize } from "./hooks";
 import classNames from "classnames";
 import styles from "./index.module.less";
 import { useDomEvents, useListenRef } from "@/hooks";
-import { ask } from "@/components/Ask";
+import { useAsk } from "@/components/Ask";
 
 interface Coordinate {
   x: number;
@@ -30,16 +31,21 @@ interface Coordinate {
 
 interface RenderComponentProps {
   componentNode: ComponentNodeType;
+  packages: ComponentPackage[];
 }
 
-interface ScopeRenderComponentNode extends RenderComponentProps {
+interface ScopeRenderComponentNode extends Omit<RenderComponentProps, "packages"> {
   component: ComponentType;
 }
 
 export default function RenderComponentNode(props: RenderComponentProps) {
   const [componentNode, setComponentNode] = useState(props?.componentNode);
   const componentNodeShow = componentNode?.show ?? true;
-  const component = useMemo(() => engine.component.get(componentNode.cId), [componentNode?.cId]);
+
+  // packages 变化必定导致 components 变化，所以重新查找组件的 component 是否存在
+  const component = useMemo(() => {
+    return engine.component.get(componentNode.cId);
+  }, [componentNode?.cId, props?.packages]);
 
   useEffect(() => {
     // 监听当前节点变更事件
@@ -60,6 +66,7 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
   const componentNodeRef = useListenRef<ComponentNodeType>(componentNode);
   const containerDomRef = useRef<HTMLDivElement>(null);
   const boxDomRef = useRef<HTMLDivElement>(null);
+  const ask = useAsk();
 
   // 是否选中
   const [isSelected, setIsSelected] = React.useState(false);

@@ -27,7 +27,7 @@ import Component from "./component";
 import Instance from "./instance";
 import ComponentNode from "./componentNode";
 import Config from "./config";
-import type { JsonType } from "./types";
+import { JsonType } from "./types";
 import { builtInComponents } from "./built-in";
 import { BaseEvent } from "./model";
 
@@ -35,6 +35,7 @@ export type * from "./types";
 export * from "./store";
 export * from "./hooks";
 export * from "./enum";
+export * from "./utils";
 
 class Engine {
   // 组件模板
@@ -69,11 +70,16 @@ class Engine {
     // 载入componentNode
     this.componentNode.init(json.componentNodes);
 
+    // 注册所有的组件包对象
+    this.component.registerPackage(this.component.getDefaultPackage());
+    // 注册 local package
+    this.component.loadLocalPackages(json.localPackages);
+
     // 读取默认选中
     if (json.selectedIds) {
       setTimeout(() => {
         this.instance.select(json.selectedIds as string[]);
-      });
+      }, 50); // 等待 packages 触发 componentNodes 更新完毕后再选中
     }
   }
 
@@ -88,12 +94,13 @@ class Engine {
   }
 
   // 获取json对象
-  public getJSON(): JsonType {
+  public async getJSON(): Promise<JsonType> {
     return {
       used: this.componentNode.getComponentUsed(),
       componentNodes: this.componentNode.getAll(),
       config: this.config.getConfig(),
       selectedIds: this.instance.getAllSelected().map((instance) => instance.id),
+      localPackages: await this.component.getAllLocalPackages(),
     };
   }
 }

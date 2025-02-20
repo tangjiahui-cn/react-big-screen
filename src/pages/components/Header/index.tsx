@@ -21,7 +21,7 @@ import { message } from "antd";
 import IconFont from "@/components/IconFont";
 import SizeBar from "./components/SizeBar";
 import engine from "@/engine";
-import { getLocalFileText, saveToFile } from "@/utils";
+import { getLocalFileText, downloadText } from "@/utils";
 import ShortCutKeysDescription from "./components/ShortCutKeysDescription";
 import { clearComponentNodes, saveLocal } from "../../../packages/shortCutKeys";
 import { saveLocalPreviewJson } from "@/pages/preview";
@@ -74,8 +74,10 @@ export default function Header() {
         message.warn("暂不支持取消撤销");
         break;
       case "export": // 导出
-        const text: string = JSON.stringify(engine.getJSON());
-        saveToFile(text, "大屏看板.json");
+        engine.getJSON().then((json) => {
+          const text: string = JSON.stringify(json);
+          downloadText(text, "大屏看板.json");
+        });
         break;
       case "import": // 导入
         getLocalFileText().then((text) => {
@@ -91,8 +93,10 @@ export default function Header() {
         });
         break;
       case "preview": // 预览
-        saveLocalPreviewJson(engine.getJSON());
-        openRoute("/preview");
+        engine.getJSON().then((json) => {
+          saveLocalPreviewJson(json);
+          openRoute("/preview");
+        });
         break;
       case "save": // 保存
         saveLocal();
