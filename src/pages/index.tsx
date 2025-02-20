@@ -42,7 +42,11 @@ export default function Page() {
           <Attributes />
         </div>
       </div>
-      {/*<div className={styles.page_footer}>底部区域</div>*/}
+      <div className={styles.page_footer}>
+        <a href={"https://beian.miit.gov.cn"} target={"_blank"} rel='noreferrer'>
+          浙ICP备2024117433号-2
+        </a>
+      </div>
     </div>
   );
 }

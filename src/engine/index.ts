@@ -28,7 +28,7 @@ import Instance from "./instance";
 import ComponentNode from "./componentNode";
 import Config from "./config";
 import { JsonType } from "./types";
-import { builtInComponents } from "./built-in";
+import { defaultPackage } from "./built-in";
 import { BaseEvent } from "./model";
 
 export type * from "./types";
@@ -51,27 +51,24 @@ class Engine {
 
   constructor() {
     // （初始化时）注册内置组件
-    this.registerBuiltInComponents();
+    this.registerDefaultPackage();
   }
 
-  // 注册内置组件
-  private registerBuiltInComponents() {
-    this.component.register(builtInComponents);
+  // 注册默认package
+  private registerDefaultPackage() {
+    this.component.initPackages(defaultPackage);
   }
 
   // 加载json对象
   public loadJSON(json: JsonType): void {
     if (__DEV__) {
       // 注册内置组件 (解决hmr时，内存注册的components丢失问题)
-      this.registerBuiltInComponents();
+      this.registerDefaultPackage();
     }
     // 设置config
     this.config.setConfig(json.config);
     // 载入componentNode
     this.componentNode.init(json.componentNodes);
-
-    // 注册所有的组件包对象
-    this.component.registerPackage(this.component.getDefaultPackage());
     // 注册 local package
     this.component.loadLocalPackages(json.localPackages);
 

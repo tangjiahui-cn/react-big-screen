@@ -38,11 +38,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
-      - name: Deploy To My Remote Server
+      - name: Deploy To My Remote Server 1
         uses: easingthemes/ssh-deploy@main
         with:
           SSH_PRIVATE_KEY: ${{ secrets.REMOTE_SSH_KEY }}
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: "root"
+          TARGET: "/var/www/big-screen"
+          ARGS: "-avzr --delete"
+          SOURCE: "./dist/"
+          EXCLUDE: "/node_modules/"
+
+      - name: Deploy To My Remote Server 2
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.REMOTE_SSH_KEY_2 }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST_2 }}
           REMOTE_USER: "root"
           TARGET: "/var/www/big-screen"
           ARGS: "-avzr --delete"
