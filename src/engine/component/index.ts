@@ -9,7 +9,7 @@
 import { getGlobalState, setGlobalState, ComponentMap } from "../store";
 import { type ComponentPackage, ComponentType, JsonTypeLocalPackage } from "../types";
 import localforage from "localforage";
-import { getUrlText, loadModuleFromText, loadModulesFromTexts } from "@/utils";
+import { getUrlText, loadModuleFromText } from "@/utils";
 
 export default class Component {
   // 存储package映射（id => package）
@@ -213,27 +213,51 @@ export default class Component {
     if (!list.length) return;
 
     // 所有包含本地源码的一起查询（因为每次注册一个package都会触发更新，所以同时进行注册）
-    const codes: string[] = [];
-    const urls: string[] = [];
+    const localPkgs: JsonTypeLocalPackage[] = [];
+    const remotePkgs: JsonTypeLocalPackage[] = [];
 
     list.forEach((pkg) => {
       if (pkg.origin === "local") {
-        pkg.originData && codes.push(pkg.originData);
-      } else if (pkg.origin === "remote") {
-        pkg.originData && urls.push(pkg.originData);
+        pkg.originData && localPkgs.push(pkg);
+        return;
+      }
+      if (pkg.origin === "remote") {
+        pkg.originData && remotePkgs.push(pkg);
+        return;
       }
     });
 
     // 注册包含源码的模块
-    const packages: (ComponentPackage | undefined)[] = await loadModulesFromTexts(codes);
-    this.registerPackage(packages);
+    Promise.all(
+      localPkgs.map((pkg) => {
+        return loadModuleFromText(pkg.originData);
+      }),
+    ).then((pkgs) => {
+      pkgs.forEach((pkg, index) => {
+        const localData = list[index];
+        if (pkg) {
+          // 赋值origin
+          pkg.origin = localData.origin;
+          pkg.originData = "";
+          // 存储源码到浏览器
+          this.savePackageSourceCode(pkg.id, localData.originData);
+        }
+      });
+      this.registerPackage(pkgs);
+    });
 
     // 注册远程模块
-    urls.forEach((url) => {
-      // 下载url对应文本
-      getUrlText(url).then((text) => {
-        // 读取模块
-        loadModuleFromText(text).then((pkg: ComponentPackage | undefined) => {
+    remotePkgs.forEach((remotePkg) => {
+      getUrlText(remotePkg.originData).then((text) => {
+        loadModuleFromText(text).then((pkg) => {
+          if (pkg) {
+            // 赋值origin
+            pkg.origin = remotePkg.origin;
+            pkg.originData = remotePkg.originData;
+            // 存储源码到浏览器
+            this.savePackageSourceCode(pkg.id, text);
+          }
+          // 注册package
           this.registerPackage(pkg);
         });
       });
