@@ -34,7 +34,7 @@ interface RenderComponentProps {
   packages: ComponentPackage[];
 }
 
-interface ScopeRenderComponentNode extends Omit<RenderComponentProps, "packages"> {
+interface ScopeRenderComponentNodeProps extends Omit<RenderComponentProps, "packages"> {
   component: ComponentType;
 }
 
@@ -61,7 +61,7 @@ export default function RenderComponentNode(props: RenderComponentProps) {
   );
 }
 
-function ScopeRenderComponentNode(props: ScopeRenderComponentNode) {
+function ScopeRenderComponentNode(props: ScopeRenderComponentNodeProps) {
   const { component, componentNode } = props;
   const componentNodeRef = useListenRef<ComponentNodeType>(componentNode);
   const containerDomRef = useRef<HTMLDivElement>(null);
