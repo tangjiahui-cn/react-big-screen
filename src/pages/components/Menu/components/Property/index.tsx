@@ -38,11 +38,17 @@ export default function () {
   );
 
   // 新增包
-  function handleAdd(pkg: ComponentPackage, code: string) {
+  function handleAdd(pkg: ComponentPackage, code: string): void;
+  function handleAdd(pkgs: ComponentPackage[], codes: string[]): void;
+  function handleAdd(pkg: ComponentPackage | ComponentPackage[], code: string | string[]) {
+    const pkgs = Array.isArray(pkg) ? pkg : [pkg];
+    const codes = Array.isArray(code) ? code : [code];
     // 注册package
-    engine.component.registerPackage(pkg);
+    engine.component.registerPackage(pkgs);
     // 存储源代码
-    engine.component.savePackageSourceCode(pkg, code);
+    codes.forEach((code, index) => {
+      engine.component.savePackageSourceCode(pkgs[index], code);
+    });
   }
 
   // 删除包
@@ -98,6 +104,9 @@ export default function () {
           <AddPackageButton
             onAdd={(pkg, code) => {
               handleAdd(pkg, code);
+            }}
+            onAddSome={(pkgs, codes) => {
+              handleAdd(pkgs, codes);
             }}
           >
             新增组件包
