@@ -58,8 +58,11 @@ export default function AddPackageButton(props: Props) {
       // 本地上传文件
       case "local":
         const file = await getLocalFile({ accept: "text/javascript,application/zip" });
+        if (!file) {
+          return;
+        }
         // 导入zip压缩包
-        if (file?.type === "application/zip") {
+        if (["application/x-zip-compressed", "application/zip"].includes(file?.type!)) {
           const blob = new Blob([file], { type: file.type });
           const zip = new jszip();
           const zipData = await zip.loadAsync(blob);
@@ -95,6 +98,7 @@ export default function AddPackageButton(props: Props) {
           emitChangeAdd(pkg, fileText);
           return;
         }
+        message.warn("只能上传 .js 和 .zip 文件");
         break;
       // 读取远程文件
       case "remote":
