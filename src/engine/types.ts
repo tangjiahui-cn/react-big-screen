@@ -114,8 +114,9 @@ export interface ComponentNodeType extends BaseComponent {
 
 // 全局配置类型
 export interface GlobalConfig {
-  width: number;
-  height: number;
+  width: number; // 画板宽度
+  height: number; // 画板高度
+  currentMenu?: string; // 当前菜单面板
 }
 
 export type ComponentUsed = Record<

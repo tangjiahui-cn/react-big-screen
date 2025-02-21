@@ -22,7 +22,7 @@ export async function isAMDModuleText(text: string): Promise<boolean> {
 // 从文本中加载一个模块
 export async function loadModuleFromText(text: string): Promise<ComponentPackage | undefined> {
   if (!text) return undefined;
-  return Promise.resolve(loadUMDModuleFromText(text) || loadAMDModuleFromText(text));
+  return (await loadUMDModuleFromText(text)) || (await loadAMDModuleFromText(text));
 }
 
 // 从文本数组中加载多个模块
@@ -45,11 +45,11 @@ export async function loadUMDModuleFromText<T = any>(text: string): Promise<T | 
         const keys = Object.keys(module.exports);
         return resolve(keys.length ? (module.exports as T) : undefined);
       } catch (e) {
-        console.error(e);
+        console.warn(e);
         return resolve(undefined);
       }
     } catch (e) {
-      console.error(e);
+      console.warn(e);
       resolve(undefined);
     }
   });
@@ -94,11 +94,11 @@ export async function loadAMDModuleFromText<T = any>(text: string): Promise<T | 
         fn(define);
         return resolve(module ?? undefined);
       } catch (e) {
-        console.error(e);
+        console.warn(e);
         return resolve(undefined);
       }
     } catch (e) {
-      console.error(e);
+      console.warn(e);
       return resolve(undefined);
     }
   });

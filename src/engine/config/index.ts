@@ -10,19 +10,42 @@ import { getGlobalState, setGlobalState } from "../store";
 import { GlobalConfig } from "../types";
 
 export default class Config {
-  // 获取配置
-  getConfig(): GlobalConfig {
+  // 获取配置（保存全局）
+  public getConfig(): GlobalConfig {
     return getGlobalState().config;
   }
 
-  // 设置配置
-  setConfig(config: GlobalConfig | ((value: GlobalConfig) => GlobalConfig)) {
+  // 静默设置配置 (不触发全局更新)
+  public setConfigSilently(
+    config: Partial<GlobalConfig> | ((value: GlobalConfig) => Partial<GlobalConfig>),
+  ) {
+    this.setConfig(config, { silent: true });
+  }
+
+  // 设置配置（保存全局）
+  public setConfig(
+    config: Partial<GlobalConfig> | ((value: GlobalConfig) => Partial<GlobalConfig>),
+    options?: {
+      cover?: boolean; // 覆盖
+      silent?: boolean; // 不触发全局更新
+    },
+  ) {
     setGlobalState((state) => {
-      return {
-        config: {
-          ...state.config,
+      // 静默更新（不触发全局更新）
+      if (options?.silent) {
+        Object.assign(state.config, {
           ...(typeof config === "function" ? config(this.getConfig()) : config),
-        },
+        });
+        return state;
+      }
+      // 触发全局更新
+      return {
+        config: options?.cover
+          ? ({ ...config } as any)
+          : {
+              ...state.config,
+              ...(typeof config === "function" ? config(this.getConfig()) : config),
+            },
       };
     });
   }

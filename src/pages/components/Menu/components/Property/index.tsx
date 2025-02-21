@@ -9,10 +9,13 @@ import { message, Space } from "antd";
 import engine, { ComponentNodeType, ComponentPackage, usePackages } from "@/engine";
 import Item from "./components/Item";
 import AddPackageButton from "./components/AddPackageButton";
+import DownloadButton from "./components/DownloadButton";
 import { LoadingOutlined, ReloadOutlined } from "@ant-design/icons";
 import styles from "./index.module.less";
 import IEmpty from "@/components/IEmpty";
 import { useRequest } from "ahooks";
+import jszip from "jszip";
+import { saveAs } from "file-saver";
 
 export default function () {
   const packages = usePackages();
@@ -35,11 +38,17 @@ export default function () {
   );
 
   // 新增包
-  function handleAdd(pkg: ComponentPackage, code: string) {
+  function handleAdd(pkg: ComponentPackage, code: string): void;
+  function handleAdd(pkgs: ComponentPackage[], codes: string[]): void;
+  function handleAdd(pkg: ComponentPackage | ComponentPackage[], code: string | string[]) {
+    const pkgs = Array.isArray(pkg) ? pkg : [pkg];
+    const codes = Array.isArray(code) ? code : [code];
     // 注册package
-    engine.component.registerPackage(pkg);
+    engine.component.registerPackage(pkgs);
     // 存储源代码
-    engine.component.savePackageSourceCode(pkg, code);
+    codes.forEach((code, index) => {
+      engine.component.savePackageSourceCode(pkgs[index], code);
+    });
   }
 
   // 删除包
@@ -48,6 +57,30 @@ export default function () {
     engine.component.unregisterPackage(pkg);
     // 删除相关实例
     engine.componentNode.delete(componentNodes);
+  }
+
+  // 打包下载所有组件包
+  async function handleDownloadAll() {
+    const thenableList = packages.map((pkg) => {
+      return engine.component.getPackageSourceCode(pkg.id);
+    });
+    Promise.all(thenableList).then((codes) => {
+      const zip = new jszip();
+      let count = 0;
+      codes.forEach((code, index) => {
+        if (!code) return;
+        const pkg = packages[index];
+        zip.file(`${pkg.name}.js`, code);
+        count++;
+      });
+      if (!count) {
+        message.warn("暂无组件包");
+        return;
+      }
+      zip.generateAsync({ type: "blob" }).then(function (content) {
+        saveAs(content, "组件包集合.zip");
+      });
+    });
   }
 
   return (
@@ -65,8 +98,23 @@ export default function () {
           </span>
         </Space>
         <Space>
+          {/* 下载下拉按钮 */}
+          <DownloadButton
+            onDownloadAll={() => {
+              handleDownloadAll();
+            }}
+          >
+            下载
+          </DownloadButton>
           {/* 新增包下拉按钮 */}
-          <AddPackageButton onAdd={(pkg, code) => handleAdd(pkg, code)}>
+          <AddPackageButton
+            onAdd={(pkg, code) => {
+              handleAdd(pkg, code);
+            }}
+            onAddSome={(pkgs, codes) => {
+              handleAdd(pkgs, codes);
+            }}
+          >
             新增组件包
           </AddPackageButton>
         </Space>

@@ -5,6 +5,7 @@ declare module "*.jpg";
 declare module "*.jpeg";
 declare module "*.js";
 declare module "*.json";
+declare module "*.txt";
 
 declare const BASE: string;
 declare const PUBLIC_PATH: string;
