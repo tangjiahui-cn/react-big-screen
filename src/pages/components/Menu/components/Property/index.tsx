@@ -9,10 +9,13 @@ import { message, Space } from "antd";
 import engine, { ComponentNodeType, ComponentPackage, usePackages } from "@/engine";
 import Item from "./components/Item";
 import AddPackageButton from "./components/AddPackageButton";
+import DownloadButton from "./components/DownloadButton";
 import { LoadingOutlined, ReloadOutlined } from "@ant-design/icons";
 import styles from "./index.module.less";
 import IEmpty from "@/components/IEmpty";
 import { useRequest } from "ahooks";
+import jszip from "jszip";
+import { saveAs } from "file-saver";
 
 export default function () {
   const packages = usePackages();
@@ -50,6 +53,24 @@ export default function () {
     engine.componentNode.delete(componentNodes);
   }
 
+  // 打包下载所有组件包
+  async function handleDownloadAll() {
+    const thenableList = packages.map((pkg) => {
+      return engine.component.getPackageSourceCode(pkg.id);
+    });
+    Promise.all(thenableList).then((codes) => {
+      const zip = new jszip();
+      codes.forEach((code, index) => {
+        if (!code) return;
+        const pkg = packages[index];
+        zip.file(`${pkg.name}.js`, code);
+      });
+      zip.generateAsync({ type: "blob" }).then(function (content) {
+        saveAs(content, "组件包集合.zip");
+      });
+    });
+  }
+
   return (
     <div className={styles.property}>
       <div className={styles.property_header}>
@@ -65,8 +86,20 @@ export default function () {
           </span>
         </Space>
         <Space>
+          {/* 下载下拉按钮 */}
+          <DownloadButton
+            onDownloadAll={() => {
+              handleDownloadAll();
+            }}
+          >
+            下载
+          </DownloadButton>
           {/* 新增包下拉按钮 */}
-          <AddPackageButton onAdd={(pkg, code) => handleAdd(pkg, code)}>
+          <AddPackageButton
+            onAdd={(pkg, code) => {
+              handleAdd(pkg, code);
+            }}
+          >
             新增组件包
           </AddPackageButton>
         </Space>

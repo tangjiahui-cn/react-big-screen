@@ -59,7 +59,7 @@ export default function (props: Props) {
       message.warn("源码不存在");
       return;
     }
-    const filename = `pkg_${data?.name}.umd.js`;
+    const filename = `${data?.name}.js`;
     downloadText(text, filename);
   }
 
