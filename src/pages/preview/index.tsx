@@ -3,7 +3,13 @@
  */
 import styles from "./index.module.less";
 import React, { useMemo } from "react";
-import engine, { ComponentNodeType, type JsonType, useComponentNodes, useConfig } from "@/engine";
+import engine, {
+  ComponentNodeType,
+  type JsonType,
+  useComponentNodes,
+  useConfig,
+  usePackages,
+} from "@/engine";
 import RenderPreviewComponentNode from "./components/RenderPreviewComponentNode";
 import FitScreen from "@/pages/preview/components/FitScreen";
 import { useEffectOnce } from "@/hooks";
@@ -26,24 +32,27 @@ export function getLocalPreviewJson(): JsonType | undefined {
 
 export default function Preview() {
   const config = useConfig();
+
+  // 组件包
+  const packages = usePackages();
+  // 展示的 componentNodes
   const componentNodes: ComponentNodeType[] = useComponentNodes();
 
   // 渲染组件节点
   const renderComponentNodes: React.ReactNode[] = useMemo(() => {
-    return componentNodes.reduce((list: React.ReactNode[], current: ComponentNodeType) => {
-      const component = engine.component.get(current?.cId);
-      if (component) {
-        list.push(
-          <RenderPreviewComponentNode
-            key={current?.id}
-            componentNode={current}
-            component={component}
-          />,
-        );
-      }
-      return list;
-    }, [] as React.ReactNode[]);
-  }, [componentNodes]);
+    if (!packages.length) {
+      return [];
+    }
+    return componentNodes?.map?.((componentNode: ComponentNodeType) => {
+      return (
+        <RenderPreviewComponentNode
+          key={componentNode?.id}
+          componentNode={componentNode}
+          packages={packages}
+        />
+      );
+    });
+  }, [componentNodes, packages]);
 
   useEffectOnce(() => {
     // 读取本地json
