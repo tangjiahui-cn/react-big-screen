@@ -76,7 +76,7 @@ const useAddRemoteTextDialog = createBindModalHook<Params>((props) => {
           </div>
         </Form.Item>
         <Form.Item label={"文本"} name={"content"}>
-          <CodeEditor language={"javascript"} style={{ height: 400 }} />
+          <CodeEditor readOnly language={"javascript"} style={{ height: 400 }} />
         </Form.Item>
       </Form>
     </Modal>
