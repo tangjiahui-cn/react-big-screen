@@ -22,9 +22,7 @@ export async function isAMDModuleText(text: string): Promise<boolean> {
 // 从文本中加载一个模块
 export async function loadModuleFromText(text: string): Promise<ComponentPackage | undefined> {
   if (!text) return undefined;
-  let module: ComponentPackage | undefined = await loadUMDModuleFromText(text);
-  if (module) return module;
-  return await loadAMDModuleFromText(text);
+  return (await loadUMDModuleFromText(text)) || (await loadAMDModuleFromText(text));
 }
 
 // 从文本数组中加载多个模块

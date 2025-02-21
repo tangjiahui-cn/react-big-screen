@@ -68,15 +68,17 @@ export default function AddPackageButton(props: Props) {
           const codes: string[] = [];
           // 读取压缩包内第一层文件
           for (const fileName in files) {
-            if (fileName?.endsWith?.(".js")) {
-              const file = files[fileName];
-              const fileText = await file.async("text");
-              const pkg: ComponentPackage | undefined = await loadModuleFromText(fileText);
-              if (pkg) {
-                pkg.origin = "local";
-                pkgs.push(pkg);
-                codes.push(fileText);
-              }
+            if (!fileName?.endsWith?.(".js")) {
+              return;
+            }
+            // 只读取.js结尾的文件
+            const file = files[fileName];
+            const fileText = await file.async("text");
+            const pkg: ComponentPackage | undefined = await loadModuleFromText(fileText);
+            if (pkg) {
+              pkg.origin = "local";
+              pkgs.push(pkg);
+              codes.push(fileText);
             }
           }
           emitChangeAddSome(pkgs, codes);

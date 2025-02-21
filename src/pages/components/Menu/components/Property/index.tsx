@@ -66,11 +66,17 @@ export default function () {
     });
     Promise.all(thenableList).then((codes) => {
       const zip = new jszip();
+      let count = 0;
       codes.forEach((code, index) => {
         if (!code) return;
         const pkg = packages[index];
         zip.file(`${pkg.name}.js`, code);
+        count++;
       });
+      if (!count) {
+        message.warn("暂无组件包");
+        return;
+      }
       zip.generateAsync({ type: "blob" }).then(function (content) {
         saveAs(content, "组件包集合.zip");
       });
