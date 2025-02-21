@@ -10,6 +10,9 @@ import { downloadUrlText, getUrlText } from "@/utils";
 import jszip from "jszip";
 import { saveAs } from "file-saver";
 
+const UMD_URL = "./demo.umd.js";
+const AMD_URL = "./demo.amd.js";
+
 // 下拉选项
 const items = [
   { key: "umd-demo", label: <span className={"theme-text"}>下载示例组件包（UMD）</span> },
@@ -29,14 +32,14 @@ export default function DownloadButton(props: Props) {
   async function handleOperate(key: ItemKey) {
     switch (key) {
       case "umd-demo":
-        downloadUrlText("/demo.umd.js", "测试包2.js");
+        downloadUrlText(UMD_URL, "测试包2.js");
         break;
       case "amd-demo":
-        downloadUrlText("/demo.amd.js", "测试包1.js");
+        downloadUrlText(AMD_URL, "测试包1.js");
         break;
       case "zip-demo":
-        const umdText = await getUrlText("/demo.umd.js");
-        const amdText = await getUrlText("/demo.amd.js");
+        const umdText = await getUrlText(UMD_URL);
+        const amdText = await getUrlText(AMD_URL);
         const zip = new jszip();
         zip.file("测试包1.js", amdText);
         zip.file("测试包2.js", umdText);
