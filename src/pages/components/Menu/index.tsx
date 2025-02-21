@@ -9,14 +9,15 @@ import Library from "./components/Library";
 import ComponentNodes from "./components/ComponentNodes";
 import MenuBar, { MenuBarItem } from "./components/MenuBar";
 import Property from "./components/Property";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ApartmentOutlined, AppstoreOutlined, BankOutlined } from "@ant-design/icons";
+import engine, { GlobalConfig, useConfig } from "@/engine";
 
-type PanelItem = MenuBarItem & {
+type MenuItem = MenuBarItem & {
   children?: React.ReactNode;
 };
 
-const panelList: PanelItem[] = [
+const menuList: MenuItem[] = [
   {
     key: "library",
     icon: <AppstoreOutlined />,
@@ -37,18 +38,33 @@ const panelList: PanelItem[] = [
   },
 ];
 
-const FIRST_PANEL_KEY = panelList[0].key; // 默认 0
+const FIRST_PANEL_KEY = menuList[0].key; // 默认 0
 export default function Menu() {
+  const currentMenu = useConfig<GlobalConfig["currentMenu"]>((config) => config.currentMenu);
   const [activeKey, setActiveKey] = useState<string>(FIRST_PANEL_KEY);
 
+  // menu渲染children
   const children: React.ReactNode = useMemo(() => {
-    return panelList.find((item) => item.key === activeKey)?.children;
+    return menuList.find((item) => item.key === activeKey)?.children;
   }, [activeKey]);
+
+  function handeChange(key: string) {
+    setActiveKey(key);
+    engine.config.setConfigSilently({
+      currentMenu: key,
+    });
+  }
+
+  useEffect(() => {
+    const { currentMenu } = engine.config.getConfig();
+    const menu = menuList.find((item) => item.key === currentMenu);
+    setActiveKey(menu?.key || FIRST_PANEL_KEY);
+  }, [currentMenu]);
 
   return (
     <div className={styles.menu}>
       <div className={styles.menu_bar}>
-        <MenuBar value={activeKey} list={panelList} onChange={setActiveKey} />
+        <MenuBar value={activeKey} list={menuList} onChange={handeChange} />
       </div>
       <div className={styles.menu_main}>{children}</div>
     </div>
