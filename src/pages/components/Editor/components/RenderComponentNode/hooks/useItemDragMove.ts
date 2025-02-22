@@ -8,6 +8,7 @@ import { RefObject, useEffect } from "react";
 import { moveableDom } from "@/packages/dragMove";
 import globalCursor from "@/packages/globalCursor";
 import engine, { ComponentNodeType } from "@/engine";
+import { getAllSelectedComponentNodes } from "@/packages/shortCutKeys";
 
 interface DragSizeOptions {
   lock?: boolean; // 是否锁定
@@ -49,10 +50,8 @@ export function useItemDragMove(domRef: RefObject<HTMLElement | null>, options: 
         globalCursor.set("move");
         // 等待选中时设置选中实例后，再获取
         setTimeout(() => {
-          // 待移动组件
-          moveOptItems = getAllMoveOptItem();
-          // 显示组件的数量
-          const showCount = moveOptItems.filter((item) => item.componentNode?.show).length;
+          let { list, showCount } = getAllMoveItems();
+          moveOptItems = list;
           // 不超过50个组件使用transform，避免内存溢出（使用了transform会流畅，代价是占用内存）
           enableTransform = showCount < 50;
         });
@@ -100,40 +99,24 @@ export function useItemDragMove(domRef: RefObject<HTMLElement | null>, options: 
   }, [lock]);
 }
 
-// 获取所有待移动组件item
-function getAllMoveOptItem(): MoveOptItem[] {
-  // 所有选中的组件
-  const allSelectedItems: MoveOptItem[] = engine.instance.getAllSelected().map((instance) => {
-    const componentNode = instance.getComponentNode();
-    return {
-      componentNode,
-      id: instance.id,
-      show: !!instance,
-      containerDom: instance.getContainerDom?.(),
-    };
-  });
-  return [...allSelectedItems, ...getChildrenMoveOptItems(allSelectedItems)];
-}
-
-// 获取所有待移动组件子item
-function getChildrenMoveOptItems(moveItems: MoveOptItem[]): MoveOptItem[] {
-  return moveItems.reduce((result, moveItem) => {
-    const componentNode = moveItem.componentNode;
-    // 如果是layout类型组件，则将其包含的children全部添加
-    if (componentNode && componentNode.category === "layout") {
-      const childrenIds: string[] = engine.componentNode.getLayoutChildrenIds(componentNode.id);
-      const childrenMoveItems = childrenIds.map((id) => {
-        const childInstance = engine.instance.get(id);
-        const componentNode = childInstance?.getComponentNode?.() || engine.componentNode.get(id);
-        return {
-          id,
-          componentNode,
-          show: !!childInstance,
-          containerDom: childInstance?.getContainerDom?.(),
-        };
+// 获取所有移动 moveItems
+function getAllMoveItems() {
+  const allSelectedComponentNodes = getAllSelectedComponentNodes();
+  return allSelectedComponentNodes.reduce(
+    (data, componentNode) => {
+      const show = componentNode.show ?? true;
+      if (show) data.showCount++;
+      data.list.push({
+        id: componentNode.id,
+        componentNode,
+        show: show,
+        containerDom: engine.instance?.get?.(componentNode.id)?.getContainerDom?.(),
       });
-      result.push(...childrenMoveItems, ...getChildrenMoveOptItems(childrenMoveItems));
-    }
-    return result;
-  }, [] as MoveOptItem[]);
+      return data;
+    },
+    {
+      showCount: 0,
+      list: [] as MoveOptItem[],
+    },
+  );
 }

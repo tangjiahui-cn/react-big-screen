@@ -13,6 +13,7 @@ import {
   DeleteOutlined,
   DisconnectOutlined,
   LockOutlined,
+  StarOutlined,
   UnlockOutlined,
   VerticalAlignBottomOutlined,
   VerticalAlignTopOutlined,
@@ -28,6 +29,7 @@ import {
   unlockAllSelectedComponentNodes,
   selectedLevelUp,
   selectedLevelDown,
+  collectSelectedComponentNodes,
 } from "@/packages/shortCutKeys";
 
 /**
@@ -98,6 +100,12 @@ export function createContextMenu(): ContextMenuItem[] {
       title: "删除",
       titleStyle: { gap: 6 },
       onSelect: () => deleteSelectedComponentNodes(),
+    },
+    {
+      key: "collect",
+      icon: <StarOutlined />,
+      title: "收藏",
+      onSelect: () => collectSelectedComponentNodes(),
     },
   ];
 }

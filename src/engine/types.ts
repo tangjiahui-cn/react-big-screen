@@ -70,7 +70,7 @@ export interface BaseComponent {
   // layout相关
   panelId?: PanelData["value"]; // (子) 所属panelId
   currentPanelId?: PanelData["value"]; // (父) 当前展示panel
-  panels?: PanelData[];
+  panels?: PanelData[]; // 只要有这个属性就是 layout布局容器（即父）
 
   // 请求相关
   request?: ComponentRequest;
@@ -138,6 +138,8 @@ export interface JsonType {
   selectedIds?: string[];
   // 存储非云端packages
   localPackages?: JsonTypeLocalPackage[];
+  // 收藏夹
+  favorites: FavoritesComponentType[];
 }
 
 export interface JsonTypeLocalPackage {
@@ -184,4 +186,12 @@ export interface ComponentPackage {
 
   // 其他属性
   description?: string; // 描述
+}
+
+// 收藏夹组件类型
+export interface FavoritesComponentType {
+  id: string; // 收藏id
+  name?: string; // 收藏名称
+  gmtCreate?: string; // 创建时间 YYYY-MM-DD HH:mm:ss
+  children: ComponentNodeType[]; // 包含的组件
 }

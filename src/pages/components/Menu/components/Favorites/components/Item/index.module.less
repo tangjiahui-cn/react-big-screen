@@ -1,0 +1,43 @@
+@gap: 8px;
+
+.favoriteItem {
+  width: calc(31%);
+  height: 100px;
+  border: @border;
+  cursor: pointer;
+  transition: all .3s;
+  padding: @gap;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &:hover {
+    box-shadow: @boxShadow;
+  }
+
+  &_head {
+    width: 100%;
+    flex: 0 0 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: rgba(0,0,0,0.3);
+  }
+
+  &_name {
+    flex: 0 0 16px;
+    width: 100%;
+    font-size: 11px;
+    line-height: 14px;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &_footer {
+    font-size: 10px;
+    margin-top: 2px;
+  }
+}

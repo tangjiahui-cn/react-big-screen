@@ -9,8 +9,9 @@ import Library from "./components/Library";
 import ComponentNodes from "./components/ComponentNodes";
 import MenuBar, { MenuBarItem } from "./components/MenuBar";
 import Property from "./components/Property";
+import Favorites from "./components/Favorites";
 import React, { useEffect, useMemo, useState } from "react";
-import { ApartmentOutlined, AppstoreOutlined, BankOutlined } from "@ant-design/icons";
+import { ApartmentOutlined, AppstoreOutlined, BankOutlined, StarOutlined } from "@ant-design/icons";
 import engine, { GlobalConfig, useConfig } from "@/engine";
 
 type MenuItem = MenuBarItem & {
@@ -35,6 +36,12 @@ const menuList: MenuItem[] = [
     icon: <BankOutlined />,
     title: "个人资产",
     children: <Property />,
+  },
+  {
+    key: "favorites",
+    icon: <StarOutlined />,
+    title: "收藏夹",
+    children: <Favorites />,
   },
 ];
 

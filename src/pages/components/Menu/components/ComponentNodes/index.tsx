@@ -39,7 +39,7 @@ export default function () {
 
   return (
     <div className={styles.componentNodes} onMouseDown={() => unSelectAllComponentNodes()}>
-      {!componentNodes.length && <IEmpty style={{ height: 300 }} />}
+      {!componentNodes.length && <IEmpty />}
       {renderComponentNodes}
     </div>
   );

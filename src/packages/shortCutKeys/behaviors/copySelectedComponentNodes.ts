@@ -4,30 +4,33 @@
  * @author tangjiahui
  * @date 2025/1/15
  */
-import engine, { ComponentNodeType } from "@/engine";
+import engine from "@/engine";
+import { getAllSelectedComponentNodes } from ".";
 
 export function copySelectedComponentNodes() {
-  // 新的数据节点
-  const newComponentNodes = engine.instance.getAllSelected().reduce((list, current) => {
-    const componentNode = engine.componentNode.get(current.id);
-    if (componentNode) {
-      const newComponentNode = engine.componentNode.createFromComponentNode(componentNode, {
-        x: componentNode.x + 10,
-        y: componentNode.y + 10,
-      });
-      list.push(newComponentNode);
-    }
-    return list;
-  }, [] as ComponentNodeType[]);
+  const allSelectedComponentNodes = getAllSelectedComponentNodes(); // 所有选中组件
+  const selectedInstanceIds = new Set(engine.instance.getAllSelected().map((ins) => ins.id));
+  const newSelectedIds: string[] = []; // 复制后选中的组件
+
+  // 克隆组件
+  const clonedComponentNodes = engine.componentNode.cloneComponentNodes(allSelectedComponentNodes, {
+    onClone(old, cloned) {
+      // 收集选中组件id
+      if (selectedInstanceIds.has(old.id)) {
+        selectedInstanceIds.delete(old.id);
+        newSelectedIds.push(cloned.id);
+      }
+      // 复制后自动增加位移
+      cloned.x += 10;
+      cloned.y += 10;
+    },
+  });
 
   // 添加到componentNode中
-  engine.componentNode.add(newComponentNodes);
+  engine.componentNode.add(clonedComponentNodes);
 
+  // 选中新复制的实例
   setTimeout(() => {
-    // 选中新实例
-    engine.instance.select(
-      newComponentNodes.map((x) => x.id),
-      true,
-    );
+    engine.instance.select(newSelectedIds, true);
   });
 }
