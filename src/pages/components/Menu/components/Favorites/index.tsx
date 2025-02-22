@@ -9,9 +9,17 @@ import styles from "./index.module.less";
 import engine, { FavoritesComponentType, useFavorites } from "@/engine";
 import IEmpty from "@/components/IEmpty";
 import Item from "./components/Item";
+import useEditFavoriteDialog from "./components/EditFavoriteDialog";
+import useFavoriteDetailDialog from "./components/FavoriteDetailDialog";
 
 export default function () {
   const favorites = useFavorites();
+  const favoriteDetailDialog = useFavoriteDetailDialog();
+  const editFavoriteDialog = useEditFavoriteDialog({
+    onOk(updateFavorite) {
+      engine.favorites.update(updateFavorite.id, updateFavorite);
+    },
+  });
 
   // 删除一个favorite
   function handleDelete(favorite: FavoritesComponentType) {
@@ -23,9 +31,26 @@ export default function () {
       {!favorites?.length && <IEmpty />}
       {favorites.map((favorite: FavoritesComponentType) => {
         return (
-          <Item key={favorite.id} favorite={favorite} onDelete={() => handleDelete(favorite)} />
+          <Item
+            key={favorite.id}
+            favorite={favorite}
+            onDelete={() => handleDelete(favorite)}
+            onEdit={() => {
+              editFavoriteDialog.open({
+                favorite,
+              });
+            }}
+            onDetail={() => {
+              favoriteDetailDialog.open({
+                favorite,
+              });
+            }}
+          />
         );
       })}
+
+      {editFavoriteDialog.children}
+      {favoriteDetailDialog.children}
     </div>
   );
 }

@@ -43,7 +43,6 @@ export function dragElement(dom: HTMLElement, options: Options): UnmountWatch {
   }
 
   function clearMove() {
-    if (!isDragging) return;
     isDragging = false;
     dom.removeEventListener("mousemove", mousemove);
     window.removeEventListener("mouseup", mouseup);

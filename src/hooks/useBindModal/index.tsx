@@ -27,14 +27,16 @@ interface BindModalReturn<Params = any> extends RenderModalRefType<Params> {
 // useBindModal （绑定modal）
 export function useBindModal<Params = any>(
   component: ModalFunctionComponent<Params>,
-  options: BindModalOptions,
+  options?: BindModalOptions,
 ): BindModalReturn<Params> {
   const renderRef = useRef<RenderModalRefType>(null);
   const onOkRef = useRef<BindModalOptions["onOk"]>();
   const onCancelRef = useRef<BindModalOptions["onCancel"]>();
 
-  onCancelRef.current = options?.onCancel;
-  onOkRef.current = options?.onOk;
+  if (options) {
+    onCancelRef.current = options?.onCancel;
+    onOkRef.current = options?.onOk;
+  }
 
   return useMemo(() => {
     const children = (
@@ -66,7 +68,7 @@ export function useBindModal<Params = any>(
 
 // 创建 bindModal 的hook
 export function createBindModalHook<Params = any>(component: ModalFunctionComponent<Params>) {
-  return function (options: BindModalOptions) {
+  return function (options?: BindModalOptions) {
     return useBindModal(component, options);
   };
 }
