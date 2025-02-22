@@ -16,9 +16,10 @@ export function collectSelectedComponentNodes() {
     return;
   }
   const id = createUUID();
+  const totalCount = engine.favorites.getAll().length;
   engine.favorites.add({
     id,
-    name: `我的收藏-${id}`,
+    name: `收藏${totalCount + 1}`,
     children: allSelectedComponentNodes,
     gmtCreate: dayjs().format("YYYY-MM-DD HH:mm:ss"),
   });

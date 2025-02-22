@@ -44,6 +44,24 @@ export default class Favorites {
     this.notifyChange();
   }
 
+  // 更新收藏组件
+  public update(
+    id: string,
+    extFavorite:
+      | Partial<FavoritesComponentType>
+      | ((favorite: FavoritesComponentType) => Partial<FavoritesComponentType>),
+  ) {
+    const favorite = this.get(id);
+    if (!favorite) {
+      return;
+    }
+    Object.assign(
+      favorite,
+      typeof extFavorite === "function" ? extFavorite(favorite) : extFavorite,
+    );
+    this.notifyChange();
+  }
+
   // 删除收藏组件
   public delete(id: string | FavoritesComponentType | (string | FavoritesComponentType)[]) {
     // 待删除ids

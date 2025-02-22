@@ -1,0 +1,37 @@
+.favoriteDetailDialog {
+  color: @color;
+
+  &_head {
+    gap: 8px;
+    display: flex;
+    align-items: baseline;
+  }
+
+  &_title {
+    .text-ellipsis();
+    max-width: 300px;
+  }
+
+  &_componentNodes {
+    height: 430px;
+    border: @border;
+    overflow-y: auto;
+  }
+
+  &_item {
+    height: 28px;
+    cursor: default;
+    box-sizing: border-box;
+    padding: 0 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    color: @color;
+    border-bottom: 1px solid #ededed;
+
+    &:hover {
+      background: whitesmoke;
+    }
+  }
+}
