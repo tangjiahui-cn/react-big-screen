@@ -44,11 +44,13 @@ const useFavoriteDetailDialog = createBindModalHook<Params>((props) => {
           const component = engine.component.get(componentNode.cId);
           return (
             <div key={componentNode.id} className={styles.favoriteDetailDialog_item}>
-              <ComponentNodeImage
-                src={component?.icon}
-                style={{ maxWidth: "50%", maxHeight: "50%" }}
-              />
-              <span>{componentNode.name}</span>
+              <div>
+                <ComponentNodeImage
+                  src={component?.icon}
+                  style={{ maxWidth: "80%", maxHeight: "80%" }}
+                />
+              </div>
+              <span title={componentNode.name}>{componentNode.name}</span>
             </div>
           );
         })}
