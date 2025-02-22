@@ -5,10 +5,8 @@
  * @date 2025/1/14
  */
 import engine from "@/engine";
+import { getAllSelectedComponentNodes } from "@/packages/shortCutKeys";
 
 export function deleteSelectedComponentNodes() {
-  const selectedInstanceIds: string[] = engine.instance
-    .getAllSelected()
-    .map((instance) => instance.id);
-  engine.componentNode.delete(selectedInstanceIds);
+  engine.componentNode.delete(getAllSelectedComponentNodes());
 }

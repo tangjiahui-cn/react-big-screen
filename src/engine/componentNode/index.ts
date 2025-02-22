@@ -87,12 +87,8 @@ export default class ComponentNode {
   /**
    * 管道化处理componentNodes
    * @param componentNodes 要通过的componentNodes
-   * @param init 是否初始化操作
    */
-  private pipeComponentNodes(
-    componentNodes: ComponentNodeType[],
-    init?: boolean,
-  ): ComponentNodeType[] {
+  private pipeComponentNodes(componentNodes: ComponentNodeType[]): ComponentNodeType[] {
     componentNodes.forEach((componentNode) => {
       // 成组（group）
       if (componentNode.groupId) {
@@ -100,9 +96,8 @@ export default class ComponentNode {
       }
       // 后增的show属性，如果为undefined则手动设置true
       componentNode.show ??= true;
-      // 如果属于一个layout,则隐藏（由layout类组件内部控制显示）
+      // 如果属于一个layout
       if (componentNode.panelId) {
-        componentNode.show = !init;
         (this.panelMap[componentNode.panelId] ||= {
           parentId: "",
           children: new Set(),
@@ -129,12 +124,12 @@ export default class ComponentNode {
    * @param componentNodes 要设置的 componentNodes
    * @param init 是否是初始化操作
    */
-  public init(componentNodes: ComponentNodeType[] = [], init: boolean = true) {
+  public init(componentNodes: ComponentNodeType[] = []) {
     this.maxLevel = 1;
     this.groupMap = {};
     this.panelMap = {};
     setGlobalState({
-      componentNodes: this.pipeComponentNodes(componentNodes, init),
+      componentNodes: this.pipeComponentNodes(componentNodes),
     });
   }
 
@@ -246,7 +241,7 @@ export default class ComponentNode {
       return !deleteIds.has(componentNode.id);
     });
 
-    this.init(componentNodes, false);
+    this.init(componentNodes);
   }
 
   // 计算一个componentNode的矩形坐标
@@ -480,10 +475,39 @@ export default class ComponentNode {
     return panels?.find?.((panel) => panel.value === panelId)?.label || "";
   }
 
-  // 获取面板包含的子组件id
+  // 获取面板包含的子组件id（第一层）
   public getPanelChildrenIds(panelId?: string): string[] {
     if (!panelId) return [];
     return Array.from(this.panelMap[panelId]?.children || []);
+  }
+
+  // 获取面板包含的子组件
+  public getPanelComponentNodes(
+    id: string | ComponentNodeType, // 组件id / 组件
+    all?: boolean, // 是否添加下属全部子组件（默认 false只取最近一层。可选true）
+  ): ComponentNodeType[] {
+    const componentNode = this.get(id);
+    if (!componentNode) return [];
+    return (
+      componentNode?.panels?.reduce?.((list, panel) => {
+        // 最近一层所有componentNode的id列表
+        const panelChildrenIds = this.getPanelChildrenIds(panel.value);
+        // 最近一层所有componentNode
+        return list.concat(
+          panelChildrenIds.reduce((list, id) => {
+            const childrenNode = this.get(id);
+            if (childrenNode) {
+              list.push(childrenNode);
+              // 如果子组件也是容器组件，则继续添加其子组件
+              if (all && childrenNode.panels?.length) {
+                list.push(...this.getPanelComponentNodes(childrenNode, all));
+              }
+            }
+            return list;
+          }, [] as ComponentNodeType[]),
+        );
+      }, [] as ComponentNodeType[]) || []
+    );
   }
 
   // 显示面板下全部组件
@@ -504,5 +528,54 @@ export default class ComponentNode {
         show: false,
       });
     });
+  }
+
+  // 克隆 componentNodes（会重置父子关系）
+  public cloneComponentNodes(
+    componentNodes: ComponentNodeType[], // 待克隆组件列表
+    options?: {
+      // 克隆每一个组件时回调
+      onClone?: (old: ComponentNodeType, cloned: ComponentNodeType) => void;
+    },
+  ): ComponentNodeType[] {
+    const panelIdMap = new Map<string, string>(); // panelId映射（旧panelId => 新panelId）
+    // 创建新实例
+    const newComponentNodes = componentNodes.reduce((list, componentNode) => {
+      if (componentNode) {
+        // 复制创建新实例
+        const newComponentNode = this.createFromComponentNode(componentNode, {
+          id: createUUID(),
+        });
+        // 复制panels
+        if (componentNode?.panels) {
+          newComponentNode.panels = componentNode.panels.map((panel) => {
+            const newPanelId = createUUID();
+            if (panel.value === newComponentNode.currentPanelId) {
+              newComponentNode.currentPanelId = newPanelId;
+            }
+            panelIdMap.set(panel.value, newPanelId);
+            return {
+              ...panel,
+              value: newPanelId,
+            };
+          });
+        }
+        list.push(newComponentNode);
+        options?.onClone?.(componentNode, newComponentNode);
+      }
+      return list;
+    }, [] as ComponentNodeType[]);
+
+    // 重置panelId映射关系
+    newComponentNodes.forEach((componentNode) => {
+      if (componentNode?.panelId) {
+        const newPanelId = panelIdMap.get(componentNode.panelId);
+        if (newPanelId) {
+          componentNode.panelId = newPanelId;
+        }
+      }
+    });
+
+    return newComponentNodes;
   }
 }

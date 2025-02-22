@@ -27,6 +27,7 @@ import Component from "./component";
 import Instance from "./instance";
 import ComponentNode from "./componentNode";
 import Config from "./config";
+import Favorites from "./favorites";
 import { JsonType } from "./types";
 import { defaultPackage } from "./built-in";
 import { BaseEvent } from "./model";
@@ -48,6 +49,8 @@ class Engine {
   public config: Config = new Config();
   // 事件
   public events: BaseEvent = new BaseEvent();
+  // 收藏夹
+  public favorites: Favorites = new Favorites();
 
   constructor() {
     // （初始化时）注册内置组件
@@ -71,6 +74,8 @@ class Engine {
     this.componentNode.init(json.componentNodes);
     // 注册 local package
     this.component.loadLocalPackages(json.localPackages);
+    // 设置收藏夹
+    this.favorites.set(json?.favorites || []);
 
     // 读取默认选中
     if (json.selectedIds) {
@@ -98,6 +103,7 @@ class Engine {
       config: this.config.getConfig(),
       selectedIds: this.instance.getAllSelected().map((instance) => instance.id),
       localPackages: await this.component.getAllLocalPackages(),
+      favorites: this.favorites.getAll(),
     };
   }
 }
