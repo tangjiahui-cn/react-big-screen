@@ -8,8 +8,8 @@ import { Empty, Tabs } from "antd";
 import Attributes from "./components/Attributes";
 import DataSource from "./components/DataSource";
 import Interactive from "./components/Interactive";
-import engine, { ComponentNodeType, InstanceType } from "@/engine";
-import { createContext, useContext, useEffect, useState } from "react";
+import { ComponentNodeType, InstanceType, useComponentNode } from "@/engine";
+import { createContext, useContext } from "react";
 
 const SingleSelectedContext = createContext<{
   instance?: InstanceType;
@@ -24,17 +24,7 @@ interface Props {
 
 export default function SingleInstanceAttributes(props: Props) {
   const { instance } = props;
-  const [componentNode, setComponentNode] = useState<ComponentNodeType>();
-
-  useEffect(() => {
-    // 设置componentNode
-    setComponentNode(engine.componentNode.get(instance.id));
-    // 监听数据节点变化
-    return engine.componentNode.onChange(instance.id, ({ payload }) => {
-      setComponentNode({ ...payload });
-    });
-  }, [instance.id]);
-
+  const componentNode = useComponentNode(instance.id);
   return componentNode ? (
     <SingleSelectedContext.Provider value={{ instance, componentNode }}>
       <Tabs

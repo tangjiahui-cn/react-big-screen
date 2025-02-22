@@ -9,3 +9,4 @@ export * from "./useCreateHandleTrigger";
 export * from "./useCreateUseExposeHook";
 export * from "./usePackages";
 export * from "./useFavorites";
+export * from "./useComponentNode";
