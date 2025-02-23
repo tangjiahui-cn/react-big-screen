@@ -62,6 +62,7 @@ pnpm dev
 
 - 支持 UMD 模块包。
 - 支持 AMD 模块包。
+- 支持 .zip 压缩包。
 
 ## 相关项目
 - [lowcode-engine](https://github.com/tangjiahui-cn/lowcode-engine)
