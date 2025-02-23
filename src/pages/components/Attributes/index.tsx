@@ -15,7 +15,6 @@ export default function Attributes() {
   const selectedInstances = useSelectedInstances();
   const isSelected = useMemo(() => !!selectedInstances.length, [selectedInstances]);
   const isSingleInstance = useMemo(() => selectedInstances.length === 1, [selectedInstances]);
-
   return (
     <div className={styles.attributes}>
       {/* Empty */}
@@ -26,7 +25,7 @@ export default function Attributes() {
           {/* 单实例配置 */}
           {isSingleInstance && <SingleInstanceAttributes instance={selectedInstances[0]} />}
           {/* 多实例配置 */}
-          {!isSingleInstance && <MultipleInstanceAttributes />}
+          {!isSingleInstance && <MultipleInstanceAttributes instances={selectedInstances} />}
         </>
       )}
     </div>
