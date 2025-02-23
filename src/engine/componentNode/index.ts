@@ -546,6 +546,8 @@ export default class ComponentNode {
         const newComponentNode = this.createFromComponentNode(componentNode, {
           id: createUUID(),
         });
+        // 解除复制组件的成组关系
+        delete newComponentNode.groupId;
         // 复制panels
         if (componentNode?.panels) {
           newComponentNode.panels = componentNode.panels.map((panel) => {
