@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import { IInput } from "@/components/Attributes/base/IInput";
 import { message } from "antd";
 import styles from "./index.module.less";
+import { EditOutlined, SaveOutlined } from "@ant-design/icons";
+import classNames from "classnames";
 
 interface Props {
   emptyMessage?: string; // 空校验提示文字
@@ -56,7 +58,14 @@ export default function EditText(props: Props) {
           {props?.value}
         </b>
       )}
-      {isEdit ? <a onClick={handleSave}>保存</a> : <a onClick={handleEdit}>编辑</a>}
+      {isEdit ? (
+        <SaveOutlined className={"icon_clickable"} onClick={handleSave} />
+      ) : (
+        <EditOutlined
+          className={classNames(styles.opacity0, "icon_clickable")}
+          onClick={handleEdit}
+        />
+      )}
     </div>
   );
 }
