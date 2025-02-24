@@ -12,7 +12,7 @@ import { Tooltip } from "antd";
 export interface MenuBarItem {
   key: string;
   icon: React.ReactNode;
-  title: React.ReactNode;
+  title: any;
 }
 
 interface Props {

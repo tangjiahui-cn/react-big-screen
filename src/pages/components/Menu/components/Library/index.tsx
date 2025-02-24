@@ -12,13 +12,7 @@ import styles from "./index.module.less";
 import ComponentsBlock from "./components/ComponentsBlock";
 import { debounce, groupBy } from "lodash-es";
 import IEmpty from "@/components/IEmpty";
-
-const groupNameMap: Record<ComponentCategory, string> = {
-  base: "基础组件",
-  charts: "图表组件",
-  layout: "布局组件",
-  unknown: "未分类组件",
-};
+import { useTranslation } from "react-i18next";
 
 function filterComponents(componentList: ComponentType[], keyword: string = ""): ComponentType[] {
   if (!keyword) return componentList;
@@ -32,10 +26,20 @@ function filterComponents(componentList: ComponentType[], keyword: string = ""):
 }
 
 export default function Library() {
+  const [t, i18n] = useTranslation();
   const [activeKeys, setActiveKeys] = useState<any[]>([]);
   const components = useComponents();
   const [keyword, setKeyword] = useState<string>("");
   const [displayComponents, setDisplayComponents] = useState<ComponentType[]>([]);
+
+  const groupNameMap: Record<ComponentCategory, string> = useMemo(() => {
+    return {
+      base: t("menu.library.base"),
+      charts: t("menu.library.charts"),
+      layout: t("menu.library.layout"),
+      unknown: t("menu.library.unknown"),
+    };
+  }, [i18n.language]);
 
   const debounceFilterComponent = useMemo(() => {
     return debounce((componentList: ComponentType[], keyword: string = "") => {
@@ -67,7 +71,7 @@ export default function Library() {
     });
     setActiveKeys(groupKeys);
     return groups;
-  }, [displayComponents]);
+  }, [displayComponents, groupNameMap]);
 
   return (
     <div className={styles.library}>

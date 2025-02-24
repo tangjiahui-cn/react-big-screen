@@ -13,42 +13,45 @@ import Favorites from "./components/Favorites";
 import React, { useEffect, useMemo, useState } from "react";
 import { ApartmentOutlined, AppstoreOutlined, BankOutlined, StarOutlined } from "@ant-design/icons";
 import engine, { GlobalConfig, useConfig } from "@/engine";
+import { useTranslation } from "react-i18next";
 
 type MenuItem = MenuBarItem & {
   children?: React.ReactNode;
 };
 
-const menuList: MenuItem[] = [
-  {
-    key: "library",
-    icon: <AppstoreOutlined />,
-    title: "组件库",
-    children: <Library />,
-  },
-  {
-    key: "componentNodes",
-    icon: <ApartmentOutlined />,
-    title: "页面组件",
-    children: <ComponentNodes />,
-  },
-  {
-    key: "property",
-    icon: <BankOutlined />,
-    title: "个人资产",
-    children: <Property />,
-  },
-  {
-    key: "favorites",
-    icon: <StarOutlined />,
-    title: "收藏夹",
-    children: <Favorites />,
-  },
-];
-
-const FIRST_PANEL_KEY = menuList[0].key; // 默认 0
 export default function Menu() {
+  const [t, i18n] = useTranslation();
+  const menuList: MenuItem[] = useMemo(() => {
+    return [
+      {
+        key: "library",
+        icon: <AppstoreOutlined />,
+        title: t("menu.bar.library"),
+        children: <Library />,
+      },
+      {
+        key: "componentNodes",
+        icon: <ApartmentOutlined />,
+        title: t("menu.bar.componentNodes"),
+        children: <ComponentNodes />,
+      },
+      {
+        key: "property",
+        icon: <BankOutlined />,
+        title: t("menu.bar.property"),
+        children: <Property />,
+      },
+      {
+        key: "favorites",
+        icon: <StarOutlined />,
+        title: t("menu.bar.favorites"),
+        children: <Favorites />,
+      },
+    ];
+  }, [i18n.language]);
+
   const currentMenu = useConfig<GlobalConfig["currentMenu"]>((config) => config.currentMenu);
-  const [activeKey, setActiveKey] = useState<string>(FIRST_PANEL_KEY);
+  const [activeKey, setActiveKey] = useState<string>("");
 
   // menu渲染children
   const children: React.ReactNode = useMemo(() => {
@@ -65,7 +68,7 @@ export default function Menu() {
   useEffect(() => {
     const { currentMenu } = engine.config.getConfig();
     const menu = menuList.find((item) => item.key === currentMenu);
-    setActiveKey(menu?.key || FIRST_PANEL_KEY);
+    setActiveKey(menu?.key || menuList[0].key);
   }, [currentMenu]);
 
   return (

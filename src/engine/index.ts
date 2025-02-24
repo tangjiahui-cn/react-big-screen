@@ -31,6 +31,7 @@ import Favorites from "./favorites";
 import { JsonType } from "./types";
 import { defaultPackage } from "./built-in";
 import { BaseEvent } from "./model";
+import { changeLanguage } from "@/i18n";
 
 export type * from "./types";
 export * from "./store";
@@ -68,6 +69,9 @@ class Engine {
       // 注册内置组件 (解决hmr时，内存注册的components丢失问题)
       this.registerDefaultPackage();
     }
+
+    // 切换语言
+    changeLanguage(json.config?.language || "zh");
     // 设置config
     this.config.setConfig(json.config);
     // 载入componentNode
