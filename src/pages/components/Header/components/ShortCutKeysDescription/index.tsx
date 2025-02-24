@@ -12,6 +12,7 @@ import {
   ArrowRightOutlined,
   ArrowUpOutlined,
 } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 function Key({ children }: { children: React.ReactNode }) {
   return (
@@ -34,57 +35,58 @@ function Key({ children }: { children: React.ReactNode }) {
 }
 
 export default function ShortCutKeysDescription() {
+  const [t] = useTranslation();
   return (
     <Space
       direction={"vertical"}
       style={{ padding: 6, userSelect: "none", whiteSpace: "nowrap", width: 300 }}
     >
-      <b>快捷键</b>
+      <b>{t("head.shortCutKeys.title")}</b>
 
       <Space>
-        <span>全选：</span>
+        <span>{t("head.shortCutKeys.all")}：</span>
         <Key>Shift</Key>
         <span>+</span>
         <Key>A</Key>
       </Space>
 
       <Space>
-        <span>反选：</span>
+        <span>{t("head.shortCutKeys.invert")}：</span>
         <Key>Shift</Key>
         <span>+</span>
         <Key>R</Key>
       </Space>
 
       <Space>
-        <span>复制：</span>
+        <span>{t("head.shortCutKeys.copy")}：</span>
         <Key>Shift</Key>
         <span>+</span>
         <Key>C</Key>
       </Space>
 
       <Space>
-        <span>保存：</span>
+        <span>{t("head.shortCutKeys.save")}：</span>
         <Key>Shift</Key>
         <span>+</span>
         <Key>S</Key>
       </Space>
 
       <Space>
-        <span>多选：</span>
-        <span>按住</span>
+        <span>{t("head.shortCutKeys.multiple")}：</span>
+        <span>{t("head.shortCutKeys.multipleExt.ext1")}</span>
         <Key>Shift</Key>
-        <span>选中</span>
+        <span>{t("head.shortCutKeys.multipleExt.ext2")}</span>
       </Space>
 
       <Space>
-        <span>删除：</span>
+        <span>{t("head.shortCutKeys.delete")}：</span>
         <Key>BackSpace</Key>
-        <span> 或 </span>
+        <span> {t("head.shortCutKeys.deleteExt.ext1")} </span>
         <Key>Delete</Key>
       </Space>
 
       <Space>
-        <span>位移：</span>
+        <span>{t("head.shortCutKeys.move")}：</span>
         <Key>
           <ArrowUpOutlined />
         </Key>
@@ -100,10 +102,10 @@ export default function ShortCutKeysDescription() {
       </Space>
 
       <Space>
-        <span>强制：</span>
-        <span>按住</span>
+        <span>{t("head.shortCutKeys.force")}：</span>
+        <span>{t("head.shortCutKeys.forceExt.ext1")}</span>
         <Key>Shift</Key>
-        <span>框选锁定组件</span>
+        <span>{t("head.shortCutKeys.forceExt.ext2")}</span>
       </Space>
     </Space>
   );

@@ -10,6 +10,7 @@ import DataSource from "./components/DataSource";
 import Interactive from "./components/Interactive";
 import { ComponentNodeType, InstanceType, useComponentNode } from "@/engine";
 import { createContext, useContext } from "react";
+import { useTranslation } from "react-i18next";
 
 const SingleSelectedContext = createContext<{
   instance?: InstanceType;
@@ -23,6 +24,7 @@ interface Props {
 }
 
 export default function SingleInstanceAttributes(props: Props) {
+  const [t] = useTranslation();
   const { instance } = props;
   const componentNode = useComponentNode(instance.id);
   return componentNode ? (
@@ -32,15 +34,15 @@ export default function SingleInstanceAttributes(props: Props) {
         style={{ padding: "0 16px" }}
         size={"small"}
         items={[
-          { key: "1", label: "属性", children: <Attributes /> },
+          { key: "1", label: t("attributes.attr.title"), children: <Attributes /> },
           {
             key: "2",
-            label: "数据",
+            label: t("attributes.dataSource.title"),
             children: <DataSource />,
           },
           {
             key: "3",
-            label: "交互",
+            label: t("attributes.interactive.title"),
             children: <Interactive />,
           },
         ]}

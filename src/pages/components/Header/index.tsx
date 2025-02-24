@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2024/12/19
  */
-import React from "react";
+import React, { useMemo } from "react";
 import {
   UploadOutlined,
   VerticalAlignBottomOutlined,
@@ -14,6 +14,7 @@ import {
   SettingOutlined,
   ClearOutlined,
   QuestionCircleOutlined,
+  TranslationOutlined,
 } from "@ant-design/icons";
 import styles from "./index.module.less";
 import TooltipButton from "@/components/TooltipButton";
@@ -23,8 +24,10 @@ import SizeBar from "./components/SizeBar";
 import engine from "@/engine";
 import { getLocalFileText, downloadText } from "@/utils";
 import ShortCutKeysDescription from "./components/ShortCutKeysDescription";
-import { clearComponentNodes, saveLocal } from "../../../packages/shortCutKeys";
+import { clearComponentNodes, saveLocal } from "@/packages/shortCutKeys";
 import { saveLocalPreviewJson } from "@/pages/preview";
+import { useTranslation } from "react-i18next";
+import { changeLanguage, LANGUAGE } from "@/i18n";
 
 // 打开新路由页面
 function openRoute(routePath: string) {
@@ -35,32 +38,51 @@ function openRoute(routePath: string) {
 interface OperateItem {
   key: string;
   disabled?: boolean;
-  description?: React.ReactNode;
+  description?: any;
   icon?: React.ReactNode;
 }
 
-const operates: OperateItem[] = [
-  {
-    key: "shortCutKeys",
-    description: <ShortCutKeysDescription />,
-    icon: <QuestionCircleOutlined />,
-  },
-  { key: "undo", description: "撤销", disabled: true, icon: <IconFont type={"icon-undo"} /> },
-  {
-    key: "cancelRevoke",
-    description: "取消撤销",
-    disabled: true,
-    icon: <IconFont type={"icon-cancel-undo"} />,
-  },
-  { key: "export", description: "导出", icon: <UploadOutlined /> },
-  { key: "import", description: "导入", icon: <VerticalAlignBottomOutlined /> },
-  { key: "save", description: "保存到本地", icon: <SaveOutlined /> },
-  { key: "clear", description: "清空", icon: <ClearOutlined /> },
-  { key: "settings", description: "设置", disabled: true, icon: <SettingOutlined /> },
-  { key: "preview", description: "预览", icon: <DesktopOutlined /> },
-];
-
 export default function Header() {
+  const [t, i18n] = useTranslation();
+  const isChinese = i18n.language === LANGUAGE.zh;
+  const operates = useMemo(() => {
+    return [
+      {
+        key: "shortCutKeys",
+        description: <ShortCutKeysDescription />,
+        icon: <QuestionCircleOutlined />,
+      },
+      {
+        key: "undo",
+        description: t("head.undo"),
+        disabled: true,
+        icon: <IconFont type={"icon-undo"} />,
+      },
+      {
+        key: "cancelUndo",
+        description: t("head.cancelUndo"),
+        disabled: true,
+        icon: <IconFont type={"icon-cancel-undo"} />,
+      },
+      { key: "export", description: t("head.export"), icon: <UploadOutlined /> },
+      { key: "import", description: t("head.import"), icon: <VerticalAlignBottomOutlined /> },
+      { key: "save", description: t("head.save"), icon: <SaveOutlined /> },
+      { key: "clear", description: t("head.clear"), icon: <ClearOutlined /> },
+      {
+        key: "language",
+        description: t("head.language", { text: `${isChinese ? "切换英语" : "change chinese"}` }),
+        icon: <TranslationOutlined />,
+      },
+      {
+        key: "settings",
+        description: t("head.settings"),
+        disabled: true,
+        icon: <SettingOutlined />,
+      },
+      { key: "preview", description: t("head.preview"), icon: <DesktopOutlined /> },
+    ];
+  }, [i18n.language]);
+
   function handleJumpGithub() {
     window.open("https://github.com/tangjiahui-cn/big-screen.git");
   }
@@ -70,7 +92,7 @@ export default function Header() {
       case "undo": // 撤销
         message.warn("暂不支持撤销");
         break;
-      case "cancelRevoke": // 反撤销
+      case "cancelUndo": // 反撤销
         message.warn("暂不支持取消撤销");
         break;
       case "export": // 导出
@@ -105,6 +127,11 @@ export default function Header() {
         clearComponentNodes();
         break;
       case "settings":
+        break;
+      case "language":
+        const language = isChinese ? "en" : "zh";
+        changeLanguage(language);
+        engine.config.setConfig({ language });
         break;
       default:
         break;

@@ -5,7 +5,9 @@
  * @date 2025/1/14
  */
 import styles from "./index.module.less";
+import { useTranslation } from "react-i18next";
 
 export default function () {
-  return <div className={styles.emptyAttributes}>请选中面板组件</div>;
+  const [t] = useTranslation();
+  return <div className={styles.emptyAttributes}>{t("attributes.empty")}</div>;
 }

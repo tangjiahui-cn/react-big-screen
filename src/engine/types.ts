@@ -1,6 +1,7 @@
 // 基础组件类型
 import React from "react";
 import { ComponentNodeEventTargetOpt } from "@/engine/enum";
+import { LANGUAGE_TYPE } from "@/i18n";
 
 // 组件传入参数
 export type ComponentHandleTrigger<TriggerKeys extends string = string> = (
@@ -117,6 +118,7 @@ export interface GlobalConfig {
   width: number; // 画板宽度
   height: number; // 画板高度
   currentMenu?: string; // 当前菜单面板
+  language?: LANGUAGE_TYPE; // 默认语言类型
 }
 
 export type ComponentUsed = Record<
