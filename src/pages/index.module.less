@@ -53,8 +53,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 24px;
 
-    & > a {
+    &_beian {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      & > img {
+        @size: 12px;
+        width: @size;
+        height: @size;
+      }
+    }
+
+    & a {
       color: @color;
 
       &:hover {
