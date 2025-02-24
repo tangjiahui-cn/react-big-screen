@@ -6,9 +6,9 @@
  */
 
 /**
- * 从字符串文本中获取函数文本
- * @param code 包含函数的字符串文本
- * @description 字符串文本中只能有一个函数
+ * 从字符串文本中获取函数
+ * @param code 包含函数的字符串文本 （文本中只能包含一个函数）
+ * @return Function | undefined
  */
 export function getFunction<T extends Function>(code: string): T | undefined {
   let fn: T | undefined;
@@ -18,6 +18,21 @@ export function getFunction<T extends Function>(code: string): T | undefined {
     fn = new Function(`return ${functionText}`)();
   } catch (error) {
     console.error("[bigScreen](getFunction)：", error);
+  }
+  return fn;
+}
+
+/**
+ * 从字符串文本中获取 main函数
+ * @param code 包含函数的字符串文本
+ * @return Function | undefined
+ */
+export function getMainFunction<T extends Function>(code: string): T | undefined {
+  let fn: T | undefined;
+  try {
+    fn = new Function(`${code} return main;`)();
+  } catch (error) {
+    console.error("[bigScreen](getMainFunction)：", error);
   }
   return fn;
 }

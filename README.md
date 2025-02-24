@@ -1,20 +1,11 @@
 # React-Big-Screen
 
-一个基于 React 实现的 `前端大屏拖拽平台`，用于快速验证原型。
+一个使用 React 框架实现的 `前端大屏拖拽平台`，只需要简单的拖拽、配置即可设计出不错的大屏页面。
 
 > 状态：`开发中`
 
 ## 在线预览
 [https://tangjiahui-cn.github.io/react-big-screen](https://tangjiahui-cn.github.io/react-big-screen)
-
-## 如何运行 
-```shell
-# 安装依赖（pnpm@16.20.1、pnpm@7.30.5）
-pnpm i
-
-# 运行
-pnpm dev
-```
 
 ## 功能 <font color="white" size="3">（开发中）</font> 
 
@@ -28,7 +19,7 @@ pnpm dev
 - ✅ 支持预览页面。
 - ✅ 成组/取消成组。
 - ✅ 布局容器组件。
-- ✅ 数据源。
+- ✅ 属性配置面板（属性、数据、交互）。
 - ✅ 多组件联动。
 - ✅ 支持远程组件包。
 - ✅ 收藏夹。
@@ -51,22 +42,65 @@ pnpm dev
 - store：存储全局数据（不做复杂action，仅用作响应式变量触发引用位置更新）。
 - 实例：等于component + componentNode + instance。
 
-## 处理事件
+## dom 事件
 点击事件只涉及到: `click`、`mousedown`、`mousemove`、`mouseup`。
 
-## 远程组件使用
+## 多组件联动
 
-可在 `src/common-module.ts` 文件中配置公共模块配置。
+自己单独实现了一套事件机制。`component`中声明了暴露事件列表`exposes`、触发事件列表`triggers`。
 
-远程组件包：
+- `exposes` 是暴露给外界，用来调用内部事件的端口。
+- `triggers` 是声明内部可以触发的事件，用来在 \[属性面板-交互\] 中读取该列表进行配置与其他组件联动。
+
+关于组件内部使用？
+
+在 `props` 中获取 `useExpose`、`handleTrigger`。通过 `useExpose` 去定义运行时暴露的事件行为，`handleTrigger` 去触发内部事件的执行。
+
+## 远程组件
+
+通过远程组件功能，可以拥有个人资产。
+
+> 在 `src/common-module.ts` 文件中配置公共模块配置，以此减小远程组件包体积。
+
+加载方式：
+- 本地上传
+- 远程URL
+
+支持格式：
 
 - 支持 UMD 模块包。
 - 支持 AMD 模块包。
+- 支持 .zip 压缩包。
+
+## 容器组件
+
+容器包含很多个面板，通过切换不同面板，实现显隐不同组件的效果。
+
+主要关注 `componentNode` 的三个属性：`panels`、`currentPanelId`、`panelId`。
+
+- panels：当前容器组件所包含的全部面板（panel是容器的一个面板）。
+- currentPanelId：当前容器组件展示的面板 panel 的 id。
+- panelId: 所属父容器 panels 中某个面板的id。
+
+若开发一个容器组件，只需要组件内部修改 `panels`、`currentPanelId` 即可，`panelId` 是引擎自动绑定的。
+
+核心API：
+- engine.componentNode.hidePanel：隐藏一个面板全部子组件
+- engine.componentNode.showPanel：显示一个面板全部子组件
 
 ## 相关项目
 - [lowcode-engine](https://github.com/tangjiahui-cn/lowcode-engine)
 
-## 开发计划
+## 本地调试
+```shell
+# 安装依赖（pnpm@16.20.1、pnpm@7.30.5）
+pnpm i
+
+# 运行
+pnpm dev
+```
+
+## 开发日志
 
 ### v0.0.1 （进行中）
 完成基本大屏功能，支持拖拽移动设计大屏页面，修改页面组件属性，并支持上传导入、导出，可预览。
@@ -79,7 +113,13 @@ pnpm dev
 - ✅ 拖拽移动/缩放
 - ✅ 编辑器 右键菜单禁用
 - ✅ 组件右键菜单（复制、删除、上移一层、下移一层、置顶、置底）
-- ✅ 完成页面右侧属性面板
+- ✅ 完成页面右侧属性面板 (属性、数据、交互，共 3 类配置面板)
 - ✅ 完成预览页面
 - ✅ 成组/取消成组
-- ✅ layout类（容器组件）
+- ✅ 布局容器组件
+- ✅ 缓存请求
+- ✅ 多组件联动
+- ✅ 上传本地 / 加载远程组件包
+- ✅ 收藏夹
+- ✅ 页面组件列表
+- ✅ 自定义组件

@@ -14,7 +14,7 @@ import engine, {
   TransformFunction,
   TransformFunctionOptions,
 } from "..";
-import { ensureObject, getFunction } from "@/utils";
+import { ensureObject, getMainFunction } from "@/utils";
 import { message } from "antd";
 
 // 获取解析data
@@ -25,7 +25,7 @@ function parserData(
 ): any {
   if (!parserFuncText) return data;
   // 从文本中获取转换函数
-  const parserFunc = getFunction<TransformFunction>(parserFuncText);
+  const parserFunc = getMainFunction<TransformFunction>(parserFuncText);
   if (!parserFunc) return data;
   // 返回处理结果
   return parserFunc(data, options);
@@ -81,7 +81,7 @@ function createHandleTrigger(componentNodeId: string) {
           const option = opt?.option as ComponentNodeEventTargetCustomOption;
           // 执行自定义函数
           if (option?.function) {
-            const customFunction = getFunction<GetUpdateTargetComponentNodeFunction>(
+            const customFunction = getMainFunction<GetUpdateTargetComponentNodeFunction>(
               option?.function,
             );
             const updateTargetComponentNode = customFunction?.(

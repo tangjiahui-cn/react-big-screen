@@ -12,6 +12,11 @@ export function useSelectedInstances(): InstanceType[] {
   const [selectedInstances, setSelectedInstances] = useState<InstanceType[]>([]);
 
   useEffect(() => {
+    // 默认选中，则立即设置一次
+    const insList = engine.instance.getAllSelected();
+    if (insList.length) {
+      setSelectedInstances(insList);
+    }
     return engine.instance.onSelectedChange((instances) => {
       setSelectedInstances(Object.values(instances));
     });
