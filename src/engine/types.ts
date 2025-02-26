@@ -108,6 +108,7 @@ export interface ComponentNodeType extends BaseComponent {
   lock?: boolean; // 是否锁定（仅用于编辑模式）
   groupId?: string; // 所属成组的id
   show?: boolean; // 控制组件是否显示
+  pageId?: string; // 页面id（默认 default）
 
   // 交互事件
   events?: ComponentNodeEvent[];
@@ -117,7 +118,9 @@ export interface ComponentNodeType extends BaseComponent {
 export interface GlobalConfig {
   width: number; // 画板宽度
   height: number; // 画板高度
-  currentMenu?: string; // 当前菜单面板
+  currentMenu?: string; // 当前菜单面板key
+  currentPage?: string; // 当前页面id
+  expandedPageIds?: string[]; // 展开页面ids
   language?: LANGUAGE_TYPE; // 默认语言类型
 }
 
@@ -142,6 +145,15 @@ export interface JsonType {
   localPackages?: JsonTypeLocalPackage[];
   // 收藏夹
   favorites: FavoritesComponentType[];
+  // 页面
+  pages: JsonTypePage[]; // 所有页
+}
+
+// 页面
+export interface JsonTypePage {
+  id: string; // 页面id
+  name: string; // 页面名称
+  parentId?: string; // 父页面id
 }
 
 export interface JsonTypeLocalPackage {

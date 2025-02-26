@@ -4,6 +4,7 @@ export default {
   menu: {
     bar: {
       library: "library",
+      pages: "pages",
       componentNodes: "componentNodes",
       property: "property",
       favorites: "favorites",

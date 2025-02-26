@@ -28,6 +28,7 @@ import Instance from "./instance";
 import ComponentNode from "./componentNode";
 import Config from "./config";
 import Favorites from "./favorites";
+import Page, { DEFAULT_PAGE } from "./page";
 import { JsonType } from "./types";
 import { defaultPackage } from "./built-in";
 import { BaseEvent } from "./model";
@@ -52,6 +53,8 @@ class Engine {
   public events: BaseEvent = new BaseEvent();
   // 收藏夹
   public favorites: Favorites = new Favorites();
+  // 子页面管理
+  public page: Page = new Page();
 
   constructor() {
     // （初始化时）注册内置组件
@@ -72,20 +75,29 @@ class Engine {
 
     // 切换语言
     changeLanguage(json.config?.language || "zh");
+
     // 设置config
-    this.config.setConfig(json.config);
-    // 载入componentNode
-    this.componentNode.init(json.componentNodes);
+    this.config.setConfig({
+      ...json.config,
+      currentPage: json?.config?.currentPage || DEFAULT_PAGE.id,
+    });
+
     // 注册 local package
     this.component.loadLocalPackages(json.localPackages);
     // 设置收藏夹
     this.favorites.set(json?.favorites || []);
 
+    // 初始化 pages
+    this.page.init(json.componentNodes, json?.pages);
+    // 设置当前展示页 componentNodes
+    this.componentNode.set(this.page.getComponentNodes(json.config.currentPage || DEFAULT_PAGE.id));
+
     // 读取默认选中
     if (json.selectedIds) {
+      // 等待 packages 触发 componentNodes 更新完毕后再选中
       setTimeout(() => {
         this.instance.select(json.selectedIds as string[]);
-      }, 50); // 等待 packages 触发 componentNodes 更新完毕后再选中
+      }, 50);
     }
   }
 
@@ -101,13 +113,15 @@ class Engine {
 
   // 获取json对象
   public async getJSON(): Promise<JsonType> {
+    this.page.setComponentNodes(this.config.getCurrentPage(), this.componentNode.getAll());
     return {
       used: this.componentNode.getComponentUsed(),
-      componentNodes: this.componentNode.getAll(),
+      componentNodes: this.page.getAllComponentNodes(),
       config: this.config.getConfig(),
       selectedIds: this.instance.getAllSelected().map((instance) => instance.id),
       localPackages: await this.component.getAllLocalPackages(),
       favorites: this.favorites.getAll(),
+      pages: this.page.getAll(),
     };
   }
 }

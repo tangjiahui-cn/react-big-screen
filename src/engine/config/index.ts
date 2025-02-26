@@ -8,6 +8,7 @@
 
 import { getGlobalState, setGlobalState } from "../store";
 import { GlobalConfig } from "../types";
+import { DEFAULT_PAGE } from "../page";
 
 export default class Config {
   // 获取配置（保存全局）
@@ -48,5 +49,10 @@ export default class Config {
             },
       };
     });
+  }
+
+  // 获取当前页
+  public getCurrentPage() {
+    return this.getConfig().currentPage || DEFAULT_PAGE.id;
   }
 }

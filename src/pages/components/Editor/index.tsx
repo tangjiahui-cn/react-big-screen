@@ -73,6 +73,7 @@ export default React.memo(() => {
       const componentNode = engine.componentNode.createFromComponent(data.component, {
         x: Math.round(e.x - domRect.x),
         y: Math.round(e.y - domRect.y),
+        pageId: engine.config.getCurrentPage(),
       });
       // 插入新componentNode到末尾
       engine.componentNode.add(componentNode);
@@ -115,12 +116,14 @@ export default React.memo(() => {
         },
       );
 
+      const pageId = engine.config.getCurrentPage();
       // 这里克隆children后创建到画布
       const clonedComponents = engine.componentNode.cloneComponentNodes(favorite.children, {
         onClone(_, cloned) {
           // 计算坐标
           cloned.x = x + (cloned.x - minX);
           cloned.y = y + (cloned.y - minY);
+          cloned.pageId = pageId;
         },
       });
       engine.componentNode.add(clonedComponents);

@@ -4,7 +4,8 @@ export default {
   menu: {
     bar: {
       library: "组件库",
-      componentNodes: "页面组件",
+      pages: "页面管理",
+      componentNodes: "当前页组件",
       property: "个人资产",
       favorites: "收藏夹",
     },

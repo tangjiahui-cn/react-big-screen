@@ -119,12 +119,8 @@ export default class ComponentNode {
     return componentNodes;
   }
 
-  /**
-   * 初始化componentNodes
-   * @param componentNodes 要设置的 componentNodes
-   * @param init 是否是初始化操作
-   */
-  public init(componentNodes: ComponentNodeType[] = []) {
+  // 设置展示componentNodes
+  public set(componentNodes: ComponentNodeType[] = []) {
     this.maxLevel = 1;
     this.groupMap = {};
     this.panelMap = {};
@@ -241,7 +237,7 @@ export default class ComponentNode {
       return !deleteIds.has(componentNode.id);
     });
 
-    this.init(componentNodes);
+    this.set(componentNodes);
   }
 
   // 计算一个componentNode的矩形坐标
