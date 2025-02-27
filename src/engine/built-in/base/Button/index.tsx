@@ -7,18 +7,18 @@
  */
 import { Button } from "antd";
 import { ButtonType } from "antd/es/button";
-import { ComponentProps } from "@/engine";
+import { createComponent } from "@/engine";
 
-type Props = ComponentProps<{
+interface Options {
   type: ButtonType;
   children?: string;
-}>;
+}
 
-export default function (props: Props) {
+export default createComponent<Options>((props) => {
   const { options, width, height } = props;
   return (
     <Button type={options?.type} style={{ width, height }}>
       {options.children}
     </Button>
   );
-}
+});

@@ -4,13 +4,15 @@
  * @author tangjiahui
  * @date 2024/12/25
  */
-import { ComponentProps } from "@/engine";
 import React from "react";
+import { createComponent } from "@/engine";
 
-type Props = ComponentProps<{}> & React.CSSProperties;
+interface Options {
+  style?: React.CSSProperties;
+}
 
-export default function (props: Props) {
+export default createComponent<Options>((props) => {
   const { options, width, height } = props;
   const { ...style } = options;
   return <div style={{ width, height, ...style }} />;
-}
+});

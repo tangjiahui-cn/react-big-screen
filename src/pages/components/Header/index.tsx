@@ -24,7 +24,7 @@ import SizeBar from "./components/SizeBar";
 import engine from "@/engine";
 import { getLocalFileText, downloadText } from "@/utils";
 import ShortCutKeysDescription from "./components/ShortCutKeysDescription";
-import { clearComponentNodes, saveLocal } from "@/packages/shortCutKeys";
+import { saveLocal } from "@/packages/shortCutKeys";
 import { saveLocalPreviewJson } from "@/pages/preview";
 import { useTranslation } from "react-i18next";
 import { changeLanguage, LANGUAGE } from "@/i18n";
@@ -124,7 +124,7 @@ export default function Header() {
         saveLocal();
         break;
       case "clear":
-        clearComponentNodes();
+        engine.clear();
         break;
       case "settings":
         break;

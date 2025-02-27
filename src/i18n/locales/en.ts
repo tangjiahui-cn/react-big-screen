@@ -4,6 +4,7 @@ export default {
   menu: {
     bar: {
       library: "library",
+      pages: "pages",
       componentNodes: "componentNodes",
       property: "property",
       favorites: "favorites",
@@ -12,6 +13,7 @@ export default {
       base: "base",
       charts: "charts",
       layout: "layout",
+      nav: "nav",
       unknown: "unknown",
     },
   },

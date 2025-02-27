@@ -4,15 +4,13 @@
  * @author tangjiahui
  * @date 2025/1/21
  */
-import { ComponentProps } from "@/engine";
-import React from "react";
+import { createComponent } from "@/engine";
 
-type Props = ComponentProps<{
+interface Options {
   value: string; // 文字内容
-}> &
-  React.CSSProperties;
+}
 
-export default function Title(props: Props) {
+export default createComponent<Options>((props) => {
   const { options, width, height } = props;
   const { value, ...style } = options;
   return (
@@ -27,4 +25,4 @@ export default function Title(props: Props) {
       }}
     />
   );
-}
+});

@@ -2,6 +2,7 @@ export interface Locale {
   menu: {
     bar: {
       library: string;
+      pages: string;
       componentNodes: string;
       property: string;
       favorites: string;
@@ -10,6 +11,7 @@ export interface Locale {
       base: string;
       charts: string;
       layout: string;
+      nav: string;
       unknown: string;
     };
   };

@@ -6,3 +6,4 @@
  */
 export * from "./createUUID";
 export * from "./getPackageComponentNodes";
+export * from "./createComponent";

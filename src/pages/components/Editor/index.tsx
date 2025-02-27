@@ -12,7 +12,7 @@ import engine, {
   usePackages,
   useRangeSelect,
 } from "@/engine";
-import React, { useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { useComponentNodes } from "@/engine";
 import RenderComponentNode from "./components/RenderComponentNode";
 import { isClickMouseLeft } from "@/utils";
@@ -73,6 +73,7 @@ export default React.memo(() => {
       const componentNode = engine.componentNode.createFromComponent(data.component, {
         x: Math.round(e.x - domRect.x),
         y: Math.round(e.y - domRect.y),
+        pageId: engine.config.getCurrentPage(),
       });
       // 插入新componentNode到末尾
       engine.componentNode.add(componentNode);
@@ -115,17 +116,27 @@ export default React.memo(() => {
         },
       );
 
+      const pageId = engine.config.getCurrentPage();
       // 这里克隆children后创建到画布
       const clonedComponents = engine.componentNode.cloneComponentNodes(favorite.children, {
         onClone(_, cloned) {
           // 计算坐标
           cloned.x = x + (cloned.x - minX);
           cloned.y = y + (cloned.y - minY);
+          cloned.pageId = pageId;
         },
       });
       engine.componentNode.add(clonedComponents);
     },
   });
+
+  // 监听页面组件删除
+  useEffect(() => {
+    // 删除 componentNode时，从page的globalComponents中移除，表示不再是一个全局组件
+    return engine.componentNode.onDelete((ids) => {
+      engine.page.removeGlobalComponentNode(ids);
+    });
+  }, []);
 
   return (
     <div

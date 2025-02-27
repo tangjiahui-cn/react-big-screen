@@ -10,8 +10,15 @@ import ComponentNodes from "./components/ComponentNodes";
 import MenuBar, { MenuBarItem } from "./components/MenuBar";
 import Property from "./components/Property";
 import Favorites from "./components/Favorites";
+import Pages from "./components/Pages";
 import React, { useEffect, useMemo, useState } from "react";
-import { ApartmentOutlined, AppstoreOutlined, BankOutlined, StarOutlined } from "@ant-design/icons";
+import {
+  ApartmentOutlined,
+  AppstoreOutlined,
+  BankOutlined,
+  FileTextOutlined,
+  StarOutlined,
+} from "@ant-design/icons";
 import engine, { GlobalConfig, useConfig } from "@/engine";
 import { useTranslation } from "react-i18next";
 
@@ -28,6 +35,12 @@ export default function Menu() {
         icon: <AppstoreOutlined />,
         title: t("menu.bar.library"),
         children: <Library />,
+      },
+      {
+        key: "pages",
+        icon: <FileTextOutlined />,
+        title: t("menu.bar.pages"),
+        children: <Pages />,
       },
       {
         key: "componentNodes",

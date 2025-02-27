@@ -21,6 +21,9 @@ import { RectCoordinate } from "@/utils";
 type ComponentNodeChangeEventCallback = (options: { payload: ComponentNodeType }) => void;
 type ComponentNodeChangeEventUnmount = () => void;
 
+type ListerCallback<T> = (value: T) => void;
+type UnmountCallback = () => void;
+
 // 默认值
 const INIT_COMPONENT: BaseComponent = {
   cId: "",
@@ -43,6 +46,24 @@ export default class ComponentNode {
       children: Set<string>; // 包含子组件id
     }
   > = {}; // 面板映射（panelId => {children: [id, id, ...]}）
+
+  // 删除回调
+  private deleteListeners: ListerCallback<string[]>[] = [];
+
+  // 监听删除
+  public onDelete(listener: ListerCallback<string[]>): UnmountCallback {
+    this.deleteListeners.push(listener);
+    return () => {
+      this.deleteListeners = this.deleteListeners.filter((cb) => {
+        return cb !== listener;
+      });
+    };
+  }
+
+  // 触发删除
+  private notifyDelete(deleteIds: string[] = []) {
+    this.deleteListeners.forEach((cb) => cb(deleteIds));
+  }
 
   // 触发onChange事件
   private notifyChange(componentNode: ComponentNodeType) {
@@ -119,12 +140,8 @@ export default class ComponentNode {
     return componentNodes;
   }
 
-  /**
-   * 初始化componentNodes
-   * @param componentNodes 要设置的 componentNodes
-   * @param init 是否是初始化操作
-   */
-  public init(componentNodes: ComponentNodeType[] = []) {
+  // 设置展示componentNodes
+  public set(componentNodes: ComponentNodeType[] = []) {
     this.maxLevel = 1;
     this.groupMap = {};
     this.panelMap = {};
@@ -241,7 +258,8 @@ export default class ComponentNode {
       return !deleteIds.has(componentNode.id);
     });
 
-    this.init(componentNodes);
+    this.set(componentNodes);
+    this.notifyDelete(Array.from(deleteIds));
   }
 
   // 计算一个componentNode的矩形坐标
@@ -295,7 +313,14 @@ export default class ComponentNode {
   ): ComponentNodeType {
     const componentNode: ComponentNodeType = {
       ...INIT_COMPONENT, // 基础默认组件数据
-      ...omit(component, ["icon", "component", "attributesComponent", "exposes", "triggers"]), // 自定义组件默认数据
+      ...omit(component, [
+        "icon",
+        "component",
+        "attributesComponent",
+        "exposes",
+        "triggers",
+        "description",
+      ]), // 自定义组件默认数据
       ...extComponentNode, // 扩展组件数据
     } as ComponentNodeType;
 

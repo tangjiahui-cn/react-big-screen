@@ -45,7 +45,7 @@ export interface PanelData {
   label: string; // (父) 包含的panel名称
   value: string; // (父) 包含的panel的id
 }
-export type ComponentCategory = "base" | "charts" | "layout" | "unknown"; // 组件分类
+export type ComponentCategory = "base" | "charts" | "layout" | "nav" | "unknown"; // 组件分类
 export type ComponentRequestMethod = "get" | "post" | "put" | "delete"; // 组件请求类型
 export type ComponentRequest = {
   // 组件请求配置对象
@@ -67,6 +67,7 @@ export interface BaseComponent {
   level?: number; // 层级
   options?: Record<string, any>; // 配置数据
   category: ComponentCategory; // 组件分类
+  isAllPage?: boolean; // 是否全页面显示
 
   // layout相关
   panelId?: PanelData["value"]; // (子) 所属panelId
@@ -84,6 +85,7 @@ export interface ComponentType<Option = any> extends BaseComponent {
   attributesComponent?: React.FC<AttributesComponentProps<Option>>; // 属性配置页面模板
   exposes?: EventData[]; // 注册内部暴露事件（通过外部可以触发内部暴露事件）
   triggers?: EventData[]; // 注册内部触发事件（外部主动触发事件）
+  description?: string; // 组件的描述（不会被保存到json）
 }
 
 export interface EventData<VALUE extends string = string> {
@@ -108,6 +110,7 @@ export interface ComponentNodeType extends BaseComponent {
   lock?: boolean; // 是否锁定（仅用于编辑模式）
   groupId?: string; // 所属成组的id
   show?: boolean; // 控制组件是否显示
+  pageId?: string; // 页面id（默认 default）
 
   // 交互事件
   events?: ComponentNodeEvent[];
@@ -117,7 +120,9 @@ export interface ComponentNodeType extends BaseComponent {
 export interface GlobalConfig {
   width: number; // 画板宽度
   height: number; // 画板高度
-  currentMenu?: string; // 当前菜单面板
+  currentMenu?: string; // 当前菜单面板key
+  currentPage?: string; // 当前页面id
+  expandedPageIds?: string[]; // 展开页面ids
   language?: LANGUAGE_TYPE; // 默认语言类型
 }
 
@@ -131,17 +136,26 @@ export type ComponentUsed = Record<
 // json 文件格式
 export interface JsonType {
   // 实例化组件列表
-  componentNodes: ComponentNodeType[];
+  componentNodes?: ComponentNodeType[];
   // 全局配置
   config: GlobalConfig;
   // 已使用组件列表统计
-  used: ComponentUsed;
+  used?: ComponentUsed;
   // 选中组件id列表
   selectedIds?: string[];
   // 存储非云端packages
   localPackages?: JsonTypeLocalPackage[];
   // 收藏夹
-  favorites: FavoritesComponentType[];
+  favorites?: FavoritesComponentType[];
+  // 页面
+  pages?: JsonTypePage[]; // 所有页
+}
+
+// 页面
+export interface JsonTypePage {
+  id: string; // 页面id
+  name: string; // 页面名称
+  parentId?: string; // 父页面id
 }
 
 export interface JsonTypeLocalPackage {

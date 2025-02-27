@@ -25,3 +25,4 @@ export * from "./selectedLevelDown";
 export * from "./collectSelectedComponentNodes";
 export * from "./getAllSelectedComponentNodes";
 export * from "./getAllChildrenComponentNodes";
+export * from "./selectPage";
