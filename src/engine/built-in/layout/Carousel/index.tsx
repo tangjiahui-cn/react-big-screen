@@ -5,13 +5,14 @@
  * @date 2024/1/7
  */
 import { Carousel } from "antd";
-import engine, { ComponentProps, EventData } from "@/engine";
+import engine, { EventData } from "@/engine";
 import styles from "./index.module.less";
 import { CarouselOptions } from "./attributes";
 import classNames from "classnames";
 import React, { RefObject, useEffect, useMemo, useRef } from "react";
 import { CarouselRef } from "antd/lib/carousel";
 import { useUnmount } from "ahooks";
+import { createComponent } from "@/engine/utils";
 
 type TriggerKeys = "onChange" | "onClick";
 type ExposeKeys = "changePanel";
@@ -21,7 +22,7 @@ export const triggers: EventData<TriggerKeys>[] = [
   { label: "面板点击", value: "onClick" },
 ];
 export const exposes: EventData<ExposeKeys>[] = [{ label: "切换面板", value: "changePanel" }];
-export default function (props: ComponentProps<CarouselOptions, TriggerKeys, ExposeKeys>) {
+export default createComponent<CarouselOptions, TriggerKeys, ExposeKeys>((props) => {
   const { options, width, height, componentNode, handleTrigger, useExpose } = props;
   const carouselRef: RefObject<CarouselRef> = useRef<CarouselRef>(null);
   const itemStyle: React.CSSProperties = {
@@ -118,4 +119,4 @@ export default function (props: ComponentProps<CarouselOptions, TriggerKeys, Exp
       </Carousel>
     </div>
   );
-}
+});

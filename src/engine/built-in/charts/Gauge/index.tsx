@@ -4,15 +4,12 @@
  * @author tangjiahui
  * @date 2025/1/21
  */
-import { ComponentProps } from "@/engine";
 import ReactECharts from "@/components/ReactECharts";
 import { EChartsOption } from "echarts";
+import { createComponent } from "@/engine";
 
-type Props = ComponentProps<{}>;
-
-export default function (props: Props) {
-  const { options, width, height } = props;
-  const { ...style } = options;
+export default createComponent((props) => {
+  const { width, height } = props;
 
   const chartOption: EChartsOption = {
     tooltip: {
@@ -41,8 +38,7 @@ export default function (props: Props) {
       style={{
         width,
         height,
-        ...style,
       }}
     />
   );
-}
+});

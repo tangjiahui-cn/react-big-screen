@@ -11,6 +11,7 @@ export interface Locale {
       base: string;
       charts: string;
       layout: string;
+      nav: string;
       unknown: string;
     };
   };

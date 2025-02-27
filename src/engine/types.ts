@@ -45,7 +45,7 @@ export interface PanelData {
   label: string; // (父) 包含的panel名称
   value: string; // (父) 包含的panel的id
 }
-export type ComponentCategory = "base" | "charts" | "layout" | "unknown"; // 组件分类
+export type ComponentCategory = "base" | "charts" | "layout" | "nav" | "unknown"; // 组件分类
 export type ComponentRequestMethod = "get" | "post" | "put" | "delete"; // 组件请求类型
 export type ComponentRequest = {
   // 组件请求配置对象
@@ -84,6 +84,7 @@ export interface ComponentType<Option = any> extends BaseComponent {
   attributesComponent?: React.FC<AttributesComponentProps<Option>>; // 属性配置页面模板
   exposes?: EventData[]; // 注册内部暴露事件（通过外部可以触发内部暴露事件）
   triggers?: EventData[]; // 注册内部触发事件（外部主动触发事件）
+  description?: string; // 组件的描述（不会被保存到json）
 }
 
 export interface EventData<VALUE extends string = string> {

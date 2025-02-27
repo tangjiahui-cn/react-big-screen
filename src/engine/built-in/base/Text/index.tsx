@@ -4,9 +4,10 @@
  * @author tangjiahui
  * @date 2025/1/21
  */
-import { ComponentProps, EventData } from "@/engine";
+import { EventData } from "@/engine";
 import { TextOptions } from "./attributes";
 import { useState } from "react";
+import { createComponent } from "@/engine";
 
 type TriggerKeys = "onClick";
 type ExposeKeys = "setText";
@@ -14,10 +15,9 @@ type ExposeKeys = "setText";
 export const buttonTriggers: EventData<TriggerKeys>[] = [{ label: "点击事件", value: "onClick" }];
 export const buttonExposes: EventData<ExposeKeys>[] = [{ label: "更新文本", value: "setText" }];
 
-export default function Text(props: ComponentProps<TextOptions, TriggerKeys, ExposeKeys>) {
+export default createComponent<TextOptions, TriggerKeys, ExposeKeys>((props) => {
   const { options, width, height, useExpose, handleTrigger } = props;
   const { value } = options;
-
   const [innerValue, setInnerValue] = useState<string>();
 
   useExpose({
@@ -43,4 +43,4 @@ export default function Text(props: ComponentProps<TextOptions, TriggerKeys, Exp
       }}
     />
   );
-}
+});

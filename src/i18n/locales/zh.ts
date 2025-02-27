@@ -13,6 +13,7 @@ export default {
       base: "基础组件",
       charts: "图表组件",
       layout: "布局组件",
+      nav: "导航组件",
       unknown: "未分类组件",
     },
   },

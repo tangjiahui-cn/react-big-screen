@@ -5,13 +5,13 @@
  * @date 2024/1/7
  */
 import { Image } from "antd";
-import { ComponentProps } from "@/engine";
+import { createComponent } from "@/engine";
 
-type Props = ComponentProps<{
+interface Options {
   src?: string; // 图片地址
-}>;
+}
 
-export default function (props: Props) {
+export default createComponent<Options>((props) => {
   const { options, width, height } = props;
   return <Image src={options?.src} style={{ width, height }} />;
-}
+});

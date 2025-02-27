@@ -37,6 +37,7 @@ export default function Library() {
       base: t("menu.library.base"),
       charts: t("menu.library.charts"),
       layout: t("menu.library.layout"),
+      nav: t("menu.library.nav"),
       unknown: t("menu.library.unknown"),
     };
   }, [i18n.language]);

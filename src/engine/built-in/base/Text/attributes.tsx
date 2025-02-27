@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2025/2/5
  */
-import { AttributesComponentProps } from "@/engine";
+import { createAttributes } from "@/engine";
 import { Checkbox } from "antd";
 import React from "react";
 import {
@@ -24,7 +24,7 @@ export interface TextOptions {
   fontSize?: number; // 字号
 }
 
-export default function (props: AttributesComponentProps<TextOptions>) {
+export default createAttributes<TextOptions>((props) => {
   const { options, onChange } = props;
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -83,4 +83,4 @@ export default function (props: AttributesComponentProps<TextOptions>) {
       </Line>
     </div>
   );
-}
+});

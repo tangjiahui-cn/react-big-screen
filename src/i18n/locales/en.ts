@@ -13,6 +13,7 @@ export default {
       base: "base",
       charts: "charts",
       layout: "layout",
+      nav: "nav",
       unknown: "unknown",
     },
   },

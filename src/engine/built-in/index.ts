@@ -8,6 +8,7 @@ import type { ComponentPackage } from "@/engine";
 import { base } from "./base";
 import { layout } from "./layout";
 import { charts } from "./charts";
+import { nav } from "./nav";
 
 export const defaultPackage: ComponentPackage = {
   id: "system",
@@ -19,5 +20,6 @@ export const defaultPackage: ComponentPackage = {
     ...base, // 基础组件
     ...layout, // 布局组件
     ...charts, // 图表组件
+    ...nav, // 导航组件
   ],
 };
