@@ -67,6 +67,7 @@ export interface BaseComponent {
   level?: number; // 层级
   options?: Record<string, any>; // 配置数据
   category: ComponentCategory; // 组件分类
+  isAllPage?: boolean; // 是否全页面显示
 
   // layout相关
   panelId?: PanelData["value"]; // (子) 所属panelId
@@ -110,7 +111,6 @@ export interface ComponentNodeType extends BaseComponent {
   groupId?: string; // 所属成组的id
   show?: boolean; // 控制组件是否显示
   pageId?: string; // 页面id（默认 default）
-  isAllPage?: boolean; // 是否全页面显示
 
   // 交互事件
   events?: ComponentNodeEvent[];

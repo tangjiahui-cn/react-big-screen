@@ -8,15 +8,17 @@ import styles from "./index.module.less";
 import { Button, message, Space, Tree, TreeDataNode } from "antd";
 import { FileOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import engine, { JsonTypePage, usePages } from "@/engine";
+import engine, { JsonTypePage, useCurrentPage, usePages } from "@/engine";
 import useAddPageDialog from "./components/AddPageDialog";
 import { useStateWithRef } from "@/hooks";
+import { selectPage } from "@/packages/shortCutKeys";
 
 export default function () {
   const [expandedKeys, setExpandedKeys] = useState<any[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<any[]>([]);
   const [treeData, setTreeData, treeDataRef] = useStateWithRef<TreeDataNode[]>([]);
   const pages = usePages();
+  const currentPage = useCurrentPage();
 
   // 新增页面弹窗
   const addPageDialog = useAddPageDialog({
@@ -24,7 +26,7 @@ export default function () {
       // 插入一个新页面
       engine.page.insert(page, parentId);
       // 选中新页面
-      handleSelectPage(page.id);
+      selectPage(page.id);
       // 展开当前id
       if (parentId) {
         const keys = Array.from(new Set(expandedKeys).add(parentId));
@@ -37,23 +39,6 @@ export default function () {
   function handleExpandedKeys(keys: any[]) {
     setExpandedKeys(keys);
     engine.config.setConfigSilently({ expandedPageIds: keys });
-  }
-
-  // 选中page
-  function handleSelectPage(pageId?: string) {
-    if (!pageId) {
-      console.error("pageId must be required.");
-      return;
-    }
-    const currentPageId = engine.config.getCurrentPage();
-    // 保存当前页 componentNodes
-    engine.page.setComponentNodes(currentPageId, engine.componentNode.getAll());
-    // 设置下一页的 componentNodes
-    engine.componentNode.set(engine.page.getComponentNodes(pageId));
-    // 设置全局 config
-    engine.config.setConfig({ currentPage: pageId });
-    // 设置选中项
-    setSelectedKeys([pageId]);
   }
 
   // 获取所有节点keys
@@ -93,7 +78,7 @@ export default function () {
       if (deletePageIds.includes(topLevelPageId!)) {
         topLevelPageId = treeDataRef.current?.[1]?.key;
       }
-      handleSelectPage(topLevelPageId);
+      selectPage(topLevelPageId);
     }
     // 实际删除页面
     engine.page.delete(deletePageIds);
@@ -149,9 +134,12 @@ export default function () {
   }, []);
 
   useEffect(() => {
-    setSelectedKeys([engine.config.getCurrentPage()]);
     setTreeData(pagesToTreeData(pages));
   }, [pages]);
+
+  useEffect(() => {
+    setSelectedKeys([currentPage]);
+  }, [currentPage]);
 
   return (
     <div className={styles.pages}>
@@ -184,8 +172,7 @@ export default function () {
             if (!keys.length) {
               return;
             }
-            setSelectedKeys(keys);
-            handleSelectPage(keys?.[0] as any);
+            selectPage(keys?.[0] as any);
           }}
         />
       </div>

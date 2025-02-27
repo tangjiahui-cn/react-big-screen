@@ -6,6 +6,7 @@
  * */
 import type { ComponentType } from "@/engine";
 import PageNav from "./PageNav";
+
 export const nav: ComponentType[] = [
   {
     cId: "page-nav",
@@ -17,6 +18,7 @@ export const nav: ComponentType[] = [
     y: 0,
     width: 300,
     height: 32,
+    isAllPage: true,
     options: {},
     component: PageNav,
   },

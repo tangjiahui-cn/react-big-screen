@@ -1,0 +1,42 @@
+.navLine {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  &_inner {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.navItem {
+  color: @color;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(24, 144, 255, 0.14);
+  border-bottom: 2px solid transparent;
+  box-sizing: border-box;
+  padding: 0 12px;
+  cursor: pointer;
+  user-select: none;
+  transition: all .3s;
+
+  & + & {
+    border-left: @border;
+  }
+
+  &:hover {
+    color: @primaryHover;
+    border-bottom: 2px solid @primaryHover;
+  }
+
+  &_selected {
+    border-bottom: 2px solid @primaryHover;
+  }
+
+  &_last {
+    color: @primaryHover;
+  }
+}
