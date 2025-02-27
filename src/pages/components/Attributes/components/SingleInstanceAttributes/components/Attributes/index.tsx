@@ -5,11 +5,11 @@
  * @date 2025/1/14
  */
 import { useEffect, useMemo } from "react";
-import { Col, Form, InputNumber, Row } from "antd";
+import { Checkbox, Col, Form, InputNumber, Row } from "antd";
 import { useSingleSelectedInstance } from "../..";
 import engine, { ComponentNodeType } from "@/engine";
 import styles from "./index.module.less";
-import { Line } from "@/components/Attributes";
+import { Line, LineConfigProvider } from "@/components/Attributes";
 import EditText from "@/components/EditText";
 
 export default function () {
@@ -20,9 +20,21 @@ export default function () {
   }, [componentNode?.cId]);
   const AttributesComponent = component?.attributesComponent;
 
+  // 切换组件全页面显示
+  function handleChangeAllPage(isAllPage: boolean) {
+    // 只有关闭全页面时才需要手动删除全局global
+    // 开启全页面不需要，因为切换页面时会保存当前页所有数据，自动更新 global、componentNodes
+    if (!isAllPage) {
+      engine.page.removeGlobalComponentNode(componentNode?.id);
+    }
+  }
+
   useEffect(() => {
     if (componentNode) {
-      form.setFieldsValue(componentNode);
+      form.setFieldsValue({
+        ...componentNode,
+        isAllPage: !!componentNode?.isAllPage,
+      });
     }
   }, [componentNode]);
 
@@ -93,11 +105,26 @@ export default function () {
             </Form.Item>
           </Col>
         </Row>
-        <Line label={"层级"} style={{ marginTop: 8 }} labelSpan={3}>
-          <Form.Item name={"level"} noStyle>
-            <InputNumber size={"small"} style={{ width: "100%" }} />
-          </Form.Item>
-        </Line>
+        <LineConfigProvider labelSpan={4}>
+          <Line label={"层级"} style={{ marginTop: 8 }} labelSpan={3}>
+            <Form.Item name={"level"} noStyle>
+              <InputNumber size={"small"} style={{ width: "100%" }} />
+            </Form.Item>
+          </Line>
+          <Line label={"全页面"} style={{ marginTop: 8 }} labelTip={"每个页面都会显示"}>
+            <Form.Item name={"isAllPage"} noStyle valuePropName={"checked"}>
+              <Checkbox
+                onChange={(e) => {
+                  // 等待 engine.componentNode.update组件更新后，再执行切换全局组件操作
+                  // 之所有不在 engine.componentNode 里面单独处理，是为了 componentNode 和 page 相互独立。
+                  setTimeout(() => {
+                    handleChangeAllPage(e.target.checked);
+                  });
+                }}
+              />
+            </Form.Item>
+          </Line>
+        </LineConfigProvider>
       </div>
 
       {/* 组件Attributes配置项 */}

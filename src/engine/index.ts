@@ -55,6 +55,8 @@ class Engine {
   public favorites: Favorites = new Favorites();
   // 子页面管理
   public page: Page = new Page();
+  // 载入的json对象
+  private json: JsonType | undefined = undefined;
 
   constructor() {
     // （初始化时）注册内置组件
@@ -68,6 +70,8 @@ class Engine {
 
   // 加载json对象
   public loadJSON(json: JsonType): void {
+    this.json = json;
+
     if (__DEV__) {
       // 注册内置组件 (解决hmr时，内存注册的components丢失问题)
       this.registerDefaultPackage();
@@ -83,12 +87,12 @@ class Engine {
     });
 
     // 注册 local package
-    this.component.loadLocalPackages(json.localPackages);
+    this.component.loadLocalPackages(json?.localPackages);
     // 设置收藏夹
     this.favorites.set(json?.favorites || []);
 
     // 初始化 pages
-    this.page.init(json.componentNodes, json?.pages);
+    this.page.init(json?.componentNodes, json?.pages);
     // 设置当前展示页 componentNodes
     this.componentNode.set(this.page.getComponentNodes(json.config.currentPage || DEFAULT_PAGE.id));
 
@@ -123,6 +127,17 @@ class Engine {
       favorites: this.favorites.getAll(),
       pages: this.page.getAll(),
     };
+  }
+
+  // 清空内容
+  public clear() {
+    this.loadJSON({
+      config: {
+        width: 1920,
+        height: 1080,
+        ...this.json?.config,
+      },
+    });
   }
 }
 

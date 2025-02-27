@@ -21,6 +21,9 @@ import { RectCoordinate } from "@/utils";
 type ComponentNodeChangeEventCallback = (options: { payload: ComponentNodeType }) => void;
 type ComponentNodeChangeEventUnmount = () => void;
 
+type ListerCallback<T> = (value: T) => void;
+type UnmountCallback = () => void;
+
 // 默认值
 const INIT_COMPONENT: BaseComponent = {
   cId: "",
@@ -43,6 +46,24 @@ export default class ComponentNode {
       children: Set<string>; // 包含子组件id
     }
   > = {}; // 面板映射（panelId => {children: [id, id, ...]}）
+
+  // 删除回调
+  private deleteListeners: ListerCallback<string[]>[] = [];
+
+  // 监听删除
+  public onDelete(listener: ListerCallback<string[]>): UnmountCallback {
+    this.deleteListeners.push(listener);
+    return () => {
+      this.deleteListeners = this.deleteListeners.filter((cb) => {
+        return cb !== listener;
+      });
+    };
+  }
+
+  // 触发删除
+  private notifyDelete(deleteIds: string[] = []) {
+    this.deleteListeners.forEach((cb) => cb(deleteIds));
+  }
 
   // 触发onChange事件
   private notifyChange(componentNode: ComponentNodeType) {
@@ -238,6 +259,7 @@ export default class ComponentNode {
     });
 
     this.set(componentNodes);
+    this.notifyDelete(Array.from(deleteIds));
   }
 
   // 计算一个componentNode的矩形坐标

@@ -12,7 +12,7 @@ import engine, {
   usePackages,
   useRangeSelect,
 } from "@/engine";
-import React, { useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { useComponentNodes } from "@/engine";
 import RenderComponentNode from "./components/RenderComponentNode";
 import { isClickMouseLeft } from "@/utils";
@@ -129,6 +129,14 @@ export default React.memo(() => {
       engine.componentNode.add(clonedComponents);
     },
   });
+
+  // 监听页面组件删除
+  useEffect(() => {
+    // 删除 componentNode时，从page的globalComponents中移除，表示不再是一个全局组件
+    return engine.componentNode.onDelete((ids) => {
+      engine.page.removeGlobalComponentNode(ids);
+    });
+  }, []);
 
   return (
     <div

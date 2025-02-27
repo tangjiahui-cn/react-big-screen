@@ -109,6 +109,7 @@ export interface ComponentNodeType extends BaseComponent {
   groupId?: string; // 所属成组的id
   show?: boolean; // 控制组件是否显示
   pageId?: string; // 页面id（默认 default）
+  isAllPage?: boolean; // 是否全页面显示
 
   // 交互事件
   events?: ComponentNodeEvent[];
@@ -134,19 +135,19 @@ export type ComponentUsed = Record<
 // json 文件格式
 export interface JsonType {
   // 实例化组件列表
-  componentNodes: ComponentNodeType[];
+  componentNodes?: ComponentNodeType[];
   // 全局配置
   config: GlobalConfig;
   // 已使用组件列表统计
-  used: ComponentUsed;
+  used?: ComponentUsed;
   // 选中组件id列表
   selectedIds?: string[];
   // 存储非云端packages
   localPackages?: JsonTypeLocalPackage[];
   // 收藏夹
-  favorites: FavoritesComponentType[];
+  favorites?: FavoritesComponentType[];
   // 页面
-  pages: JsonTypePage[]; // 所有页
+  pages?: JsonTypePage[]; // 所有页
 }
 
 // 页面
