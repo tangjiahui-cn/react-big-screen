@@ -91,7 +91,7 @@ export default function (props: Props) {
                   <div key={component?.cId} className={styles.propertyItemPopover_body_item}>
                     <div className={styles.propertyItemPopover_body_item_icon}>
                       <ComponentNodeImage
-                        src={component.icon}
+                        src={component?.icon}
                         style={{ maxHeight: "80%", maxWidth: 32 }}
                       />
                     </div>

@@ -88,6 +88,103 @@
 - engine.componentNode.hidePanel：隐藏一个面板全部子组件
 - engine.componentNode.showPanel：显示一个面板全部子组件
 
+## 自定义组件
+
+开发自定义组件，只需要3步：
+- 定义一个 `ComponentType` 对象。
+- 使用 `createComponent` 创建一个模板组件。
+- 使用 `createAttributes` 创建一个属性配置项组件。
+
+示例：
+
+```tsx
+import engine, { ComponentType, createComponent, createAttributes } from '@/engine';
+
+// 配置属性值类型
+interface Options {
+  value: string; // 值
+}
+
+// 模板组件
+const Component = createComponent<Options>(props => {
+  const { options, width, height } = props;
+  return (
+    <div style={{ width, height }}>
+      {options?.value}
+    </div>
+  )
+})
+
+// 属性配置组件
+const Attributes = createAttributes<Options>(props => {
+  const { options, onChange } = props;
+  return (
+    <div>
+      <input
+        value={options?.value}
+        onChange={e => onChange({ value: e.target.value })}
+      />
+    </div>
+  )
+})
+
+// 注册组件
+engine.component.register({
+  cId: 'demo-text', // 组件id（必填、唯一）
+  cName: 'demo-文字', // 组件名称
+  x: 0, // 初始 x
+  y: 0, // 初始 y
+  width: 200, // 初始宽度
+  height: 32, // 初始高度
+  component: Component, // 模板组件
+  attributesComponent: Attributes, // 属性配置组件
+})
+```
+
+## 多页面管理
+
+多页面，主要适用于一个大屏多个子页面的场景。
+
+> 展示一个页面时，其他页面会卸载，不渲染而只保留数据，因此不会造成性能损失。
+
+若要控制多页面切换，需要开发`导航组件`：
+- `usePages`：实时获取所有页面
+- `useCurrentPage`: 获取当前页id
+- `selectPage`: 选中对应页面（即切换页面）
+
+常见场景：
+- 单大屏多子页面：顶部的导航栏tabs，点击打开目标子页面。
+- 类SPA站点：头部面包屑导航，点击跳转对应页面。
+- 单页面文档站点：导航下拉框，快速打开对应文档页。
+
+> **为什么会出现子页面，容器组件难道不行吗？** <br><br>
+> 答：子页面会完整的加载、卸载、刷新一个页面的全部组件，而容器包含的所有组件一直存在（只会随页面卸载而删除）。
+
+## 设计复杂页面
+
+若要实现复杂页面，则需将页面元素抽象成 一个个的实例，多个实例通过`暴露事件`、`触发事件`相互沟通。
+
+在 `react-big-screen` 中，事件机制是一个十分重要的功能，甚至可以触发自身的 `暴露事件`!
+
+> 例如：设计一个中后台查询表格页。我们只需要准备`按钮`、`表格`，点击 `按钮` 触发表格暴露的 `查询` 事件即可。如果想要修改查询参数，则只需要设置解析函数。
+
+另外，有时候会用到多页面管理，在一个页面中支持切换多个子页面。 可以单独开发 `导航组件`，用于管理页面的切换、或当做路由面包屑等。
+
+## 性能优化
+### (1) 组件独立更新
+每个组件更新时，只会更新当前渲染节点，而不会更新所有组件。
+
+### (2) 拖拽优化
+单个或多个组件拖拽过程中，实时修改对应dom的位置，拖拽结束才会保存生效变更范围内的组件。
+
+### (3) 隐藏组件不渲染
+有些不显示的组件，例如处于容器中、或者show设置false等，不会在页面上渲染。等到外界控制其显示时，局部更新其节点重新渲染，而不会影响所有组件。
+
+### (4) 远程组件包优化
+组件包下载后，源码存储在浏览器端`IndexedDB`中，不会占用内存。下载时，才会从浏览器存储中取出。
+
+### ...
+
 ## 相关项目
 - [lowcode-engine](https://github.com/tangjiahui-cn/lowcode-engine)
 
@@ -123,3 +220,6 @@ pnpm dev
 - ✅ 收藏夹
 - ✅ 页面组件列表
 - ✅ 自定义组件
+- ✅ i18n 国际化语言。
+- ✅ 支持多子页面切换。
+- 可撤销历史记录。

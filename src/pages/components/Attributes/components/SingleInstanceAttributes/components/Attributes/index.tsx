@@ -66,89 +66,91 @@ export default function () {
         </Row>
       </div>
 
-      {/* 公共Attributes配置项 */}
-      <div>
-        <Row gutter={[8, 8]} style={{ fontSize: 12 }}>
-          <Col span={3} className={styles.singleInstanceAttributesBase_label}>
-            X轴
-          </Col>
-          <Col span={9}>
-            <Form.Item name={"x"} noStyle>
-              <InputNumber size={"small"} style={{ width: "100%" }} />
-            </Form.Item>
-          </Col>
+      <div className={styles.singleInstanceAttributesBase_body}>
+        {/* 公共Attributes配置项 */}
+        <div>
+          <Row gutter={[8, 8]} style={{ fontSize: 12 }}>
+            <Col span={3} className={styles.singleInstanceAttributesBase_label}>
+              X轴
+            </Col>
+            <Col span={9}>
+              <Form.Item name={"x"} noStyle>
+                <InputNumber size={"small"} style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
 
-          <Col span={3} className={styles.singleInstanceAttributesBase_label}>
-            Y轴
-          </Col>
-          <Col span={9}>
-            <Form.Item name={"y"} noStyle>
-              <InputNumber size={"small"} style={{ width: "100%" }} />
-            </Form.Item>
-          </Col>
+            <Col span={3} className={styles.singleInstanceAttributesBase_label}>
+              Y轴
+            </Col>
+            <Col span={9}>
+              <Form.Item name={"y"} noStyle>
+                <InputNumber size={"small"} style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
 
-          <Col span={3} className={styles.singleInstanceAttributesBase_label}>
-            宽度
-          </Col>
-          <Col span={9}>
-            <Form.Item name={"width"} noStyle>
-              <InputNumber size={"small"} style={{ width: "100%" }} />
-            </Form.Item>
-          </Col>
+            <Col span={3} className={styles.singleInstanceAttributesBase_label}>
+              宽度
+            </Col>
+            <Col span={9}>
+              <Form.Item name={"width"} noStyle>
+                <InputNumber size={"small"} style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
 
-          <Col span={3} className={styles.singleInstanceAttributesBase_label}>
-            高度
-          </Col>
-          <Col span={9}>
-            <Form.Item name={"height"} noStyle>
-              <InputNumber size={"small"} style={{ width: "100%" }} />
-            </Form.Item>
-          </Col>
-        </Row>
-        <LineConfigProvider labelSpan={4}>
-          <Line label={"层级"} style={{ marginTop: 8 }} labelSpan={3}>
-            <Form.Item name={"level"} noStyle>
-              <InputNumber size={"small"} style={{ width: "100%" }} />
-            </Form.Item>
-          </Line>
-          <Line label={"全页面"} style={{ marginTop: 8 }} labelTip={"每个页面都会显示"}>
-            <Form.Item name={"isAllPage"} noStyle valuePropName={"checked"}>
-              <Checkbox
-                onChange={(e) => {
-                  // 等待 engine.componentNode.update组件更新后，再执行切换全局组件操作
-                  // 之所有不在 engine.componentNode 里面单独处理，是为了 componentNode 和 page 相互独立。
-                  setTimeout(() => {
-                    handleChangeAllPage(e.target.checked);
-                  });
-                }}
-              />
-            </Form.Item>
-          </Line>
-        </LineConfigProvider>
-      </div>
-
-      {/* 组件Attributes配置项 */}
-      {componentNode && AttributesComponent && (
-        <div style={{ paddingTop: 8 }}>
-          <AttributesComponent
-            componentNode={componentNode}
-            onChangeComponentNode={(target) => {
-              engine.componentNode.update(componentNode?.id, target);
-            }}
-            options={componentNode?.options}
-            onChange={(options, cover) => {
-              engine.componentNode.update(componentNode?.id, {
-                options: cover
-                  ? options
-                  : {
-                      ...componentNode?.options,
-                      ...options,
-                    },
-              });
-            }}
-          />
+            <Col span={3} className={styles.singleInstanceAttributesBase_label}>
+              高度
+            </Col>
+            <Col span={9}>
+              <Form.Item name={"height"} noStyle>
+                <InputNumber size={"small"} style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <LineConfigProvider labelSpan={4}>
+            <Line label={"层级"} style={{ marginTop: 8 }} labelSpan={3}>
+              <Form.Item name={"level"} noStyle>
+                <InputNumber size={"small"} style={{ width: "100%" }} />
+              </Form.Item>
+            </Line>
+            <Line label={"全页面"} style={{ marginTop: 8 }} labelTip={"每个页面都会显示"}>
+              <Form.Item name={"isAllPage"} noStyle valuePropName={"checked"}>
+                <Checkbox
+                  onChange={(e) => {
+                    // 等待 engine.componentNode.update组件更新后，再执行切换全局组件操作
+                    // 之所有不在 engine.componentNode 里面单独处理，是为了 componentNode 和 page 相互独立。
+                    setTimeout(() => {
+                      handleChangeAllPage(e.target.checked);
+                    });
+                  }}
+                />
+              </Form.Item>
+            </Line>
+          </LineConfigProvider>
         </div>
-      )}
+
+        {/* 组件Attributes配置项 */}
+        {componentNode && AttributesComponent && (
+          <div style={{ paddingTop: 8 }}>
+            <AttributesComponent
+              componentNode={componentNode}
+              onChangeComponentNode={(target) => {
+                engine.componentNode.update(componentNode?.id, target);
+              }}
+              options={componentNode?.options}
+              onChange={(options, cover) => {
+                engine.componentNode.update(componentNode?.id, {
+                  options: cover
+                    ? options
+                    : {
+                        ...componentNode?.options,
+                        ...options,
+                      },
+                });
+              }}
+            />
+          </div>
+        )}
+      </div>
     </Form>
   );
 }

@@ -220,18 +220,27 @@ export default class ComponentNode {
       | ((origin: ComponentNodeType) => Partial<ComponentNodeType>),
     options?: {
       silent?: boolean; // 是否不触发更新，而仅仅是修改值。（默认false，true不触发，false触发）
+      cover?: boolean; // 是否完全覆盖
     },
   ) {
     if (!id || !extComponentNode) return;
     const componentNode = this.get(id);
-    if (componentNode) {
-      Object.assign(
-        componentNode,
-        typeof extComponentNode === "function" ? extComponentNode(componentNode) : extComponentNode,
-      );
-      if (!options?.silent) {
-        this.notifyChange(componentNode);
+    if (!componentNode) return;
+    const override =
+      typeof extComponentNode === "function" ? extComponentNode(componentNode) : extComponentNode;
+    // 如果覆盖，则删除id以外所有属性
+    if (options?.cover) {
+      for (const key in componentNode) {
+        if (key !== "id") {
+          delete componentNode[key as keyof ComponentNodeType];
+        }
       }
+    }
+    // override覆盖属性
+    Object.assign(componentNode, override);
+    // 是否静默更新（不触发组件）
+    if (!options?.silent) {
+      this.notifyChange(componentNode);
     }
   }
 

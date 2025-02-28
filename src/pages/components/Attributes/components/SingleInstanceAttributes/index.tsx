@@ -8,9 +8,11 @@ import { Empty, Tabs } from "antd";
 import Attributes from "./components/Attributes";
 import DataSource from "./components/DataSource";
 import Interactive from "./components/Interactive";
+import Json from "./components/Json";
 import { ComponentNodeType, InstanceType, useComponentNode } from "@/engine";
 import { createContext, useContext } from "react";
 import { useTranslation } from "react-i18next";
+import styles from "./index.module.less";
 
 const SingleSelectedContext = createContext<{
   instance?: InstanceType;
@@ -30,8 +32,8 @@ export default function SingleInstanceAttributes(props: Props) {
   return componentNode ? (
     <SingleSelectedContext.Provider value={{ instance, componentNode }}>
       <Tabs
+        className={styles.singleAttributes}
         defaultActiveKey={"1"}
-        style={{ padding: "0 16px" }}
         size={"small"}
         items={[
           { key: "1", label: t("attributes.attr.title"), children: <Attributes /> },
@@ -44,6 +46,11 @@ export default function SingleInstanceAttributes(props: Props) {
             key: "3",
             label: t("attributes.interactive.title"),
             children: <Interactive />,
+          },
+          {
+            key: "4",
+            label: "json",
+            children: <Json />,
           },
         ]}
       />

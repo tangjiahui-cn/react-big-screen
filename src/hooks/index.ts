@@ -9,3 +9,4 @@ export * from "./useListenState";
 export * from "./useDomEvents";
 export * from "./useListenRef";
 export * from "./useBindModal";
+export * from "./useResizeDom";
