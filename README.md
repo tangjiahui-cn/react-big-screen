@@ -88,6 +88,25 @@
 - engine.componentNode.hidePanel：隐藏一个面板全部子组件
 - engine.componentNode.showPanel：显示一个面板全部子组件
 
+## 自定义组件
+
+开发自定义组件，只需要3步：
+- 定义一个 `ComponentType` 对象。
+- 使用 `createComponent` 创建一个模板组件。
+- 使用 `createAttributes` 创建一个属性配置项组件。
+
+> 相关导入: <br>
+> import { ComponentType, createComponent, createAttributes } from '@/engine';
+
+然后注册组件：
+
+```typescript
+import engine from '@/engine';
+engine.component.register(component | components);
+```
+
+然后，就可以拖拽组件到页面并创建新实例了。
+
 ## 相关项目
 - [lowcode-engine](https://github.com/tangjiahui-cn/lowcode-engine)
 
@@ -123,3 +142,6 @@ pnpm dev
 - ✅ 收藏夹
 - ✅ 页面组件列表
 - ✅ 自定义组件
+- ✅ i18n 国际化语言。
+- ✅ 支持多子页面切换。
+- 可撤销历史记录。
