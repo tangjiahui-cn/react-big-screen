@@ -80,8 +80,8 @@ export interface BaseComponent {
 
 // 组件模板类型
 export interface ComponentType<Option = any> extends BaseComponent {
-  icon: string | (() => Promise<typeof import("*.png")>); // 组件图标
   component: React.FC<ComponentProps<Option>>; // 组件模板
+  icon?: string | (() => Promise<typeof import("*.png")>); // 组件图标
   attributesComponent?: React.FC<AttributesComponentProps<Option>>; // 属性配置页面模板
   exposes?: EventData[]; // 注册内部暴露事件（通过外部可以触发内部暴露事件）
   triggers?: EventData[]; // 注册内部触发事件（外部主动触发事件）

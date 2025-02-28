@@ -37,7 +37,7 @@ export default function MenuBar(props: Props) {
                 props?.onChange?.(item?.key);
               }}
             >
-              {item.icon}
+              {item?.icon}
             </div>
           </Tooltip>
         );

@@ -95,17 +95,51 @@
 - 使用 `createComponent` 创建一个模板组件。
 - 使用 `createAttributes` 创建一个属性配置项组件。
 
-> 相关导入: <br>
-> import { ComponentType, createComponent, createAttributes } from '@/engine';
+示例：
 
-然后注册组件：
+```tsx
+import engine, { ComponentType, createComponent, createAttributes } from '@/engine';
 
-```typescript
-import engine from '@/engine';
-engine.component.register(component | components);
+// 配置属性值类型
+interface Options {
+  value: string; // 值
+}
+
+// 模板组件
+const Component = createComponent<Options>(props => {
+  const { options, width, height } = props;
+  return (
+    <div style={{ width, height }}>
+      {options?.value}
+    </div>
+  )
+})
+
+// 属性配置组件
+const Attributes = createAttributes<Options>(props => {
+  const { options, onChange } = props;
+  return (
+    <div>
+      <input
+        value={options?.value}
+        onChange={e => onChange({ value: e.target.value })}
+      />
+    </div>
+  )
+})
+
+// 注册组件
+engine.component.register({
+  cId: 'demo-text', // 组件id（必填、唯一）
+  cName: 'demo-文字', // 组件名称
+  x: 0, // 初始 x
+  y: 0, // 初始 y
+  width: 200, // 初始宽度
+  height: 32, // 初始高度
+  component: Component, // 模板组件
+  attributesComponent: Attributes, // 属性配置组件
+})
 ```
-
-然后，就可以拖拽组件到页面并创建新实例了。
 
 ## 相关项目
 - [lowcode-engine](https://github.com/tangjiahui-cn/lowcode-engine)

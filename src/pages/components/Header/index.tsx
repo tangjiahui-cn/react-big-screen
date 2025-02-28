@@ -156,7 +156,7 @@ export default function Header() {
               title={item.description}
               onClick={() => handleOperate(item)}
             >
-              {item.icon}
+              {item?.icon}
             </TooltipButton>
           );
         })}
