@@ -17,6 +17,10 @@ import engine, {
 import { ensureObject, getMainFunction } from "@/utils";
 import { message } from "antd";
 
+export function getEventId(componentNodeId: string, exposeId: string): string {
+  return `${componentNodeId}-${exposeId}`;
+}
+
 // 获取解析data
 function parserData(
   parserFuncText: string | undefined, // 包含函数字符串
@@ -109,7 +113,7 @@ function createHandleTrigger(componentNodeId: string) {
           option,
         });
         // 触发目标事件
-        engine.events.notify(`${targetComponentNode.id}-${opt?.exposeId}`, data);
+        engine.events.notify(getEventId(targetComponentNode!.id, opt!.exposeId), data);
       });
     });
   };
