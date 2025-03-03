@@ -7,10 +7,12 @@
   padding-top: 10px;
 
   &_item {
+    @height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 38px;
+    height: @height;
+    flex: 0 0 @height;
     width: 100%;
     font-size: 18px;
     color: @color;
