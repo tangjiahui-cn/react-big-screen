@@ -18,6 +18,7 @@ import engine, {
 import { ensureObject, getMainFunction } from "@/utils";
 import { message } from "antd";
 
+// 获取事件id
 export function getEventId(componentNodeId: string, exposeId: string): string {
   return `${componentNodeId}-${exposeId}`;
 }
@@ -29,11 +30,8 @@ function parserData(
   options: TransformFunctionOptions, // 配置项
 ): any {
   if (!parserFuncText) return data;
-  // 从文本中获取转换函数
   const parserFunc = getMainFunction<TransformFunction>(parserFuncText);
-  if (!parserFunc) return data;
-  // 返回处理结果
-  return parserFunc(data, options);
+  return parserFunc ? parserFunc(data, options) : data;
 }
 
 // 处理显隐 option
@@ -77,8 +75,8 @@ function handleCustomOption(
   const option = opt?.option as ComponentNodeEventTargetCustomOption;
   // 执行自定义函数
   if (option?.function) {
-    const callback = getMainFunction<GetUpdateTargetComponentNodeFunction>(option?.function);
-    const updateComponentNode = callback?.(target, origin, payload);
+    const customFunc = getMainFunction<GetUpdateTargetComponentNodeFunction>(option?.function);
+    const updateComponentNode = customFunc?.(target, origin, payload);
     engine.componentNode.update(target?.id, updateComponentNode, { cover: true });
   }
 }
