@@ -7,10 +7,10 @@
  */
 import styles from "./index.module.less";
 import React, { useEffect, useRef } from "react";
-import * as monaco from "monaco-editor";
 import { useUpdateEffect } from "ahooks";
-import "./useWorker";
 import { LoadingOutlined } from "@ant-design/icons";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import "./useWorker";
 
 interface Props {
   value?: string; // 文本内容
@@ -20,9 +20,7 @@ interface Props {
   loading?: boolean; // 加载中
   readOnly?: boolean; // 是否只读
   minimap?: boolean; // 是否显示右侧小地图
-
-  // editor options
-  options?: monaco.editor.IStandaloneEditorConstructionOptions;
+  options?: monaco.editor.IStandaloneEditorConstructionOptions; // 编辑器配置项
 }
 
 export default function CodeEditor(props: Props) {

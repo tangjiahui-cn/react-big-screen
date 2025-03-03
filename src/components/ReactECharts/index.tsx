@@ -5,8 +5,7 @@
  * @date 2025/1/21
  */
 import React, { useEffect, useMemo, useRef } from "react";
-import * as echarts from "echarts";
-import { EChartsOption, EChartsType } from "echarts";
+import echarts, { EChartsOption, EChartsType } from "./echart";
 import { useUpdateEffect } from "ahooks";
 
 interface Props {
@@ -20,13 +19,13 @@ export default function ReactECharts(props: Props) {
   const domRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    chartInstance.current = echarts.init(domRef.current);
+    chartInstance.current = echarts.init(domRef.current) as any;
     // 初次设置options
     if (options) {
       chartInstance.current?.setOption?.(options);
     }
     return () => {
-      echarts.dispose(chartInstance.current as EChartsType);
+      echarts.dispose(chartInstance.current as any);
     };
   }, []);
 
