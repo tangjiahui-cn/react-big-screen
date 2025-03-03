@@ -1,7 +1,12 @@
 // @ts-nocheck
 /**
- * vite 使用 monaco: https://github.com/microsoft/monaco-editor/blob/main/docs/integrate-esm.md#using-vite
+ * (1) with vite: https://github.com/microsoft/monaco-editor/blob/main/docs/integrate-esm.md#using-vite.
+ * (2) all language: open the file "monaco-editor/esm/metadata.js";
  */
+import "monaco-editor/esm/vs/language/json/monaco.contribution";
+import "monaco-editor/esm/vs/basic-languages/javascript/javascript.contribution";
+import "monaco-editor/esm/vs/basic-languages/typescript/typescript.contribution";
+import "monaco-editor/esm/vs/language/typescript/monaco.contribution";
 
 self.MonacoEnvironment = {
   getWorker: function (workerId, label) {
@@ -14,14 +19,6 @@ self.MonacoEnvironment = {
     switch (label) {
       case "json":
         return getWorkerModule("/monaco-editor/esm/vs/language/json/json.worker?worker", label);
-      case "css":
-      case "scss":
-      case "less":
-        return getWorkerModule("/monaco-editor/esm/vs/language/css/css.worker?worker", label);
-      case "html":
-      case "handlebars":
-      case "razor":
-        return getWorkerModule("/monaco-editor/esm/vs/language/html/html.worker?worker", label);
       case "typescript":
       case "javascript":
         return getWorkerModule("/monaco-editor/esm/vs/language/typescript/ts.worker?worker", label);
