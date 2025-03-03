@@ -20,7 +20,7 @@ export default function () {
 
   function handleReset() {
     form.setFieldsValue({
-      code: JSON.stringify(componentNode || {}, null, "\t"),
+      code: componentNode ? JSON.stringify(componentNode || {}, null, "\t") : "",
     });
   }
 
@@ -41,6 +41,7 @@ export default function () {
   }
 
   useEffect(() => {
+    // 当选中不同组件时，才会初始读取一次 componentNode 对象。
     handleReset();
   }, [componentNode]);
 

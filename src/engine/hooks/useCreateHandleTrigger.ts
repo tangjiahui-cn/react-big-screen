@@ -9,6 +9,7 @@ import engine, {
   ComponentNodeEventTargetOpt,
   ComponentNodeEventTargetRequestOption,
   ComponentNodeEventTargetVisibleOption,
+  ComponentNodeType,
   GetUpdateTargetComponentNodeFunction,
   INIT_EXPOSES,
   TransformFunction,
@@ -17,6 +18,11 @@ import engine, {
 import { ensureObject, getMainFunction } from "@/utils";
 import { message } from "antd";
 
+// 获取事件id
+export function getEventId(componentNodeId: string, exposeId: string): string {
+  return `${componentNodeId}-${exposeId}`;
+}
+
 // 获取解析data
 function parserData(
   parserFuncText: string | undefined, // 包含函数字符串
@@ -24,18 +30,82 @@ function parserData(
   options: TransformFunctionOptions, // 配置项
 ): any {
   if (!parserFuncText) return data;
-  // 从文本中获取转换函数
   const parserFunc = getMainFunction<TransformFunction>(parserFuncText);
-  if (!parserFunc) return data;
-  // 返回处理结果
-  return parserFunc(data, options);
+  return parserFunc ? parserFunc(data, options) : data;
+}
+
+// 处理显隐 option
+function handleVisibleOption(
+  opt: ComponentNodeEventTargetOpt, // 配置
+  target: ComponentNodeType, // 目标组件
+) {
+  const option = opt?.option as ComponentNodeEventTargetVisibleOption;
+  engine.componentNode.update(target.id, {
+    show: !!option?.visible,
+  });
+}
+
+// 处理请求 option
+function handleRequestOption(
+  opt: ComponentNodeEventTargetOpt, // 配置
+  target: ComponentNodeType, // 目标组件
+  origin: ComponentNodeType, // 源组件
+  payload?: any, // 参数
+) {
+  const option = opt?.option as ComponentNodeEventTargetRequestOption;
+  let data = option?.type === "json" ? option?.params : payload;
+  // 执行转换函数
+  data = parserData(option?.parserFunc, data, {
+    target,
+    origin,
+    option,
+  });
+  // 确保是对象
+  data = ensureObject(data);
+  engine.instance.get(target?.id)?.request?.(data);
+}
+
+// 处理自定义函数 option
+function handleCustomOption(
+  opt: ComponentNodeEventTargetOpt, // 配置
+  target: ComponentNodeType, // 目标组件
+  origin: ComponentNodeType, // 源组件
+  payload?: any, // 参数
+) {
+  const option = opt?.option as ComponentNodeEventTargetCustomOption;
+  // 执行自定义函数
+  if (option?.function) {
+    const customFunc = getMainFunction<GetUpdateTargetComponentNodeFunction>(option?.function);
+    const updateComponentNode = customFunc?.(target, origin, payload);
+    engine.componentNode.update(target?.id, updateComponentNode, { cover: true });
+  }
+}
+
+// 处理默认 option
+function handleCommonOption(
+  opt: ComponentNodeEventTargetOpt,
+  target: ComponentNodeType,
+  origin: ComponentNodeType,
+  payload?: any,
+) {
+  const option = opt.option as ComponentNodeEventTargetCommonOption;
+  const type = option?.type || "default";
+  let data = type === "default" ? payload : option?.value;
+  // 执行转换函数
+  data = parserData(option?.parserFunc, data, {
+    target,
+    origin,
+    option,
+  });
+  // 触发目标事件
+  engine.events.notify(getEventId(target.id, opt.exposeId), data);
 }
 
 // 创建handleTrigger
 function createHandleTrigger(componentNodeId: string) {
   return function (triggerId: string, payload: any) {
-    const componentNode = engine.componentNode.get(componentNodeId);
-    const targets = componentNode?.events?.find?.((event) => {
+    const origin = engine.componentNode.get(componentNodeId);
+    const targets = origin?.events?.find?.((event) => {
       return event?.triggerId === triggerId;
     })?.targets;
 
@@ -43,73 +113,27 @@ function createHandleTrigger(componentNodeId: string) {
     if (!targets) return;
 
     // 触发目标组件的事件
-    targets.forEach((target: ComponentNodeEventTarget) => {
-      const id = target.id;
-      const targetComponentNode = engine.componentNode.get(id);
-      if (!targetComponentNode) {
+    targets.forEach((optTarget: ComponentNodeEventTarget) => {
+      const target: ComponentNodeType | undefined = engine.componentNode.get(optTarget.id);
+      if (!target) {
         message.error("[bigScreen]: target componentNode not exist.");
         return;
       }
-      target.opts.forEach((opt: ComponentNodeEventTargetOpt) => {
-        // visible option.
-        if (opt.exposeId === INIT_EXPOSES.visible) {
-          const option = opt?.option as ComponentNodeEventTargetVisibleOption;
-          engine.componentNode.update(id, {
-            show: !!option?.visible,
-          });
-          return;
+      optTarget.opts.forEach((opt: ComponentNodeEventTargetOpt) => {
+        switch (opt.exposeId) {
+          case INIT_EXPOSES.visible:
+            handleVisibleOption(opt, target);
+            break;
+          case INIT_EXPOSES.request:
+            handleRequestOption(opt, target, origin, payload);
+            break;
+          case INIT_EXPOSES.custom:
+            handleCustomOption(opt, target, origin, payload);
+            break;
+          default:
+            handleCommonOption(opt, target, origin, payload);
+            break;
         }
-
-        // request option.
-        if (opt.exposeId === INIT_EXPOSES.request) {
-          const option = opt?.option as ComponentNodeEventTargetRequestOption;
-          let data = option?.type === "json" ? option?.params : payload;
-          // 执行转换函数
-          data = parserData(option?.parserFunc, data, {
-            origin: componentNode,
-            target: targetComponentNode,
-            option,
-          });
-          // 确保是对象
-          data = ensureObject(data);
-          engine.instance.get(id)?.request?.(data);
-          return;
-        }
-
-        // custom option.
-        if (opt.exposeId === INIT_EXPOSES.custom) {
-          const option = opt?.option as ComponentNodeEventTargetCustomOption;
-          // 执行自定义函数
-          if (option?.function) {
-            const customFunction = getMainFunction<GetUpdateTargetComponentNodeFunction>(
-              option?.function,
-            );
-            const updateTargetComponentNode = customFunction?.(
-              targetComponentNode,
-              componentNode,
-              payload,
-            );
-            // 更新目标组件
-            if (updateTargetComponentNode) {
-              engine.componentNode.update(id, updateTargetComponentNode);
-            }
-          }
-          return;
-        }
-
-        // common option.
-        const option = opt.option as ComponentNodeEventTargetCommonOption;
-        const type = option?.type || "default";
-        // 事件参数值
-        let data = type === "default" ? payload : option?.value;
-        // 执行转换函数
-        data = parserData(option?.parserFunc, data, {
-          origin: componentNode,
-          target: targetComponentNode,
-          option,
-        });
-        // 触发目标事件
-        engine.events.notify(`${targetComponentNode.id}-${opt?.exposeId}`, data);
       });
     });
   };
