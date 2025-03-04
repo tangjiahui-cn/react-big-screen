@@ -12,6 +12,7 @@ import type {
   HistoryRecordListener,
   HistoryRecordListenerUnmount,
 } from "./types";
+import { cloneDeep } from "lodash-es";
 
 export class HistoryRecord {
   private initData: any; // 初始化data（不在list中）
@@ -68,7 +69,7 @@ export class HistoryRecord {
   private getInitDataRecordItem(): HistoryRecordItem {
     return {
       stepId: "init",
-      data: this.initData,
+      data: cloneDeep(this.initData),
       isPass: true,
     };
   }

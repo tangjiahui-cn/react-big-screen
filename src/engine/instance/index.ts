@@ -47,15 +47,16 @@ export default class Instance extends BaseInstance {
    * @param cover 是否覆盖（默认false。true则重置整个选中实例，false则新增选中）
    */
   public select(id: string | string[] | InstanceType | InstanceType[], cover?: boolean): void {
+    const instances: (InstanceType | undefined)[] = this.getInstances(id);
+
+    // 取消选中全部
     if (cover) {
-      // 取消选中全部
       this.selectedInstances.getAll().forEach((instance) => {
         instance?.handleUnSelected?.();
       });
     }
 
     // 选中对应实例
-    const instances: (InstanceType | undefined)[] = this.getInstances(id);
     instances.forEach((instance?: InstanceType) => {
       instance?.handleSelected?.();
     });

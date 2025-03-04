@@ -8,7 +8,7 @@ import { RefObject, useEffect } from "react";
 import { moveableDom } from "@/packages/dragMove";
 import globalCursor from "@/packages/globalCursor";
 import engine, { ComponentNodeType } from "@/engine";
-import { getAllSelectedComponentNodes } from "@/packages/shortCutKeys";
+import { addHistory, getAllSelectedComponentNodes } from "@/packages/shortCutKeys";
 
 interface DragSizeOptions {
   lock?: boolean; // 是否锁定
@@ -41,6 +41,7 @@ export function useItemDragMove(domRef: RefObject<HTMLElement | null>, options: 
     let enableTransform = false;
     // 旧pointerEvents
     const oldPointerEvents = currentDOM.style.pointerEvents;
+    let isMove = false;
     return moveableDom(currentDOM, {
       onStart(e) {
         e.stopPropagation();
@@ -57,46 +58,78 @@ export function useItemDragMove(domRef: RefObject<HTMLElement | null>, options: 
         });
       },
       onMove(deltaX: number, deltaY: number, e: MouseEvent) {
-        moveOptItems.forEach((item: MoveOptItem) => {
-          // 不显示的组件不移动
-          if (!item.show) {
-            return;
-          }
-          const dom = item.containerDom!;
-          if (enableTransform) {
-            dom.style.transform = `translate3d(${deltaX}px,${deltaY}px, 0)`;
-          } else {
-            const componentNode = item.componentNode!;
-            dom.style.left = `${componentNode.x + deltaX}px`;
-            dom.style.top = `${componentNode.y + deltaY}px`;
-          }
-        });
+        isMove = true;
         options?.onMove?.(deltaX, deltaY, e);
+        // 移动选中实例
+        moveSelectedInstances(moveOptItems, enableTransform, deltaX, deltaY);
       },
       onEnd(deltaX: number, deltaY: number, e: MouseEvent) {
         // 移动结束恢复pointerEvents
         currentDOM.style.pointerEvents = oldPointerEvents;
         // 恢复全局光标
         globalCursor.revoke();
-        // 处理选中实例
-        moveOptItems.forEach((item) => {
-          // 删除 transform
-          if (item?.show && enableTransform) {
-            item.containerDom!.style.removeProperty("transform");
-          }
-          // 更新 componentNode
-          const componentNode = item?.componentNode;
-          if (componentNode) {
-            engine.componentNode.update(componentNode.id, {
-              x: deltaX + (componentNode?.x || 0),
-              y: deltaY + (componentNode?.y || 0),
-            });
-          }
-        });
+        // 回调onEnd
         options?.onEnd?.(deltaX, deltaY, e);
+
+        // 如果未移动，则不处理选中实例
+        if (!isMove) return;
+
+        // 更新选中实例
+        updateSelectedInstances(moveOptItems, enableTransform, deltaX, deltaY);
+
+        // 加入历史记录
+        if (moveOptItems?.length) {
+          addHistory("移动组件");
+        }
+
+        isMove = false;
       },
     });
   }, [lock]);
+}
+
+// 移动选中实例
+function moveSelectedInstances(
+  moveOptItems: MoveOptItem[],
+  enableTransform: boolean,
+  deltaX: number,
+  deltaY: number,
+) {
+  moveOptItems.forEach((item: MoveOptItem) => {
+    // 不显示的组件不移动
+    if (!item.show) return;
+    const dom = item.containerDom!;
+    if (enableTransform) {
+      dom.style.transform = `translate3d(${deltaX}px,${deltaY}px, 0)`;
+    } else {
+      const componentNode = item.componentNode!;
+      dom.style.left = `${componentNode.x + deltaX}px`;
+      dom.style.top = `${componentNode.y + deltaY}px`;
+    }
+  });
+}
+
+// 更新选中实例
+function updateSelectedInstances(
+  moveOptItems: MoveOptItem[],
+  enableTransform: boolean,
+  deltaX: number,
+  deltaY: number,
+) {
+  moveOptItems.forEach((item) => {
+    // 删除 transform
+    if (item?.show && enableTransform) {
+      item.containerDom!.style.removeProperty("transform");
+    }
+    // 更新 componentNode
+    const componentNode = item?.componentNode;
+    if (componentNode) {
+      engine.componentNode.update(componentNode.id, {
+        x: deltaX + (componentNode?.x || 0),
+        y: deltaY + (componentNode?.y || 0),
+      });
+    }
+  });
 }
 
 // 获取所有移动 moveItems

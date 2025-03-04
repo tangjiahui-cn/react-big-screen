@@ -11,6 +11,7 @@ import engine, { ComponentNodeType } from "@/engine";
 import styles from "./index.module.less";
 import { Line, LineConfigProvider } from "@/components/Attributes";
 import EditText from "@/components/EditText";
+import { addHistory } from "@/packages/shortCutKeys";
 
 export default function () {
   const { componentNode } = useSingleSelectedInstance();
@@ -20,10 +21,11 @@ export default function () {
   }, [componentNode?.cId]);
   const AttributesComponent = component?.attributesComponent;
 
-  // 切换组件全页面显示
-  function handleChangeAllPage(isAllPage: boolean) {
+  // 切换全页面
+  function handleChangeIsAllPage(isAllPage: boolean) {
     // 只有关闭全页面时才需要手动删除全局global
-    // 开启全页面不需要，因为切换页面时会保存当前页所有数据，自动更新 global、componentNodes
+    // 开启全页面不需要 (因为切换页面时会保存当前页所有数据，自动更新 global、componentNodes)
+    // 【tips：每次切换页面时，才会真正区分全页面组件】
     if (!isAllPage) {
       engine.page.removeGlobalComponentNode(componentNode?.id);
     }
@@ -43,7 +45,15 @@ export default function () {
       form={form}
       className={styles.singleInstanceAttributesBase}
       onValuesChange={(changedValues) => {
+        let historyDescription = "修改组件";
+        // 修改"全页面"属性时
+        if (changedValues.hasOwnProperty("isAllPage")) {
+          handleChangeIsAllPage(changedValues.isAllPage);
+          historyDescription = changedValues.isAllPage ? "设置组件全页面" : "取消组件全页面";
+        }
+        // 其他属性更新
         engine.componentNode.update(componentNode?.id, changedValues);
+        addHistory(historyDescription);
       }}
     >
       {/* 选中组件信息 */}
@@ -113,16 +123,8 @@ export default function () {
               </Form.Item>
             </Line>
             <Line label={"全页面"} style={{ marginTop: 8 }} labelTip={"每个页面都会显示"}>
-              <Form.Item name={"isAllPage"} noStyle valuePropName={"checked"}>
-                <Checkbox
-                  onChange={(e) => {
-                    // 等待 engine.componentNode.update组件更新后，再执行切换全局组件操作
-                    // 之所有不在 engine.componentNode 里面单独处理，是为了 componentNode 和 page 相互独立。
-                    setTimeout(() => {
-                      handleChangeAllPage(e.target.checked);
-                    });
-                  }}
-                />
+              <Form.Item noStyle name={"isAllPage"} valuePropName={"checked"}>
+                <Checkbox />
               </Form.Item>
             </Line>
           </LineConfigProvider>
@@ -135,6 +137,7 @@ export default function () {
               componentNode={componentNode}
               onChangeComponentNode={(target) => {
                 engine.componentNode.update(componentNode?.id, target);
+                addHistory("修改组件属性");
               }}
               options={componentNode?.options}
               onChange={(options, cover) => {
@@ -146,6 +149,7 @@ export default function () {
                         ...options,
                       },
                 });
+                addHistory("修改组件属性");
               }}
             />
           </div>

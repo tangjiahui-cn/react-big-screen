@@ -41,9 +41,16 @@ export * from "./hooks";
 export * from "./enum";
 export * from "./utils";
 
+type JsonListener = (json: JsonType) => void;
+type JsonListenerUnmount = () => void;
+
 class Engine {
   // 载入的json对象
   private json: JsonType | undefined = undefined;
+  // json值监听
+  private listeners: JsonListener[] = [];
+  // setTimeout的id
+  private timerId: any;
   // 组件模板
   public component: Component = new Component();
   // 组件数据实例
@@ -72,7 +79,7 @@ class Engine {
   }
 
   // 加载json对象
-  public loadJSON(json: JsonType): void {
+  public loadJSON(json: JsonType) {
     this.json = json;
 
     if (__DEV__) {
@@ -103,11 +110,18 @@ class Engine {
 
     // 读取默认选中
     if (json.selectedIds) {
+      if (this.timerId) {
+        clearTimeout(this.timerId);
+      }
       // 等待 packages 触发 componentNodes 更新完毕后再选中
-      setTimeout(() => {
-        this.instance.select(json.selectedIds as string[]);
-      }, 50);
+      this.timerId = setTimeout(() => {
+        this.timerId = undefined;
+        this.instance.select(json.selectedIds as string[], true);
+      }, 10);
     }
+
+    // 触发json变化
+    this.notifyJsonChange();
   }
 
   // 加载json字符串对象
@@ -144,6 +158,24 @@ class Engine {
         ...this.json?.config,
       },
     });
+  }
+
+  // json读取触发事件
+  private notifyJsonChange() {
+    const json = this.json;
+    if (json) {
+      this.listeners.forEach((callback) => {
+        callback(json);
+      });
+    }
+  }
+
+  // 监听json读取
+  public onJsonChange(callback: JsonListener): JsonListenerUnmount {
+    this.listeners.push(callback);
+    return () => {
+      this.listeners = this.listeners.filter((listener) => listener !== callback);
+    };
   }
 }
 

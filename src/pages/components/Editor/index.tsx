@@ -59,7 +59,7 @@ export default React.memo(() => {
   // 拖拽创建实例
   useVirtualDrop(innerEditorDomRef, {
     accept: ["create-component"],
-    onDrop: async (e: MouseEvent, dragOptions) => {
+    onDrop: (e: MouseEvent, dragOptions) => {
       const dom = innerEditorDomRef.current;
       if (!dom) {
         throw new Error("dom must be exist.");
@@ -81,8 +81,7 @@ export default React.memo(() => {
       setTimeout(async () => {
         // 选中新增的组件
         engine.instance.select(componentNode.id, true);
-        // 增加历史记录
-        addHistory(await engine.getJSON(), "新增一个组件");
+        addHistory(`新增一个组件 “${componentNode.cName}”`);
       });
     },
   });
@@ -120,6 +119,7 @@ export default React.memo(() => {
       );
 
       const pageId = engine.config.getCurrentPage();
+      const clonedIds: string[] = [];
       // 这里克隆children后创建到画布
       const clonedComponents = engine.componentNode.cloneComponentNodes(favorite.children, {
         onClone(_, cloned) {
@@ -127,9 +127,15 @@ export default React.memo(() => {
           cloned.x = x + (cloned.x - minX);
           cloned.y = y + (cloned.y - minY);
           cloned.pageId = pageId;
+          clonedIds.push(cloned.id);
         },
       });
       engine.componentNode.add(clonedComponents);
+      setTimeout(() => {
+        // 选中克隆组件
+        engine.instance.select(clonedIds, true);
+        addHistory(`新增收藏组件 “${favorite.name}”`);
+      });
     },
   });
 
@@ -147,8 +153,9 @@ export default React.memo(() => {
       className={styles.editor}
       onContextMenu={(e) => e.preventDefault()}
       onMouseDown={(e) => {
-        if (isClickMouseLeft(e.nativeEvent)) {
+        if (isClickMouseLeft(e.nativeEvent) && engine.instance.getAllSelected().length) {
           engine.instance.unselectAll();
+          addHistory("取消选中组件");
         }
       }}
     >

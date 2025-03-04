@@ -13,3 +13,4 @@ export * from "./useComponentNode";
 export * from "./usePages";
 export * from "./useCurrentPage";
 export * from "./useHistoryData";
+export * from "./useJson";

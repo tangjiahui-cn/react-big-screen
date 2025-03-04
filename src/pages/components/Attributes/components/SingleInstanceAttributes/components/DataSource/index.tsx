@@ -138,7 +138,7 @@ export default function () {
           minimap={false}
           language={"json"}
           value={loading ? "" : resultCode}
-          style={{ height: 300 }}
+          style={{ flex: 1, minHeight: 200, maxHeight: 400 }}
         />
       </div>
     </LineConfigProvider>

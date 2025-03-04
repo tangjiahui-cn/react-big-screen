@@ -40,6 +40,8 @@ export default {
         ext1: "press",
         ext2: "lock component",
       },
+      undo: "undo",
+      cancelUndo: "cancelUndo",
     },
     undo: "undo",
     cancelUndo: "cancel undo",

@@ -40,6 +40,8 @@ export default {
         ext1: "按住",
         ext2: "锁定组件",
       },
+      undo: "撤销",
+      cancelUndo: "取消撤销",
     },
     undo: "撤销",
     cancelUndo: "取消撤销",
