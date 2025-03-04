@@ -39,7 +39,7 @@ export default function ShortCutKeysDescription() {
   return (
     <Space
       direction={"vertical"}
-      style={{ padding: 6, userSelect: "none", whiteSpace: "nowrap", width: 300 }}
+      style={{ padding: "6px 6px 10px", userSelect: "none", whiteSpace: "nowrap", width: 335 }}
     >
       <b>{t("head.shortCutKeys.title")}</b>
 
@@ -106,6 +106,22 @@ export default function ShortCutKeysDescription() {
         <span>{t("head.shortCutKeys.forceExt.ext1")}</span>
         <Key>Shift</Key>
         <span>{t("head.shortCutKeys.forceExt.ext2")}</span>
+      </Space>
+
+      <Space>
+        <span>{t("head.shortCutKeys.undo")}：</span>
+        <Key>Shift</Key>
+        <span>+</span>
+        <Key>Z</Key>
+      </Space>
+
+      <Space>
+        <span>{t("head.shortCutKeys.cancelUndo")}：</span>
+        <Key>Shift</Key>
+        <span>+</span>
+        <Key>Ctrl / Command</Key>
+        <span>+</span>
+        <Key>Z</Key>
       </Space>
     </Space>
   );

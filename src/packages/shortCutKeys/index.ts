@@ -59,5 +59,6 @@ export function useGlobalShortCutKeys() {
     "Shift + R": () => unSelectAllComponentNodes(),
     "Shift + Z": () => undoHistory(),
     "Shift + Command + Z": () => cancelUndoHistory(),
+    "Shift + Ctrl + Z": () => cancelUndoHistory(),
   });
 }

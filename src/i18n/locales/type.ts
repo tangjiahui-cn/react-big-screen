@@ -38,6 +38,8 @@ export interface Locale {
         ext1: string;
         ext2: string;
       };
+      undo: string;
+      cancelUndo: string;
     };
     undo: string;
     cancelUndo: string;
