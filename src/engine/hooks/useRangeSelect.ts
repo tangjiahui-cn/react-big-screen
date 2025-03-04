@@ -9,12 +9,15 @@ import { isIntersect } from "@/utils";
 import { RefObject, useMemo } from "react";
 import { throttle } from "lodash-es";
 import engine from "..";
-import { isKeyPressed } from "@/packages/shortCutKeys";
+import { addHistory, isKeyPressed } from "@/packages/shortCutKeys";
 
 export function useRangeSelect(domRef: RefObject<HTMLDivElement | null>) {
   // 范围框选
-  const handleSelectRangeInfo: (rangeInfo: RangeInfo) => void = useMemo(() => {
-    return throttle((rangeInfo: RangeInfo) => {
+  const handleSelectRangeInfo: (
+    rangeInfo: RangeInfo,
+    callback?: (selectedIds: string[]) => void,
+  ) => void = useMemo(() => {
+    return throttle((rangeInfo: RangeInfo, callback?: (selectedIds: string[]) => void) => {
       // 过滤框选实例
       const selectedIds = engine.componentNode.getAll().reduce((result, componentNode) => {
         const p1 = {
@@ -39,6 +42,7 @@ export function useRangeSelect(domRef: RefObject<HTMLDivElement | null>) {
       }, [] as string[]);
       // 选中框选的实例
       engine.instance.select(selectedIds, true);
+      callback?.(selectedIds);
     }, 100);
   }, []);
 
@@ -47,7 +51,11 @@ export function useRangeSelect(domRef: RefObject<HTMLDivElement | null>) {
       handleSelectRangeInfo(rangeInfo);
     },
     onEnd(rangeInfo) {
-      handleSelectRangeInfo(rangeInfo);
+      handleSelectRangeInfo(rangeInfo, (selectedIds) => {
+        if (selectedIds.length) {
+          addHistory("范围选中组件");
+        }
+      });
     },
   });
 }

@@ -5,6 +5,7 @@
  * @date 2025/2/25
  */
 import { ComponentNodeType, JsonTypePage } from "@/engine";
+import { cloneDeep } from "lodash-es";
 
 type Listener = (pages: JsonTypePage[]) => void;
 type ListenerUnmount = () => void;
@@ -63,7 +64,11 @@ export default class Page {
   public init(componentNodes: ComponentNodeType[] = [], pages: JsonTypePage[] = []) {
     this.globalComponentNodes = {};
     this.pageMap = { [DEFAULT_PAGE.id]: { children: [] } };
-    this.pages = pages?.length ? pages : [DEFAULT_PAGE];
+    // 设置空页面
+    this.pages = pages?.length ? pages : [cloneDeep(DEFAULT_PAGE)];
+    this.pages.forEach((page) => {
+      this.pageMap[page.id] ||= { children: [] };
+    });
     componentNodes.forEach((componentNode) => {
       const pageId = componentNode?.pageId || DEFAULT_PAGE.id;
       // 添加全页面组件
@@ -73,10 +78,6 @@ export default class Page {
       }
       // 添加非全页面组件
       (this.pageMap[pageId] ||= { children: [] }).children.push(componentNode);
-    });
-    // 设置空页面
-    this.pages.forEach((page) => {
-      this.pageMap[page.id] ||= { children: [] };
     });
     this.notifyChange();
   }

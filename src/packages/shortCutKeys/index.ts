@@ -35,9 +35,15 @@ export function isKeyPressed(key: "command" | "ctrl" | "shift"): boolean {
  */
 export function useGlobalShortCutKeys() {
   useShortCutKeys({
-    backspace: () => deleteSelectedComponentNodes(),
-    delete: () => deleteSelectedComponentNodes(),
-    "Shift + A": () => selectAllComponentNodes(),
+    backspace: () => {
+      deleteSelectedComponentNodes();
+    },
+    delete: () => {
+      deleteSelectedComponentNodes();
+    },
+    "Shift + A": () => {
+      selectAllComponentNodes();
+    },
     left: (e) => {
       e.preventDefault();
       selectedMoveLeft();

@@ -5,7 +5,7 @@
  * @date 2025/1/15
  */
 import engine from "@/engine";
-import { getAllSelectedComponentNodes } from ".";
+import { addHistory, getAllSelectedComponentNodes } from ".";
 
 export function copySelectedComponentNodes() {
   const allSelectedComponentNodes = getAllSelectedComponentNodes(); // 所有选中组件
@@ -32,5 +32,6 @@ export function copySelectedComponentNodes() {
   // 选中新复制的实例
   setTimeout(() => {
     engine.instance.select(newSelectedIds, true);
+    addHistory("复制组件");
   });
 }

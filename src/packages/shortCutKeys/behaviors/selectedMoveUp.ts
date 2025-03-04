@@ -5,6 +5,7 @@
  * @date 2025/1/14
  */
 import engine from "@/engine";
+import { addHistory } from "@/packages/shortCutKeys";
 
 export function selectedMoveUp() {
   engine.instance.getAllSelected().forEach((instance) => {
@@ -15,4 +16,5 @@ export function selectedMoveUp() {
       });
     }
   });
+  addHistory("组件上移");
 }

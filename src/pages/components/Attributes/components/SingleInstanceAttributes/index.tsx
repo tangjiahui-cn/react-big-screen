@@ -9,10 +9,11 @@ import Attributes from "./components/Attributes";
 import DataSource from "./components/DataSource";
 import Interactive from "./components/Interactive";
 import Json from "./components/Json";
-import { ComponentNodeType, InstanceType, useComponentNode } from "@/engine";
-import { createContext, useContext } from "react";
+import engine, { ComponentNodeType, InstanceType, useComponentNode } from "@/engine";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import styles from "./index.module.less";
+import { useListenRef } from "@/hooks";
 
 const SingleSelectedContext = createContext<{
   instance?: InstanceType;
@@ -29,8 +30,23 @@ export default function SingleInstanceAttributes(props: Props) {
   const [t] = useTranslation();
   const { instance } = props;
   const componentNode = useComponentNode(instance.id);
-  return componentNode ? (
-    <SingleSelectedContext.Provider value={{ instance, componentNode }}>
+  const [scopeComponentNode, setScopeComponentNode] = useState<ComponentNodeType>();
+  const instanceRef = useListenRef(instance);
+
+  // 监听 componentNode
+  useEffect(() => {
+    setScopeComponentNode(componentNode);
+  }, [componentNode]);
+
+  // 监听json变化时设置 componentNode (适用于历史记录变更时设置json)
+  useEffect(() => {
+    return engine.onJsonChange(() => {
+      setScopeComponentNode(engine.componentNode.get(instanceRef?.current?.id));
+    });
+  }, []);
+
+  return scopeComponentNode ? (
+    <SingleSelectedContext.Provider value={{ instance, componentNode: scopeComponentNode }}>
       <Tabs
         className={styles.singleAttributes}
         defaultActiveKey={"1"}

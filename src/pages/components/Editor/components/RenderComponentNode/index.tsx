@@ -15,14 +15,15 @@ import engine, {
   useCreateUseExposeHook,
   ComponentPackage,
 } from "@/engine";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { isKeyPressed } from "@/packages/shortCutKeys";
+import React, { useMemo, useRef, useState } from "react";
+import { addHistory, isKeyPressed } from "@/packages/shortCutKeys";
 import { isClickMouseLeft, isClickMouseRight, isInRect } from "@/utils";
 import { useItemContextMenu, useItemDragMove, useItemDragSize } from "./hooks";
 import classNames from "classnames";
 import styles from "./index.module.less";
-import { useDomEvents, useListenRef } from "@/hooks";
+import { useDomEvents, useEffectOnce, useListenRef } from "@/hooks";
 import { useAsk } from "@/components/Ask";
+import { useUpdateEffect } from "ahooks";
 
 interface Coordinate {
   x: number;
@@ -39,23 +40,31 @@ interface ScopeRenderComponentNodeProps extends Omit<RenderComponentProps, "pack
 }
 
 export default function RenderComponentNode(props: RenderComponentProps) {
-  const [componentNode, setComponentNode] = useState(props?.componentNode);
-  const componentNodeShow = componentNode?.show ?? true;
+  const [scopeComponentNode, setScopeComponentNode] = useState<ComponentNodeType>(
+    props?.componentNode,
+  );
+
+  const componentNodeShow = scopeComponentNode ? scopeComponentNode?.show ?? true : false;
 
   // packages 变化必定导致 components 变化，所以重新查找组件的 component 是否存在
   const component = useMemo(() => {
-    return engine.component.get(componentNode.cId);
-  }, [componentNode?.cId, props?.packages]);
+    return engine.component.get(props?.componentNode.cId);
+  }, [props?.componentNode?.cId, props?.packages]);
 
-  useEffect(() => {
+  useEffectOnce(() => {
     // 监听当前节点变更事件
-    return engine.componentNode.onChange(componentNode.id, ({ payload }) => {
-      setComponentNode({ ...payload });
+    return engine.componentNode.onChange(props?.componentNode.id, ({ payload }) => {
+      setScopeComponentNode({ ...payload });
     });
-  }, []);
+  });
+
+  useUpdateEffect(() => {
+    // componentNodes更新时，刷新当前 componentNode
+    setScopeComponentNode(props?.componentNode);
+  }, [props?.componentNode]);
 
   return component && componentNodeShow ? (
-    <ScopeRenderComponentNode componentNode={componentNode} component={component} />
+    <ScopeRenderComponentNode componentNode={scopeComponentNode} component={component} />
   ) : (
     <></>
   );
@@ -163,9 +172,10 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNodeProps) {
         return;
       }
       // 如果不在，则询问是否移入
+      const panelName = engine.componentNode.getPanelName(targetPanelId) || "目标";
       ask({
         title: "移入提醒",
-        content: `确定放入面板“${engine.componentNode.getPanelName(targetPanelId) || "目标"}”？`,
+        content: `确定放入面板“${panelName}”？`,
         onOk(close) {
           // 选中组件都移入到panelId
           engine.instance.getAllSelected().forEach((instance) => {
@@ -174,6 +184,7 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNodeProps) {
           });
           // 选中目标layout组件
           engine.instance.select(layoutComponentNode.id, true);
+          addHistory(`移入面板 “${panelName}”`);
           close();
         },
       });
@@ -183,14 +194,16 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNodeProps) {
     // 如果不在layout类型组件上方，则判断是否之前已经在layout类型组件中，如果在，则询问移出
     const panelId = componentNodeRef.current.panelId;
     if (panelId) {
+      const panelName = engine.componentNode.getPanelName(panelId) || "目标";
       ask({
         title: "移出提醒",
-        content: `是否移出面板“${engine.componentNode.getPanelName(panelId) || "目标"}”?`,
+        content: `是否移出面板“${panelName}”?`,
         onOk(close) {
           // 选中组件都从面板移除
           engine.instance.getAllSelected().forEach((instance) => {
             const selectedComponentNode = engine.componentNode.get(instance.id);
             engine.componentNode.removeFromPanel(selectedComponentNode);
+            addHistory(`移出面板 “${panelName}”`);
           });
           close();
         },
@@ -258,6 +271,7 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNodeProps) {
 
         // 是否按住多选键（按住多选，则cover为true，不会取消选中其他实例）
         engine.instance.select(selectedIds, !isPressedShift);
+        addHistory("选中组件");
       }
     },
   });
