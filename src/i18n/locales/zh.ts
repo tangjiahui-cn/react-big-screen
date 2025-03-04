@@ -8,6 +8,7 @@ export default {
       componentNodes: "当前页组件",
       property: "个人资产",
       favorites: "收藏夹",
+      history: "历史记录",
     },
     library: {
       base: "基础组件",

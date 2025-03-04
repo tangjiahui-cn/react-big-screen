@@ -21,10 +21,10 @@ import TooltipButton from "@/components/TooltipButton";
 import { message } from "antd";
 import IconFont from "@/components/IconFont";
 import SizeBar from "./components/SizeBar";
-import engine from "@/engine";
+import engine, { useHistoryData } from "@/engine";
 import { getLocalFileText, downloadText } from "@/utils";
 import ShortCutKeysDescription from "./components/ShortCutKeysDescription";
-import { saveLocal } from "@/packages/shortCutKeys";
+import { cancelUndoHistory, saveLocal, undoHistory } from "@/packages/shortCutKeys";
 import { saveLocalPreviewJson } from "@/pages/preview";
 import { useTranslation } from "react-i18next";
 import { changeLanguage, LANGUAGE } from "@/i18n";
@@ -44,6 +44,7 @@ interface OperateItem {
 
 export default function Header() {
   const [t, i18n] = useTranslation();
+  const historyData = useHistoryData();
   const isChinese = i18n.language === LANGUAGE.zh;
   const operates = useMemo(() => {
     return [
@@ -55,13 +56,13 @@ export default function Header() {
       {
         key: "undo",
         description: t("head.undo"),
-        disabled: true,
+        disabled: !historyData.isCanGoLast,
         icon: <IconFont type={"icon-undo"} />,
       },
       {
         key: "cancelUndo",
         description: t("head.cancelUndo"),
-        disabled: true,
+        disabled: !historyData.isCanGoForward,
         icon: <IconFont type={"icon-cancel-undo"} />,
       },
       { key: "export", description: t("head.export"), icon: <UploadOutlined /> },
@@ -81,7 +82,7 @@ export default function Header() {
       },
       { key: "preview", description: t("head.preview"), icon: <DesktopOutlined /> },
     ];
-  }, [i18n.language]);
+  }, [i18n.language, historyData.isCanGoForward, historyData.isCanGoLast]);
 
   function handleJumpGithub() {
     window.open("https://github.com/tangjiahui-cn/big-screen.git");
@@ -90,10 +91,10 @@ export default function Header() {
   function handleOperate(item: OperateItem) {
     switch (item.key) {
       case "undo": // 撤销
-        message.warn("暂不支持撤销");
+        undoHistory();
         break;
       case "cancelUndo": // 反撤销
-        message.warn("暂不支持取消撤销");
+        cancelUndoHistory();
         break;
       case "export": // 导出
         engine.getJSON().then((json) => {

@@ -8,6 +8,7 @@ export default {
       componentNodes: "componentNodes",
       property: "property",
       favorites: "favorites",
+      history: "history",
     },
     library: {
       base: "base",

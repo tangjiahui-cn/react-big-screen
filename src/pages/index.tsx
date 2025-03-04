@@ -12,6 +12,7 @@ import Menu from "./components/Menu";
 import engine from "@/engine";
 import { useEffectOnce } from "@/hooks";
 import { useGlobalShortCutKeys } from "@/packages/shortCutKeys";
+import { cloneDeep } from "lodash-es";
 
 export default function Page() {
   // 注册全局快捷键
@@ -19,7 +20,10 @@ export default function Page() {
 
   useEffectOnce(() => {
     // 读取本地json
-    engine.loadJSONString(localStorage.getItem("json"));
+    engine.loadJSONString(localStorage.getItem("json"), (json) => {
+      // 初始化历史记录
+      engine.history.setInitData(cloneDeep(json));
+    });
     // unmount
     return () => {
       engine.component.unRegisterAll();

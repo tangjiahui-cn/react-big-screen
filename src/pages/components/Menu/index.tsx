@@ -11,12 +11,14 @@ import MenuBar, { MenuBarItem } from "./components/MenuBar";
 import Property from "./components/Property";
 import Favorites from "./components/Favorites";
 import Pages from "./components/Pages";
+import History from "./components/History";
 import React, { useEffect, useMemo, useState } from "react";
 import {
   ApartmentOutlined,
   AppstoreOutlined,
   BankOutlined,
   FileTextOutlined,
+  HistoryOutlined,
   StarOutlined,
 } from "@ant-design/icons";
 import engine, { GlobalConfig, useConfig } from "@/engine";
@@ -59,6 +61,12 @@ export default function Menu() {
         icon: <StarOutlined />,
         title: t("menu.bar.favorites"),
         children: <Favorites />,
+      },
+      {
+        key: "history",
+        icon: <HistoryOutlined />,
+        title: t("menu.bar.history"),
+        children: <History />,
       },
     ];
   }, [i18n.language]);
