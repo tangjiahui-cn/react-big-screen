@@ -6,6 +6,7 @@ export interface Locale {
       componentNodes: string;
       property: string;
       favorites: string;
+      history: string;
     };
     library: {
       base: string;

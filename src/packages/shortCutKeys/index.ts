@@ -17,6 +17,8 @@ import {
   saveLocal,
   unSelectAllComponentNodes,
 } from "./behaviors";
+import { undoHistory } from "@/packages/shortCutKeys/behaviors/undoHistory";
+import { cancelUndoHistory } from "@/packages/shortCutKeys/behaviors/cancelUndoHistory";
 
 export * from "./behaviors";
 
@@ -55,5 +57,7 @@ export function useGlobalShortCutKeys() {
     "Shift + C": () => copySelectedComponentNodes(),
     "Shift + S": () => saveLocal(),
     "Shift + R": () => unSelectAllComponentNodes(),
+    "Shift + Z": () => undoHistory(),
+    "Shift + Command + Z": () => cancelUndoHistory(),
   });
 }

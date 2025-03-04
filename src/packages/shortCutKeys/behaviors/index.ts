@@ -26,3 +26,7 @@ export * from "./collectSelectedComponentNodes";
 export * from "./getAllSelectedComponentNodes";
 export * from "./getAllChildrenComponentNodes";
 export * from "./selectPage";
+export * from "./addHistory";
+export * from "./undoHistory";
+export * from "./cancelUndoHistory";
+export * from "./goHistory";

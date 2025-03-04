@@ -102,7 +102,7 @@ export default class Page {
   // 设置页面的 componentNodes
   public setComponentNodes(pageId?: string | JsonTypePage, componentNodes?: ComponentNodeType[]) {
     pageId = typeof pageId === "string" ? pageId : pageId?.id;
-    if (pageId && componentNodes?.length && this.pageMap?.[pageId]?.children) {
+    if (pageId && componentNodes && this.pageMap?.[pageId]?.children) {
       this.pageMap[pageId].children = componentNodes.filter((componentNode) => {
         // 如果是全局组件
         if (componentNode.isAllPage) {

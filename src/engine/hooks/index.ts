@@ -12,3 +12,4 @@ export * from "./useFavorites";
 export * from "./useComponentNode";
 export * from "./usePages";
 export * from "./useCurrentPage";
+export * from "./useHistoryData";

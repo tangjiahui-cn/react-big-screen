@@ -33,6 +33,7 @@ import { JsonType } from "./types";
 import { defaultPackage } from "./built-in";
 import { BaseEvent } from "./model";
 import { changeLanguage } from "@/i18n";
+import { HistoryRecord } from "@/packages/historyRecord";
 
 export type * from "./types";
 export * from "./store";
@@ -41,6 +42,8 @@ export * from "./enum";
 export * from "./utils";
 
 class Engine {
+  // 载入的json对象
+  private json: JsonType | undefined = undefined;
   // 组件模板
   public component: Component = new Component();
   // 组件数据实例
@@ -55,8 +58,8 @@ class Engine {
   public favorites: Favorites = new Favorites();
   // 子页面管理
   public page: Page = new Page();
-  // 载入的json对象
-  private json: JsonType | undefined = undefined;
+  // 历史记录管理
+  public history: HistoryRecord = new HistoryRecord();
 
   constructor() {
     // （初始化时）注册内置组件
@@ -83,7 +86,7 @@ class Engine {
     // 设置config
     this.config.setConfig({
       ...json.config,
-      currentPage: json?.config?.currentPage || DEFAULT_PAGE.id,
+      currentPage: json.config.currentPage || DEFAULT_PAGE.id,
     });
 
     // 注册 local package
@@ -94,7 +97,9 @@ class Engine {
     // 初始化 pages
     this.page.init(json?.componentNodes, json?.pages);
     // 设置当前展示页 componentNodes
-    this.componentNode.set(this.page.getComponentNodes(json.config.currentPage || DEFAULT_PAGE.id));
+    this.componentNode.set(
+      this.page.getComponentNodes(json?.config?.currentPage || DEFAULT_PAGE.id),
+    );
 
     // 读取默认选中
     if (json.selectedIds) {
@@ -106,9 +111,10 @@ class Engine {
   }
 
   // 加载json字符串对象
-  public loadJSONString(text?: string | null): void {
+  public loadJSONString(text?: string | null, callback?: (json: JsonType) => void): void {
     try {
       const json = JSON.parse(text || "{}");
+      callback?.(json);
       this.loadJSON(json);
     } catch (e) {
       console.error(e);

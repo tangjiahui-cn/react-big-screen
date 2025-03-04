@@ -20,6 +20,7 @@ import { useContextMenu } from "@/packages/contextMenu";
 import { createEditorContextMenu } from "./data/contextMenu";
 import { useVirtualDrop } from "@/packages/virtual-drag";
 import { message } from "antd";
+import { addHistory } from "@/packages/shortCutKeys";
 
 // 右键菜单项
 const contextMenu = createEditorContextMenu();
@@ -58,7 +59,7 @@ export default React.memo(() => {
   // 拖拽创建实例
   useVirtualDrop(innerEditorDomRef, {
     accept: ["create-component"],
-    onDrop: (e: MouseEvent, dragOptions) => {
+    onDrop: async (e: MouseEvent, dragOptions) => {
       const dom = innerEditorDomRef.current;
       if (!dom) {
         throw new Error("dom must be exist.");
@@ -77,9 +78,11 @@ export default React.memo(() => {
       });
       // 插入新componentNode到末尾
       engine.componentNode.add(componentNode);
-      setTimeout(() => {
+      setTimeout(async () => {
         // 选中新增的组件
         engine.instance.select(componentNode.id, true);
+        // 增加历史记录
+        addHistory(await engine.getJSON(), "新增一个组件");
       });
     },
   });
