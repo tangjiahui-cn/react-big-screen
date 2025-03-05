@@ -236,6 +236,9 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNodeProps) {
         ...moveInfo,
       });
     },
+    onEnd: () => {
+      addHistory("拖拽组件大小");
+    },
   });
 
   // 注册右键菜单

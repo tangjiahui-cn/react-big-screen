@@ -20,10 +20,11 @@ interface DragSizeOptions {
   isSelected?: boolean; // 是否选中
   lock?: boolean; // 是否锁定
   onChange?: (sizeInfo: SizeInfo) => void; // 更新位置信息
+  onEnd?: () => void; // 结束拖拽
 }
 
 export function useItemDragSize(domRef: RefObject<HTMLElement | null>, options: DragSizeOptions) {
-  const { isSelected, lock, onChange } = options;
+  const { isSelected, lock, onChange, onEnd } = options;
 
   useEffect(() => {
     if (!isSelected || lock) return;
@@ -61,6 +62,7 @@ export function useItemDragSize(domRef: RefObject<HTMLElement | null>, options: 
       onEnd() {
         // 恢复全局光标
         globalCursor.revoke();
+        onEnd?.();
       },
     });
   }, [isSelected, lock]);
