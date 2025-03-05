@@ -7,7 +7,17 @@
 ## 在线预览
 [https://tangjiahui-cn.github.io/react-big-screen](https://tangjiahui-cn.github.io/react-big-screen)
 
-## 功能 <font color="white" size="3">（开发中）</font> 
+## 页面截图
+
+编辑n：
+
+<img src="./imgs/edit.png" height="200">
+
+预览：
+
+<img src="./imgs/preview.png" height="200">
+
+## 功能特点
 
 - ✅ 拖拽移动、缩放。
 - ✅ 快捷键。
