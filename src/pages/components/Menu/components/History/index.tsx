@@ -11,6 +11,7 @@ import { useHistoryData } from "@/engine/hooks";
 import { goHistory, undoHistory } from "@/packages/shortCutKeys";
 import classNames from "classnames";
 import engine from "@/engine";
+import { HistoryRecordItem } from "@/packages/historyRecord/types";
 
 export default function Library() {
   const historyData = useHistoryData();
@@ -28,20 +29,25 @@ export default function Library() {
 
   return (
     <div className={styles.history}>
-      {historyData?.list?.map?.((item) => {
-        return (
-          <div
-            key={item.stepId}
-            className={classNames(styles.history_item, !item.isPass && styles.history_item_gray)}
-            onClick={() => {
-              handleClickStepId(item.stepId);
-            }}
-          >
-            {item.description}
-          </div>
-        );
-      })}
-      {!historyData?.list?.length && <IEmpty />}
+      <div className={styles.history_head}>
+        <b>最大存储容量：{historyData?.maxSize}</b>
+      </div>
+      <div className={styles.history_body}>
+        {historyData?.list?.map?.((item: HistoryRecordItem) => {
+          return (
+            <div
+              key={item.stepId}
+              className={classNames(styles.history_item, !item.isPass && styles.history_item_gray)}
+              onClick={() => {
+                handleClickStepId(item.stepId);
+              }}
+            >
+              {item.description}
+            </div>
+          );
+        })}
+        {!historyData?.list?.length && <IEmpty />}
+      </div>
     </div>
   );
 }

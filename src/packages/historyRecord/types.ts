@@ -1,6 +1,7 @@
 export type HistoryRecordListener = (data: HistoryData) => void;
 
 export interface HistoryData {
+  maxSize: number; // 最大存储容量
   list: HistoryRecordItem[]; // 历史记录列表
   currentIndex: number; // 当前历史索引
   current?: HistoryRecordItem; // 当前历史
