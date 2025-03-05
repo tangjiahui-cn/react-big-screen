@@ -9,7 +9,7 @@
 
 ## 页面截图
 
-编辑n：
+编辑：
 
 <img src="./imgs/edit.png" height="200">
 
