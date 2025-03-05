@@ -60,6 +60,7 @@ export default function RenderComponentNode(props: RenderComponentProps) {
 
   useUpdateEffect(() => {
     // componentNodes更新时，刷新当前 componentNode
+    // （此时，一定是全局componentNodes更新了，才会导致 props.componentNode更新。组件内部，都是触发局部更新的。）
     setScopeComponentNode(props?.componentNode);
   }, [props?.componentNode]);
 
