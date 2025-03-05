@@ -52,6 +52,40 @@ export default function AddPackageButton(props: Props) {
     props?.onAddSome?.(pkgs, sourceCodes);
   }
 
+  // 导入zip
+  async function loadZip(file: File): Promise<{
+    codes: string[];
+    pkgs: ComponentPackage[];
+  }> {
+    const blob = new Blob([file], { type: file.type });
+    const zip = new jszip();
+    const zipData = await zip.loadAsync(blob);
+    const files = zipData?.files || {};
+    // 解析出的组件包列表
+    const pkgs: ComponentPackage[] = [];
+    // 组件包对应源代码列表
+    const codes: string[] = [];
+    // 读取压缩包内第一层文件
+    for (const fileName in files) {
+      if (!fileName?.endsWith?.(".js")) {
+        continue;
+      }
+      // 只读取.js结尾的文件
+      const file = files[fileName];
+      const fileText = await file.async("text");
+      const pkg: ComponentPackage | undefined = await loadModuleFromText(fileText);
+      if (pkg) {
+        pkg.origin = "local";
+        pkgs.push(pkg);
+        codes.push(fileText);
+      }
+    }
+    return {
+      pkgs,
+      codes,
+    };
+  }
+
   async function handleOperate(key: ItemKey) {
     let fileText: string = "";
     switch (key) {
@@ -63,27 +97,7 @@ export default function AddPackageButton(props: Props) {
         }
         // 导入zip压缩包
         if (["application/x-zip-compressed", "application/zip"].includes(file?.type!)) {
-          const blob = new Blob([file], { type: file.type });
-          const zip = new jszip();
-          const zipData = await zip.loadAsync(blob);
-          const files = zipData?.files || {};
-          const pkgs: ComponentPackage[] = [];
-          const codes: string[] = [];
-          // 读取压缩包内第一层文件
-          for (const fileName in files) {
-            if (!fileName?.endsWith?.(".js")) {
-              return;
-            }
-            // 只读取.js结尾的文件
-            const file = files[fileName];
-            const fileText = await file.async("text");
-            const pkg: ComponentPackage | undefined = await loadModuleFromText(fileText);
-            if (pkg) {
-              pkg.origin = "local";
-              pkgs.push(pkg);
-              codes.push(fileText);
-            }
-          }
+          const { pkgs, codes } = await loadZip(file);
           emitChangeAddSome(pkgs, codes);
           return;
         }
