@@ -29,3 +29,5 @@ interface Window {
   define: RequireJsDefine;
   require: RequireJsRequire;
 }
+
+type Unmount = () => void;

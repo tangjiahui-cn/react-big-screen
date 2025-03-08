@@ -208,6 +208,12 @@ engine.component.register({
 - `echarts`：减小 46%。1050kb => 570kb。
 - `monoco-editor`：减小 36%。3600kb => 2308kb。
 
+### (7) 使用“事件委托”实现拖拽
+在编辑器容器处监听`mouse`事件，通过`dom.dataset.id`获取实例的一切信息，并借此实现组件移动、放置layout、范围框选中等。无需创建实例数量的事件监听器，节省内存提高性能。
+
+### (8) 合并事件
+一个事件同时运行多个功能。例如 `startMove` 支持 `hookQueue`，一次点击流程（`mousedown` -> `mouseup`），即可依次运行每个功能注册的回调函数，无需拖拽实例、选中实例功能各自创建一个`mousedown`的事件监听。
+
 ### ...
 
 ## 相关项目
