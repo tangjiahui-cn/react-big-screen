@@ -7,7 +7,17 @@
 ## 在线预览
 [https://tangjiahui-cn.github.io/react-big-screen](https://tangjiahui-cn.github.io/react-big-screen)
 
-## 功能 <font color="white" size="3">（开发中）</font> 
+## 页面截图
+
+编辑：
+
+<img src="./imgs/edit.png" height="200">
+
+预览：
+
+<img src="./imgs/preview.png" height="200">
+
+## 功能特点
 
 - ✅ 拖拽移动、缩放。
 - ✅ 快捷键。
@@ -182,6 +192,27 @@ engine.component.register({
 
 ### (4) 远程组件包优化
 组件包下载后，源码存储在浏览器端`IndexedDB`中，不会占用内存。下载时，才会从浏览器存储中取出。
+
+### (5) vite 构建优化
+手动分包，将`monaco-editor`等固定不变的大型包单独划分chunk便于更好的利用缓存。<br>
+一些随着按需加载体积不断增大的包单独划分（例如：`antd`、`ahooks`等），避免每次改动都更新其他未修改包。<br>
+
+### (6) 按需加载
+同时`nginx`设置`gzip`，体积可再次减小`75%`。<br>
+
+常见库替换：
+- `dayjs`：代替moment。
+- `lodash-es`：代替lodash。
+
+大型库按需加载：
+- `echarts`：减小 46%。1050kb => 570kb。
+- `monoco-editor`：减小 36%。3600kb => 2308kb。
+
+### (7) 使用“事件委托”实现拖拽
+在编辑器容器处监听`mouse`事件，通过`dom.dataset.id`获取实例的一切信息，并借此实现组件移动、放置layout、范围框选中等。无需创建实例数量的事件监听器，节省内存提高性能。
+
+### (8) 合并事件
+一个事件同时运行多个功能。例如 `startMove` 支持 `hookQueue`，一次点击流程（`mousedown` -> `mouseup`），即可依次运行每个功能注册的回调函数，无需拖拽实例、选中实例功能各自创建一个`mousedown`的事件监听。
 
 ### ...
 

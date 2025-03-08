@@ -14,6 +14,7 @@ import type {
 } from "./types";
 import { cloneDeep } from "lodash-es";
 
+export * from "./types";
 export class HistoryRecord {
   private initData: any; // 初始化data（不在list中）
   private maxSize: number = 20; // 最大容量
@@ -24,6 +25,7 @@ export class HistoryRecord {
   // 获取历史数据
   public getHistoryData(): HistoryData {
     return {
+      maxSize: this.maxSize,
       list: this.getAll(),
       currentIndex: this.currentIndex,
       current: this.getCurrent(),
