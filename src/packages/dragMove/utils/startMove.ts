@@ -81,8 +81,8 @@ export function startMove(options: moveableDomOptions): UnmountMoveableDom {
   }
 
   function mousemove(e: MouseEvent) {
-    const deltaX = Math.round(e.x - moveInfo.startX);
-    const deltaY = Math.round(e.y - moveInfo.startY);
+    const deltaX = e.x - moveInfo.startX;
+    const deltaY = e.y - moveInfo.startY;
     handleMove(deltaX, deltaY, e);
   }
 
