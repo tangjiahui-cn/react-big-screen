@@ -19,6 +19,7 @@ export interface RangeInfo {
 export function useRangeBox(
   domRef: RefObject<HTMLDivElement | null>, // dom的ref值
   options?: {
+    onStart?: (rangeInfo: RangeInfo) => void;
     onMove?: (rangeInfo: RangeInfo) => void;
     onEnd?: (rangeInfo: RangeInfo) => void;
   },
@@ -31,7 +32,7 @@ export function useRangeBox(
     let div: HTMLDivElement = document.createElement("div");
     div.classList.add(styles.rangeBox);
 
-    function getRangeInfo(deltaX: number, deltaY: number): RangeInfo {
+    function getRangeInfo(deltaX: number = 0, deltaY: number = 0): RangeInfo {
       const otherX = startPos.x + deltaX;
       const otherY = startPos.y + deltaY;
       const rangeInfo = {
@@ -56,6 +57,7 @@ export function useRangeBox(
         div.style.borderWidth = "0px";
         div.style.zIndex = `${engine.componentNode.getMaxLevel()}`;
         dom.appendChild(div);
+        options?.onStart?.(getRangeInfo());
       },
       onMove(deltaX: number, deltaY: number) {
         const rangeInfo = getRangeInfo(deltaX, deltaY);
