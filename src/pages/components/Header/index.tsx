@@ -85,7 +85,7 @@ export default function Header() {
   }, [i18n.language, historyData.isCanGoForward, historyData.isCanGoLast]);
 
   function handleJumpGithub() {
-    window.open("https://github.com/tangjiahui-cn/big-screen.git");
+    window.open("https://github.com/tangjiahui-cn/react-big-screen.git");
   }
 
   function handleOperate(item: OperateItem) {

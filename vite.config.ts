@@ -39,11 +39,12 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          antd: ["antd"], // 单独分包，避免按需使用antd时体积增大，继而导致“多包组合的大型chunk”体积变化，致使缓存失效。
-          lodash: ["lodash-es"], //（同antd）
-          ahooks: ["ahooks"], //（同antd）
+          "react-vendor": ["react", "react-dom"],
           "monaco-editor": ["monaco-editor"],
           echarts: ["echarts"],
+          ahooks: ["ahooks"], //（同antd）
+          "lodash-es": ["lodash-es"], //（同antd）
+          antd: ["antd"], //（同antd）
         },
       },
     },
