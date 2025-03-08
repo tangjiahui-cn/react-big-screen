@@ -12,8 +12,8 @@ import engine from "@/engine";
 import { useUnmount } from "ahooks";
 import { startMove } from "@/packages/dragMove/utils/startMove";
 import { listenDragMove } from "./listenDragMove";
-import { listenRangeBox } from "@/pages/components/Editor/hooks/useRegisterDrag/listenRangeBox";
-import { listenDropLayout } from "@/pages/components/Editor/hooks/useRegisterDrag/listenDropLayout";
+import { listenRangeBox } from "./listenRangeBox";
+import { listenDropLayout } from "./listenDropLayout";
 
 export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
   const unmountsRef = useRef<(Unmount | void)[]>([]);
