@@ -50,6 +50,9 @@ export default class BaseInstance {
   public get(id?: string): InstanceType | undefined;
   public get(id?: string[]): (InstanceType | undefined)[];
   public get(id?: string | string[]): InstanceType | (InstanceType | undefined)[] | undefined {
+    if (!id) {
+      return undefined;
+    }
     if (Array.isArray(id)) {
       return id.map((value) => this.get(value)) as (InstanceType | undefined)[];
     }

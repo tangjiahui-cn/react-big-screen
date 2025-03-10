@@ -41,11 +41,13 @@ export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
 
       // 组件实例id
       const id = (e.target as any)?.dataset?.id;
+      // 组件对应 instance
+      const instance = engine.instance.get(id);
+      // 是否选中组件实例
+      const isSelectedInstance = instance && !instance?.getComponentNode?.()?.lock;
 
-      // 点击组件
-      if (id) {
-        const instance = engine.instance.get(id);
-        if (!instance) return;
+      // 选中组件实例时
+      if (isSelectedInstance) {
         // 处理组件选中
         handleClickComponentNode(instance, e);
         // 监听移动
