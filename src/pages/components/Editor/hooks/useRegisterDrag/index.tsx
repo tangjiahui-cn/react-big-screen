@@ -12,8 +12,8 @@ import engine from "@/engine";
 import { useUnmount } from "ahooks";
 import { startMove } from "@/packages/dragMove/utils/startMove";
 import { listenDragMove } from "./listenDragMove";
-import { listenRangeBox } from "@/pages/components/Editor/hooks/useRegisterDrag/listenRangeBox";
-import { listenDropLayout } from "@/pages/components/Editor/hooks/useRegisterDrag/listenDropLayout";
+import { listenRangeBox } from "./listenRangeBox";
+import { listenDropLayout } from "./listenDropLayout";
 
 export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
   const unmountsRef = useRef<(Unmount | void)[]>([]);
@@ -41,11 +41,13 @@ export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
 
       // 组件实例id
       const id = (e.target as any)?.dataset?.id;
+      // 组件对应 instance
+      const instance = engine.instance.get(id);
+      // 是否选中组件实例
+      const isSelectedInstance = instance && !instance?.getComponentNode?.()?.lock;
 
-      // 点击组件
-      if (id) {
-        const instance = engine.instance.get(id);
-        if (!instance) return;
+      // 选中组件实例时
+      if (isSelectedInstance) {
         // 处理组件选中
         handleClickComponentNode(instance, e);
         // 监听移动
