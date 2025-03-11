@@ -12,9 +12,8 @@ export function useComponentNode(id: string): ComponentNodeType | undefined {
   const [componentNode, setComponentNode] = useState<ComponentNodeType>();
 
   useEffect(() => {
-    // 设置componentNode
-    setComponentNode(engine.componentNode.get(id));
-    // 监听数据节点变化
+    const componentNode: ComponentNodeType | undefined = engine.componentNode.get(id);
+    if (componentNode) setComponentNode(componentNode);
     return engine.componentNode.onChange(id, ({ payload }) => {
       setComponentNode({ ...payload });
     });
