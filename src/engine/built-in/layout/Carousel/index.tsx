@@ -4,15 +4,14 @@
  * @author tangjiahui
  * @date 2024/1/7
  */
-import { Carousel } from "antd";
 import engine, { EventData } from "@/engine";
 import styles from "./index.module.less";
 import { CarouselOptions } from "./attributes";
 import classNames from "classnames";
-import React, { RefObject, useEffect, useMemo, useRef } from "react";
-import { CarouselRef } from "antd/lib/carousel";
+import { useEffect, useRef, useState } from "react";
 import { useUnmount } from "ahooks";
 import { createComponent } from "@/engine/utils";
+import ToggleBar from "./components/ToggleBar";
 
 type TriggerKeys = "onChange" | "onClick";
 type ExposeKeys = "changePanel";
@@ -24,27 +23,10 @@ export const triggers: EventData<TriggerKeys>[] = [
 export const exposes: EventData<ExposeKeys>[] = [{ label: "切换面板", value: "changePanel" }];
 export default createComponent<CarouselOptions, TriggerKeys, ExposeKeys>((props) => {
   const { options, width, height, componentNode, handleTrigger, useExpose } = props;
-  const carouselRef: RefObject<CarouselRef> = useRef<CarouselRef>(null);
-  const itemStyle: React.CSSProperties = {
-    width,
-    height,
-    position: "relative",
-    color: "rgba(0,0,0,0.65)",
-  };
-
   // 上一个panelId
   const lastPanelId = useRef<string>();
-
-  // 显示空的面板列表
-  const renderPanels = useMemo(() => {
-    return componentNode.panels?.map((_, index) => {
-      return (
-        <div key={index}>
-          <div style={itemStyle} />
-        </div>
-      );
-    });
-  }, [componentNode.panels]);
+  // 当前面板位置索引
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   // 打开指定index的panel
   function jumpPanel(panelIndex: number) {
@@ -58,8 +40,9 @@ export default createComponent<CarouselOptions, TriggerKeys, ExposeKeys>((props)
     // 触发事件
     handleTrigger("onChange", panelIndex);
 
-    // 跳转面板
-    carouselRef.current?.goTo?.(panelIndex);
+    // 切换面板
+    setCurrentIndex(panelIndex);
+
     // 展示指定panels下的所有组件
     // 放入宏任务中是为了等渲染完毕后再显示（因为初次渲染时layout类组件可能会先于子组件渲染）
     if (panelId) {
@@ -105,18 +88,12 @@ export default createComponent<CarouselOptions, TriggerKeys, ExposeKeys>((props)
       className={classNames(styles.carousel, options?.bordered && styles.carousel_bordered)}
       onClick={() => handleTrigger("onClick")}
     >
-      <Carousel
-        speed={0}
-        ref={carouselRef}
-        autoplay={options?.autoplay}
-        style={{ width, height }}
-        dotPosition={"bottom"}
-        afterChange={(currentIndex) => {
-          jumpPanel(currentIndex);
-        }}
-      >
-        {renderPanels}
-      </Carousel>
+      {/* 切换栏 */}
+      <ToggleBar
+        value={currentIndex}
+        count={componentNode.panels?.length}
+        onChange={(panelIndex) => jumpPanel(panelIndex)}
+      />
     </div>
   );
 });

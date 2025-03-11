@@ -14,7 +14,6 @@ export interface CarouselOptions {
   children?: ComponentNodeType[]; // 子元素
   bordered?: boolean; // 是否显示边框
   borderColor?: string; // 边框颜色
-  autoplay?: boolean; // 自动播放
   count?: number; // 面板数量
 }
 
@@ -40,16 +39,6 @@ export default createAttributes<CarouselOptions>((props) => {
             />
           )}
         </div>
-      </Line>
-      <Line label={"自动播放"} labelSpan={5}>
-        <Checkbox
-          checked={options?.autoplay}
-          onChange={(e) => {
-            onChange({
-              autoplay: e.target.checked,
-            });
-          }}
-        />
       </Line>
       <Line label={"面板"}>
         <EditList

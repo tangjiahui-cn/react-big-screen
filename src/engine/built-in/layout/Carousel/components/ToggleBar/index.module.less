@@ -1,0 +1,26 @@
+.toggleBar {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  display: flex;
+  gap: 12px;
+  transform: translateX(-50%);
+
+  &_rect {
+    width: 26px;
+    height: 5px;
+    background: #b5b5b5;
+    cursor: pointer;
+    transition: all .3s;
+    border-radius: 2px;
+
+    &:hover {
+      background: #5c5c5c;
+    }
+
+    &_selected {
+      width: 40px;
+      background: #5c5c5c;
+    }
+  }
+}
