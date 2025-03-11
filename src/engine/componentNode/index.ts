@@ -79,6 +79,10 @@ export default class ComponentNode {
     id: string,
     callback: ComponentNodeChangeEventCallback,
   ): ComponentNodeChangeEventUnmount {
+    if (!id) {
+      console.warn("id must be defined");
+      return () => {};
+    }
     (this.eventMap[id] ||= []).push(callback);
     return () => {
       this.eventMap[id] = this.eventMap[id].filter((cb: ComponentNodeChangeEventCallback) => {
