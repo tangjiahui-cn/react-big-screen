@@ -88,12 +88,12 @@ class Engine {
     }
 
     // 切换语言
-    changeLanguage(json.config?.language || "zh");
+    changeLanguage(json?.config?.language || "zh");
 
     // 设置config
     this.config.setConfig({
-      ...json.config,
-      currentPage: json.config.currentPage || DEFAULT_PAGE.id,
+      ...json?.config,
+      currentPage: json?.config?.currentPage || DEFAULT_PAGE.id,
     });
 
     // 注册 local package
