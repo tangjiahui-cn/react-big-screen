@@ -221,7 +221,7 @@ engine.component.register({
 
 ## 本地调试
 ```shell
-# 安装依赖（pnpm@16.20.1、pnpm@7.30.5）
+# 安装依赖（node@v20.15.1 pnpm@9.13.2）
 pnpm i
 
 # 运行
