@@ -1,24 +1,29 @@
-// 点击 componentNode
-import engine, { InstanceType } from "@/engine";
-import { message } from "antd";
+/**
+ * 点击 componentNode
+ *
+ * @author tangjiahui
+ * @date 2025/3/12
+ */
+import engine, { ComponentNodeType } from "@/engine";
 import { isClickMouseLeft, isClickMouseRight } from "@/utils";
 import { addHistory, isKeyPressed } from "@/packages/shortCutKeys";
 
-export function handleClickComponentNode(instance: InstanceType, e: MouseEvent) {
-  const componentNode = instance?.getComponentNode?.();
-  if (!componentNode) {
-    message.error("componentNode not found!");
-    return;
-  }
-
+export function handleClickComponentNode(componentNode: ComponentNodeType, e: MouseEvent) {
+  // 点击鼠标左键
   const isClickLeft = isClickMouseLeft(e);
+  // 按住shift
   const isPressedShift = isKeyPressed("shift");
+
   // 锁定状态下，不可单独选中
   if (componentNode.lock && isClickLeft && !isPressedShift) {
     return;
   }
+
   e.stopPropagation();
+
+  // 点击鼠标右键
   const isClickRight = isClickMouseRight(e);
+
   // 点击左键或右键，可选中当前组件
   if (isClickLeft || isClickRight) {
     // 当前组件已选中
@@ -32,7 +37,7 @@ export function handleClickComponentNode(instance: InstanceType, e: MouseEvent) 
     // 待选中组件实例ids
     const selectedIds: string[] = componentNode.groupId
       ? engine.componentNode.getGroupComponentNodeIds(componentNode.groupId)
-      : [instance.id];
+      : [componentNode.id];
 
     // 是否按住多选键（按住多选，则cover为true，不会取消选中其他实例）
     engine.instance.select(selectedIds, !isPressedShift);

@@ -22,7 +22,7 @@ interface moveableDomOptions {
   onMove?: MoveHookType; // 移动中
   onEnd?: MoveHookType; // 移动结束
   // 执行队列 （先于 options?.onXXX 事件执行）
-  hookQueue?: (MoveHookQueueType | void)[]; // 每个hookQueueData返回false，则不执行之后的所有hookQueueData
+  hookQueue?: (MoveHookQueueType | void | false | undefined | null)[]; // 每个hookQueueData返回false，则不执行之后的所有hookQueueData
 }
 
 type UnmountMoveableDom = () => void;
@@ -39,9 +39,11 @@ export function startMove(options: moveableDomOptions): UnmountMoveableDom {
     endHooks = [],
   } = options?.hookQueue?.reduce(
     (result, current) => {
-      if (current?.onStart) result.startHooks.push(current.onStart);
-      if (current?.onMove) result.moveHooks.push(current.onMove);
-      if (current?.onEnd) result.endHooks.push(current.onEnd);
+      if (current) {
+        if (current?.onStart) result.startHooks.push(current.onStart);
+        if (current?.onMove) result.moveHooks.push(current.onMove);
+        if (current?.onEnd) result.endHooks.push(current.onEnd);
+      }
       return result;
     },
     {
@@ -58,6 +60,8 @@ export function startMove(options: moveableDomOptions): UnmountMoveableDom {
   if (options?.onStart) startHooks.push(options.onStart);
   if (options?.onMove) moveHooks.push(options.onMove);
   if (options?.onEnd) endHooks.push(options.onEnd);
+
+  const isHasListener = startHooks.length || moveHooks.length || endHooks.length;
 
   function handleStart(deltaX: number = 0, deltaY: number = 0, e?: MouseEvent) {
     let i = 0;
@@ -94,14 +98,18 @@ export function startMove(options: moveableDomOptions): UnmountMoveableDom {
   }
 
   function clear() {
+    if (!isHasListener) return;
     window.removeEventListener("mouseup", mouseup);
     window.removeEventListener("mousemove", mousemove);
   }
 
-  // 只能点击鼠标左键开始移动
-  window.addEventListener("mouseup", mouseup);
-  window.addEventListener("mousemove", mousemove);
-  handleStart(0, 0, options?.startEvent);
+  // 如果有事件监听器，才会触发拖拽
+  if (isHasListener) {
+    // 只能点击鼠标左键开始移动
+    window.addEventListener("mouseup", mouseup);
+    window.addEventListener("mousemove", mousemove);
+    handleStart(0, 0, options?.startEvent);
+  }
 
   // 卸载
   return () => clear();
