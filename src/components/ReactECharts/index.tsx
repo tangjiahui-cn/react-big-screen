@@ -7,6 +7,7 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import echarts, { EChartsOption, EChartsType } from "./echart";
 import { useUpdateEffect } from "ahooks";
+import { useResizeDom } from "@/hooks";
 
 interface Props {
   options?: EChartsOption;
@@ -37,9 +38,9 @@ export default function ReactECharts(props: Props) {
     }
   }, [props?.options]);
 
-  useUpdateEffect(() => {
+  useResizeDom(domRef, () => {
     chartInstance.current?.resize?.();
-  }, [props?.style]);
+  });
 
   return useMemo(() => <div style={props?.style} ref={domRef} />, [props?.style]);
 }

@@ -44,8 +44,9 @@ export function listenDragMove(instance: InstanceType): MoveHookQueueType | void
       setTimeout(() => {
         let { list, showCount } = getAllMoveItems();
         moveOptItems = list;
-        // 不超过50个组件使用transform，避免内存溢出（使用了transform会流畅，代价是占用内存）
-        enableTransform = showCount < 50;
+        // 同时移动不超过指定个数组件使用transform
+        //（使用transform会提高流畅度，但会消耗更多性能和内存）
+        enableTransform = showCount < 20;
       });
       return false;
     },
