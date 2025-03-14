@@ -1,6 +1,6 @@
-import { Locale } from ".";
-
+import { LocaleType } from "..";
 export default {
+  reset: "重置",
   menu: {
     bar: {
       library: "组件库",
@@ -65,4 +65,4 @@ export default {
       title: "交互",
     },
   },
-} as Locale;
+} as LocaleType;

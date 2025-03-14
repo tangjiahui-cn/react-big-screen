@@ -8,17 +8,23 @@
 import { useEffect, useState } from "react";
 import engine, { InstanceType } from "@/engine";
 
+function getInitial() {
+  return engine.instance.getAllSelected();
+}
+
 export function useSelectedInstances(): InstanceType[] {
-  const [selectedInstances, setSelectedInstances] = useState<InstanceType[]>([]);
+  const [selectedInstances, setSelectedInstances] = useState<InstanceType[]>(getInitial);
 
   useEffect(() => {
-    // 默认选中，则立即设置一次
-    const insList = engine.instance.getAllSelected();
-    if (insList.length) {
-      setSelectedInstances(insList);
-    }
     return engine.instance.onSelectedChange((instances) => {
-      setSelectedInstances(Object.values(instances));
+      const currentSelectedInstances = Object.values(instances);
+      setSelectedInstances((list: InstanceType[]) => {
+        // 如果新/旧都未选中实例，则不更新
+        if (!currentSelectedInstances.length && !list.length) {
+          return list;
+        }
+        return currentSelectedInstances;
+      });
     });
   }, []);
 

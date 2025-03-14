@@ -6,5 +6,4 @@
  */
 export * from "./font";
 export * from "./base";
-
-export { default as Line, LineConfigProvider } from "./Line";
+export * from "./layout";

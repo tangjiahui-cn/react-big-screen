@@ -121,7 +121,7 @@ export interface GlobalConfig {
   width: number; // 画板宽度
   height: number; // 画板高度
   currentMenu?: string; // 当前菜单面板key
-  currentPage?: string; // 当前页面id
+  currentPageId?: string; // 当前页面id
   expandedPageIds?: string[]; // 展开页面ids
   language?: LANGUAGE_TYPE; // 默认语言类型
 }
@@ -156,6 +156,13 @@ export interface JsonTypePage {
   id: string; // 页面id
   name: string; // 页面名称
   parentId?: string; // 父页面id
+
+  // 配置选项
+  options?: {
+    background?: string; // 页面背景
+    bordered?: boolean; // 是否显示边框
+    borderColor?: string; // 边框颜色
+  };
 }
 
 export interface JsonTypeLocalPackage {

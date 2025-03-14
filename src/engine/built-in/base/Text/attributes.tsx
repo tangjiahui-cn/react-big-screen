@@ -13,6 +13,9 @@ import {
   Line,
   ITextArea,
   IInputNumber,
+  TextAlignSelect,
+  TextAlignType,
+  AttrContainer,
 } from "@/components/Attributes";
 
 export interface TextOptions {
@@ -22,12 +25,14 @@ export interface TextOptions {
   fontStyle?: React.CSSProperties["fontStyle"];
   lineHeight?: number; // 行高（px）
   fontSize?: number; // 字号
+  textAlign?: TextAlignType; // 水平对齐（默认不设置）
+  background?: string; // 背景颜色
 }
 
 export default createAttributes<TextOptions>((props) => {
   const { options, onChange } = props;
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+    <AttrContainer>
       <Line label={"内容"}>
         <ITextArea
           style={{ width: "100%" }}
@@ -70,6 +75,12 @@ export default createAttributes<TextOptions>((props) => {
       <Line label={"颜色"}>
         <IColorPicker value={options?.color || "black"} onChange={(color) => onChange({ color })} />
       </Line>
+      <Line label={"背景"}>
+        <IColorPicker
+          value={options?.background}
+          onChange={(background) => onChange({ background })}
+        />
+      </Line>
       <Line label={"斜体"}>
         <Checkbox
           checked={options?.fontStyle === "italic"}
@@ -81,6 +92,17 @@ export default createAttributes<TextOptions>((props) => {
           }}
         />
       </Line>
-    </div>
+      <Line label={"水平对齐"} labelSpan={5}>
+        <TextAlignSelect
+          style={{ width: "100%" }}
+          value={options?.textAlign}
+          onChange={(textAlign: any) => {
+            onChange({
+              textAlign,
+            });
+          }}
+        />
+      </Line>
+    </AttrContainer>
   );
 });

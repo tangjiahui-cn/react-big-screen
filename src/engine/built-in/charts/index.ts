@@ -7,6 +7,7 @@
 import type { ComponentType } from "@/engine";
 import Pie from "./Pie";
 import Line from "./Line";
+import LineAttributes from "./Line/attributes";
 import Bar from "./Bar";
 import Radar from "./Radar";
 import Gauge from "./Gauge";
@@ -35,6 +36,7 @@ export const charts: ComponentType[] = [
     height: 250,
     options: {},
     component: Line,
+    attributesComponent: LineAttributes,
   },
   {
     cId: "bar",

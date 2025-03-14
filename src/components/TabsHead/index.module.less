@@ -1,0 +1,59 @@
+
+.tabsHead {
+  display: flex;
+  align-items: center;
+  border-bottom: @border;
+
+  &_add {
+    height: 32px;
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  &_body {
+    flex: 1;
+    overflow: auto hidden;
+    -ms-overflow-style: none;  /* 隐藏滚动条 */
+    scrollbar-width: none; /* 隐藏滚动条 */
+    border-right: @border;
+
+    ::-webkit-scrollbar {
+      display: none; /* 隐藏滚动条 */
+    }
+
+    &_inner {
+      display: inline-flex;
+      white-space: nowrap;
+      padding: 0 12px;
+    }
+  }
+
+  &_item {
+    height: 32px;
+    line-height: 32px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+
+    & + & {
+      margin-left: 24px;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &_selected {
+      transition: all .3s;
+      color: @primaryHover;
+      border-bottom: 2px solid @primaryHover;
+    }
+
+    &_delete {
+      margin-left: 6px;
+      font-size: 10px !important;
+    }
+  }
+}

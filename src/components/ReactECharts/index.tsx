@@ -10,12 +10,13 @@ import { useUpdateEffect } from "ahooks";
 import { useResizeDom } from "@/hooks";
 
 interface Props {
-  options?: EChartsOption;
+  clearBeforeUpdate?: boolean; // 配置项更新前清空
+  options?: EChartsOption; // 配置项
   style?: React.CSSProperties;
 }
 
 export default function ReactECharts(props: Props) {
-  const { options } = props;
+  const { options, clearBeforeUpdate = true } = props;
   const chartInstance = useRef<EChartsType>();
   const domRef = useRef<HTMLDivElement>(null);
 
@@ -31,10 +32,11 @@ export default function ReactECharts(props: Props) {
   }, []);
 
   useUpdateEffect(() => {
+    if (clearBeforeUpdate || !options) {
+      chartInstance?.current?.clear?.();
+    }
     if (options) {
       chartInstance.current?.setOption?.(options);
-    } else {
-      chartInstance?.current?.clear?.();
     }
   }, [props?.options]);
 

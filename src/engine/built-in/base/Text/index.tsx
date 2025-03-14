@@ -32,6 +32,9 @@ export default createComponent<TextOptions, TriggerKeys, ExposeKeys>((props) => 
       style={{
         width,
         height,
+        background: options?.background,
+        wordBreak: "break-all",
+        textAlign: options?.textAlign,
         color: options?.color || "black",
         fontWeight: options?.fontWeight,
         fontStyle: options?.fontStyle,

@@ -50,6 +50,19 @@ export default class Page {
     });
   }
 
+  // 更新 page
+  public update(pageId?: string, extPage?: Partial<JsonTypePage>) {
+    if (!pageId || !extPage) return;
+    this.pages.some((page) => {
+      const isFind = page.id === pageId;
+      if (isFind) {
+        Object.assign(page, extPage);
+        this.notifyChange();
+      }
+      return isFind;
+    });
+  }
+
   // 监听pages变更
   public onChange(listener: Listener): ListenerUnmount {
     this.listeners.push(listener);
@@ -112,6 +125,12 @@ export default class Page {
         return !componentNode.isAllPage;
       });
     }
+  }
+
+  // 获取某个page
+  public get(pageId?: string): JsonTypePage | undefined {
+    if (!pageId) return undefined;
+    return this.pages.find((page) => page.id === pageId);
   }
 
   // 获取所有pages

@@ -5,3 +5,4 @@
  * @date 2025/2/5
  */
 export * from "./FontWeightSelect";
+export * from "./TextAlignSelect";

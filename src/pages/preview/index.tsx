@@ -10,6 +10,7 @@ import engine, {
   useConfig,
   usePackages,
 } from "@/engine";
+import PageContainer from "../components/Editor/components/PageContainer";
 import RenderPreviewComponentNode from "./components/RenderPreviewComponentNode";
 import FitScreen from "@/pages/preview/components/FitScreen";
 import { useEffectOnce } from "@/hooks";
@@ -64,7 +65,9 @@ export default function Preview() {
 
   return (
     <FitScreen className={styles.preview} dw={config?.width || 1920} dh={config?.height || 1080}>
-      {renderComponentNodes}
+      <PageContainer style={{ width: "100%", height: "100%" }}>
+        {renderComponentNodes}
+      </PageContainer>
     </FitScreen>
   );
 }
