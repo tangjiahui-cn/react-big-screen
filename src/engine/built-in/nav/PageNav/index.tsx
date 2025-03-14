@@ -5,7 +5,7 @@
  * @date 2025/2/27
  */
 import { createComponent } from "@/engine/utils";
-import { useCurrentPage, usePages } from "@/engine";
+import { useCurrentPageId, usePages } from "@/engine";
 import { useMemo } from "react";
 import NavLine from "./components/NavLine";
 import { selectPage } from "@/packages/shortCutKeys";
@@ -13,14 +13,14 @@ import { pagesToTree, getSelectedKeys } from "./utils";
 
 export default createComponent((props) => {
   const pages = usePages();
-  const currentPage = useCurrentPage();
+  const currentPageId = useCurrentPageId();
 
   const { tree, treeMap } = useMemo(() => pagesToTree(pages), [pages]);
 
   // 到达选中页面的页面id结合
   const selectedKeys: string[] = useMemo(
-    () => getSelectedKeys(currentPage, treeMap),
-    [currentPage, treeMap],
+    () => getSelectedKeys(currentPageId, treeMap),
+    [currentPageId, treeMap],
   );
 
   const renderChildren = useMemo(() => {
@@ -30,7 +30,7 @@ export default createComponent((props) => {
         selectedKeys={selectedKeys}
         onSelect={(pageId) => {
           // 相同页面不可选中
-          if (pageId === currentPage) {
+          if (pageId === currentPageId) {
             return;
           }
           selectPage(pageId);

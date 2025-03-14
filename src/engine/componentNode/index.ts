@@ -314,6 +314,10 @@ export default class ComponentNode {
     if (!componentNode.category) {
       componentNode.category = "unknown";
     }
+    // 如果未设置数据源类型（默认静态）
+    if (!componentNode.dataSourceType) {
+      componentNode.dataSourceType = "static";
+    }
     // 计算最大层级
     this.maxLevel = Math.max(this.maxLevel, componentNode.level);
     return componentNode;
@@ -370,6 +374,10 @@ export default class ComponentNode {
         };
       });
       componentNode.currentPanelId = componentNode.panels?.[0]?.value;
+    }
+    // 如果未设置数据源类型（默认静态）
+    if (!componentNode.dataSourceType) {
+      componentNode.dataSourceType = "static";
     }
 
     // 设置show

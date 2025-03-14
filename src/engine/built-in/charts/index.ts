@@ -7,6 +7,7 @@
 import type { ComponentType } from "@/engine";
 import Pie from "./Pie";
 import Line from "./Line";
+import LineAttributes from "./Line/attributes";
 import Bar from "./Bar";
 import Radar from "./Radar";
 import Gauge from "./Gauge";
@@ -33,8 +34,21 @@ export const charts: ComponentType[] = [
     y: 0,
     width: 250,
     height: 250,
-    options: {},
+    options: {
+      seriesList: [
+        { key: "1", name: "数据1", value: "value1", color: "#f8e71c" },
+        { key: "2", name: "数据2", value: "value2", color: "#7ed321" },
+        { key: "3", name: "数据3", value: "value3", color: "#1071e0" },
+      ],
+    },
     component: Line,
+    attributesComponent: LineAttributes,
+    dataSourceType: "static",
+    staticDataSource: [
+      { name: "选项一", value1: 100, value2: 200, value3: 300 },
+      { name: "选项二", value1: 50, value2: 150, value3: 250 },
+      { name: "选项三", value1: 80, value2: 180, value3: 280 },
+    ],
   },
   {
     cId: "bar",

@@ -7,25 +7,26 @@
 import ReactECharts from "@/components/ReactECharts";
 import { EChartsOption } from "echarts";
 import { createComponent } from "@/engine";
+import { LineOptions } from "./attributes";
+import { useMemo } from "react";
+import { getSeries, getDataSet } from "./utils";
 
-export default createComponent((props) => {
-  const { width, height } = props;
+export default createComponent<LineOptions>((props) => {
+  const { width, height, options, dataSource } = props;
 
-  const chartOption: EChartsOption = {
-    xAxis: {
-      type: "category",
-      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-    },
-    yAxis: {
-      type: "value",
-    },
-    series: [
-      {
-        data: [150, 230, 224, 218, 135, 147, 260],
-        type: "line",
-      },
-    ],
-  };
+  const chartOption: EChartsOption = useMemo(() => {
+    return {
+      tooltip: {},
+      dataset: getDataSet(
+        options?.nameCode,
+        options?.seriesList,
+        Array.isArray(dataSource) ? dataSource : [],
+      ),
+      xAxis: [{ type: "category" }],
+      yAxis: [{}],
+      series: getSeries(options?.seriesList),
+    };
+  }, [dataSource, options?.seriesList, options?.nameCode]);
 
   return (
     <ReactECharts
@@ -33,6 +34,7 @@ export default createComponent((props) => {
       style={{
         width,
         height,
+        background: options?.background,
       }}
     />
   );

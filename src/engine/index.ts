@@ -93,7 +93,7 @@ class Engine {
     // 设置config
     this.config.setConfig({
       ...json?.config,
-      currentPage: json?.config?.currentPage || DEFAULT_PAGE.id,
+      currentPageId: json?.config?.currentPageId || DEFAULT_PAGE.id,
     });
 
     // 注册 local package
@@ -105,7 +105,7 @@ class Engine {
     this.page.init(json?.componentNodes, json?.pages);
     // 设置当前展示页 componentNodes
     this.componentNode.set(
-      this.page.getComponentNodes(json?.config?.currentPage || DEFAULT_PAGE.id),
+      this.page.getComponentNodes(json?.config?.currentPageId || DEFAULT_PAGE.id),
     );
 
     // 读取默认选中
@@ -117,7 +117,7 @@ class Engine {
       this.timerId = setTimeout(() => {
         this.timerId = undefined;
         this.instance.select(json.selectedIds as string[], true);
-      }, 10);
+      }, 100);
     }
 
     // 触发json变化

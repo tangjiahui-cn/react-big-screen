@@ -18,5 +18,5 @@ export function selectPage(pageId?: string) {
   // 设置下一页的 componentNodes
   engine.componentNode.set(engine.page.getComponentNodes(pageId));
   // 设置全局 config
-  engine.config.setConfig({ currentPage: pageId });
+  engine.config.setConfig({ currentPageId: pageId });
 }

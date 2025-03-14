@@ -53,6 +53,6 @@ export default class Config {
 
   // 获取当前页
   public getCurrentPage() {
-    return this.getConfig().currentPage || DEFAULT_PAGE.id;
+    return this.getConfig().currentPageId || DEFAULT_PAGE.id;
   }
 }

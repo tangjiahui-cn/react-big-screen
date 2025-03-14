@@ -7,6 +7,8 @@
 import type { ComponentType } from "@/engine";
 import Carousel, { triggers as CarouselTriggers, exposes as CarouselExposes } from "./Carousel";
 import CarouselAttributes from "./Carousel/attributes";
+import SpecialCard from "./SpecialCard";
+import SpecialCardAttributes from "./SpecialCard/attributes";
 
 export const layout: ComponentType[] = [
   {
@@ -36,5 +38,25 @@ export const layout: ComponentType[] = [
     ],
     triggers: CarouselTriggers,
     exposes: CarouselExposes,
+  },
+  {
+    cId: "specialCard",
+    cName: "特殊卡片",
+    category: "layout",
+    x: 0,
+    y: 0,
+    width: 400,
+    height: 300,
+    component: SpecialCard,
+    attributesComponent: SpecialCardAttributes,
+    icon: () => import("@/static/built-in/specialCard.png"),
+    panels: [{ label: "特殊卡片", value: "" }],
+    options: {
+      title: "标题",
+      bordered: true,
+      borderColor: "rgba(83, 141, 233, 0.54)",
+      background: "rgba(22, 28, 48, 0.8)",
+      color: "rgb(71, 216, 218)",
+    },
   },
 ];

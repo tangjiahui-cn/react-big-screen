@@ -1,4 +1,5 @@
-export interface Locale {
+export interface LocaleType {
+  reset: string;
   menu: {
     bar: {
       library: string;

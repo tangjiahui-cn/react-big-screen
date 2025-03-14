@@ -6,5 +6,6 @@
  */
 export * from "./ITextArea";
 export * from "./IColorPicker";
+export * from "./IInput";
 export * from "./IInputNumber";
-export * from "./IInputNumber";
+export * from "./ResetButton";

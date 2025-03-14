@@ -12,7 +12,9 @@ import RenderComponentNode from "./components/RenderComponentNode";
 import { useContextMenu } from "@/packages/contextMenu";
 import { createEditorContextMenu } from "./data/contextMenu";
 import { useRegisterDrag, useCreateComponentNode } from "./hooks";
-import { useCreateFavorite } from "@/pages/components/Editor/hooks/useCreateFavorite";
+import { useCreateFavorite } from "./hooks/useCreateFavorite";
+import { unSelectAllComponentNodes } from "@/packages/shortCutKeys";
+import PageContainer from "./components/PageContainer";
 
 // 右键菜单项
 const contextMenu = createEditorContextMenu();
@@ -63,15 +65,19 @@ export default React.memo(() => {
   }, []);
 
   return (
-    <div ref={editorDomRef} className={styles.editor}>
-      <div
+    <div
+      ref={editorDomRef}
+      className={styles.editor}
+      onMouseDown={() => unSelectAllComponentNodes()}
+    >
+      <PageContainer
         ref={innerEditorDomRef}
         className={styles.editor_render}
         style={{ width: config.width, height: config.height }}
       >
         {/* 渲染实例 */}
         {renderComponentNodes}
-      </div>
+      </PageContainer>
     </div>
   );
 });

@@ -11,6 +11,7 @@ export * from "./usePackages";
 export * from "./useFavorites";
 export * from "./useComponentNode";
 export * from "./usePages";
-export * from "./useCurrentPage";
+export * from "./useCurrentPageId";
 export * from "./useHistoryData";
 export * from "./useJson";
+export * from "./useCurrentPage";

@@ -159,7 +159,7 @@ engine.component.register({
 
 若要控制多页面切换，需要开发`导航组件`：
 - `usePages`：实时获取所有页面
-- `useCurrentPage`: 获取当前页id
+- `useCurrentPageId`: 获取当前页id
 - `selectPage`: 选中对应页面（即切换页面）
 
 常见场景：

@@ -43,3 +43,15 @@ export function isIntersect(rect1: RectCoordinate, rect2: RectCoordinate) {
 export function isInRect(point: Point, rect: RectCoordinate) {
   return point.x >= rect.x1 && point.x <= rect.x2 && point.y >= rect.y1 && point.y <= rect.y2;
 }
+
+/**
+ * 判断一个矩形是否完全在另一个矩形内部
+ */
+export function isRectInner(rect: RectCoordinate, targetRect: RectCoordinate) {
+  return (
+    rect.x1 >= targetRect.x1 &&
+    rect.y1 >= targetRect.y1 &&
+    rect.x2 <= targetRect.x2 &&
+    rect.y2 <= targetRect.y2
+  );
+}

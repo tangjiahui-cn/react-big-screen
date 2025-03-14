@@ -8,7 +8,7 @@ import styles from "./index.module.less";
 import { Button, message, Space, Tree, TreeDataNode } from "antd";
 import { FileOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import engine, { JsonTypePage, useCurrentPage, usePages } from "@/engine";
+import engine, { JsonTypePage, useCurrentPageId, usePages } from "@/engine";
 import useAddPageDialog from "./components/AddPageDialog";
 import { useStateWithRef } from "@/hooks";
 import { selectPage } from "@/packages/shortCutKeys";
@@ -18,7 +18,7 @@ export default function () {
   const [selectedKeys, setSelectedKeys] = useState<any[]>([]);
   const [treeData, setTreeData, treeDataRef] = useStateWithRef<TreeDataNode[]>([]);
   const pages = usePages();
-  const currentPage = useCurrentPage();
+  const currentPage = useCurrentPageId();
 
   // 新增页面弹窗
   const addPageDialog = useAddPageDialog({

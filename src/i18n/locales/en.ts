@@ -1,6 +1,6 @@
-import { Locale } from ".";
-
+import { LocaleType } from "..";
 export default {
+  reset: "reset",
   menu: {
     bar: {
       library: "library",
@@ -65,4 +65,4 @@ export default {
       title: "interactive",
     },
   },
-} as Locale;
+} as LocaleType;
