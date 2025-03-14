@@ -42,7 +42,7 @@ export default function StaticDataSource(props: Props) {
         ? JSON.stringify(componentNode?.staticDataSource || {}, null, "\t")
         : "",
     );
-  }, [componentNode?.id]);
+  }, [componentNode]);
 
   return (
     <div className={styles.staticDataSource} style={props?.style}>

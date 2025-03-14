@@ -21,9 +21,9 @@ export function useComponentNodeRequest(componentNode: ComponentNodeType): {
 } {
   const { dataSourceType = "static" } = componentNode;
   const requestManagerRef = useRef<RequestManager>();
-  const [dataSource, setDataSource] = useState<any>(() => {
-    return dataSourceType === "static" ? componentNode?.staticDataSource : undefined;
-  });
+
+  // 接口请求数据
+  const [dataSource, setDataSource] = useState<any>();
 
   // 获取唯一 requestManager 实例
   const getRequestManager: () => RequestManager | undefined = useCallback(() => {
@@ -34,23 +34,17 @@ export function useComponentNodeRequest(componentNode: ComponentNodeType): {
     return requestManagerRef.current;
   }, [componentNode.dataSourceType]);
 
-  const isFirstRef = useRef(true);
   useEffect(() => {
-    // 静态数据，不走请求
+    // 静态数据不需要设置请求
     if (dataSourceType === "static") {
-      // 第一次不需要设置（因为初始化时已经赋值了）
-      if (!isFirstRef.current) {
-        setDataSource(componentNode.staticDataSource);
-      }
       return;
     }
-    // 如果上一次是静态数据，则清除
+    // 清空上一次的数据
     if (dataSource) {
       setDataSource(undefined);
     }
     // 初始化一次request
     getRequestManager();
-    isFirstRef.current = false;
     return () => {
       requestManagerRef?.current?.unmount();
       requestManagerRef.current = undefined;
@@ -73,7 +67,7 @@ export function useComponentNodeRequest(componentNode: ComponentNodeType): {
   }, []);
 
   return {
-    dataSource,
+    dataSource: dataSourceType === "static" ? componentNode?.staticDataSource : dataSource?.[0],
     requestInstance,
   };
 }
