@@ -41,6 +41,9 @@ export interface AttributesComponentProps<Option = any> {
   onChange: (options: Option, cover?: boolean) => void; // 配置数据修改回调 （cover：默认false。true覆盖，false则修改部分属性）
 }
 
+// 数据源类型
+export type DataSourceType = "request" | "static"; // request请求接口 static静态数据
+
 export interface PanelData {
   label: string; // (父) 包含的panel名称
   value: string; // (父) 包含的panel的id
@@ -75,7 +78,9 @@ export interface BaseComponent {
   panels?: PanelData[]; // 只要有这个属性就是 layout布局容器（即父）
 
   // 请求相关
-  request?: ComponentRequest;
+  dataSourceType?: DataSourceType; // 数据源类型
+  staticDataSource?: any; // 数据源 - 静态数据
+  request?: ComponentRequest; // 数据源 - 请求配置
 }
 
 // 组件模板类型

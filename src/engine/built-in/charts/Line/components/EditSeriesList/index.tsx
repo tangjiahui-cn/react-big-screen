@@ -34,7 +34,7 @@ export default function EditSeriesList(props: Props) {
       props?.value?.map?.((x: SeriesItem) => {
         return {
           label: x.name || "",
-          value: x.key,
+          value: x.key || x?.value || "",
           data: x,
         };
       }) || [];
