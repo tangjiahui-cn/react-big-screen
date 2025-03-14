@@ -13,8 +13,8 @@ import RequestDataSource from "./components/RequestDataSource";
 import StaticDataSource from "./components/StaticDataSource";
 
 const dataSourceTypeOptions: { label: string; value: DataSourceType }[] = [
-  { label: "请求接口", value: "request" },
   { label: "静态数据", value: "static" },
+  { label: "请求接口", value: "request" },
 ];
 
 export default function () {
