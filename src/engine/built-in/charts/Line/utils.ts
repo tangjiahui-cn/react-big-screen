@@ -38,7 +38,7 @@ export function getSeries(seriesList?: SeriesItem[]): EChartsOption["series"] {
     seriesList?.map?.((item) => {
       return {
         id: item?.key,
-        type: "bar",
+        type: "line",
         color: item?.color,
       };
     }) || []
