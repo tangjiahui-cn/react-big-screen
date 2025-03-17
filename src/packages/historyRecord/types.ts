@@ -5,8 +5,8 @@ export interface HistoryData {
   list: HistoryRecordItem[]; // 历史记录列表
   currentIndex: number; // 当前历史索引
   current?: HistoryRecordItem; // 当前历史
-  isCanGoLast: boolean; // 能否前往上一条记录
-  isCanGoForward: boolean; // 能否前往下一条记录
+  isCanGoForward: boolean; // 前进历史到更新记录
+  isCanGoBack: boolean; // 后退历史到更旧记录
 }
 
 export type HistoryRecordListenerUnmount = () => void;
