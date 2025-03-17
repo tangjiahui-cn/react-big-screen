@@ -16,7 +16,7 @@ export default createComponent<LineOptions>((props) => {
 
   const chartOption: EChartsOption = useMemo(() => {
     return {
-      tooltip: {},
+      tooltip: { trigger: "item" },
       dataset: getDataSet(
         options?.nameCode,
         options?.seriesList,

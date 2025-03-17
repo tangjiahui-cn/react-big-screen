@@ -24,7 +24,7 @@ export function getDataSet(
   return {
     dimensions: [nameCode, ...seriesList.map((item) => item.name)],
     source: dataSource.map((data: any) => {
-      const item: Record<string, any> = { name: data.name };
+      const item: Record<string, any> = { [nameCode]: `${data[nameCode] ?? ""}` };
       seriesList.forEach((seriesItem) => {
         item[seriesItem.name as any] = data[seriesItem.value as any] || 0;
       });

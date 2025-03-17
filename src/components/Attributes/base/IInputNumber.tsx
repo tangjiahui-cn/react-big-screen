@@ -15,7 +15,7 @@ export function IInputNumber(
   return (
     <InputNumber
       min={1}
-      max={999}
+      max={99999999}
       size={"small"}
       placeholder={"请输入"}
       {...rest}
