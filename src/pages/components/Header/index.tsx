@@ -56,7 +56,7 @@ export default function Header() {
       {
         key: "undo",
         description: t("head.undo"),
-        disabled: !historyData.isCanGoLast,
+        disabled: !historyData.isCanGoBack,
         icon: <IconFont type={"icon-undo"} />,
       },
       {
@@ -82,7 +82,7 @@ export default function Header() {
       },
       { key: "preview", description: t("head.preview"), icon: <DesktopOutlined /> },
     ];
-  }, [i18n.language, historyData.isCanGoForward, historyData.isCanGoLast]);
+  }, [i18n.language, historyData.isCanGoForward, historyData.isCanGoBack]);
 
   function handleJumpGithub() {
     window.open("https://github.com/tangjiahui-cn/react-big-screen.git");

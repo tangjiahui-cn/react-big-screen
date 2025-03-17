@@ -29,8 +29,8 @@ export class HistoryRecord {
       list: this.getAll(),
       currentIndex: this.currentIndex,
       current: this.getCurrent(),
-      isCanGoForward: !!(this.list.length && this.currentIndex), // 上一条，则currentIndex越小
-      isCanGoLast: !!(this.list.length && this.currentIndex <= this.list.length - 1), // 下一条，则 currentIndex 越大
+      isCanGoForward: !!(this.list.length && this.currentIndex), // 前进，是否可以前往更新记录
+      isCanGoBack: !!(this.list.length && this.currentIndex <= this.list.length - 1), // 后退，是否可以前往更久记录
     };
   }
 

@@ -14,6 +14,7 @@ import { useRequest } from "ahooks";
 import { useSingleSelectedInstance } from "@/pages/components/Attributes/components/SingleInstanceAttributes";
 import React, { useMemo } from "react";
 import styles from "./index.module.less";
+import { addHistory } from "@/packages/shortCutKeys";
 
 interface Props {
   style?: React.CSSProperties;
@@ -68,6 +69,7 @@ export default function RequestDataSource(props: Props) {
           value={request?.method || "get"}
           onChange={(method: any) => {
             handleChange({ method });
+            addHistory("修改请求类型");
           }}
         />
       </Line>
@@ -76,6 +78,7 @@ export default function RequestDataSource(props: Props) {
           value={request?.url}
           onChange={(url: any) => {
             handleChange({ url });
+            addHistory("修改请求地址");
           }}
         />
       </Line>
@@ -87,6 +90,7 @@ export default function RequestDataSource(props: Props) {
             checked={request?.loop ?? false}
             onChange={(e) => {
               handleChange({ loop: e.target.checked });
+              addHistory("修改轮训请求");
             }}
           />
           {request?.loop && (
@@ -96,6 +100,7 @@ export default function RequestDataSource(props: Props) {
                 value={request?.loopDelay || 1000}
                 onChange={(loopDelay) => {
                   handleChange({ loopDelay });
+                  addHistory("修改轮训时长");
                 }}
               />
               <span>毫秒</span>
@@ -108,6 +113,7 @@ export default function RequestDataSource(props: Props) {
           checked={request?.first ?? false}
           onChange={(e) => {
             handleChange({ first: e.target.checked });
+            addHistory("修改初次请求");
           }}
         />
       </Line>

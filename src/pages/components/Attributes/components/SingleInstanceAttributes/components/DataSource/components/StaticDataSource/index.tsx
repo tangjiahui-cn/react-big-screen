@@ -12,6 +12,7 @@ import { message, Tooltip } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 import { useSingleSelectedInstance } from "@/pages/components/Attributes/components/SingleInstanceAttributes";
 import engine from "@/engine";
+import { addHistory } from "@/packages/shortCutKeys";
 
 interface Props {
   style?: React.CSSProperties;
@@ -31,6 +32,7 @@ export default function StaticDataSource(props: Props) {
         staticDataSource: json,
       });
       message.success("修改成功");
+      addHistory("修改静态数据");
     } catch (e) {
       message.warn("json格式不正确");
     }
