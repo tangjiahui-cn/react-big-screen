@@ -3,11 +3,11 @@ import { useEffect, useRef } from "react";
 import styles from "./index.module.less";
 import RenderList, { RenderListItem } from "../RenderList";
 
-export type { RenderListItem };
+export type ContextMenuItem = RenderListItem;
 
 interface ContextMenuProps {
-  items?: RenderListItem[]; // 选项列表
-  onSelect?: (item: RenderListItem) => void; // 选中元素
+  items?: ContextMenuItem[]; // 选项列表
+  onSelect?: (item: ContextMenuItem) => void; // 选中元素
   onClickOuter?: () => void; // 点击元素之外
 }
 

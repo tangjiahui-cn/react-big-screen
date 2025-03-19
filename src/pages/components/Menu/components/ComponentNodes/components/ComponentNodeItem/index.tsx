@@ -4,14 +4,13 @@
  * @author tangjiahui
  * @date 2025/2/5
  */
-import engine, { ComponentNodeType } from "@/engine";
+import engine, { ComponentNodeType, DATASET } from "@/engine";
 import classNames from "classnames";
 import ComponentNodeImage from "@/components/ComponentNodeImage";
 import { EyeInvisibleOutlined, EyeOutlined, LockOutlined } from "@ant-design/icons";
 import styles from "./index.module.less";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { isKeyPressed } from "@/packages/shortCutKeys";
-import { useItemContextMenu } from "@/pages/components/Editor/components/RenderComponentNode/hooks";
 import { isClickMouseLeft } from "@/utils";
 
 interface Props {
@@ -69,11 +68,11 @@ export default function ComponentNodeItem(props: Props) {
     });
   }, []);
 
-  // 注册右键菜单
-  useItemContextMenu(domRef);
-
   return (
     <div
+      {...{
+        [`data-${DATASET.componentNodeId}`]: componentNode.id,
+      }}
       ref={domRef}
       className={classNames(
         styles.componentNodeItem,

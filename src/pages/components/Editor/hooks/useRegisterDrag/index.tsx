@@ -8,13 +8,13 @@ import { RefObject, useRef } from "react";
 import { useDomEvents } from "@/hooks";
 import { handleClickEditor } from "./handleClickEditor";
 import { handleClickComponentNode } from "./handleClickComponentNode";
-import engine from "@/engine";
+import engine, { DATASET } from "@/engine";
 import { useUnmount } from "ahooks";
 import { startMove } from "@/packages/dragMove/utils/startMove";
 import { listenDragMove } from "./listenDragMove";
 import { listenRangeBox } from "./listenRangeBox";
 import { listenDropLayout } from "./listenDropLayout";
-import { isClickMouseLeft, isClickMouseRight } from "@/utils";
+import { getHTMLElementDataSet, isClickMouseLeft, isClickMouseRight } from "@/utils";
 import { isKeyPressed } from "@/packages/shortCutKeys";
 
 export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
@@ -48,7 +48,7 @@ export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
       const isPressedShift = isKeyPressed("shift");
 
       // 组件实例id
-      const id = (e.target as any)?.dataset?.id;
+      const id = getHTMLElementDataSet(e.target as HTMLElement, DATASET.componentNodeId);
       // 组件对应 instance
       const instance = engine.instance.get(id);
       // 获取组件实例
