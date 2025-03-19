@@ -20,17 +20,10 @@ import { isKeyPressed } from "@/packages/shortCutKeys";
 export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
   const unmountsRef = useRef<(Unmount | void)[]>([]);
 
-  // 注册卸载函数
-  function addUnmount(cb: Unmount | void) {
-    unmountsRef.current.push(cb);
-  }
-
   // 运行卸载函数
   function clear() {
     if (unmountsRef?.current.length) {
-      unmountsRef?.current?.map?.((unmount) => {
-        unmount?.();
-      });
+      unmountsRef?.current?.forEach?.((unmount) => unmount?.());
       unmountsRef.current = [];
     }
   }
@@ -67,8 +60,8 @@ export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
         handleClickComponentNode(componentNode, e);
         // 只有非锁定且左键按下，才可以移动组件
         if (!componentNode?.lock && isClickLeft) {
-          // 监听移动
-          addUnmount(
+          // 监听鼠标移动
+          unmountsRef.current.push(
             startMove({
               startX: e.x,
               startY: e.y,
@@ -78,7 +71,7 @@ export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
                 listenDragMove(instance),
                 // 监听是否放置到 layout 组件
                 listenDropLayout(instance, (unmount) => {
-                  addUnmount(unmount);
+                  unmountsRef.current.push(unmount);
                 }),
               ],
             }),
@@ -89,8 +82,8 @@ export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
 
       // 点击编辑器
       handleClickEditor(e);
-      // 监听移动
-      addUnmount(
+      // 监听鼠标移动
+      unmountsRef.current.push(
         startMove({
           startX: e.x,
           startY: e.y,
@@ -105,7 +98,6 @@ export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
   });
 
   useUnmount(() => {
-    // 销毁运行时（有的拖拽中页面突然切换，内部还未来得及手动销毁，此时通过外部直接中断操作并销毁）
     clear();
   });
 }
