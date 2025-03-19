@@ -30,3 +30,80 @@
     }
   }
 }
+
+@size: 8px;
+
+.dragPointCommon {
+  width: @size;
+  height: @size;
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid @primaryHover;
+  transform: translate(-50%, -50%);
+  background: white;
+}
+
+.p_top { top: -1px; }
+.p_left { left: -1px; }
+.p_right { right: -8px; }
+.p_bottom { bottom: -9px;}
+.p_horizontal_mid {left: 50%}
+.p_vertical_mid {top: 50%}
+
+.dragPoint {
+  &_top {
+    .dragPointCommon();
+    .p_top();
+    .p_horizontal_mid();
+    cursor: n-resize;
+
+    &_left {
+      .dragPointCommon();
+      .p_top();
+      .p_left();
+      cursor: nw-resize;
+    }
+
+    &_right {
+      .dragPointCommon();
+      .p_top();
+      .p_right();
+      cursor: ne-resize;
+    }
+  }
+
+  &_bottom {
+    .dragPointCommon();
+    .p_bottom();
+    .p_horizontal_mid();
+    cursor: s-resize;
+
+    &_left {
+      .dragPointCommon();
+      .p_bottom();
+      .p_left();
+      cursor: sw-resize;
+    }
+
+    &_right {
+      .dragPointCommon();
+      .p_bottom();
+      .p_right();
+      cursor: se-resize;
+    }
+  }
+
+  &_left {
+    .dragPointCommon();
+    .p_vertical_mid();
+    .p_left();
+    cursor: w-resize;
+  }
+
+  &_right {
+    .dragPointCommon();
+    .p_vertical_mid();
+    .p_right();
+    cursor: e-resize;
+  }
+}

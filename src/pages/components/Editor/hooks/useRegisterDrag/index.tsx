@@ -14,6 +14,7 @@ import { startMove } from "@/packages/dragMove/utils/startMove";
 import { listenDragMove } from "./listenDragMove";
 import { listenRangeBox } from "./listenRangeBox";
 import { listenDropLayout } from "./listenDropLayout";
+import { listenDragSize } from "./listenDragSize";
 import { getHTMLElementDataSet, isClickMouseLeft, isClickMouseRight } from "@/utils";
 import { isKeyPressed } from "@/packages/shortCutKeys";
 
@@ -41,7 +42,7 @@ export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
       const isPressedShift = isKeyPressed("shift");
 
       // 组件实例id
-      const id = getHTMLElementDataSet(e.target as HTMLElement, DATASET.componentNodeId);
+      const id = getHTMLElementDataSet(e.target as HTMLElement, DATASET.componentNodeId, true);
       // 组件对应 instance
       const instance = engine.instance.get(id);
       // 获取组件实例
@@ -60,6 +61,11 @@ export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
         handleClickComponentNode(componentNode, e);
         // 只有非锁定且左键按下，才可以移动组件
         if (!componentNode?.lock && isClickLeft) {
+          // 拖拽大小的方向
+          const dragDirection = getHTMLElementDataSet(
+            e.target as HTMLElement,
+            DATASET.dragDirection,
+          );
           // 监听鼠标移动
           unmountsRef.current.push(
             startMove({
@@ -67,8 +73,10 @@ export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
               startY: e.y,
               startEvent: e,
               hookQueue: [
-                // 监听移动组件
-                listenDragMove(instance),
+                // 监听拖拽大小
+                dragDirection && listenDragSize(componentNode, e.target as any, dragDirection),
+                // 监听拖拽移动
+                !dragDirection && listenDragMove(instance),
                 // 监听是否放置到 layout 组件
                 listenDropLayout(instance, (unmount) => {
                   unmountsRef.current.push(unmount);

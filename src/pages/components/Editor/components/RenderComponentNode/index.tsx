@@ -17,12 +17,11 @@ import engine, {
   DATASET,
 } from "@/engine";
 import React, { useMemo, useRef, useState } from "react";
-import { addHistory } from "@/packages/shortCutKeys";
-import { useItemDragSize } from "./hooks";
 import classNames from "classnames";
 import styles from "./index.module.less";
 import { useEffectOnce, useListenRef } from "@/hooks";
 import { useUpdateEffect } from "ahooks";
+import { DRAG_DIRECTIONS } from "../../hooks/useRegisterDrag/listenDragSize";
 
 interface RenderComponentProps {
   componentNode: ComponentNodeType;
@@ -129,19 +128,36 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNodeProps) {
     },
   });
 
-  // 注册拖拽大小
-  useItemDragSize(containerDomRef, {
-    isSelected,
-    lock: componentNode.lock,
-    onChange: (moveInfo) => {
-      engine.componentNode.update(componentNode.id, {
-        ...moveInfo,
-      });
-    },
-    onEnd: () => {
-      addHistory("拖拽组件大小");
-    },
-  });
+  // 渲染遮罩层
+  const renderMask = useMemo(() => {
+    return (
+      <div
+        {...{
+          [`data-${DATASET.componentNodeId}`]: componentNode.id,
+        }}
+        ref={boxDomRef}
+        className={classNames(
+          styles.moveItem_box,
+          isHoverRef.current && styles.moveItem_box_hover, // 为实现组件状态更新，保留hover效果，而无需通过setIsSelected触发多余更新
+          isSelected && styles.moveItem_box_selected,
+          componentNode.lock && styles.moveItem_box_lock,
+        )}
+      >
+        {/* 选中，且未锁定状态，显示拖拽大小的定位圆点 */}
+        {isSelected &&
+          !componentNode.lock &&
+          DRAG_DIRECTIONS.map((direction) => (
+            <div
+              key={direction}
+              className={styles[`dragPoint_${direction}`]}
+              {...{
+                [`data-${DATASET.dragDirection}`]: direction,
+              }}
+            />
+          ))}
+      </div>
+    );
+  }, [isSelected, componentNode.lock]);
 
   return (
     <div
@@ -156,7 +172,7 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNodeProps) {
         zIndex: componentNode.level,
       }}
       onMouseEnter={() => {
-        // 手动控制样式（实现其他地方可以控制当前组件hover效果）
+        // 手动控制样式（以此实现通过组件外控制当前组件hover效果）
         instance.handleHover();
       }}
       onMouseLeave={() => {
@@ -174,19 +190,8 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNodeProps) {
         componentNode={componentNode}
       />
 
-      {/* 遮罩层 */}
-      <div
-        {...{
-          [`data-${DATASET.componentNodeId}`]: componentNode.id,
-        }}
-        ref={boxDomRef}
-        className={classNames(
-          styles.moveItem_box,
-          isHoverRef.current && styles.moveItem_box_hover,
-          isSelected && styles.moveItem_box_selected,
-          componentNode.lock && styles.moveItem_box_lock,
-        )}
-      />
+      {/* 渲染遮罩层 */}
+      {renderMask}
     </div>
   );
 }
