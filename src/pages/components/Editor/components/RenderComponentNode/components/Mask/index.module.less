@@ -1,33 +1,29 @@
-.moveItem {
+.moveItem_box {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: move;
   position: absolute;
+  box-sizing: border-box;
+  border: 2px solid transparent;
 
-  &_box {
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    cursor: move;
-    position: absolute;
-    box-sizing: border-box;
-    border: 2px solid transparent;
+  &_lock {
+    opacity: 0.8;
+  }
 
-    &_lock {
-      opacity: 0.8;
-    }
+  &_selected {
+    background: rgba(9, 109, 217, 0.05);
+  }
 
-    &_selected {
-      background: rgba(9, 109, 217, 0.05);
-    }
+  &_selected {
+    padding: 0 !important;
+    border: 2px solid @primaryHover !important;
+  }
 
-    &_selected {
-      padding: 0 !important;
-      border: 2px solid @primaryHover !important;
-    }
-
-    &_hover {
-      padding: 1px;
-      border: 1px dashed @primaryHover;
-    }
+  &_hover {
+    padding: 1px;
+    border: 1px dashed @primaryHover;
   }
 }
 
