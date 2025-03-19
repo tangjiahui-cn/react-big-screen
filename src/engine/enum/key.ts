@@ -5,5 +5,6 @@
  * @date 2025/3/19
  */
 export const DATASET = {
-  componentNodeId: "rid",
+  componentNodeId: "rid", // 组件id
+  dragDirection: "d_dir", // 拖拽大小方向
 };

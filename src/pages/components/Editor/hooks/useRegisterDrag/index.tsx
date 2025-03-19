@@ -14,23 +14,17 @@ import { startMove } from "@/packages/dragMove/utils/startMove";
 import { listenDragMove } from "./listenDragMove";
 import { listenRangeBox } from "./listenRangeBox";
 import { listenDropLayout } from "./listenDropLayout";
+import { listenDragSize } from "./listenDragSize";
 import { getHTMLElementDataSet, isClickMouseLeft, isClickMouseRight } from "@/utils";
 import { isKeyPressed } from "@/packages/shortCutKeys";
 
 export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
   const unmountsRef = useRef<(Unmount | void)[]>([]);
 
-  // 注册卸载函数
-  function addUnmount(cb: Unmount | void) {
-    unmountsRef.current.push(cb);
-  }
-
   // 运行卸载函数
   function clear() {
     if (unmountsRef?.current.length) {
-      unmountsRef?.current?.map?.((unmount) => {
-        unmount?.();
-      });
+      unmountsRef?.current?.forEach?.((unmount) => unmount?.());
       unmountsRef.current = [];
     }
   }
@@ -48,7 +42,7 @@ export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
       const isPressedShift = isKeyPressed("shift");
 
       // 组件实例id
-      const id = getHTMLElementDataSet(e.target as HTMLElement, DATASET.componentNodeId);
+      const id = getHTMLElementDataSet(e.target as HTMLElement, DATASET.componentNodeId, true);
       // 组件对应 instance
       const instance = engine.instance.get(id);
       // 获取组件实例
@@ -67,18 +61,25 @@ export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
         handleClickComponentNode(componentNode, e);
         // 只有非锁定且左键按下，才可以移动组件
         if (!componentNode?.lock && isClickLeft) {
-          // 监听移动
-          addUnmount(
+          // 拖拽大小的方向
+          const dragDirection = getHTMLElementDataSet(
+            e.target as HTMLElement,
+            DATASET.dragDirection,
+          );
+          // 监听鼠标移动
+          unmountsRef.current.push(
             startMove({
               startX: e.x,
               startY: e.y,
               startEvent: e,
               hookQueue: [
-                // 监听移动组件
-                listenDragMove(instance),
+                // 监听拖拽大小
+                dragDirection && listenDragSize(componentNode, e.target as any, dragDirection),
+                // 监听拖拽移动
+                !dragDirection && listenDragMove(instance),
                 // 监听是否放置到 layout 组件
                 listenDropLayout(instance, (unmount) => {
-                  addUnmount(unmount);
+                  unmountsRef.current.push(unmount);
                 }),
               ],
             }),
@@ -89,8 +90,8 @@ export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
 
       // 点击编辑器
       handleClickEditor(e);
-      // 监听移动
-      addUnmount(
+      // 监听鼠标移动
+      unmountsRef.current.push(
         startMove({
           startX: e.x,
           startY: e.y,
@@ -105,7 +106,6 @@ export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
   });
 
   useUnmount(() => {
-    // 销毁运行时（有的拖拽中页面突然切换，内部还未来得及手动销毁，此时通过外部直接中断操作并销毁）
     clear();
   });
 }

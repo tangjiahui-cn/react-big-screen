@@ -49,6 +49,7 @@ export default function () {
       className={styles.componentNodes}
       onMouseDown={() => unSelectAllComponentNodes()}
     >
+      <div className={styles.componentNodes_head}>当前页组件数量：{componentNodes.length}</div>
       {!componentNodes.length && <IEmpty />}
       {renderComponentNodes}
     </div>

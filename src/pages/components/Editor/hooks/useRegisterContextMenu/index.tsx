@@ -12,6 +12,7 @@ import { createEditorContextMenu } from "./createEditorContextMenu";
 import { getHTMLElementDataSet } from "@/utils";
 import { useUnmount } from "ahooks";
 
+// 放在全局，是为了不同地方调用此hook，均能取消其他页面的右键菜单项。
 let unmountList: (Unmount | undefined)[] = [];
 
 function clear() {

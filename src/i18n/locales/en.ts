@@ -38,7 +38,7 @@ export default {
       force: "force",
       forceExt: {
         ext1: "press",
-        ext2: "lock component",
+        ext2: "select lock component",
       },
       undo: "undo",
       cancelUndo: "cancelUndo",
