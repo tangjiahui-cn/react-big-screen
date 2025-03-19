@@ -14,10 +14,11 @@ import engine, {
   useCreateHandleTrigger,
   useCreateUseExposeHook,
   ComponentPackage,
+  DATASET,
 } from "@/engine";
 import React, { useMemo, useRef, useState } from "react";
 import { addHistory } from "@/packages/shortCutKeys";
-import { useItemContextMenu, useItemDragSize } from "./hooks";
+import { useItemDragSize } from "./hooks";
 import classNames from "classnames";
 import styles from "./index.module.less";
 import { useEffectOnce, useListenRef } from "@/hooks";
@@ -142,9 +143,6 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNodeProps) {
     },
   });
 
-  // 注册右键菜单
-  useItemContextMenu(containerDomRef);
-
   return (
     <div
       ref={containerDomRef}
@@ -178,7 +176,9 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNodeProps) {
 
       {/* 遮罩层 */}
       <div
-        data-id={componentNode.id}
+        {...{
+          [`data-${DATASET.componentNodeId}`]: componentNode.id,
+        }}
         ref={boxDomRef}
         className={classNames(
           styles.moveItem_box,

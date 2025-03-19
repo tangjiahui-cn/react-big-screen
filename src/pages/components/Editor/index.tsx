@@ -9,15 +9,16 @@ import engine, { ComponentNodeType, useConfig, usePackages } from "@/engine";
 import React, { useEffect, useMemo, useRef } from "react";
 import { useComponentNodes } from "@/engine";
 import RenderComponentNode from "./components/RenderComponentNode";
-import { useContextMenu } from "@/packages/contextMenu";
-import { createEditorContextMenu } from "./data/contextMenu";
-import { useRegisterDrag, useCreateComponentNode } from "./hooks";
-import { useCreateFavorite } from "./hooks/useCreateFavorite";
 import { unSelectAllComponentNodes } from "@/packages/shortCutKeys";
 import PageContainer from "./components/PageContainer";
+import {
+  useRegisterDrag,
+  useCreateComponentNode,
+  useRegisterContextMenu,
+  useCreateFavorite,
+} from "./hooks";
 
 // 右键菜单项
-const contextMenu = createEditorContextMenu();
 export default React.memo(() => {
   const config = useConfig();
   const editorDomRef = useRef<HTMLDivElement>(null);
@@ -48,7 +49,7 @@ export default React.memo(() => {
   useRegisterDrag(innerEditorDomRef);
 
   // 注册右键菜单
-  useContextMenu(editorDomRef, contextMenu);
+  useRegisterContextMenu(editorDomRef);
 
   // 拖拽创建实例
   useCreateComponentNode(innerEditorDomRef);
