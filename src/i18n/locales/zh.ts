@@ -38,7 +38,7 @@ export default {
       force: "强制",
       forceExt: {
         ext1: "按住",
-        ext2: "锁定组件",
+        ext2: "选中锁定组件",
       },
       undo: "撤销",
       cancelUndo: "取消撤销",
