@@ -38,7 +38,7 @@ export function listenDragMove(instance: InstanceType): MoveHookQueueType | void
   // 是否移动
   let isMove = false;
 
-  let throttleMove: (deltaX: number, deltaY: number) => void | undefined;
+  let throttleMove: ((deltaX: number, deltaY: number) => void) | undefined;
 
   return {
     onStart() {
@@ -92,6 +92,7 @@ export function listenDragMove(instance: InstanceType): MoveHookQueueType | void
       }
 
       isMove = false;
+      throttleMove = undefined;
     },
   };
 }
