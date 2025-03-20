@@ -8,12 +8,13 @@ import { MoveHookQueueType } from "@/packages/dragMove/utils/startMove";
 import engine, { ComponentNodeType, InstanceType } from "@/engine";
 import { addHistory, getAllSelectedComponentNodes } from "@/packages/shortCutKeys";
 import globalCursor from "@/packages/globalCursor";
+import { throttle } from "lodash-es";
 
 interface MoveOptItem {
-  id: string;
-  show?: boolean;
-  containerDom?: HTMLElement;
-  componentNode?: ComponentNodeType;
+  id: string; // 组件id
+  show?: boolean; // 组件显隐
+  containerDom?: HTMLElement; // 组件dom
+  componentNode?: ComponentNodeType; // 组件数据
 }
 
 export function listenDragMove(instance: InstanceType): MoveHookQueueType | void {
@@ -25,10 +26,12 @@ export function listenDragMove(instance: InstanceType): MoveHookQueueType | void
     return;
   }
 
+  // 容器组件不存在不能移动
   const currentDOM = instance?.getContainerDom?.();
   if (!currentDOM) {
     throw new Error("dom must be set.");
   }
+
   let moveOptItems: MoveOptItem[] = [];
   // 是否启用transform（启用则开启硬件GPU加速，变成合成层，不会触发页面 layout 和 paint）
   let enableTransform = false;
@@ -36,6 +39,8 @@ export function listenDragMove(instance: InstanceType): MoveHookQueueType | void
   const oldPointerEvents = currentDOM.style.pointerEvents;
   // 是否移动
   let isMove = false;
+  // 节流移动组件
+  let throttleMove: ((deltaX: number, deltaY: number) => void) | undefined;
   return {
     onStart() {
       // 修改全局光标
@@ -47,6 +52,17 @@ export function listenDragMove(instance: InstanceType): MoveHookQueueType | void
         // 同时移动不超过指定个数组件使用transform
         //（使用transform会提高流畅度，但会消耗更多性能和内存）
         enableTransform = showCount < 20;
+
+        // 节流移动函数 (确保大量组件同时移动，不特别卡顿)
+        throttleMove = throttle(
+          (deltaX, deltaY) => {
+            moveSelectedInstances(moveOptItems, enableTransform, deltaX, deltaY);
+          },
+          showCount < 100 ? 0 : 20,
+          {
+            trailing: true,
+          },
+        );
       });
       return false;
     },
@@ -57,7 +73,7 @@ export function listenDragMove(instance: InstanceType): MoveHookQueueType | void
         isMove = true;
       }
       // 移动选中实例
-      moveSelectedInstances(moveOptItems, enableTransform, deltaX, deltaY);
+      throttleMove?.(deltaX, deltaY);
     },
     onEnd(deltaX: number, deltaY: number) {
       // 恢复全局光标
@@ -77,6 +93,7 @@ export function listenDragMove(instance: InstanceType): MoveHookQueueType | void
       }
 
       isMove = false;
+      throttleMove = undefined;
     },
   };
 }
@@ -132,12 +149,13 @@ function getAllMoveItems() {
     (data, componentNode) => {
       const show = componentNode.show ?? true;
       if (show) data.showCount++;
-      data.list.push({
+      const moveItem: MoveOptItem = {
         id: componentNode.id,
         componentNode,
         show: show,
         containerDom: engine.instance?.get?.(componentNode.id)?.getContainerDom?.(),
-      });
+      };
+      data.list.push(moveItem);
       return data;
     },
     {

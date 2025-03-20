@@ -14,14 +14,11 @@ import engine, {
   useCreateHandleTrigger,
   useCreateUseExposeHook,
   ComponentPackage,
-  DATASET,
 } from "@/engine";
-import React, { useMemo, useRef, useState } from "react";
-import classNames from "classnames";
-import styles from "./index.module.less";
+import { useMemo, useRef, useState } from "react";
 import { useEffectOnce, useListenRef } from "@/hooks";
 import { useUpdateEffect } from "ahooks";
-import { DRAG_DIRECTIONS } from "../../hooks/useRegisterDrag/listenDragSize";
+import Mask, { MaskRefType } from "./components/Mask";
 
 interface RenderComponentProps {
   componentNode: ComponentNodeType;
@@ -69,12 +66,6 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNodeProps) {
   const { component, componentNode } = props;
   const componentNodeRef = useListenRef<ComponentNodeType>(componentNode);
   const containerDomRef = useRef<HTMLDivElement>(null);
-  const boxDomRef = useRef<HTMLDivElement>(null);
-
-  // 是否选中
-  const [isSelected, setIsSelected] = React.useState(false);
-  // 是否hover中（不希望hover时渲染组件，此处仅仅用来在组件重新渲染时，保留之前的hover状态。例如：选中实例又取消选中时仍然有hover状态）
-  const isHoverRef = useRef<boolean>(false);
 
   // 注册接口请求相关
   const { dataSource, requestInstance } = useComponentNodeRequest(componentNode);
@@ -82,29 +73,27 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNodeProps) {
   const handleTrigger: ComponentHandleTrigger = useCreateHandleTrigger(componentNode.id);
   // 注册暴露事件
   const useExpose: ComponentUseExpose = useCreateUseExposeHook(componentNode.id);
+  // 遮罩层实例
+  const maskRef = useRef<MaskRefType>(null);
 
   // 注册行为实例（只能改变内部属性）
   const instance = useRegisterInstance({
     id: componentNode.id,
     // 经过实例
     handleHover() {
-      isHoverRef.current = true;
-      boxDomRef.current?.classList?.add?.(styles.moveItem_box_hover);
+      maskRef?.current?.handleHover?.();
     },
     // 离开实例
     handleUnHover() {
-      isHoverRef.current = false;
-      boxDomRef.current?.classList?.remove?.(styles.moveItem_box_hover);
+      maskRef?.current?.handleUnHover?.();
     },
     // 选中实例样式
     handleSelected() {
-      // 内部样式选中
-      setIsSelected(true);
+      maskRef?.current?.handleSelected?.();
     },
     // 取消选中实例样式
     handleUnSelected() {
-      // 移除内部样式选中
-      setIsSelected(false);
+      maskRef?.current?.handleUnSelected?.();
     },
     // 获取容器dom
     getContainerDom(): HTMLDivElement {
@@ -128,42 +117,11 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNodeProps) {
     },
   });
 
-  // 渲染遮罩层
-  const renderMask = useMemo(() => {
-    return (
-      <div
-        {...{
-          [`data-${DATASET.componentNodeId}`]: componentNode.id,
-        }}
-        ref={boxDomRef}
-        className={classNames(
-          styles.moveItem_box,
-          isHoverRef.current && styles.moveItem_box_hover, // 为实现组件状态更新，保留hover效果，而无需通过setIsSelected触发多余更新
-          isSelected && styles.moveItem_box_selected,
-          componentNode.lock && styles.moveItem_box_lock,
-        )}
-      >
-        {/* 选中，且未锁定状态，显示拖拽大小的定位圆点 */}
-        {isSelected &&
-          !componentNode.lock &&
-          DRAG_DIRECTIONS.map((direction) => (
-            <div
-              key={direction}
-              className={styles[`dragPoint_${direction}`]}
-              {...{
-                [`data-${DATASET.dragDirection}`]: direction,
-              }}
-            />
-          ))}
-      </div>
-    );
-  }, [isSelected, componentNode.lock]);
-
   return (
     <div
       ref={containerDomRef}
-      className={classNames(styles.moveItem)}
       style={{
+        position: "absolute",
         opacity: componentNode.lock ? 0.75 : 1,
         left: componentNode.x,
         top: componentNode.y,
@@ -191,7 +149,7 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNodeProps) {
       />
 
       {/* 渲染遮罩层 */}
-      {renderMask}
+      <Mask ref={maskRef} componentNode={componentNode} />
     </div>
   );
 }
