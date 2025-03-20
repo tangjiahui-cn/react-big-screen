@@ -214,6 +214,9 @@ engine.component.register({
 ### (8) 合并事件
 一个事件同时运行多个功能。例如 `startMove` 支持 `hookQueue`，一次点击流程（`mousedown` -> `mouseup`），即可依次运行每个功能注册的回调函数，无需拖拽实例、选中实例功能各自创建一个`mousedown`的事件监听。
 
+### (9) 异步组件
+`component` 和 `attributesComponent` 支持传入`React.lazy(() => import("./...")` 形式，以支持异步组件，减小首屏加载包提交。
+
 ### ...
 
 ## 相关项目
