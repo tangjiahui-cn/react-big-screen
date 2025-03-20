@@ -8,6 +8,7 @@ import { MoveHookQueueType } from "@/packages/dragMove/utils/startMove";
 import engine, { ComponentNodeType, InstanceType } from "@/engine";
 import { addHistory, getAllSelectedComponentNodes } from "@/packages/shortCutKeys";
 import globalCursor from "@/packages/globalCursor";
+import { throttle } from "lodash-es";
 
 interface MoveOptItem {
   id: string;
@@ -36,6 +37,9 @@ export function listenDragMove(instance: InstanceType): MoveHookQueueType | void
   const oldPointerEvents = currentDOM.style.pointerEvents;
   // 是否移动
   let isMove = false;
+
+  let throttleMove: (deltaX: number, deltaY: number) => void | undefined;
+
   return {
     onStart() {
       // 修改全局光标
@@ -47,6 +51,17 @@ export function listenDragMove(instance: InstanceType): MoveHookQueueType | void
         // 同时移动不超过指定个数组件使用transform
         //（使用transform会提高流畅度，但会消耗更多性能和内存）
         enableTransform = showCount < 20;
+
+        // 节流移动函数 (确保大量组件同时移动，不特别卡顿)
+        throttleMove = throttle(
+          (deltaX, deltaY) => {
+            moveSelectedInstances(moveOptItems, enableTransform, deltaX, deltaY);
+          },
+          showCount < 100 ? 0 : 20,
+          {
+            trailing: true,
+          },
+        );
       });
       return false;
     },
@@ -57,7 +72,7 @@ export function listenDragMove(instance: InstanceType): MoveHookQueueType | void
         isMove = true;
       }
       // 移动选中实例
-      moveSelectedInstances(moveOptItems, enableTransform, deltaX, deltaY);
+      throttleMove?.(deltaX, deltaY);
     },
     onEnd(deltaX: number, deltaY: number) {
       // 恢复全局光标
