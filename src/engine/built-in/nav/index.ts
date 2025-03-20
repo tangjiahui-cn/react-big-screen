@@ -5,7 +5,7 @@
  * @date 2025/1/21
  * */
 import type { ComponentType } from "@/engine";
-import PageNav from "./PageNav";
+import React from "react";
 
 export const nav: ComponentType[] = [
   {
@@ -20,6 +20,6 @@ export const nav: ComponentType[] = [
     height: 32,
     isAllPage: true,
     options: {},
-    component: PageNav,
+    component: React.lazy(() => import("./PageNav")),
   },
 ];
