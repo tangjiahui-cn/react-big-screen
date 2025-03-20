@@ -1,0 +1,1 @@
+import{j as n}from"./index-C_MZjfwO.js";import{I as s}from"./antd-CqUyNWf7.js";function i(e){const{onChange:r,...t}=e;return n.jsx(s,{min:1,max:99999999,size:"small",placeholder:"请输入",...t,onChange:m=>{r==null||r(m??void 0)}})}export{i as I};

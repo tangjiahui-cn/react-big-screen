@@ -1,0 +1,1 @@
+import{j as e}from"./index-C_MZjfwO.js";import{z as m}from"./index-CepAP1zz.js";import"./react-vendor--oJ8assb.js";import"./monaco-editor-dqJR7YPI.js";import"./antd-CqUyNWf7.js";import"./ahooks-0i8_p3j2.js";import"./lodash-es-CdGItEyc.js";const h=m(t=>{const{options:o,width:r,height:i}=t,{...s}=o;return e.jsx("div",{style:{width:r,height:i,...s}})});export{h as default};

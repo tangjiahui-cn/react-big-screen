@@ -1,0 +1,1 @@
+import{j as o}from"./index-C_MZjfwO.js";import{u as i,R as n}from"./IInput-xAuSMMT3.js";import{T as s}from"./antd-CqUyNWf7.js";function r(t){const[e]=i();return o.jsx(s,{title:e("reset"),children:o.jsx(n,{className:"icon_clickable",onClick:t==null?void 0:t.onClick})})}export{r as R};

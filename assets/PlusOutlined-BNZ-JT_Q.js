@@ -1,0 +1,1 @@
+import{_ as o,y as n}from"./antd-CqUyNWf7.js";import{r}from"./react-vendor--oJ8assb.js";import{I as a}from"./AntdIcon-44lcdpL-.js";var s=function(e,t){return r.createElement(a,o({},e,{ref:t,icon:n}))},m=r.forwardRef(s);export{m as R};
