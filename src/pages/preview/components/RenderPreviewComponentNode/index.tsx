@@ -15,7 +15,7 @@ import engine, {
   useCreateUseExposeHook,
   ComponentPackage,
 } from "@/engine";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 
 interface RenderPreviewComponentNodeProps {
   componentNode: ComponentNodeType;
@@ -107,15 +107,17 @@ function ScopeRenderPreviewComponentNode(props: ScopeRenderPreviewComponentNodeP
         zIndex: componentNode.level,
       }}
     >
-      <component.component
-        handleTrigger={handleTrigger}
-        useExpose={useExpose}
-        dataSource={dataSource}
-        componentNode={componentNode}
-        options={componentNode.options}
-        width={componentNode.width}
-        height={componentNode.height}
-      />
+      <Suspense>
+        <component.component
+          handleTrigger={handleTrigger}
+          useExpose={useExpose}
+          dataSource={dataSource}
+          componentNode={componentNode}
+          options={componentNode.options}
+          width={componentNode.width}
+          height={componentNode.height}
+        />
+      </Suspense>
     </div>
   );
 }

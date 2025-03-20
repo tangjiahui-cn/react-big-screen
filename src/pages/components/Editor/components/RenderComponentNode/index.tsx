@@ -15,7 +15,7 @@ import engine, {
   useCreateUseExposeHook,
   ComponentPackage,
 } from "@/engine";
-import { useMemo, useRef, useState } from "react";
+import { Suspense, useMemo, useRef, useState } from "react";
 import { useEffectOnce, useListenRef } from "@/hooks";
 import { useUpdateEffect } from "ahooks";
 import Mask, { MaskRefType } from "./components/Mask";
@@ -138,15 +138,17 @@ function ScopeRenderComponentNode(props: ScopeRenderComponentNodeProps) {
       }}
     >
       {/* 渲染组件 */}
-      <component.component
-        useExpose={useExpose}
-        handleTrigger={handleTrigger}
-        dataSource={dataSource}
-        options={componentNode.options}
-        width={componentNode.width}
-        height={componentNode.height}
-        componentNode={componentNode}
-      />
+      <Suspense>
+        <component.component
+          useExpose={useExpose}
+          handleTrigger={handleTrigger}
+          dataSource={dataSource}
+          options={componentNode.options}
+          width={componentNode.width}
+          height={componentNode.height}
+          componentNode={componentNode}
+        />
+      </Suspense>
 
       {/* 渲染遮罩层 */}
       <Mask ref={maskRef} componentNode={componentNode} />

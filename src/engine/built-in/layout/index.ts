@@ -5,10 +5,8 @@
  * @date 2025/1/21
  * */
 import type { ComponentType } from "@/engine";
-import Carousel, { triggers as CarouselTriggers, exposes as CarouselExposes } from "./Carousel";
-import CarouselAttributes from "./Carousel/attributes";
-import SpecialCard from "./SpecialCard";
-import SpecialCardAttributes from "./SpecialCard/attributes";
+import { triggers as CarouselTriggers, exposes as CarouselExposes } from "./Carousel";
+import React from "react";
 
 export const layout: ComponentType[] = [
   {
@@ -24,8 +22,8 @@ export const layout: ComponentType[] = [
       bordered: true,
       borderColor: "#ccc", // 边框颜色
     },
-    component: Carousel,
-    attributesComponent: CarouselAttributes,
+    component: React.lazy(() => import("./Carousel")),
+    attributesComponent: React.lazy(() => import("./Carousel/attributes")),
     panels: [
       {
         label: "面板一",
@@ -47,8 +45,8 @@ export const layout: ComponentType[] = [
     y: 0,
     width: 400,
     height: 300,
-    component: SpecialCard,
-    attributesComponent: SpecialCardAttributes,
+    component: React.lazy(() => import("./SpecialCard")),
+    attributesComponent: React.lazy(() => import("./SpecialCard/attributes")),
     icon: () => import("@/static/built-in/specialCard.png"),
     panels: [{ label: "特殊卡片", value: "" }],
     options: {

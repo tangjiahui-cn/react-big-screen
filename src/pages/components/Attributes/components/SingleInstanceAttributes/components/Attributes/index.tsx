@@ -4,7 +4,7 @@
  * @authorn tangjiahui
  * @date 2025/1/14
  */
-import { useEffect, useMemo } from "react";
+import { Suspense, useEffect, useMemo } from "react";
 import { Checkbox, Col, Form, InputNumber, Row } from "antd";
 import { useSingleSelectedInstance } from "../..";
 import engine, { ComponentNodeType } from "@/engine";
@@ -133,25 +133,27 @@ export default function () {
         {/* 组件Attributes配置项 */}
         {componentNode && AttributesComponent && (
           <div style={{ paddingTop: 8 }}>
-            <AttributesComponent
-              componentNode={componentNode}
-              onChangeComponentNode={(target) => {
-                engine.componentNode.update(componentNode?.id, target);
-                addHistory("修改组件属性");
-              }}
-              options={componentNode?.options}
-              onChange={(options, cover) => {
-                engine.componentNode.update(componentNode?.id, {
-                  options: cover
-                    ? options
-                    : {
-                        ...componentNode?.options,
-                        ...options,
-                      },
-                });
-                addHistory("修改组件属性");
-              }}
-            />
+            <Suspense>
+              <AttributesComponent
+                componentNode={componentNode}
+                onChangeComponentNode={(target) => {
+                  engine.componentNode.update(componentNode?.id, target);
+                  addHistory("修改组件属性");
+                }}
+                options={componentNode?.options}
+                onChange={(options, cover) => {
+                  engine.componentNode.update(componentNode?.id, {
+                    options: cover
+                      ? options
+                      : {
+                          ...componentNode?.options,
+                          ...options,
+                        },
+                  });
+                  addHistory("修改组件属性");
+                }}
+              />
+            </Suspense>
           </div>
         )}
       </div>

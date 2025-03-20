@@ -5,12 +5,7 @@
  * @date 2025/1/21
  * */
 import type { ComponentType } from "@/engine";
-import Pie from "./Pie";
-import Line from "./Line";
-import LineAttributes from "./Line/attributes";
-import Bar from "./Bar";
-import Radar from "./Radar";
-import Gauge from "./Gauge";
+import React from "react";
 
 export const charts: ComponentType[] = [
   {
@@ -23,7 +18,7 @@ export const charts: ComponentType[] = [
     width: 250,
     height: 250,
     options: {},
-    component: Pie,
+    component: React.lazy(() => import("./Pie")),
   },
   {
     cId: "line",
@@ -41,8 +36,8 @@ export const charts: ComponentType[] = [
         { key: "3", name: "数据3", value: "value3", color: "#1071e0" },
       ],
     },
-    component: Line,
-    attributesComponent: LineAttributes,
+    component: React.lazy(() => import("./Line")),
+    attributesComponent: React.lazy(() => import("./Line/attributes")),
     dataSourceType: "static",
     staticDataSource: [
       { name: "选项一", value1: 100, value2: 200, value3: 300 },
@@ -60,7 +55,7 @@ export const charts: ComponentType[] = [
     width: 250,
     height: 250,
     options: {},
-    component: Bar,
+    component: React.lazy(() => import("./Bar")),
   },
   {
     cId: "radar",
@@ -72,7 +67,7 @@ export const charts: ComponentType[] = [
     width: 350,
     height: 300,
     options: {},
-    component: Radar,
+    component: React.lazy(() => import("./Radar")),
   },
   {
     cId: "gauge",
@@ -84,6 +79,6 @@ export const charts: ComponentType[] = [
     width: 350,
     height: 300,
     options: {},
-    component: Gauge,
+    component: React.lazy(() => import("./Gauge")),
   },
 ];
