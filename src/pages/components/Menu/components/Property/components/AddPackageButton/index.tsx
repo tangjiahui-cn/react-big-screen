@@ -147,7 +147,6 @@ export default function AddPackageButton(props: Props) {
           {props?.children}
         </Button>
       </Dropdown>
-      {addRemoteTextDialog.children}
     </>
   );
 }

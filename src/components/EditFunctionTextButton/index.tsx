@@ -45,7 +45,6 @@ export default function EditFunctionTextButton(props: Props) {
       >
         {children}
       </span>
-      {editModal.children}
     </>
   );
 }
