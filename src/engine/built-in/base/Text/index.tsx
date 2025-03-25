@@ -5,7 +5,7 @@
  * @date 2025/1/21
  */
 import { EventData } from "@/engine";
-import { TextOptions } from "./attributes";
+import { TextOptions, DEFAULT_OPTIONS } from "./attributes";
 import { useState } from "react";
 import { createComponent } from "@/engine";
 
@@ -35,7 +35,7 @@ export default createComponent<TextOptions, TriggerKeys, ExposeKeys>((props) => 
         background: options?.background,
         wordBreak: "break-all",
         textAlign: options?.textAlign,
-        color: options?.color || "black",
+        color: options?.color,
         fontWeight: options?.fontWeight,
         fontStyle: options?.fontStyle,
         fontSize: options?.fontSize,
@@ -46,4 +46,4 @@ export default createComponent<TextOptions, TriggerKeys, ExposeKeys>((props) => 
       }}
     />
   );
-});
+}, DEFAULT_OPTIONS);

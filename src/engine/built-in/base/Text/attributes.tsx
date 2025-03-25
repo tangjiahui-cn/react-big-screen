@@ -18,6 +18,13 @@ import {
   AttrContainer,
 } from "@/components/Attributes";
 
+export const DEFAULT_OPTIONS: TextOptions = {
+  color: "black",
+  value: "一段文字",
+  fontSize: 14,
+  lineHeight: 32,
+};
+
 export interface TextOptions {
   value?: string; // 文字内容
   fontWeight?: string; // 字重
@@ -105,4 +112,4 @@ export default createAttributes<TextOptions>((props) => {
       </Line>
     </AttrContainer>
   );
-});
+}, DEFAULT_OPTIONS);

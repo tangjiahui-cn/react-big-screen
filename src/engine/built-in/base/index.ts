@@ -11,18 +11,13 @@ import React from "react";
 export const base: ComponentType[] = [
   {
     cId: "text",
-    cName: "文字",
+    cName: "文本",
     icon: () => import("@/static/built-in/text.png"),
     category: "base",
     x: 0,
     y: 0,
     width: 120,
     height: 32,
-    options: {
-      value: "一段文字",
-      fontSize: 14,
-      lineHeight: 32,
-    },
     component: React.lazy(() => import("./Text")),
     attributesComponent: React.lazy(() => import("./Text/attributes")),
     triggers: buttonTriggers,
@@ -37,14 +32,8 @@ export const base: ComponentType[] = [
     y: 0,
     width: 120,
     height: 48,
-    options: {
-      value: "标题",
-      fontSize: 18,
-      fontWeight: "bold",
-      textAlign: "center",
-      lineHeight: "48px",
-    },
     component: React.lazy(() => import("./Title")),
+    attributesComponent: React.lazy(() => import("./Title/attributes")),
   },
   {
     cId: "button",
@@ -55,11 +44,8 @@ export const base: ComponentType[] = [
     y: 0,
     width: 64,
     height: 32,
-    options: {
-      type: "primary",
-      children: "按钮",
-    },
     component: React.lazy(() => import("./Button")),
+    attributesComponent: React.lazy(() => import("./Button/attributes")),
   },
   {
     cId: "background",
@@ -68,12 +54,10 @@ export const base: ComponentType[] = [
     category: "base",
     x: 0,
     y: 0,
-    width: 1280,
-    height: 720,
-    options: {
-      background: "#223447",
-    },
+    width: 500,
+    height: 300,
     component: React.lazy(() => import("./Background")),
+    attributesComponent: React.lazy(() => import("./Background/attributes")),
   },
   {
     cId: "image",
@@ -84,9 +68,7 @@ export const base: ComponentType[] = [
     y: 0,
     width: 270,
     height: 150,
-    options: {
-      src: "https://ts3.cn.mm.bing.net/th?id=OIP-C.3r1vguZyWFUJ80A2Nf2k3AHaEK&w=333&h=187&c=8&rs=1&qlt=90&o=6&dpr=2&pid=3.1&rm=2",
-    },
     component: React.lazy(() => import("./Image")),
+    attributesComponent: React.lazy(() => import("./Image/attributes")),
   },
 ];

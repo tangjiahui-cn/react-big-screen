@@ -12,17 +12,33 @@ export function createComponent<
   Option extends any,
   TriggerKeys extends string = string,
   ExposeKeys extends string = string,
->(Component: React.FC<ComponentProps<Option, TriggerKeys, ExposeKeys>>) {
+>(
+  Component: React.FC<ComponentProps<Option, TriggerKeys, ExposeKeys>>, // 组件模板
+  defaultOptions?: Partial<Option>, // 默认options
+) {
   return function (props: ComponentProps<Option, TriggerKeys, ExposeKeys>) {
-    return Component(props);
+    const targetProps = defaultOptions
+      ? {
+          ...props,
+          options: Object.assign({}, defaultOptions, props?.options),
+        }
+      : props;
+    return Component(targetProps);
   };
 }
 
 // 创建自定义属性面板
 export function createAttributes<Options extends any>(
-  Component: React.FC<AttributesComponentProps<Options>>,
+  Component: React.FC<AttributesComponentProps<Options>>, // 组件模板
+  defaultOptions?: Partial<Options>, // 默认options
 ) {
   return function (props: AttributesComponentProps<Options>) {
-    return Component(props);
+    const targetProps = defaultOptions
+      ? {
+          ...props,
+          options: Object.assign({}, defaultOptions, props?.options),
+        }
+      : props;
+    return Component(targetProps);
   };
 }

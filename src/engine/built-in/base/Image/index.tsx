@@ -6,12 +6,9 @@
  */
 import { Image } from "antd";
 import { createComponent } from "@/engine";
+import { DEFAULT_OPTIONS, ImageOptions } from "./attributes";
 
-interface Options {
-  src?: string; // 图片地址
-}
-
-export default createComponent<Options>((props) => {
+export default createComponent<ImageOptions>((props) => {
   const { options, width, height } = props;
   return <Image src={options?.src} style={{ width, height }} />;
-});
+}, DEFAULT_OPTIONS);

@@ -38,7 +38,7 @@ export interface AttributesComponentProps<Option = any> {
       | ((origin: ComponentNodeType) => Partial<ComponentNodeType>),
   ) => void;
   options: Option; // 配置数据
-  onChange: (options: Option, cover?: boolean) => void; // 配置数据修改回调 （cover：默认false。true覆盖，false则修改部分属性）
+  onChange: (options: Partial<Option>, cover?: boolean) => void; // 配置数据修改回调 （cover：默认false。true覆盖，false则修改部分属性）
 }
 
 // 数据源类型
@@ -68,7 +68,7 @@ export interface BaseComponent {
   width: number; // 宽度
   height: number; // 高度
   level?: number; // 层级
-  options?: Record<string, any>; // 配置数据
+  options?: Record<string, any>; // 配置数据（创建时以此为基准值）
   category: ComponentCategory; // 组件分类
   isAllPage?: boolean; // 是否全页面显示
 
