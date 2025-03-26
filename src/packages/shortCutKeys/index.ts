@@ -25,7 +25,9 @@ export * from "./behaviors";
 /**
  * 判断某些key是否按下
  */
-export function isKeyPressed(key: "command" | "ctrl" | "shift"): boolean {
+export function isKeyPressed(
+  key: "command" | "ctrl" | "shift" | "alt" | "option" | "control" | "cmd",
+): boolean {
   return hotkeys[key];
 }
 
