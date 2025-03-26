@@ -31,13 +31,15 @@ export function useRegisterZoom(domRef: RefObject<HTMLElement>) {
         e.preventDefault();
         // 鼠标滚动偏移量（正值往上，负值往下）
         const wheelDeltaY = (e as any).wheelDeltaY;
+        // 缩放倍数（用于实现鼠标加速滚动，缩放同样更快）
+        const times = Math.abs(wheelDeltaY) / 120;
         // 缩小比例
         if (wheelDeltaY < 0) {
-          zoomEditorSmaller();
+          zoomEditorSmaller(times);
         }
         // 放大比例
         if (wheelDeltaY > 0) {
-          zoomEditorLarger();
+          zoomEditorLarger(times);
         }
       }
     },

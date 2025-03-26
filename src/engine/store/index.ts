@@ -19,7 +19,7 @@ export interface GlobalState {
 export const INIT_CONFIG: GlobalState["config"] = {
   scale: 1,
   scaleDefault: 1,
-  scaleStep: 0.1,
+  scaleStep: 0.02,
   scaleMinZoom: 0.1,
   scaleMaxZoom: 2,
   width: 1920,
