@@ -26,7 +26,7 @@ export default React.forwardRef((props: Props, ref: ForwardedRef<HTMLDivElement>
         border: options?.bordered ? `1px solid ${options.borderColor}` : undefined,
         width: config.width,
         height: config.height,
-        transform: config.scale || config.scale === 1 ? `scale(${config.scale})` : undefined,
+        transform: config.scale && config.scale !== 1 ? `scale(${config.scale})` : undefined,
         ...props?.style,
       }}
     >
