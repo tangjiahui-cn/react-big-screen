@@ -4,10 +4,22 @@
  * @author tangjiahui
  * @date 2025/3/25
  */
-import { Button, Dropdown, message, Space } from "antd";
-import { DownOutlined } from "@ant-design/icons";
-import { useMemo, useState } from "react";
+import { Popover, Slider, Space } from "antd";
+import { DownOutlined, ReloadOutlined } from "@ant-design/icons";
+import { useMemo } from "react";
 import { IInputNumber } from "@/components/Attributes";
+import TooltipButton from "@/components/TooltipButton";
+
+const MIN = 1; // 最小缩放
+const MAX = 200; // 最大缩放
+const DEFAULT = 100; // 默认缩放
+
+const MARKS = {
+  50: <span style={{ fontSize: 12 }}>50%</span>,
+  100: <span style={{ fontSize: 12 }}>100%</span>,
+  150: <span style={{ fontSize: 12 }}>150%</span>,
+  200: " ",
+};
 
 interface Props {
   value?: number; // 缩放比率(单位1)
@@ -16,70 +28,60 @@ interface Props {
 
 export default function ScaleSelect(props: Props) {
   const { value = 1 } = props;
-  const [visible, setVisible] = useState(false);
-  const [custom, setCustom] = useState<number>();
 
-  const displayText = useMemo(() => `${value * 100}%`, [value]);
-
-  function handleOpen() {
-    setVisible(true);
-    setCustom(undefined);
-  }
+  // 比率值（单位%）
+  const rateValue = useMemo(() => Math.round(value * 100), [value]);
 
   function handleSelect(value: number) {
-    props?.onChange?.(Number(value) / 100);
-    setVisible(false);
+    const targetValue = Math.round(Number(value)) / 100;
+    if (targetValue !== rateValue) {
+      props?.onChange?.(targetValue);
+    }
   }
 
   return (
-    <Dropdown
-      open={visible}
-      menu={{
-        items: [
-          { label: "200%", key: 200 },
-          { label: "150%", key: 150 },
-          { label: "125%", key: 125 },
-          { label: "100%", key: 100 },
-          { label: "75%", key: 75 },
-          { label: "50%", key: 50 },
-          {
-            key: "",
-            label: (
-              <Space style={{ userSelect: "none" }}>
-                <IInputNumber size={"small"} min={1} value={custom} onChange={setCustom} />
-                <span>%</span>
-                <Button
-                  type={"primary"}
-                  size={"small"}
-                  onClick={() => {
-                    if (!value) {
-                      message.warn("请填写值");
-                    }
-                    handleSelect(custom as number);
-                  }}
-                >
-                  确定
-                </Button>
-              </Space>
-            ),
-          },
-        ],
-        onClick({ key }) {
-          if (key) {
-            handleSelect(key as any);
-          }
-        },
-      }}
-      onOpenChange={(visible) => {
-        if (!visible) {
-          setVisible(false);
-        }
-      }}
+    <Popover
+      content={
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <Slider
+            style={{ width: 250 }}
+            min={MIN}
+            max={Math.max(MAX, rateValue)}
+            tooltip={{
+              formatter: (rate) => `${rate}%`,
+            }}
+            marks={MARKS}
+            value={rateValue}
+            onChange={handleSelect}
+          />
+          <Space style={{ marginTop: -16 }}>
+            <IInputNumber
+              min={MIN}
+              max={1000}
+              value={rateValue}
+              placeholder={"缩放值"}
+              style={{ fontSize: 12, width: 80 }}
+              onChange={(v) => {
+                handleSelect(v || 1);
+              }}
+            />
+            <TooltipButton noHoverClass title={"重置"}>
+              <ReloadOutlined
+                className={"theme-color icon_clickable"}
+                onClick={() => {
+                  // 选中默认值
+                  handleSelect(DEFAULT);
+                }}
+              />
+            </TooltipButton>
+          </Space>
+        </div>
+      }
     >
-      <span style={{ cursor: "pointer" }} onMouseEnter={handleOpen}>
-        <span style={{ marginRight: 4 }}>{displayText}</span>
+      <span style={{ cursor: "pointer" }}>
+        <span style={{ marginRight: 4 }}>{`${rateValue}%`}</span>
         <DownOutlined />
       </span>
-    </Dropdown>
+    </Popover>
   );
 }
