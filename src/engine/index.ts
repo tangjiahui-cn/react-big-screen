@@ -93,6 +93,7 @@ class Engine {
     // 设置config
     this.config.setConfig({
       ...json?.config,
+      scale: json?.config?.scale || 1,
       currentPageId: json?.config?.currentPageId || DEFAULT_PAGE.id,
     });
 
@@ -155,6 +156,7 @@ class Engine {
       config: {
         width: 1920,
         height: 1080,
+        scale: 1,
         ...this.json?.config,
       },
     });

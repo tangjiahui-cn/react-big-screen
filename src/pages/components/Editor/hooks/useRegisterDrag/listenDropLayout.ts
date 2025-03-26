@@ -22,6 +22,7 @@ export function listenDropLayout(
   return {
     onEnd(_, __, e) {
       setTimeout(() => {
+        const scale = engine.config.getConfig().scale;
         const componentNode = instance.getComponentNode();
         const containerDom = instance.getContainerDom();
         // 锁定组件不能移动
@@ -30,8 +31,8 @@ export function listenDropLayout(
         }
         const containerRect = containerDom?.getBoundingClientRect?.() || { x: 0, y: 0 };
         const unmount = moveLayout(componentNode, {
-          x: e.x - containerRect.x + componentNode.x, // 鼠标点击位置在编辑器上的坐标
-          y: e.y - containerRect.y + componentNode.y,
+          x: (e.x - containerRect.x + componentNode.x) * scale, // 鼠标在编辑器上的虚拟坐标
+          y: (e.y - containerRect.y + componentNode.y) * scale,
         });
         onGetUnmountAsk?.(unmount);
       });
@@ -42,18 +43,18 @@ export function listenDropLayout(
 /**
  * 找到包含点击位置的“层级最大”、“最后渲染”的layout类型组件（也就是最靠近用户屏幕上方的）。
  * @param componentNode 当前点击实例
- * @param point 点击坐标
+ * @param editorPos 编辑器坐标
  */
 function getLatestLayoutComponentNode(
   componentNode: ComponentNodeType,
-  point: Coordinate,
+  editorPos: Coordinate, // 编辑器虚拟坐标
 ): ComponentNodeType | undefined {
   const layoutMap = engine.componentNode.getAll().reduce((result, current) => {
     if (
       (current.show ?? true) &&
       current.category === "layout" && // layout类组件
       current.id !== componentNode.id && // 不能拖拽到自身（如果自身拖拽组件是layout类型时）
-      isInRect(point, engine.componentNode.getCoordinate(current)) // 是否在点击位置内
+      isInRect(editorPos, engine.componentNode.getCoordinate(current)) // 是否在点击位置内
     ) {
       (result[`${current.level}`] ||= []).push(current);
     }
@@ -67,13 +68,13 @@ function getLatestLayoutComponentNode(
 /**
  * 处理移动布局相关
  * @param componentNode 当前点击实例
- * @param clickPos 点击坐标
+ * @param editorPos 点击位置（编辑器坐标）
  */
-function moveLayout(componentNode: ComponentNodeType, clickPos: Coordinate): void | Unmount {
+function moveLayout(componentNode: ComponentNodeType, editorPos: Coordinate): void | Unmount {
   // 获取离用户屏幕最近的layout类型组件
   const layoutComponentNode = getLatestLayoutComponentNode(componentNode, {
-    x: clickPos.x,
-    y: clickPos.y,
+    x: editorPos.x,
+    y: editorPos.y,
   });
 
   // 如果在layout类型组件上方

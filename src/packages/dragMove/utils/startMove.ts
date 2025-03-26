@@ -1,11 +1,18 @@
 /**
- * 立刻监听全局鼠标移动偏移量
+ * 立刻监听全局鼠标移动虚拟偏移量
  *
  * @author tangjiahui
  * @date 2025/3/8
+ * @description 支持虚拟偏移量功能，用于操作区域放大或者缩小时，能准确获得操作区域的虚拟偏移量。
+ * （真实像素偏移量：屏幕像素位移偏移量）
+ * （虚拟偏移量：屏幕像素偏移量 映射到 操作区域的偏移距离）
  */
 
-type MoveHookType = (deltaX: number, deltaY: number, e: MouseEvent) => boolean | void;
+type MoveHookType = (
+  deltaX: number, // x轴虚拟偏移量（如果scale是1，则该值为真实像素。scale越大，编辑器区域越大，则真实屏幕像素不变的情况下，对应虚拟像素越小）
+  deltaY: number, // y轴虚拟偏移量（如果scale是1，则该值为真实像素）
+  e: MouseEvent, // 触发事件
+) => boolean | void;
 type MovePartialHookType = (deltaX: number, deltaY: number, e?: MouseEvent) => boolean | void;
 
 export type MoveHookQueueType = {
@@ -15,6 +22,7 @@ export type MoveHookQueueType = {
 };
 
 interface moveableDomOptions {
+  scale?: number; // 缩放比率（默认1。缩放倍率越大，虚拟偏移量deltaX、deltaY则越小。因为绘制区域变大，真实移动像素不变，绘制区域上的虚拟偏移量则变小）
   startX: number; // 初始鼠标x坐标
   startY: number; // 初始鼠标y坐标
   startEvent?: MouseEvent; // 初始事件
@@ -28,6 +36,7 @@ interface moveableDomOptions {
 type UnmountMoveableDom = () => void;
 
 export function startMove(options: moveableDomOptions): UnmountMoveableDom {
+  const scale = options?.scale || 1;
   let moveInfo = {
     startX: options?.startX ?? 0,
     startY: options?.startY ?? 0,
@@ -87,12 +96,12 @@ export function startMove(options: moveableDomOptions): UnmountMoveableDom {
   function mousemove(e: MouseEvent) {
     const deltaX = e.x - moveInfo.startX;
     const deltaY = e.y - moveInfo.startY;
-    handleMove(deltaX, deltaY, e);
+    handleMove(deltaX / scale, deltaY / scale, e);
   }
 
   function mouseup(e: MouseEvent) {
-    const deltaX = Math.round(e.x - moveInfo.startX);
-    const deltaY = Math.round(e.y - moveInfo.startY);
+    const deltaX = Math.round((e.x - moveInfo.startX) / scale);
+    const deltaY = Math.round((e.y - moveInfo.startY) / scale);
     handleEnd(deltaX, deltaY, e);
     clear();
   }

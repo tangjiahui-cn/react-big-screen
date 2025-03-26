@@ -135,8 +135,8 @@ function updateSelectedInstances(
     const componentNode = item?.componentNode;
     if (componentNode) {
       engine.componentNode.update(componentNode.id, {
-        x: deltaX + (componentNode?.x || 0),
-        y: deltaY + (componentNode?.y || 0),
+        x: Math.round(deltaX + (componentNode?.x || 0)),
+        y: Math.round(deltaY + (componentNode?.y || 0)),
       });
     }
   });

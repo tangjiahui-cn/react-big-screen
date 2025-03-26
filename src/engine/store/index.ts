@@ -20,6 +20,7 @@ export const useGlobalSelector = create<GlobalState>(() => ({
   componentNodes: [],
   componentMap: {},
   config: {
+    scale: 1,
     width: 1920,
     height: 1080,
   },

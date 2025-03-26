@@ -5,7 +5,7 @@
  * @date 2024/12/19
  */
 import styles from "./index.module.less";
-import engine, { ComponentNodeType, useConfig, usePackages } from "@/engine";
+import engine, { ComponentNodeType, usePackages } from "@/engine";
 import React, { useEffect, useMemo, useRef } from "react";
 import { useComponentNodes } from "@/engine";
 import RenderComponentNode from "./components/RenderComponentNode";
@@ -20,7 +20,6 @@ import {
 
 // 右键菜单项
 export default React.memo(() => {
-  const config = useConfig();
   const editorDomRef = useRef<HTMLDivElement>(null);
   const innerEditorDomRef = useRef<HTMLDivElement>(null);
 
@@ -71,11 +70,7 @@ export default React.memo(() => {
       className={styles.editor}
       onMouseDown={() => unSelectAllComponentNodes()}
     >
-      <PageContainer
-        ref={innerEditorDomRef}
-        className={styles.editor_render}
-        style={{ width: config.width, height: config.height }}
-      >
+      <PageContainer ref={innerEditorDomRef} className={styles.editor_render}>
         {/* 渲染实例 */}
         {renderComponentNodes}
       </PageContainer>

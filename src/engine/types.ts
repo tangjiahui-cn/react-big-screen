@@ -125,6 +125,7 @@ export interface ComponentNodeType extends BaseComponent {
 export interface GlobalConfig {
   width: number; // 画板宽度
   height: number; // 画板高度
+  scale: number; // 缩放比率 (默认 1)
   currentMenu?: string; // 当前菜单面板key
   currentPageId?: string; // 当前页面id
   expandedPageIds?: string[]; // 展开页面ids

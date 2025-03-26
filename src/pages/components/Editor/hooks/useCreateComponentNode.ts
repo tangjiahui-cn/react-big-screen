@@ -24,9 +24,10 @@ export function useCreateComponentNode(containerDomRef: RefObject<HTMLElement>) 
       }
       // 创建一个componentNode
       const domRect = dom.getBoundingClientRect();
+      const scale = engine.config.getConfig().scale;
       const componentNode = engine.componentNode.createFromComponent(data.component, {
-        x: Math.round(e.x - domRect.x),
-        y: Math.round(e.y - domRect.y),
+        x: Math.round((e.x - domRect.x) / scale), // 真实坐标转为编辑器坐标 （scale 越小，编辑器面积越小，真实像素变化映射到虚拟像素越大）
+        y: Math.round((e.y - domRect.y) / scale),
         pageId: engine.config.getCurrentPage(),
       });
       // 插入新componentNode到末尾
