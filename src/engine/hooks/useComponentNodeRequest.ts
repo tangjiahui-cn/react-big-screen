@@ -77,7 +77,7 @@ export function useComponentNodeRequest(componentNode: ComponentNodeType): {
   }, []);
 
   return {
-    dataSource: dataSourceType === "static" ? componentNode?.staticDataSource : dataSource?.[0],
+    dataSource: isStaticRef.current ? componentNode?.staticDataSource : dataSource?.[0],
     requestInstance,
   };
 }
