@@ -1,3 +1,6 @@
+/**
+ * 语言文件类型（具体含义参考 ./locales/zh.ts）
+ */
 export interface LocaleType {
   reset: string;
   menu: {
@@ -41,6 +44,14 @@ export interface LocaleType {
       };
       undo: string;
       cancelUndo: string;
+      zoom: string;
+      zoomExt: {
+        ext1: string;
+      };
+      zoomReset: string;
+      zoomResetExt: {
+        ext1: string;
+      };
     };
     undo: string;
     cancelUndo: string;

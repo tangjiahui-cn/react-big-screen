@@ -125,11 +125,15 @@ export interface ComponentNodeType extends BaseComponent {
 export interface GlobalConfig {
   width: number; // 画板宽度
   height: number; // 画板高度
-  scale: number; // 缩放比率 (默认 1)
   currentMenu?: string; // 当前菜单面板key
   currentPageId?: string; // 当前页面id
   expandedPageIds?: string[]; // 展开页面ids
   language?: LANGUAGE_TYPE; // 默认语言类型
+  scale: number; // 缩放比例 (默认 1)
+  scaleDefault: number; // 默认缩放比例（默认1）
+  scaleStep: number; // 缩放比例步进（默认 0.1）
+  scaleMinZoom: number; // 最小缩放比例（默认 0.1）
+  scaleMaxZoom: number; // 最大缩放比例（默认 2）（自定义比率会突破这个值，滚轮缩放不会超出）
 }
 
 export type ComponentUsed = Record<

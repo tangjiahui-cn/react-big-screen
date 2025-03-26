@@ -9,10 +9,7 @@ import { DownOutlined, ReloadOutlined } from "@ant-design/icons";
 import { useMemo } from "react";
 import { IInputNumber } from "@/components/Attributes";
 import TooltipButton from "@/components/TooltipButton";
-
-const MIN = 1; // 最小缩放
-const MAX = 200; // 最大缩放
-const DEFAULT = 100; // 默认缩放
+import { useConfig } from "@/engine";
 
 const MARKS = {
   50: <span style={{ fontSize: 12 }}>50%</span>,
@@ -29,6 +26,14 @@ interface Props {
 export default function ScaleSelect(props: Props) {
   const { value = 1 } = props;
 
+  // 全局配置
+  const config = useConfig();
+  // 最小缩放
+  const MIN = useMemo(() => config.scaleMinZoom * 100, [config]);
+  // 最大缩放
+  const MAX = useMemo(() => config.scaleMaxZoom * 100, [config]);
+  // 默认缩放
+  const DEFAULT = useMemo(() => config.scaleDefault * 100, [config]);
   // 比率值（单位%）
   const rateValue = useMemo(() => Math.round(value * 100), [value]);
 

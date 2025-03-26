@@ -42,6 +42,14 @@ export default {
       },
       undo: "撤销",
       cancelUndo: "取消撤销",
+      zoom: "缩放",
+      zoomExt: {
+        ext1: "鼠标滚轮",
+      },
+      zoomReset: "缩放重置",
+      zoomResetExt: {
+        ext1: "鼠标中键",
+      },
     },
     undo: "撤销",
     cancelUndo: "取消撤销",

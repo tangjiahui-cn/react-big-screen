@@ -16,6 +16,7 @@ import {
   useCreateComponentNode,
   useRegisterContextMenu,
   useCreateFavorite,
+  useRegisterZoom,
 } from "./hooks";
 
 // 右键菜单项
@@ -55,6 +56,9 @@ export default React.memo(() => {
 
   // 拖拽创建favorite
   useCreateFavorite(innerEditorDomRef);
+
+  // 注册滚轮缩放逻辑
+  useRegisterZoom(editorDomRef);
 
   // 监听页面组件删除
   useEffect(() => {
