@@ -6,12 +6,18 @@
  */
 import { MoveHookQueueType } from "@/packages/dragMove/utils/startMove";
 import styles from "./listenRangeBox.module.less";
-import { RangeInfo } from "@/packages/rangeBox";
 import engine from "@/engine";
 import { throttle } from "lodash-es";
 import { isIntersect } from "@/utils";
 import { addHistory, isKeyPressed } from "@/packages/shortCutKeys";
 import globalCursor from "@/packages/globalCursor";
+
+interface RangeInfo {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
 
 // 范围框选
 const handleSelectRangeInfo: (
