@@ -31,8 +31,8 @@ export function listenDropLayout(
         }
         const containerRect = containerDom?.getBoundingClientRect?.() || { x: 0, y: 0 };
         const unmount = moveLayout(componentNode, {
-          x: (e.x - containerRect.x + componentNode.x) * scale, // 鼠标在编辑器上的虚拟坐标
-          y: (e.y - containerRect.y + componentNode.y) * scale,
+          x: (e.x - containerRect.x) / scale + componentNode.x, // 鼠标在编辑器上的虚拟坐标
+          y: (e.y - containerRect.y) / scale + componentNode.y,
         });
         onGetUnmountAsk?.(unmount);
       });
