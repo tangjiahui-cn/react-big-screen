@@ -13,6 +13,6 @@ export function zoomEditorSmaller(times: number = 1) {
     return;
   }
   engine.config.setConfig({
-    scale: Math.max(config.scaleMinZoom, scale - config.scaleStep * times),
+    scale: parseFloat(Math.max(config.scaleMinZoom, scale - config.scaleStep * times).toFixed(2)),
   });
 }

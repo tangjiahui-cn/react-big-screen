@@ -93,8 +93,8 @@ class Engine {
 
     // 设置config
     this.config.setConfig({
-      ...json?.config,
       ...INIT_CONFIG,
+      ...json?.config,
       currentPageId: json?.config?.currentPageId || DEFAULT_PAGE.id,
     });
 
