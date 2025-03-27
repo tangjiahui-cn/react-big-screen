@@ -1,4 +1,5 @@
 .editor {
+  .mask_2();
   position: relative;
   width: 100%;
   height: 100%;
@@ -6,7 +7,32 @@
   padding: 20px;
 
   &_render {
+    @boxShadowRadius: 12px;
+    @boxShadowColor: #f1f1f1;
+    @boxShadow:
+      4px 0 @boxShadowRadius @boxShadowColor,
+      -4px 0 @boxShadowRadius @boxShadowColor,
+      0 4px @boxShadowRadius @boxShadowColor;
+
     position: relative;
     background: white;
+    box-shadow: @boxShadow;
   }
 }
+
+/**************************** 遮罩层样式 ***********************/
+// 网格 - 遮罩层
+.mask_1 {
+  @lineColor: #ededed;
+  background-size: 20px 20px;
+  background-image:
+    linear-gradient(to right, @lineColor 1px , transparent 1px),
+    linear-gradient(to bottom, @lineColor 1px , #fbfbfb 1px);
+}
+
+// 圆点 - 遮罩层
+.mask_2 {
+  background-size: 20px 20px;
+  background-image: radial-gradient(circle, #bfbfbf 1px , #fbfbfb 1px);
+}
+
