@@ -29,7 +29,7 @@ export interface TextOptions {
   value?: string; // 文字内容
   fontWeight?: string; // 字重
   color?: string; // 字体颜色
-  fontStyle?: React.CSSProperties["fontStyle"];
+  fontStyle?: React.CSSProperties["fontStyle"]; // 字体样式
   lineHeight?: number; // 行高（px）
   fontSize?: number; // 字号
   textAlign?: TextAlignType; // 水平对齐（默认不设置）

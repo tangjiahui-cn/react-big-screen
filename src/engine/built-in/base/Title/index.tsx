@@ -12,7 +12,18 @@ export default createComponent<TitleOptions>((props) => {
   const { options, width, height } = props;
   return (
     <div
-      style={{ width, height }}
+      style={{
+        width,
+        height,
+        lineHeight: `${height}px`,
+        background: options?.background,
+        wordBreak: "break-all",
+        textAlign: options?.textAlign,
+        color: options?.color,
+        fontWeight: options?.fontWeight,
+        fontStyle: options?.fontStyle,
+        fontSize: options?.fontSize,
+      }}
       className={styles.title}
       dangerouslySetInnerHTML={{
         __html: options?.value,
