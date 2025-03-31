@@ -9,6 +9,7 @@
   background: #EDEFF3;
   flex-direction: column;
   user-select: none;
+  @darkBoxShadowColor: rgba(0,0,0,0.1);
 
   &_header {
     height: 40px;
@@ -25,7 +26,7 @@
       height: 100%;
       flex: 0 0 320px;
       background: white;
-      box-shadow: 2px 0 10px @borderColor;
+      box-shadow: 2px 0 10px @darkBoxShadowColor;
       z-index: 1;
     }
 
@@ -39,7 +40,7 @@
       height: 100%;
       flex: 0 0 300px;
       background: white;
-      box-shadow: -2px 0 10px @borderColor;
+      box-shadow: -2px 0 10px @darkBoxShadowColor;
       z-index: 1;
       overflow: hidden;
     }
