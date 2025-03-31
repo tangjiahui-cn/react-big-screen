@@ -51,7 +51,7 @@ export function listenDragMove(instance: InstanceType): MoveHookQueueType | void
         moveOptItems = list;
         // 同时移动不超过指定个数组件使用transform
         //（使用transform会提高流畅度，但会消耗更多性能和内存）
-        enableTransform = showCount < 20;
+        enableTransform = showCount < 300;
 
         // 节流移动函数 (确保大量组件同时移动，不特别卡顿)
         throttleMove = throttle(
