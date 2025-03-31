@@ -5,19 +5,29 @@
  * @date 2025/3/25
  */
 import { createAttributes } from "@/engine";
-import { AttrContainer, IInput, Line } from "@/components/Attributes";
+import { AttrContainer, IInput, IInputNumber, Line } from "@/components/Attributes";
 import { ButtonProps } from "antd";
 import ICustomSelect from "@/components/ICustomSelect";
+import { IOption } from "@/components/ICustomSelect/type";
 
-const typeList: ButtonOptions["type"][] = ["primary", "default", "dashed", "ghost", "text", "link"];
+const BTN_TYPE_OPTIONS: IOption[] = [
+  { label: "主按钮", value: "primary" },
+  { label: "默认", value: "default" },
+  { label: "虚线", value: "dashed" },
+  { label: "幽灵", value: "ghost" },
+  { label: "文字", value: "text" },
+  { label: "链接", value: "link" },
+];
 
 export const DEFAULT_OPTIONS = {
   value: "标题",
+  borderRadius: 2,
 };
 
 export interface ButtonOptions {
   type: ButtonProps["type"];
   value: string; // 标题内容
+  borderRadius: number; // 外边框圆角
 }
 
 export default createAttributes<ButtonOptions>((props) => {
@@ -39,15 +49,21 @@ export default createAttributes<ButtonOptions>((props) => {
         <ICustomSelect
           style={{ width: "100%" }}
           value={options?.type}
-          requestFn={async () => {
-            return typeList.map((type) => ({
-              label: type,
-              value: type,
-            }));
-          }}
+          requestFn={async () => BTN_TYPE_OPTIONS}
           onChange={(type: any) => {
             onChange({
               type,
+            });
+          }}
+        />
+      </Line>
+      <Line label={"边框圆角"} labelSpan={5}>
+        <IInputNumber
+          style={{ width: "100%" }}
+          value={options?.borderRadius}
+          onChange={(borderRadius) => {
+            onChange({
+              borderRadius,
             });
           }}
         />

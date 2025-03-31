@@ -19,7 +19,7 @@ export default createAttributes<BackgroundOptions>((props) => {
   const { options, onChange } = props;
   return (
     <AttrContainer>
-      <Line label={"标题"}>
+      <Line label={"背景"}>
         <IColorPicker
           style={{ width: "100%" }}
           value={options?.background}
