@@ -72,6 +72,10 @@ export function createAttributesByConfig<Options extends Record<string, any> = R
       <ConfigRender
         items={items}
         value={options}
+        extra={{
+          componentNode: props.componentNode,
+          onChangeComponentNode: props.onChangeComponentNode,
+        }}
         onChange={(value) => {
           props.onChange(value as any);
         }}

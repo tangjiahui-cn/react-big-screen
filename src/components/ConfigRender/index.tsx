@@ -5,11 +5,24 @@
  * @date 2025/3/31
  * @description 渲染配置项。
  */
-import React, { isValidElement, useCallback, useEffect, useMemo, useRef } from "react";
+import React, {
+  createContext,
+  isValidElement,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+} from "react";
 import type { DEFAULT_REGISTER_KEY } from "./registerDefault";
 import { Form, Tooltip } from "antd";
 import styles from "./index.module.less";
 import classNames from "classnames";
+
+const ExtraContext = createContext<any>(undefined);
+export function useConfigExtra<T = any>(): T {
+  return useContext(ExtraContext);
+}
 
 // 注册默认模板组件
 import("./registerDefault").then((module) => {
@@ -50,6 +63,8 @@ interface ConfigListProps<ConfigKey extends any = string> {
   onChange?: (value: Record<string, any>) => void;
   /** label 样式 */
   labelStyle?: React.CSSProperties;
+  /** 额外属性配置（方便form.Item内的组件穿透获取最新属性） */
+  extra?: Record<string, any>;
 }
 
 // 已注册组件模板映射
@@ -73,15 +88,8 @@ export default function ConfigRender<ConfigKey extends any = string>(
     return initial;
   }, []);
 
-  useEffect(() => {
-    // value变更设置时，改变表单内容
-    form.setFieldsValue({
-      ...getInitial(),
-      ...props?.value,
-    });
-  }, [props?.value]);
-
-  return useMemo(() => {
+  // 渲染表单
+  const renderList = useMemo(() => {
     return (
       <Form
         form={form}
@@ -132,6 +140,16 @@ export default function ConfigRender<ConfigKey extends any = string>(
       </Form>
     );
   }, [items]);
+
+  useEffect(() => {
+    // value变更设置时，改变表单内容
+    form.setFieldsValue({
+      ...getInitial(),
+      ...props?.value,
+    });
+  }, [props?.value]);
+
+  return <ExtraContext.Provider value={props?.extra}>{renderList}</ExtraContext.Provider>;
 }
 
 /**
