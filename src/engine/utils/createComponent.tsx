@@ -5,7 +5,7 @@
  * @date 2025/2/27
  */
 import React from "react";
-import { AttributesComponentProps, ComponentProps } from "@/engine";
+import { AttributesComponentProps, ComponentNodeType, ComponentProps } from "@/engine";
 import ConfigRender, { ConfigRenderItem } from "@/components/ConfigRender";
 
 /**
@@ -57,10 +57,13 @@ export function createAttributes<Options extends Record<string, any> = Record<st
  * @param items 配置列表
  * @param defaultOptions 默认options
  */
-export function createAttributesByConfig<Options extends Record<string, any> = Record<string, any>>(
-  items?: ConfigRenderItem<keyof Options>[],
-  defaultOptions?: Partial<Options>,
-) {
+export function createAttributesByConfig<
+  Options extends Record<string, any> = Record<string, any>,
+  Extra extends any = {
+    componentNode: ComponentNodeType; // componentNode
+    onChangeComponentNode: (target: Partial<ComponentNodeType>) => void; // 合并更新
+  },
+>(items?: ConfigRenderItem<keyof Options, Extra>[], defaultOptions?: Partial<Options>) {
   return function (props: AttributesComponentProps<Options>) {
     // 合并options
     const options = defaultOptions
@@ -69,7 +72,7 @@ export function createAttributesByConfig<Options extends Record<string, any> = R
 
     // 表单渲染器
     return (
-      <ConfigRender
+      <ConfigRender<keyof Options, Extra>
         items={items}
         value={options}
         extra={{

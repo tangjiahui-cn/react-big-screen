@@ -33,30 +33,33 @@ import("./registerDefault").then((module) => {
 export type ConfigRenderRegisterKey = DEFAULT_REGISTER_KEY | (string & {});
 
 // 模板组件props
-interface ConfigRenderRegisterComponentProps {
+interface ConfigRenderRegisterComponentProps<Extra = any> {
   value: any;
   onChange: (value: any) => void;
+  useExtra: () => Extra;
   options?: Record<string, any>; // 组件额外配置项
 }
 
 // 配置项模板组件类型
-type ConfigRenderRegisterComponent = React.FC<ConfigRenderRegisterComponentProps>;
+type ConfigRenderRegisterComponent<Extra = any> = React.FC<
+  ConfigRenderRegisterComponentProps<Extra>
+>;
 
 // 配置项类型
-export type ConfigRenderItem<ConfigKey extends any = string> = XOR<
+export type ConfigRenderItem<ConfigKey extends any = string, Extra = any> = XOR<
   {
     key: ConfigKey | (string & {}); // 唯一key
     label: React.ReactNode; // 标签
     labelTip?: React.ReactNode; // 标签提示语
-    component: ConfigRenderRegisterKey | ConfigRenderRegisterComponent; // 支持({value, onChange, options})的组件, 或预定义枚举。（传入string表示注册的组件，传入ReactElement则显示该组件）
+    component: ConfigRenderRegisterKey | ConfigRenderRegisterComponent<Extra>; // 支持({value, onChange, options})的组件, 或预定义枚举。（传入string表示注册的组件，传入ReactElement则显示该组件）
     options?: Record<string, any>; // 传给 component 的属性配置
   },
   React.ReactElement
 >;
 
-interface ConfigListProps<ConfigKey extends any = string> {
+interface ConfigListProps<ConfigKey extends any = string, Extra = any> {
   /** 配置项列表 */
-  items?: ConfigRenderItem<ConfigKey>[];
+  items?: ConfigRenderItem<ConfigKey, Extra>[];
   /** 选中值 */
   value?: Record<string, any>;
   /** 值变更回调 */
@@ -64,12 +67,12 @@ interface ConfigListProps<ConfigKey extends any = string> {
   /** label 样式 */
   labelStyle?: React.CSSProperties;
   /** 额外属性配置（方便form.Item内的组件穿透获取最新属性） */
-  extra?: Record<string, any>;
+  extra?: Extra;
 }
 
 // 已注册组件模板映射
 let registered = new Map<string, ConfigRenderRegisterComponent>();
-export default function ConfigRender<ConfigKey extends any = string>(
+export default function ConfigRender<ConfigKey = string, Extra = any>(
   props: ConfigListProps<ConfigKey>,
 ) {
   const { items } = props;
@@ -107,8 +110,10 @@ export default function ConfigRender<ConfigKey extends any = string>(
             return item;
           }
           // 渲染 自定义组件模板 / 预定义的组件模板
-          const Component: any =
-            typeof item.component === "string" ? registered.get(item.component) : item.component;
+          const Component: ConfigRenderRegisterComponent<Extra> | undefined =
+            typeof item.component === "string"
+              ? (registered.get(item.component) as any)
+              : item.component;
           return (
             <div key={item?.key as string} className={styles.configRender_item}>
               {/* 渲染label */}
@@ -130,7 +135,8 @@ export default function ConfigRender<ConfigKey extends any = string>(
               <div className={styles.configRender_item_value}>
                 {Component ? (
                   <Form.Item key={item?.key as string} noStyle name={item.key as string}>
-                    <Component options={item?.options} />
+                    {/* @ts-ignore */}
+                    <Component options={item?.options} useExtra={useConfigExtra} />
                   </Form.Item>
                 ) : undefined}
               </div>

@@ -7,7 +7,6 @@
 import { ComponentNodeType } from "@/engine";
 import EditList from "./components/EditList";
 import { createAttributesByConfig } from "@/engine";
-import { useConfigExtra } from "@/components/ConfigRender";
 
 export const DEFAULT_OPTIONS: CarouselOptions = {
   bordered: true,
@@ -28,8 +27,8 @@ export default createAttributesByConfig<CarouselOptions>(
     {
       key: "_",
       label: "面板",
-      component: () => {
-        const { componentNode, onChangeComponentNode } = useConfigExtra();
+      component: ({ useExtra }) => {
+        const { componentNode, onChangeComponentNode } = useExtra();
         return (
           <EditList
             value={componentNode.currentPanelId}
