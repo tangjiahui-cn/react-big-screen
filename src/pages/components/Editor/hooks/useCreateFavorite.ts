@@ -49,8 +49,8 @@ export function useCreateFavorite(containerDomRef: RefObject<HTMLElement>) {
       const clonedComponents = engine.componentNode.cloneComponentNodes(favorite.children, {
         onClone(_, cloned) {
           // 计算坐标
-          cloned.x = (x + (cloned.x - minX)) / scale; // 真实坐标转为编辑器坐标 （scale 越小，编辑器面积越小，真实像素变化映射到虚拟像素越大）
-          cloned.y = (y + (cloned.y - minY)) / scale;
+          cloned.x = Math.round((x + (cloned.x - minX)) / scale); // 真实坐标转为编辑器坐标 （scale 越小，编辑器面积越小，真实像素变化映射到虚拟像素越大）
+          cloned.y = Math.round((y + (cloned.y - minY)) / scale);
           cloned.pageId = pageId;
           clonedIds.push(cloned.id);
         },
