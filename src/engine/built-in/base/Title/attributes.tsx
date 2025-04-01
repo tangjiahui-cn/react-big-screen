@@ -4,19 +4,9 @@
  * @author tangjiahui
  * @date 2025/3/25
  */
-import { createAttributes } from "@/engine";
-import {
-  AttrContainer,
-  FontWeightSelect,
-  IColorPicker,
-  IInput,
-  IInputNumber,
-  Line,
-  TextAlignSelect,
-  TextAlignType,
-} from "@/components/Attributes";
+import { createAttributesByConfig } from "@/engine";
+import type { TextAlignType } from "@/components/Attributes";
 import React from "react";
-import { Checkbox } from "antd";
 
 export const DEFAULT_OPTIONS = {
   value: "标题",
@@ -34,71 +24,22 @@ export interface TitleOptions {
   background?: string; // 背景颜色
 }
 
-export default createAttributes<TitleOptions>((props) => {
-  const { options, onChange } = props;
-  return (
-    <AttrContainer>
-      <Line label={"标题"}>
-        <IInput
-          style={{ width: "100%" }}
-          value={options?.value}
-          onChange={(value) => {
-            onChange({
-              value,
-            });
-          }}
-        />
-      </Line>
-      <Line label={"字号"}>
-        <IInputNumber
-          min={8}
-          style={{ width: "100%" }}
-          value={options?.fontSize}
-          onChange={(fontSize) => {
-            onChange({ fontSize });
-          }}
-        />
-      </Line>
-      <Line label={"字重"}>
-        <FontWeightSelect
-          style={{ width: "100%" }}
-          value={options?.fontWeight}
-          onChange={(fontWeight?: any) => {
-            onChange({ fontWeight });
-          }}
-        />
-      </Line>
-      <Line label={"颜色"}>
-        <IColorPicker value={options?.color || "black"} onChange={(color) => onChange({ color })} />
-      </Line>
-      <Line label={"背景"}>
-        <IColorPicker
-          value={options?.background}
-          onChange={(background) => onChange({ background })}
-        />
-      </Line>
-      <Line label={"斜体"}>
-        <Checkbox
-          checked={options?.fontStyle === "italic"}
-          onChange={(e) => {
-            const isItalic = e.target.checked;
-            onChange({
-              fontStyle: isItalic ? "italic" : undefined,
-            });
-          }}
-        />
-      </Line>
-      <Line label={"水平对齐"} labelSpan={5}>
-        <TextAlignSelect
-          style={{ width: "100%" }}
-          value={options?.textAlign}
-          onChange={(textAlign: any) => {
-            onChange({
-              textAlign,
-            });
-          }}
-        />
-      </Line>
-    </AttrContainer>
-  );
-}, DEFAULT_OPTIONS);
+export default createAttributesByConfig<TitleOptions>(
+  [
+    { key: "value", label: "标题", component: "input" },
+    { key: "fontSize", label: "字号", component: "inputNumber" },
+    { key: "fontWeight", label: "字重", component: "fontWeightSelect" },
+    { key: "color", label: "颜色", component: "colorPicker" },
+    { key: "background", label: "背景", component: "colorPicker" },
+    {
+      key: "fontStyle",
+      label: "斜体",
+      component: "checkboxValue",
+      options: {
+        value: "italic",
+      },
+    },
+    { key: "textAlign", label: "水平对齐", component: "textAlignSelect" },
+  ],
+  DEFAULT_OPTIONS,
+);
