@@ -17,7 +17,6 @@ export const charts: ComponentType[] = [
     y: 0,
     width: 250,
     height: 250,
-    options: {},
     component: React.lazy(() => import("./Pie")),
   },
   {
@@ -29,13 +28,6 @@ export const charts: ComponentType[] = [
     y: 0,
     width: 250,
     height: 250,
-    options: {
-      seriesList: [
-        { key: "1", name: "数据1", value: "value1", color: "#f8e71c" },
-        { key: "2", name: "数据2", value: "value2", color: "#7ed321" },
-        { key: "3", name: "数据3", value: "value3", color: "#1071e0" },
-      ],
-    },
     component: React.lazy(() => import("./Line")),
     attributesComponent: React.lazy(() => import("./Line/attributes")),
     dataSourceType: "static",
@@ -54,7 +46,6 @@ export const charts: ComponentType[] = [
     y: 0,
     width: 250,
     height: 250,
-    options: {},
     component: React.lazy(() => import("./Bar")),
   },
   {

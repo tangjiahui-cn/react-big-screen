@@ -18,10 +18,6 @@ export const layout: ComponentType[] = [
     y: 0,
     width: 500,
     height: 250,
-    options: {
-      bordered: true,
-      borderColor: "#ccc", // 边框颜色
-    },
     component: React.lazy(() => import("./Carousel")),
     attributesComponent: React.lazy(() => import("./Carousel/attributes")),
     panels: [

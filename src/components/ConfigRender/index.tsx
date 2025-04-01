@@ -5,7 +5,7 @@
  * @date 2025/3/31
  * @description 渲染配置项。
  */
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import React, { isValidElement, useCallback, useEffect, useMemo, useRef } from "react";
 import type { DEFAULT_REGISTER_KEY } from "./registerDefault";
 import { Form, Tooltip } from "antd";
 import styles from "./index.module.less";
@@ -21,22 +21,25 @@ export type ConfigRenderRegisterKey = DEFAULT_REGISTER_KEY | (string & {});
 
 // 模板组件props
 interface ConfigRenderRegisterComponentProps {
-  value?: any;
-  options?: Record<string, any>;
-  onChange?: (value: any) => void;
+  value: any;
+  onChange: (value: any) => void;
+  options?: Record<string, any>; // 组件额外配置项
 }
 
 // 配置项模板组件类型
 type ConfigRenderRegisterComponent = React.FC<ConfigRenderRegisterComponentProps>;
 
 // 配置项类型
-export interface ConfigRenderItem<ConfigKey extends any = string> {
-  key: ConfigKey; // 唯一key
-  label: React.ReactNode; // 标签
-  labelTip?: React.ReactNode; // 标签提示语
-  component: ConfigRenderRegisterKey | ConfigRenderRegisterComponent; // 支持({value, onChange, options})的组件, 或预定义枚举。（传入string表示注册的组件，传入ReactElement则显示该组件）
-  options?: Record<string, any>; // 传给 component 的属性配置
-}
+export type ConfigRenderItem<ConfigKey extends any = string> = XOR<
+  {
+    key: ConfigKey | (string & {}); // 唯一key
+    label: React.ReactNode; // 标签
+    labelTip?: React.ReactNode; // 标签提示语
+    component: ConfigRenderRegisterKey | ConfigRenderRegisterComponent; // 支持({value, onChange, options})的组件, 或预定义枚举。（传入string表示注册的组件，传入ReactElement则显示该组件）
+    options?: Record<string, any>; // 传给 component 的属性配置
+  },
+  React.ReactElement
+>;
 
 interface ConfigListProps<ConfigKey extends any = string> {
   /** 配置项列表 */
@@ -57,6 +60,7 @@ export default function ConfigRender<ConfigKey extends any = string>(
   const { items } = props;
   const [form] = Form.useForm();
 
+  // 保存最新的props引用
   const propsRef = useRef<ConfigListProps<ConfigKey>>();
   propsRef.current = props;
 
@@ -70,7 +74,7 @@ export default function ConfigRender<ConfigKey extends any = string>(
   }, []);
 
   useEffect(() => {
-    // value变更设置时，设置form值
+    // value变更设置时，改变表单内容
     form.setFieldsValue({
       ...getInitial(),
       ...props?.value,
@@ -90,6 +94,10 @@ export default function ConfigRender<ConfigKey extends any = string>(
         }}
       >
         {items?.map?.((item) => {
+          // 如果是一个React元素，则直接显示
+          if (isValidElement(item)) {
+            return item;
+          }
           // 渲染 自定义组件模板 / 预定义的组件模板
           const Component: any =
             typeof item.component === "string" ? registered.get(item.component) : item.component;

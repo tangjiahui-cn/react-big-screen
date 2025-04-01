@@ -6,7 +6,7 @@
  */
 import engine, { EventData } from "@/engine";
 import styles from "./index.module.less";
-import { CarouselOptions } from "./attributes";
+import { CarouselOptions, DEFAULT_OPTIONS } from "./attributes";
 import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 import { useUnmount } from "ahooks";
@@ -96,4 +96,4 @@ export default createComponent<CarouselOptions, TriggerKeys, ExposeKeys>((props)
       />
     </div>
   );
-});
+}, DEFAULT_OPTIONS);

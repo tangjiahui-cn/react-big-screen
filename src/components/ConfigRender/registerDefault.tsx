@@ -11,6 +11,7 @@ import {
   IInput,
   IInputNumber,
   ITextArea,
+  ResetButton,
   TextAlignSelect,
 } from "@/components/Attributes";
 import ConfigRender from ".";
@@ -19,15 +20,15 @@ import ICustomSelect from "@/components/ICustomSelect";
 import { IOption } from "@/components/ICustomSelect/type";
 
 export type DEFAULT_REGISTER_KEY =
-  | "input"
-  | "inputNumber"
-  | "textarea"
-  | "fontWeightSelect"
-  | "colorPicker"
-  | "checkbox"
-  | "checkboxValue"
-  | "textAlignSelect"
-  | "antdButtonTypeSelect";
+  | "input" // 文本输入框
+  | "inputNumber" // 数字输入框
+  | "textarea" // 文本区域
+  | "fontWeightSelect" // 字重下拉框
+  | "colorPicker" // 颜色选择器
+  | "checkbox" // 勾选框
+  | "checkboxValue" // 勾选框（指定真值）
+  | "textAlignSelect" // 文字对齐下拉框
+  | "antdButtonTypeSelect"; // antd按钮类型下拉框
 
 export default function registerDefault() {
   // 输入框
@@ -66,7 +67,11 @@ export default function registerDefault() {
 
   // 颜色选择框
   ConfigRender.register("colorPicker", (props) => {
-    return (
+    const {
+      reset, // 是否支持重置
+      resetColor, // 重置颜色
+    } = props?.options || {};
+    const children = (
       <IColorPicker
         style={{ width: "100%" }}
         {...props?.options}
@@ -74,6 +79,19 @@ export default function registerDefault() {
         onChange={props.onChange}
       />
     );
+    if (reset) {
+      return (
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          {children}
+          <ResetButton
+            onClick={() => {
+              props.onChange(resetColor);
+            }}
+          />
+        </div>
+      );
+    }
+    return children;
   });
 
   // 多选框

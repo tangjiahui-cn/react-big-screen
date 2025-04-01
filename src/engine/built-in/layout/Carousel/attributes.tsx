@@ -10,6 +10,11 @@ import { Checkbox } from "antd";
 import EditList from "./components/EditList";
 import { createAttributes } from "@/engine";
 
+export const DEFAULT_OPTIONS: CarouselOptions = {
+  bordered: true,
+  borderColor: "#ccc", // 边框颜色
+};
+
 export interface CarouselOptions {
   children?: ComponentNodeType[]; // 子元素
   bordered?: boolean; // 是否显示边框
