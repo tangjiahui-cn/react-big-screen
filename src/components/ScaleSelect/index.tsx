@@ -19,12 +19,13 @@ const MARKS = {
 };
 
 interface Props {
+  isCustom?: boolean; // 是否支持自定义修改值
   value?: number; // 缩放比率(单位1)
   onChange?: (value: number) => void;
 }
 
 export default function ScaleSelect(props: Props) {
-  const { value = 1 } = props;
+  const { value = 1, isCustom } = props;
 
   // 全局配置
   const config = useConfig();
@@ -60,16 +61,18 @@ export default function ScaleSelect(props: Props) {
             onChange={handleSelect}
           />
           <Space style={{ marginTop: -16 }}>
-            <IInputNumber
-              min={MIN}
-              max={1000}
-              value={rateValue}
-              placeholder={"缩放值"}
-              style={{ fontSize: 12, width: 80 }}
-              onChange={(v) => {
-                handleSelect(v || 1);
-              }}
-            />
+            {isCustom && (
+              <IInputNumber
+                min={MIN}
+                max={1000}
+                value={rateValue}
+                placeholder={"缩放值"}
+                style={{ fontSize: 12, width: 80 }}
+                onChange={(v) => {
+                  handleSelect(v || 1);
+                }}
+              />
+            )}
             <TooltipButton noHoverClass title={"重置"}>
               <ReloadOutlined
                 className={"theme-color icon_clickable"}
