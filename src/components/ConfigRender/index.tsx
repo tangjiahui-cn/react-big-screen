@@ -103,7 +103,11 @@ export default function ConfigRender<ConfigKey extends any = string>(
                 )}
                 style={props?.labelStyle}
               >
-                {item?.labelTip ? <Tooltip title={item.label}>{item.label}</Tooltip> : item.label}
+                {item?.labelTip ? (
+                  <Tooltip title={item.labelTip}>{item.label}</Tooltip>
+                ) : (
+                  item.label
+                )}
                 <span>:</span>
               </div>
               {/* 渲染表单组件 */}
