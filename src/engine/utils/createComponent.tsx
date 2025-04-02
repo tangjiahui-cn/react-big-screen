@@ -5,7 +5,7 @@
  * @date 2025/2/27
  */
 import React from "react";
-import { AttributesComponentProps, ComponentNodeType, ComponentProps } from "@/engine";
+import { AttributesComponentProps, ComponentProps } from "@/engine";
 import ConfigRender, { ConfigRenderItem } from "@/components/ConfigRender";
 
 /**
@@ -59,10 +59,7 @@ export function createAttributes<Options extends Record<string, any> = Record<st
  */
 export function createAttributesByConfig<
   Options extends Record<string, any> = Record<string, any>,
-  Extra extends any = {
-    componentNode: ComponentNodeType; // componentNode
-    onChangeComponentNode: (target: Partial<ComponentNodeType>) => void; // 合并更新
-  },
+  Extra extends any = AttributesComponentProps<Options>,
 >(items?: ConfigRenderItem<keyof Options, Extra>[], defaultOptions?: Partial<Options>) {
   return function (props: AttributesComponentProps<Options>) {
     // 合并options
@@ -75,10 +72,7 @@ export function createAttributesByConfig<
       <ConfigRender<keyof Options, Extra>
         items={items}
         value={options}
-        extra={{
-          componentNode: props.componentNode,
-          onChangeComponentNode: props.onChangeComponentNode,
-        }}
+        extra={props}
         onChange={(value) => {
           props.onChange(value as any);
         }}
