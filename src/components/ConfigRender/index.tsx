@@ -46,7 +46,7 @@ type ConfigRenderRegisterComponent<Extra = any> = React.FC<
 >;
 
 // 配置项类型
-export type ConfigRenderItem<ConfigKey extends any = string, Extra = any> = XOR<
+export type ConfigRenderItem<ConfigKey extends any = string, Extra = any> = OR<
   {
     key: ConfigKey | (string & {}); // 唯一key
     label: React.ReactNode; // 标签

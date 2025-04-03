@@ -19,7 +19,7 @@ type Without<T, U> = {
 };
 
 // 取类型 T 或 U
-type XOR<T, U> = T | U extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U;
+type OR<T, U> = T | U extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U;
 
 /************************ RequireJs ************************/
 type RequireJsReturnCallback = (...args: any[]) => any;
