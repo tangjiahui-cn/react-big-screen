@@ -18,10 +18,6 @@ export const layout: ComponentType[] = [
     y: 0,
     width: 500,
     height: 250,
-    options: {
-      bordered: true,
-      borderColor: "#ccc", // 边框颜色
-    },
     component: React.lazy(() => import("./Carousel")),
     attributesComponent: React.lazy(() => import("./Carousel/attributes")),
     panels: [
@@ -49,12 +45,5 @@ export const layout: ComponentType[] = [
     attributesComponent: React.lazy(() => import("./SpecialCard/attributes")),
     icon: () => import("@/static/built-in/specialCard.png"),
     panels: [{ label: "特殊卡片", value: "" }],
-    options: {
-      title: "标题",
-      bordered: true,
-      borderColor: "rgba(83, 141, 233, 0.54)",
-      background: "rgba(22, 28, 48, 0.8)",
-      color: "rgb(71, 216, 218)",
-    },
   },
 ];

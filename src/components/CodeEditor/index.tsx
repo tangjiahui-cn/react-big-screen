@@ -60,6 +60,10 @@ export default function CodeEditor(props: Props) {
   }, [props?.language]);
 
   useUpdateEffect(() => {
+    if (!editorRef?.current) {
+      console.error("monaco-editor init failed.");
+      return;
+    }
     const value = `${props?.value || ""}`;
     // 如果相同则不设置
     if (value === editorRef?.current?.getValue?.()) {

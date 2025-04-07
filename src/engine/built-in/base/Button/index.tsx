@@ -6,19 +6,18 @@
  *
  */
 import { Button } from "antd";
-import { ButtonType } from "antd/es/button";
 import { createComponent } from "@/engine";
+import { DEFAULT_OPTIONS, ButtonOptions } from "./attributes";
 
-interface Options {
-  type: ButtonType;
-  children?: string;
-}
-
-export default createComponent<Options>((props) => {
+export default createComponent<ButtonOptions>((props) => {
   const { options, width, height } = props;
   return (
-    <Button type={options?.type} style={{ width, height }}>
-      {options.children}
+    <Button type={options?.type} style={{ width, height, borderRadius: options.borderRadius }}>
+      <span
+        dangerouslySetInnerHTML={{
+          __html: options.value || "",
+        }}
+      />
     </Button>
   );
-});
+}, DEFAULT_OPTIONS);

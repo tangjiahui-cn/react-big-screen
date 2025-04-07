@@ -7,12 +7,13 @@
  *    封装 modal 弹窗使用，简化代码，并且避免初始时Modal业务组件内部渲染
  *  （普通方式<Component />形式，即使弹窗未打开，业务组件仍然内部渲染执行了，造成不必要的损失）。
  */
-import React, { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import RenderModal, {
   BindModalProps,
   ModalFunctionComponent,
   RenderModalRefType,
 } from "./RenderModal";
+import { createRoot } from "react-dom/client";
 
 export type { BindModalProps };
 
@@ -20,21 +21,33 @@ export type { BindModalProps };
 type BindModalOptions = Pick<BindModalProps, "onOk" | "onCancel">;
 
 // 返回格式
-interface BindModalReturn<Params = any> extends RenderModalRefType<Params> {
-  children: React.ReactNode; // 渲染弹窗内容
-}
+type BindModalReturn<Params = any> = RenderModalRefType<Params>;
 
 // useBindModal （绑定modal）
 export function useBindModal<Params = any>(
   component: ModalFunctionComponent<Params>,
   options?: BindModalOptions,
 ): BindModalReturn<Params> {
+  const unmountRef = useRef<Unmount>();
   const renderRef = useRef<RenderModalRefType>(null);
   const optionsRef = useRef<BindModalOptions>();
+
+  // 实时取运行环境的options值
   optionsRef.current = options;
 
+  useEffect(() => {
+    return () => {
+      unmountRef.current?.();
+    };
+  }, []);
+
   return useMemo(() => {
-    const children = (
+    let div: HTMLDivElement | undefined = document.createElement("div");
+    document.body.appendChild(div);
+
+    // 弹窗挂载到 document.body
+    let mountRoot = createRoot(div);
+    mountRoot.render(
       <RenderModal
         ref={renderRef}
         component={component}
@@ -44,11 +57,19 @@ export function useBindModal<Params = any>(
         onOk={(...args: any) => {
           optionsRef.current?.onOk?.(...args);
         }}
-      />
+      />,
     );
 
+    // 注册卸载函数
+    unmountRef.current = () => {
+      if (div) {
+        mountRoot.unmount();
+        div.remove();
+        div = undefined;
+      }
+    };
+
     return {
-      children,
       open(params?: Params) {
         // 打开弹窗
         renderRef.current?.open?.(params);

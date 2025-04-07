@@ -8,6 +8,7 @@ import styles from "./index.module.less";
 import { CloseOutlined } from "@ant-design/icons";
 import InputNumberWithSuffix from "@/components/InputNumberWithSuffix";
 import engine, { useConfig } from "@/engine";
+import ScaleSelect from "@/components/ScaleSelect";
 
 export default function SizeBar() {
   const config = useConfig();
@@ -18,11 +19,8 @@ export default function SizeBar() {
         suffix={"px"}
         value={config.width}
         onChange={(width: any) => {
-          engine.config.setConfig((config) => {
-            return {
-              ...config,
-              width,
-            };
+          engine.config.setConfig({
+            width,
           });
         }}
       />
@@ -31,11 +29,16 @@ export default function SizeBar() {
         suffix={"px"}
         value={config.height}
         onChange={(height: any) => {
-          engine.config.setConfig((config) => {
-            return {
-              ...config,
-              height,
-            };
+          engine.config.setConfig({
+            height,
+          });
+        }}
+      />
+      <ScaleSelect
+        value={config.scale}
+        onChange={(scale) => {
+          engine.config.setConfig({
+            scale,
           });
         }}
       />

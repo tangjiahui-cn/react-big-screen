@@ -34,6 +34,7 @@ import { defaultPackage } from "./built-in";
 import { BaseEvent } from "./model";
 import { changeLanguage } from "@/i18n";
 import { HistoryRecord } from "@/packages/historyRecord";
+import { INIT_CONFIG } from "@/engine/store";
 
 export type * from "./types";
 export * from "./store";
@@ -92,6 +93,7 @@ class Engine {
 
     // 设置config
     this.config.setConfig({
+      ...INIT_CONFIG,
       ...json?.config,
       currentPageId: json?.config?.currentPageId || DEFAULT_PAGE.id,
     });
@@ -153,8 +155,7 @@ class Engine {
   public clear() {
     this.loadJSON({
       config: {
-        width: 1920,
-        height: 1080,
+        ...INIT_CONFIG,
         ...this.json?.config,
       },
     });

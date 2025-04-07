@@ -42,6 +42,14 @@ export default {
       },
       undo: "undo",
       cancelUndo: "cancelUndo",
+      zoom: "zoom",
+      zoomExt: {
+        ext1: "Mouse Wheel",
+      },
+      zoomReset: "zoom reset",
+      zoomResetExt: {
+        ext1: "Mouse Mid",
+      },
     },
     undo: "undo",
     cancelUndo: "cancel undo",

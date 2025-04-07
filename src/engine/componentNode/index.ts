@@ -578,29 +578,34 @@ export default class ComponentNode {
 
   // 克隆 componentNodes（会重置父子关系）
   public cloneComponentNodes(
-    componentNodes: ComponentNodeType[], // 待克隆组件列表
+    // 待克隆组件列表
+    componentNodes: ComponentNodeType[],
+    // 配置项
     options?: {
       // 克隆每一个组件时回调
       onClone?: (old: ComponentNodeType, cloned: ComponentNodeType) => void;
     },
   ): ComponentNodeType[] {
-    const panelIdMap = new Map<string, string>(); // panelId映射（旧panelId => 新panelId）
-    // 创建新实例
+    // panelId映射（旧panelId => 新panelId）
+    const panelIdMap = new Map<string, string>();
+    // 创建的新实例
     const newComponentNodes = componentNodes.reduce((list, componentNode) => {
       if (componentNode) {
-        // 复制创建新实例
+        // 复制实例
         const newComponentNode = this.createFromComponentNode(componentNode, {
           id: createUUID(),
         });
-        // 解除复制组件的成组关系
+        // 解除新复制组件的成组关系
         delete newComponentNode.groupId;
-        // 复制panels
+        // 复制旧组件的 panels 到新组件
         if (componentNode?.panels) {
           newComponentNode.panels = componentNode.panels.map((panel) => {
             const newPanelId = createUUID();
+            // 重置新组件的 currentPanelId
             if (panel.value === newComponentNode.currentPanelId) {
               newComponentNode.currentPanelId = newPanelId;
             }
+            // 添加映射关系：旧panelId => 新panelId.
             panelIdMap.set(panel.value, newPanelId);
             return {
               ...panel,
@@ -614,7 +619,7 @@ export default class ComponentNode {
       return list;
     }, [] as ComponentNodeType[]);
 
-    // 重置panelId映射关系
+    // 重置新组件的 panelId
     newComponentNodes.forEach((componentNode) => {
       if (componentNode?.panelId) {
         const newPanelId = panelIdMap.get(componentNode.panelId);

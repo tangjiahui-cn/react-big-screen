@@ -19,7 +19,6 @@ export const nav: ComponentType[] = [
     width: 300,
     height: 32,
     isAllPage: true,
-    options: {},
     component: React.lazy(() => import("./PageNav")),
   },
 ];

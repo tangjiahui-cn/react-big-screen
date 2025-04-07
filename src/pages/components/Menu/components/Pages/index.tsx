@@ -176,7 +176,6 @@ export default function () {
           }}
         />
       </div>
-      {addPageDialog.children}
     </div>
   );
 }

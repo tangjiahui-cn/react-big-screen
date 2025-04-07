@@ -72,6 +72,7 @@ export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
               startX: e.x,
               startY: e.y,
               startEvent: e,
+              scale: engine.config.getConfig().scale,
               hookQueue: [
                 // 监听拖拽大小
                 dragDirection && listenDragSize(componentNode, e.target as any, dragDirection),
@@ -96,6 +97,7 @@ export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
           startX: e.x,
           startY: e.y,
           startEvent: e,
+          scale: engine.config.getConfig().scale,
           hookQueue: [
             // 监听创建范围多选框（左键按住范围框选）
             isClickLeft && listenRangeBox(dom),

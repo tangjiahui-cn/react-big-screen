@@ -14,13 +14,13 @@ export type ComponentUseExpose<ExposeKeys extends string = string> = (
 ) => void;
 
 export interface ComponentProps<
-  Option extends any,
+  Options extends Record<string, any>,
   TriggerKeys extends string = string,
   ExposeKeys extends string = string,
 > {
   width: number;
   height: number;
-  options: Option; // 配置数据
+  options: Options; // 配置数据
   componentNode: ComponentNodeType; // 对应的componentNode
   dataSource?: any; // 接口返回结果
 
@@ -38,7 +38,7 @@ export interface AttributesComponentProps<Option = any> {
       | ((origin: ComponentNodeType) => Partial<ComponentNodeType>),
   ) => void;
   options: Option; // 配置数据
-  onChange: (options: Option, cover?: boolean) => void; // 配置数据修改回调 （cover：默认false。true覆盖，false则修改部分属性）
+  onChange: (options: Partial<Option>, cover?: boolean) => void; // 配置数据修改回调 （cover：默认false。true覆盖，false则修改部分属性）
 }
 
 // 数据源类型
@@ -68,7 +68,7 @@ export interface BaseComponent {
   width: number; // 宽度
   height: number; // 高度
   level?: number; // 层级
-  options?: Record<string, any>; // 配置数据
+  options?: Record<string, any>; // 配置数据（创建时以此为基准值）
   category: ComponentCategory; // 组件分类
   isAllPage?: boolean; // 是否全页面显示
 
@@ -84,10 +84,10 @@ export interface BaseComponent {
 }
 
 // 组件模板类型
-export interface ComponentType<Option = any> extends BaseComponent {
-  component: React.FC<ComponentProps<Option>>; // 组件模板
+export interface ComponentType<Options extends Record<string, any> = any> extends BaseComponent {
+  component: React.FC<ComponentProps<Options>>; // 组件模板
   icon?: string | (() => Promise<typeof import("*.png")>); // 组件图标
-  attributesComponent?: React.FC<AttributesComponentProps<Option>>; // 属性配置页面模板
+  attributesComponent?: React.FC<AttributesComponentProps<Options>>; // 属性配置页面模板
   exposes?: EventData[]; // 注册内部暴露事件（通过外部可以触发内部暴露事件）
   triggers?: EventData[]; // 注册内部触发事件（外部主动触发事件）
   description?: string; // 组件的描述（不会被保存到json）
@@ -129,6 +129,11 @@ export interface GlobalConfig {
   currentPageId?: string; // 当前页面id
   expandedPageIds?: string[]; // 展开页面ids
   language?: LANGUAGE_TYPE; // 默认语言类型
+  scale: number; // 缩放比例 (默认 1)
+  scaleDefault: number; // 默认缩放比例（默认1）
+  scaleStep: number; // 缩放比例步进（默认 0.1）
+  scaleMinZoom: number; // 最小缩放比例（默认 0.1）
+  scaleMaxZoom: number; // 最大缩放比例（默认 2）（自定义比率会突破这个值，滚轮缩放不会超出）
 }
 
 export type ComponentUsed = Record<

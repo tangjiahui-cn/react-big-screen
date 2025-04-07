@@ -2,41 +2,32 @@
  * 属性配置页面
  *
  * @author tangjiahui
- * @date 2025/2/5
+ * @date 2025/3/25
  */
 import { createAttributesByConfig } from "@/engine";
+import type { TextAlignType } from "@/components/Attributes";
 import React from "react";
-import { TextAlignType } from "@/components/Attributes";
 
-export const DEFAULT_OPTIONS: TextOptions = {
+export const DEFAULT_OPTIONS = {
+  value: "标题",
   color: "black",
-  value: "一段文字",
-  fontSize: 14,
-  lineHeight: 32,
+  fontSize: 18,
 };
 
-export interface TextOptions {
-  value?: string; // 文字内容
+export interface TitleOptions {
+  value: string; // 标题内容
   fontWeight?: string; // 字重
   color?: string; // 字体颜色
   fontStyle?: React.CSSProperties["fontStyle"]; // 字体样式
-  lineHeight?: number; // 行高（px）
   fontSize?: number; // 字号
   textAlign?: TextAlignType; // 水平对齐（默认不设置）
   background?: string; // 背景颜色
 }
 
-export default createAttributesByConfig<TextOptions>(
+export default createAttributesByConfig<TitleOptions>(
   [
-    { key: "value", label: "内容", component: "textarea" },
-    { key: "fontSize", label: "字号", component: "inputNumber", options: { min: 8 } },
-    {
-      key: "lineHeight",
-      label: "行高",
-      labelTip: "单位px",
-      component: "inputNumber",
-      options: { min: 8 },
-    },
+    { key: "value", label: "标题", component: "input" },
+    { key: "fontSize", label: "字号", component: "inputNumber" },
     { key: "fontWeight", label: "字重", component: "fontWeightSelect" },
     { key: "color", label: "颜色", component: "colorPicker" },
     { key: "background", label: "背景", component: "colorPicker" },

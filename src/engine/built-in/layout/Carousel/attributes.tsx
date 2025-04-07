@@ -5,10 +5,13 @@
  * @date 2025/2/6
  */
 import { ComponentNodeType } from "@/engine";
-import { IColorPicker, Line } from "@/components/Attributes";
-import { Checkbox } from "antd";
 import EditList from "./components/EditList";
-import { createAttributes } from "@/engine";
+import { createAttributesByConfig } from "@/engine";
+
+export const DEFAULT_OPTIONS: CarouselOptions = {
+  bordered: true,
+  borderColor: "#ccc", // 边框颜色
+};
 
 export interface CarouselOptions {
   children?: ComponentNodeType[]; // 子元素
@@ -17,45 +20,33 @@ export interface CarouselOptions {
   count?: number; // 面板数量
 }
 
-export default createAttributes<CarouselOptions>((props) => {
-  const { options, onChange, componentNode, onChangeComponentNode } = props;
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-      <Line label={"边框"} labelSpan={3}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <Checkbox
-            checked={options?.bordered}
-            onChange={(e) => {
-              onChange({
-                bordered: e.target.checked,
+export default createAttributesByConfig<CarouselOptions>(
+  [
+    { key: "bordered", label: "边框", component: "checkbox" },
+    { key: "borderColor", label: "边框颜色", component: "colorPicker" },
+    {
+      key: "_",
+      label: "面板",
+      component: ({ useExtra }) => {
+        const { componentNode, onChangeComponentNode } = useExtra();
+        return (
+          <EditList
+            value={componentNode.currentPanelId}
+            onSelect={(currentPanelId) => {
+              onChangeComponentNode({
+                currentPanelId,
+              });
+            }}
+            list={componentNode.panels}
+            onChange={(panels) => {
+              onChangeComponentNode({
+                panels: [...panels],
               });
             }}
           />
-          {options?.bordered && (
-            <IColorPicker
-              style={{ flex: 1 }}
-              value={options?.borderColor}
-              onChange={(borderColor) => onChange({ borderColor })}
-            />
-          )}
-        </div>
-      </Line>
-      <Line label={"面板"}>
-        <EditList
-          value={componentNode.currentPanelId}
-          onSelect={(currentPanelId) => {
-            onChangeComponentNode({
-              currentPanelId,
-            });
-          }}
-          list={componentNode.panels}
-          onChange={(panels) => {
-            onChangeComponentNode({
-              panels: [...panels],
-            });
-          }}
-        />
-      </Line>
-    </div>
-  );
-});
+        );
+      },
+    },
+  ],
+  DEFAULT_OPTIONS,
+);

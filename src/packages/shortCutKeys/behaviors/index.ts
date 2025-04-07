@@ -30,3 +30,6 @@ export * from "./addHistory";
 export * from "./undoHistory";
 export * from "./cancelUndoHistory";
 export * from "./goHistory";
+export * from "./zoomEditorLarger";
+export * from "./zoomEditorSmaller";
+export * from "./zoomEditorDefault";

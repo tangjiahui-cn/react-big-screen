@@ -143,10 +143,10 @@ export function listenDragSize(
         return;
       }
       engine.componentNode.update(componentNode.id, {
-        x: baseInfo.x + moveInfo.dx,
-        y: baseInfo.y + moveInfo.dy,
-        height: Math.max(height, 0),
-        width: Math.max(width, 0),
+        x: Math.round(baseInfo.x + moveInfo.dx),
+        y: Math.round(baseInfo.y + moveInfo.dy),
+        height: Math.round(Math.max(height, 0)),
+        width: Math.round(Math.max(width, 0)),
       });
     },
     onEnd() {

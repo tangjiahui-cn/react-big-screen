@@ -22,18 +22,12 @@ import { message } from "antd";
 import IconFont from "@/components/IconFont";
 import SizeBar from "./components/SizeBar";
 import engine, { useHistoryData } from "@/engine";
-import { getLocalFileText, downloadText } from "@/utils";
+import { getLocalFileText, downloadText, openRoute } from "@/utils";
 import ShortCutKeysDescription from "./components/ShortCutKeysDescription";
 import { cancelUndoHistory, saveLocal, undoHistory } from "@/packages/shortCutKeys";
 import { saveLocalPreviewJson } from "@/pages/preview";
 import { useTranslation } from "react-i18next";
 import { changeLanguage, LANGUAGE } from "@/i18n";
-
-// 打开新路由页面
-function openRoute(routePath: string) {
-  routePath = routePath.startsWith("/") ? routePath : `/${routePath}`;
-  window.open(`${window.location.origin}${window.location.pathname}#${routePath}`);
-}
 
 interface OperateItem {
   key: string;

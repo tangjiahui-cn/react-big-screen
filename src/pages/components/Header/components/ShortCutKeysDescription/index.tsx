@@ -123,6 +123,27 @@ export default function ShortCutKeysDescription() {
         <span>+</span>
         <Key>Z</Key>
       </Space>
+
+      <Space>
+        <span>{t("head.shortCutKeys.zoom")}：</span>
+        <Key>Ctrl</Key>
+        <span>+</span>
+        <Key>
+          <Space>
+            <span>{t("head.shortCutKeys.zoomExt.ext1")}</span>
+            <ArrowUpOutlined />
+            <span>/</span>
+            <ArrowDownOutlined />
+          </Space>
+        </Key>
+      </Space>
+
+      <Space>
+        <span>{t("head.shortCutKeys.zoomReset")}：</span>
+        <Key>Ctrl</Key>
+        <span>+</span>
+        <Key>{t("head.shortCutKeys.zoomResetExt.ext1")}</Key>
+      </Space>
     </Space>
   );
 }

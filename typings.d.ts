@@ -12,6 +12,15 @@ declare const PUBLIC_PATH: string;
 declare const __DEV__: boolean;
 declare const VERSION: string;
 
+/************************ Types ************************/
+// 找到 T 中与 U 不相交的属性
+type Without<T, U> = {
+  [P in Exclude<keyof T, keyof U>]?: never;
+};
+
+// 取类型 T 或 U
+type OR<T, U> = T | U extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U;
+
 /************************ RequireJs ************************/
 type RequireJsReturnCallback = (...args: any[]) => any;
 type RequireJsCallback = (...args: any[]) => void;

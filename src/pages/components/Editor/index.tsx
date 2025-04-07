@@ -5,7 +5,7 @@
  * @date 2024/12/19
  */
 import styles from "./index.module.less";
-import engine, { ComponentNodeType, useConfig, usePackages } from "@/engine";
+import engine, { ComponentNodeType, usePackages } from "@/engine";
 import React, { useEffect, useMemo, useRef } from "react";
 import { useComponentNodes } from "@/engine";
 import RenderComponentNode from "./components/RenderComponentNode";
@@ -16,11 +16,11 @@ import {
   useCreateComponentNode,
   useRegisterContextMenu,
   useCreateFavorite,
+  useRegisterZoom,
 } from "./hooks";
 
 // 右键菜单项
 export default React.memo(() => {
-  const config = useConfig();
   const editorDomRef = useRef<HTMLDivElement>(null);
   const innerEditorDomRef = useRef<HTMLDivElement>(null);
 
@@ -57,6 +57,9 @@ export default React.memo(() => {
   // 拖拽创建favorite
   useCreateFavorite(innerEditorDomRef);
 
+  // 注册滚轮缩放逻辑
+  useRegisterZoom(editorDomRef);
+
   // 监听页面组件删除
   useEffect(() => {
     // 删除 componentNode时，从page的globalComponents中移除，表示不再是一个全局组件
@@ -71,11 +74,7 @@ export default React.memo(() => {
       className={styles.editor}
       onMouseDown={() => unSelectAllComponentNodes()}
     >
-      <PageContainer
-        ref={innerEditorDomRef}
-        className={styles.editor_render}
-        style={{ width: config.width, height: config.height }}
-      >
+      <PageContainer ref={innerEditorDomRef} className={styles.editor_render}>
         {/* 渲染实例 */}
         {renderComponentNodes}
       </PageContainer>

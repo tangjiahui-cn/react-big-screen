@@ -48,9 +48,6 @@ export default function () {
           />
         );
       })}
-
-      {editFavoriteDialog.children}
-      {favoriteDetailDialog.children}
     </div>
   );
 }

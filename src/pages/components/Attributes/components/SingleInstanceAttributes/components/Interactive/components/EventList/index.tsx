@@ -126,7 +126,6 @@ export default function EventList(props: Props) {
           );
         })}
       </div>
-      {editEventModal.children}
     </div>
   );
 }

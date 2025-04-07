@@ -8,6 +8,7 @@
 import { ComponentNodeType } from "@/engine";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { RequestManager } from "@/packages/request";
+import { useListenRef } from "@/hooks";
 
 type DataSource = any;
 export function useComponentNodeRequest(componentNode: ComponentNodeType): {
@@ -20,6 +21,7 @@ export function useComponentNodeRequest(componentNode: ComponentNodeType): {
   };
 } {
   const { dataSourceType = "static" } = componentNode;
+  const isStaticRef = useListenRef(dataSourceType === "static"); // 是否静态数据
   const requestManagerRef = useRef<RequestManager>();
 
   // 接口请求数据
@@ -36,7 +38,7 @@ export function useComponentNodeRequest(componentNode: ComponentNodeType): {
 
   useEffect(() => {
     // 静态数据不需要设置请求
-    if (dataSourceType === "static") {
+    if (isStaticRef.current) {
       return;
     }
     // 清空上一次的数据
@@ -54,10 +56,18 @@ export function useComponentNodeRequest(componentNode: ComponentNodeType): {
   const requestInstance = useMemo(() => {
     return {
       reload() {
+        // 静态数据不能获取
+        if (isStaticRef.current) {
+          return;
+        }
         // 更新原组件时，componentNode对象地址未变，所以可以取到实时的 request 属性值。
         getRequestManager()?.reload?.(componentNode.request);
       },
-      request(params?: Record<string, any>, noCache?: boolean): Promise<any> {
+      async request(params?: Record<string, any>, noCache?: boolean): Promise<any> {
+        // 静态数据不能获取
+        if (isStaticRef.current) {
+          return;
+        }
         const options = noCache ? { useCache: false } : undefined;
         return Promise.resolve(
           getRequestManager()?.request?.(params, componentNode.request, options),
@@ -67,7 +77,7 @@ export function useComponentNodeRequest(componentNode: ComponentNodeType): {
   }, []);
 
   return {
-    dataSource: dataSourceType === "static" ? componentNode?.staticDataSource : dataSource?.[0],
+    dataSource: isStaticRef.current ? componentNode?.staticDataSource : dataSource?.[0],
     requestInstance,
   };
 }

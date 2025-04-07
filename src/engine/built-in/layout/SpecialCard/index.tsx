@@ -6,7 +6,7 @@
  */
 import styles from "./index.module.less";
 import { createComponent } from "@/engine";
-import { SpecialCardOptions } from "./attributes";
+import { SpecialCardOptions, DEFAULT_OPTIONS } from "./attributes";
 import { DoubleRightOutlined } from "@ant-design/icons";
 
 export default createComponent<SpecialCardOptions>((props) => {
@@ -29,4 +29,4 @@ export default createComponent<SpecialCardOptions>((props) => {
       </div>
     </div>
   );
-});
+}, DEFAULT_OPTIONS);

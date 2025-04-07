@@ -7,7 +7,7 @@
 import ReactECharts from "@/components/ReactECharts";
 import { EChartsOption } from "echarts";
 import { createComponent } from "@/engine";
-import { LineOptions } from "./attributes";
+import { LineOptions, DEFAULT_OPTIONS } from "./attributes";
 import { useMemo } from "react";
 import { getSeries, getDataSet } from "./utils";
 
@@ -38,4 +38,4 @@ export default createComponent<LineOptions>((props) => {
       }}
     />
   );
-});
+}, DEFAULT_OPTIONS);

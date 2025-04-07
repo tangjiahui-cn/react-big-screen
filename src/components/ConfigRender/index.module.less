@@ -1,0 +1,27 @@
+.configRender {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+
+  &_item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    &_help {
+      text-decoration: underline dashed;
+      cursor: help;
+    }
+
+    &_label {
+      white-space: nowrap;
+      min-width: 30px;
+    }
+
+    &_value {
+      flex: 1;
+      overflow: hidden;
+    }
+  }
+}
