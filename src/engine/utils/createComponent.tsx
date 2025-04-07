@@ -67,12 +67,23 @@ export function createAttributesByConfig<
       ? Object.assign({}, defaultOptions, props.options)
       : props.options;
 
+    // 设置了defaultOptions，则合并options
+    const extra = defaultOptions
+      ? {
+          ...props,
+          options: {
+            ...props.options,
+            ...options,
+          },
+        }
+      : props;
+
     // 表单渲染器
     return (
       <ConfigRender<keyof Options, Extra>
         items={items}
         value={options}
-        extra={props}
+        extra={extra}
         onChange={(value) => {
           props.onChange(value as any);
         }}

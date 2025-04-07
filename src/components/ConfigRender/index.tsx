@@ -46,16 +46,18 @@ type ConfigRenderRegisterComponent<Extra = any> = React.FC<
 >;
 
 // 配置项类型
-export type ConfigRenderItem<ConfigKey extends any = string, Extra = any> = OR<
-  {
-    key: ConfigKey | (string & {}); // 唯一key
-    label: React.ReactNode; // 标签
-    labelTip?: React.ReactNode; // 标签提示语
-    component: ConfigRenderRegisterKey | ConfigRenderRegisterComponent<Extra>; // 支持({value, onChange, options})的组件, 或预定义枚举。（传入string表示注册的组件，传入ReactElement则显示该组件）
-    options?: Record<string, any>; // 传给 component 的属性配置
-  },
-  React.ReactElement
->;
+export type ConfigRenderItem<ConfigKey extends any = string, Extra = any> =
+  | OR<
+      {
+        key: ConfigKey | (string & {}); // 唯一key
+        label: React.ReactNode; // 标签
+        labelTip?: React.ReactNode; // 标签提示语
+        component: ConfigRenderRegisterKey | ConfigRenderRegisterComponent<Extra>; // 支持({value, onChange, options})的组件, 或预定义枚举。（传入string表示注册的组件，传入ReactElement则显示该组件）
+        options?: Record<string, any>; // 传给 component 的属性配置
+      },
+      React.ReactElement
+    >
+  | React.FC<Pick<ConfigRenderRegisterComponentProps<Extra>, "useExtra">>;
 
 interface ConfigListProps<ConfigKey extends any = string, Extra = any> {
   /** 配置项列表 */
@@ -108,6 +110,10 @@ export default function ConfigRender<ConfigKey = string, Extra = any>(
           // 如果是一个React元素，则直接显示
           if (isValidElement(item)) {
             return item;
+          }
+          if (typeof item === "function") {
+            const Component: any = item;
+            return <Component key={item} useExtra={useConfigExtra} />;
           }
           // 渲染 自定义组件模板 / 预定义的组件模板
           const Component: ConfigRenderRegisterComponent<Extra> | undefined =

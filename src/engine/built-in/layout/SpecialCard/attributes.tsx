@@ -4,10 +4,16 @@
  * @author tangjiahui
  * @date 2025/2/6
  */
-import { createAttributes } from "@/engine";
-import { IColorPicker, IInputNumber, Line, ResetButton } from "@/components/Attributes";
-import { IInput } from "@/components/Attributes/base/IInput";
-import { Checkbox, Space } from "antd";
+import { createAttributesByConfig } from "@/engine";
+import { useMemo } from "react";
+
+export const DEFAULT_OPTIONS = {
+  title: "标题",
+  bordered: true,
+  borderColor: "rgba(83, 141, 233, 0.54)",
+  background: "rgba(22, 28, 48, 0.8)",
+  color: "rgb(71, 216, 218)",
+};
 
 export interface SpecialCardOptions {
   title?: string; // 标题内容
@@ -25,74 +31,30 @@ export interface SpecialCardOptions {
   color?: string; // 文字颜色
 }
 
-export default createAttributes<SpecialCardOptions>((props) => {
-  const { options, onChange } = props;
-  return (
-    <Space style={{ width: "100%" }} direction={"vertical"}>
-      <Line label={"标题"}>
-        <IInput
-          value={options?.title}
-          onChange={(title) => {
-            onChange({ title });
-          }}
-        />
-      </Line>
-      <Line label={"边框"}>
-        <Checkbox
-          checked={options?.bordered}
-          onChange={(e) => onChange({ bordered: e.target.checked })}
-        />
-      </Line>
-
-      {options?.bordered && (
-        <>
-          <Line label={"边框宽度"} labelSpan={5}>
-            <IInputNumber
-              style={{ width: "100%" }}
-              value={options?.borderWidth || 1}
-              onChange={(borderWidth) => onChange({ borderWidth })}
-            />
-          </Line>
-          <Line label={"边框颜色"} labelSpan={5}>
-            <IColorPicker
-              style={{ width: "100%" }}
-              value={options?.borderColor}
-              onChange={(borderColor) => onChange({ borderColor })}
-            />
-          </Line>
-        </>
-      )}
-
-      <Line label={"边框圆角"} labelSpan={5}>
-        <IInputNumber
-          style={{ width: "100%" }}
-          value={options?.borderRadius}
-          onChange={(borderRadius) => onChange({ borderRadius })}
-        />
-      </Line>
-
-      <Line label={"背景"} labelSpan={5}>
-        <IColorPicker
-          value={options?.background}
-          onChange={(background) => onChange({ background })}
-        />
-      </Line>
-      <Line
-        label={"文字颜色"}
-        labelSpan={5}
-        childrenStyle={{ display: "flex", alignItems: "center", gap: 8 }}
-      >
-        <IColorPicker
-          style={{ flex: 1 }}
-          value={options?.color}
-          onChange={(color) => onChange({ color })}
-        />
-        <ResetButton
-          onClick={() => {
-            onChange({ color: undefined });
-          }}
-        />
-      </Line>
-    </Space>
-  );
-});
+export default createAttributesByConfig<SpecialCardOptions>(
+  [
+    { key: "title", label: "标题", component: "input" },
+    { key: "bordered", label: "边框", component: "checkbox" },
+    ({ useExtra }) => {
+      const extra = useExtra();
+      return useMemo(() => {
+        if (!extra.options?.bordered) return null;
+        return createAttributesByConfig<SpecialCardOptions>([
+          { key: "borderWidth", label: "边框宽度", component: "inputNumber" },
+          { key: "borderColor", label: "边框颜色", component: "colorPicker" },
+        ])(extra);
+      }, [extra.componentNode]);
+    },
+    { key: "borderRadius", label: "边框圆角", component: "inputNumber" },
+    { key: "background", label: "背景", component: "colorPicker" },
+    {
+      key: "color",
+      label: "文字颜色",
+      component: "colorPicker",
+      options: {
+        reset: true,
+      },
+    },
+  ],
+  DEFAULT_OPTIONS,
+);

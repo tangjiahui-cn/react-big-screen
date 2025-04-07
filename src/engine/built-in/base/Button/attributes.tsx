@@ -18,48 +18,6 @@ export interface ButtonOptions {
   borderRadius: number; // 外边框圆角
 }
 
-// export default createAttributes<ButtonOptions>((props) => {
-//   const { options, onChange } = props;
-//   return (
-//     <AttrContainer>
-//       <Line label={"内容"}>
-//         <IInput
-//           style={{ width: "100%" }}
-//           value={options?.value}
-//           onChange={(value) => {
-//             onChange({
-//               value,
-//             });
-//           }}
-//         />
-//       </Line>
-//       <Line label={"类型"}>
-//         <ICustomSelect
-//           style={{ width: "100%" }}
-//           value={options?.type}
-//           requestFn={async () => BTN_TYPE_OPTIONS}
-//           onChange={(type: any) => {
-//             onChange({
-//               type,
-//             });
-//           }}
-//         />
-//       </Line>
-//       <Line label={"边框圆角"} labelSpan={5}>
-//         <IInputNumber
-//           style={{ width: "100%" }}
-//           value={options?.borderRadius}
-//           onChange={(borderRadius) => {
-//             onChange({
-//               borderRadius,
-//             });
-//           }}
-//         />
-//       </Line>
-//     </AttrContainer>
-//   );
-// }, DEFAULT_OPTIONS);
-
 export default createAttributesByConfig<ButtonOptions>(
   [
     {
