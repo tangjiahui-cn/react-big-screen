@@ -142,8 +142,8 @@ export default function ConfigRender<ConfigKey = string, Extra = any>(
               <div className={styles.configRender_item_value}>
                 {Component ? (
                   <Form.Item
-                    key={item?.key as string}
                     noStyle
+                    key={item?.key as string}
                     name={item?.name || (item.key as string)}
                   >
                     {/* @ts-ignore */}
