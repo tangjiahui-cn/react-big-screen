@@ -27,7 +27,7 @@ interface Props {
 }
 
 export default function SingleInstanceAttributes(props: Props) {
-  const [t] = useTranslation();
+  const [t, i18n] = useTranslation();
   const { instance } = props;
   const [scopeComponentNode, setScopeComponentNode] = useState<ComponentNodeType>();
   const instanceRef = useListenRef(instance);
@@ -77,5 +77,5 @@ export default function SingleInstanceAttributes(props: Props) {
     ) : (
       <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={"暂无数据"} />
     );
-  }, [instance, scopeComponentNode]);
+  }, [instance, scopeComponentNode, i18n.language]);
 }
