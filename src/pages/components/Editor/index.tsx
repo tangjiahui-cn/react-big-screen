@@ -6,7 +6,7 @@
  */
 import styles from "./index.module.less";
 import engine, { ComponentNodeType, usePackages } from "@/engine";
-import React, { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useComponentNodes } from "@/engine";
 import RenderComponentNode from "./components/RenderComponentNode";
 import { unSelectAllComponentNodes } from "@/packages/shortCutKeys";
@@ -19,8 +19,7 @@ import {
   useRegisterZoom,
 } from "./hooks";
 
-// 右键菜单项
-export default React.memo(() => {
+export default () => {
   const editorDomRef = useRef<HTMLDivElement>(null);
   const innerEditorDomRef = useRef<HTMLDivElement>(null);
 
@@ -80,4 +79,4 @@ export default React.memo(() => {
       </PageContainer>
     </div>
   );
-});
+};
