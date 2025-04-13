@@ -27,22 +27,22 @@ export function moveableDom(dom: HTMLElement, options: moveableDomOptions): Unmo
       return;
     }
     moveInfo.isMoving = true;
-    moveInfo.startX = e.clientX;
-    moveInfo.startY = e.clientY;
+    moveInfo.startX = e.x;
+    moveInfo.startY = e.y;
     window.addEventListener("mouseup", mouseup);
     window.addEventListener("mousemove", mousemove);
     options?.onStart?.(e);
   }
 
   function mousemove(e: MouseEvent) {
-    const deltaX = e.clientX - moveInfo.startX;
-    const deltaY = e.clientY - moveInfo.startY;
+    const deltaX = e.x - moveInfo.startX;
+    const deltaY = e.y - moveInfo.startY;
     options?.onMove?.(deltaX, deltaY, e);
   }
 
   function mouseup(e: MouseEvent) {
-    const deltaX = Math.round(e.clientX - moveInfo.startX);
-    const deltaY = Math.round(e.clientY - moveInfo.startY);
+    const deltaX = Math.round(e.x - moveInfo.startX);
+    const deltaY = Math.round(e.y - moveInfo.startY);
     options?.onEnd?.(deltaX, deltaY, e);
     clear();
   }
