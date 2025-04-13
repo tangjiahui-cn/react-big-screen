@@ -7,9 +7,10 @@
 import { createAttributesByConfig } from "@/engine";
 import { useMemo } from "react";
 
-export const DEFAULT_OPTIONS = {
+export const DEFAULT_OPTIONS: SpecialCardOptions = {
   title: "标题",
   bordered: true,
+  borderWidth: 1,
   borderColor: "rgba(83, 141, 233, 0.54)",
   background: "rgba(22, 28, 48, 0.8)",
   color: "rgb(71, 216, 218)",
@@ -37,13 +38,15 @@ export default createAttributesByConfig<SpecialCardOptions>(
     { key: "bordered", label: "边框", component: "checkbox" },
     ({ useExtra }) => {
       const extra = useExtra();
-      return useMemo(() => {
-        if (!extra.options?.bordered) return null;
-        return createAttributesByConfig<SpecialCardOptions>([
-          { key: "borderWidth", label: "边框宽度", component: "inputNumber" },
-          { key: "borderColor", label: "边框颜色", component: "colorPicker" },
-        ])(extra);
-      }, [extra.componentNode]);
+      const AttributesFC = useMemo(
+        () =>
+          createAttributesByConfig<SpecialCardOptions>([
+            { key: "borderWidth", label: "边框宽度", component: "inputNumber" },
+            { key: "borderColor", label: "边框颜色", component: "colorPicker" },
+          ]),
+        [],
+      );
+      return extra.options.bordered && AttributesFC(extra);
     },
     { key: "borderRadius", label: "边框圆角", component: "inputNumber" },
     { key: "background", label: "背景", component: "colorPicker" },

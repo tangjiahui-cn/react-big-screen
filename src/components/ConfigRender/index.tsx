@@ -49,7 +49,8 @@ type ConfigRenderRegisterComponent<Extra = any> = React.FC<
 export type ConfigRenderItem<ConfigKey extends any = string, Extra = any> =
   | OR<
       {
-        key: ConfigKey | (string & {}); // 唯一key
+        key: ConfigKey | (string & {}); // 唯一key (name不存在时key作为表单name)
+        name?: string; // 表单的name
         label: React.ReactNode; // 标签
         labelTip?: React.ReactNode; // 标签提示语
         component: ConfigRenderRegisterKey | ConfigRenderRegisterComponent<Extra>; // 支持({value, onChange, options})的组件, 或预定义枚举。（传入string表示注册的组件，传入ReactElement则显示该组件）
@@ -140,7 +141,11 @@ export default function ConfigRender<ConfigKey = string, Extra = any>(
               {/* 渲染表单组件 */}
               <div className={styles.configRender_item_value}>
                 {Component ? (
-                  <Form.Item key={item?.key as string} noStyle name={item.key as string}>
+                  <Form.Item
+                    noStyle
+                    key={item?.key as string}
+                    name={item?.name || (item.key as string)}
+                  >
                     {/* @ts-ignore */}
                     <Component options={item?.options} useExtra={useConfigExtra} />
                   </Form.Item>
