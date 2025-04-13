@@ -5,7 +5,8 @@
  * @date 2025/3/13
  */
 import React, { ForwardedRef } from "react";
-import { useConfig, useCurrentPage } from "@/engine";
+import engine, { useConfig, useCurrentPage } from "@/engine";
+import InfiniteContainer from "@/packages/infiniteContainer";
 
 interface Props {
   style?: React.CSSProperties;
@@ -16,21 +17,34 @@ interface Props {
 export default React.forwardRef((props: Props, ref: ForwardedRef<HTMLDivElement>) => {
   const { options } = useCurrentPage() || {};
   const config = useConfig();
-
   return (
-    <div
-      ref={ref}
-      className={props?.className}
-      style={{
-        background: options?.background,
-        border: options?.bordered ? `1px solid ${options.borderColor}` : undefined,
-        width: config.width,
-        height: config.height,
-        transform: config.scale && config.scale !== 1 ? `scale(${config.scale})` : undefined,
-        ...props?.style,
+    <InfiniteContainer
+      scaleStep={0.02}
+      style={{ width: "100%", height: "100%" }}
+      scale={config.scale}
+      offsetX={config.editorOffsetX}
+      offsetY={config.editorOffsetY}
+      onChange={(scale, editorOffsetX, editorOffsetY) => {
+        engine.config.setConfig({
+          scale,
+          editorOffsetX,
+          editorOffsetY,
+        });
       }}
     >
-      {props?.children}
-    </div>
+      <div
+        ref={ref}
+        className={props?.className}
+        style={{
+          background: options?.background,
+          border: options?.bordered ? `1px solid ${options.borderColor}` : undefined,
+          width: config.width,
+          height: config.height,
+          ...props?.style,
+        }}
+      >
+        {props?.children}
+      </div>
+    </InfiniteContainer>
   );
 });

@@ -134,6 +134,9 @@ export interface GlobalConfig {
   scaleStep: number; // 缩放比例步进（默认 0.1）
   scaleMinZoom: number; // 最小缩放比例（默认 0.1）
   scaleMaxZoom: number; // 最大缩放比例（默认 2）（自定义比率会突破这个值，滚轮缩放不会超出）
+
+  editorOffsetX?: number; // 编辑器x轴偏移量 (默认0，用于保存编辑器的位置)
+  editorOffsetY?: number; // 编辑器y轴偏移量 (默认0，用于保存编辑器的位置)
 }
 
 export type ComponentUsed = Record<

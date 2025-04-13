@@ -1,0 +1,38 @@
+.infiniteCanvas {
+  .mask_2();
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  &_inner {
+    background: white;
+    border: 1px solid #e8e8e8;
+    position: absolute;
+    margin: 20px;
+    left: 0;
+    top: 0;
+  }
+
+  &_mask {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+}
+
+/******************** 遮罩层样式 ********************/
+.mask_1 {
+  @lineColor: #ededed;
+  background-size: 20px 20px;
+  background-image:
+    linear-gradient(to right, @lineColor 1px, transparent 1px),
+    linear-gradient(to bottom, @lineColor 1px, #fbfbfb 1px);
+}
+
+// 圆点 - 遮罩层
+.mask_2 {
+  background-size: 20px 20px;
+  background-image: radial-gradient(circle, #bfbfbf 1px, whitesmoke 1px);
+}
