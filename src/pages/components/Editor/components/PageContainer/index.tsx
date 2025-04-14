@@ -19,11 +19,14 @@ export default React.forwardRef((props: Props, ref: ForwardedRef<HTMLDivElement>
   const config = useConfig();
   return (
     <InfiniteContainer
-      scaleStep={0.02}
       style={{ width: "100%", height: "100%" }}
       scale={config.scale}
+      defaultScale={config.scaleDefault}
+      scaleStep={config.scaleStep}
       offsetX={config.editorOffsetX}
       offsetY={config.editorOffsetY}
+      scaleMax={config.scaleMaxZoom}
+      scaleMin={config.scaleMinZoom}
       onChange={(scale, editorOffsetX, editorOffsetY) => {
         engine.config.setConfig({
           scale,

@@ -8,10 +8,9 @@ import engine from "@/engine";
 
 export function zoomEditorDefault() {
   const config = engine.config.getConfig();
-  if (config.scaleDefault === config.scale) {
-    return;
-  }
   engine.config.setConfig({
     scale: config.scaleDefault,
+    editorOffsetX: 0,
+    editorOffsetY: 0,
   });
 }
