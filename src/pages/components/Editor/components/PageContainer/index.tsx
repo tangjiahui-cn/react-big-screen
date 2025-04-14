@@ -7,6 +7,7 @@
 import React, { ForwardedRef } from "react";
 import engine, { useConfig, useCurrentPage } from "@/engine";
 import InfiniteContainer from "@/packages/infiniteContainer";
+import { zoomEditorDefault } from "@/packages/shortCutKeys";
 
 interface Props {
   style?: React.CSSProperties;
@@ -33,6 +34,9 @@ export default React.forwardRef((props: Props, ref: ForwardedRef<HTMLDivElement>
           editorOffsetX,
           editorOffsetY,
         });
+      }}
+      onReset={() => {
+        zoomEditorDefault();
       }}
     >
       <div

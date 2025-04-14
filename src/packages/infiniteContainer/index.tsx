@@ -7,14 +7,13 @@
  */
 
 import React, { useEffect, useRef } from "react";
-import { useDomEvents } from "@/hooks";
+import { useDomEvents, useListenRef } from "@/hooks";
 import { getWheelInfo, range } from "./utils";
 import styles from "./index.module.less";
 import engine from "@/engine";
 import { startMove } from "@/packages/dragMove/utils/startMove";
 import hotkeys from "hotkeys-js";
 import globalCursor from "@/packages/globalCursor";
-import { zoomEditorDefault } from "@/packages/shortCutKeys";
 import { isClickMouseLeft, isClickMouseMid } from "@/utils";
 
 function isNumber(v: any): v is number {
@@ -29,9 +28,10 @@ interface InfiniteCanvasProps {
   offsetX?: number; // 内部元素x轴偏移量
   offsetY?: number; // 内部元素y轴偏移量
   scale?: number; // 缩放scale
-  onChange?: (scale: number, offsetX: number, offsetY: number) => void; // 回调scale
   children?: any; // 子元素
   style?: React.CSSProperties; // 样式
+  onReset?: () => void; // 点击重置按钮
+  onChange?: (scale: number, offsetX: number, offsetY: number) => void; // 回调scale
 }
 
 export default function InfiniteContainer(props: InfiniteCanvasProps) {
@@ -39,6 +39,7 @@ export default function InfiniteContainer(props: InfiniteCanvasProps) {
   const containerDomRef = useRef<HTMLDivElement>(null);
   const innerDomRef = useRef<HTMLDivElement>(null);
   const maskDomRef = useRef<HTMLDivElement>(null);
+  const propsRef = useListenRef(props);
 
   // 当前坐标信息
   const currentInfoRef = useRef<{
@@ -85,7 +86,7 @@ export default function InfiniteContainer(props: InfiniteCanvasProps) {
     mousedown(e) {
       // 按下鼠标中键，重置缩放比例
       if (isClickMouseMid(e)) {
-        zoomEditorDefault();
+        propsRef.current?.onReset?.();
       }
       // 如果同时按下左键和空格
       if (isClickMouseLeft(e)) {
