@@ -22,6 +22,7 @@ function isNumber(v: any): v is number {
 }
 
 interface InfiniteCanvasProps {
+  defaultScale?: number; // 默认缩放
   scaleStep?: number; // 缩放步进
   scaleMax?: number; // 最大缩放比例
   scaleMin?: number; // 最小缩放比例
@@ -34,7 +35,7 @@ interface InfiniteCanvasProps {
 }
 
 export default function InfiniteContainer(props: InfiniteCanvasProps) {
-  const { scaleStep = 0.05, scaleMax = 2, scaleMin = 0.1 } = props;
+  const { defaultScale = 1, scaleStep = 0.05, scaleMax = 2, scaleMin = 0.1 } = props;
   const containerDomRef = useRef<HTMLDivElement>(null);
   const innerDomRef = useRef<HTMLDivElement>(null);
   const maskDomRef = useRef<HTMLDivElement>(null);
@@ -45,7 +46,7 @@ export default function InfiniteContainer(props: InfiniteCanvasProps) {
     x: number;
     y: number;
   }>({
-    scale: 1,
+    scale: defaultScale,
     x: 0,
     y: 0,
   });
@@ -176,6 +177,7 @@ export default function InfiniteContainer(props: InfiniteCanvasProps) {
 
   // 监听offset变化
   useEffect(() => {
+    console.log("zz -> ", props.offsetX, props.offsetY);
     if (
       isNumber(props.offsetX) &&
       isNumber(props.offsetY) &&
