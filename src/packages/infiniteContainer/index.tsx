@@ -177,7 +177,6 @@ export default function InfiniteContainer(props: InfiniteCanvasProps) {
 
   // 监听offset变化
   useEffect(() => {
-    console.log("zz -> ", props.offsetX, props.offsetY);
     if (
       isNumber(props.offsetX) &&
       isNumber(props.offsetY) &&
