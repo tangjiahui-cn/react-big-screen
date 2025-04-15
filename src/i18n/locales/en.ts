@@ -50,6 +50,10 @@ export default {
       zoomResetExt: {
         ext1: "Mouse Mid",
       },
+      dragCanvas: "drag canvas",
+      dragCanvasExt: {
+        ext1: "press",
+      },
     },
     undo: "undo",
     cancelUndo: "cancel undo",

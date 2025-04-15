@@ -52,6 +52,10 @@ export interface LocaleType {
       zoomResetExt: {
         ext1: string;
       };
+      dragCanvas: string;
+      dragCanvasExt: {
+        ext1: string;
+      };
     };
     undo: string;
     cancelUndo: string;
