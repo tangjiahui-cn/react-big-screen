@@ -50,6 +50,10 @@ export default {
       zoomResetExt: {
         ext1: "鼠标中键",
       },
+      dragCanvas: "拖拽画布",
+      dragCanvasExt: {
+        ext1: "按住",
+      },
     },
     undo: "撤销",
     cancelUndo: "取消撤销",
