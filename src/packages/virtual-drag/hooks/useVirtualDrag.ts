@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2024/12/26
  */
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { globalStyle } from "../globalStyle";
 import { dragElement } from "../utils";
 import { virtualDragData, VirtualDragOptions } from "../data";
@@ -15,6 +15,9 @@ export function useVirtualDrag<T extends HTMLElement>(
   domRef: DomRef<T>,
   virtualDragOptions: VirtualDragOptions,
 ) {
+  const optionsRef = useRef<VirtualDragOptions>(virtualDragOptions);
+  optionsRef.current = virtualDragOptions;
+
   useEffect(() => {
     const dom = domRef.current;
     if (!dom) {
@@ -25,13 +28,13 @@ export function useVirtualDrag<T extends HTMLElement>(
       onStart() {
         globalStyle.mount();
         document.documentElement.classList.add("is-dragging");
-        virtualDragData.setDragOptions(virtualDragOptions);
+        virtualDragData.setDragOptions(optionsRef.current);
         virtualDragData.setIsDragging(true);
       },
       onEnd() {
         globalStyle.unmount();
         document.documentElement.classList.remove("is-dragging");
-        virtualDragData.setDragOptions(virtualDragOptions);
+        virtualDragData.setDragOptions(optionsRef.current);
         virtualDragData.setIsDragging(false);
       },
     });

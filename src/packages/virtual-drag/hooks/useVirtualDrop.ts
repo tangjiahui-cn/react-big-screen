@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2024/12/26
  */
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { virtualDragData, VirtualDragOptions } from "@/packages/virtual-drag/data";
 
 type DomRef<T extends HTMLElement> = React.RefObject<T>;
@@ -20,6 +20,9 @@ export function useVirtualDrop<T extends HTMLElement>(
   domRef: DomRef<T>,
   options: VirtualDropOptions,
 ) {
+  const optionsRef = useRef<VirtualDropOptions>(options);
+  optionsRef.current = options;
+
   useEffect(() => {
     const { accept } = options;
     if (!Array.isArray(accept)) {
@@ -40,7 +43,7 @@ export function useVirtualDrop<T extends HTMLElement>(
       if (accept && !accept?.includes?.(dragOptions.type || "")) {
         return;
       }
-      options?.onDrop?.(e, dragOptions);
+      optionsRef.current?.onDrop?.(e, dragOptions);
     };
 
     dom.addEventListener("mouseup", mouseup);
