@@ -1,7 +1,6 @@
 /**
  * 预览页面
  */
-import styles from "./index.module.less";
 import React, { useMemo } from "react";
 import engine, {
   ComponentNodeType,
@@ -13,6 +12,7 @@ import engine, {
 import PageContainer from "../components/Editor/components/PageContainer";
 import RenderPreviewComponentNode from "./components/RenderPreviewComponentNode";
 import FitScreen from "@/pages/preview/components/FitScreen";
+import styles from "./index.module.less";
 import { useEffectOnce } from "@/hooks";
 
 // 保存本地预览json数据
@@ -65,7 +65,7 @@ export default function Preview() {
 
   return (
     <FitScreen className={styles.preview} dw={config?.width || 1920} dh={config?.height || 1080}>
-      <PageContainer style={{ width: "100%", height: "100%" }}>
+      <PageContainer preview style={{ width: "100%", height: "100%" }}>
         {renderComponentNodes}
       </PageContainer>
     </FitScreen>
