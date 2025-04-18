@@ -1,0 +1,1 @@
+import{O as t}from"./index-C1dqQr_n.js";import"./index-CURBny2a.js";import"./react-vendor--oJ8assb.js";import"./monaco-editor-dqJR7YPI.js";import"./antd-DB3XX4mR.js";import"./ahooks-0i8_p3j2.js";import"./lodash-es-CdGItEyc.js";const o={background:"#223447"},n=t([{key:"background",label:"背景",component:"colorPicker"}],o);export{o as DEFAULT_OPTIONS,n as default};
