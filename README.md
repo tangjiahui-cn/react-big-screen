@@ -53,9 +53,9 @@ pnpm dev
 ## 创建一个自定义组件
 
 开发自定义组件，只需要3步：
-- 创建一个 `ComponentType` 对象。
-- 使用 `createComponent` 创建一个模板组件。
-- 使用 `createAttributes` 或 `` 创建一个属性配置项组件。
+- 创建渲染组件 `Component`。
+- 创建属性配置组件 `Attributes`。
+- 注册自定义组件对象。
 
 ### 1. 创建 `Component`
 使用内置的`createComponent`创建自定义组件，可以享受编辑器类型提示。
