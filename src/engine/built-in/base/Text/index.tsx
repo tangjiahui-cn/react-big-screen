@@ -12,23 +12,21 @@ import { createComponent } from "@/engine";
 type TriggerKeys = "onClick";
 type ExposeKeys = "setText";
 
-export const buttonTriggers: EventData<TriggerKeys>[] = [{ label: "点击事件", value: "onClick" }];
-export const buttonExposes: EventData<ExposeKeys>[] = [{ label: "更新文本", value: "setText" }];
+export const textTriggers: EventData<TriggerKeys>[] = [{ label: "点击事件", value: "onClick" }];
+export const textExposes: EventData<ExposeKeys>[] = [{ label: "更新文本", value: "setText" }];
 
 export default createComponent<TextOptions, TriggerKeys, ExposeKeys>((props) => {
   const { options, width, height, useExpose, handleTrigger } = props;
-  const { value } = options;
   const [innerValue, setInnerValue] = useState<string>();
 
   useExpose({
-    setText(value) {
+    setText(value: any) {
       setInnerValue(value);
     },
   });
 
   return (
     <div
-      onClick={() => handleTrigger("onClick")}
       style={{
         width,
         height,
@@ -41,8 +39,9 @@ export default createComponent<TextOptions, TriggerKeys, ExposeKeys>((props) => 
         fontSize: options?.fontSize,
         lineHeight: options?.lineHeight ? `${options?.lineHeight}px` : undefined,
       }}
+      onClick={(e) => handleTrigger("onClick", e)}
       dangerouslySetInnerHTML={{
-        __html: innerValue ?? (value || ""),
+        __html: innerValue ?? (options?.value || ""),
       }}
     />
   );

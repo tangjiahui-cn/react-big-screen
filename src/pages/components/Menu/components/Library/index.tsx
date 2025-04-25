@@ -67,7 +67,7 @@ export default function Library() {
       return {
         key,
         components,
-        label: groupNameMap[key as ComponentCategory],
+        label: groupNameMap[key as ComponentCategory] || key,
       };
     });
     setActiveKeys(groupKeys);

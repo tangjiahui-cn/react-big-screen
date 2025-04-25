@@ -5,8 +5,11 @@
  * @date 2025/1/21
  * */
 import type { ComponentType } from "@/engine";
-import { buttonTriggers, buttonExposes } from "./Text";
+import { textTriggers, textExposes } from "./Text";
 import React from "react";
+import { buttonTriggers } from "@/engine/built-in/base/Button";
+import { inputExposes, inputTriggers } from "@/engine/built-in/base/Input";
+import { titleExposes, titleTriggers } from "@/engine/built-in/base/Title";
 
 export const base: ComponentType[] = [
   {
@@ -20,8 +23,22 @@ export const base: ComponentType[] = [
     height: 32,
     component: React.lazy(() => import("./Text")),
     attributesComponent: React.lazy(() => import("./Text/attributes")),
-    triggers: buttonTriggers,
-    exposes: buttonExposes,
+    triggers: textTriggers,
+    exposes: textExposes,
+  },
+  {
+    cId: "input",
+    cName: "输入框",
+    icon: () => import("@/static/built-in/input.png"),
+    category: "base",
+    x: 0,
+    y: 0,
+    width: 250,
+    height: 32,
+    triggers: inputTriggers,
+    exposes: inputExposes,
+    component: React.lazy(() => import("./Input")),
+    attributesComponent: React.lazy(() => import("./Input/attributes")),
   },
   {
     cId: "title",
@@ -32,6 +49,8 @@ export const base: ComponentType[] = [
     y: 0,
     width: 120,
     height: 48,
+    triggers: titleTriggers,
+    exposes: titleExposes,
     component: React.lazy(() => import("./Title")),
     attributesComponent: React.lazy(() => import("./Title/attributes")),
   },
@@ -44,6 +63,7 @@ export const base: ComponentType[] = [
     y: 0,
     width: 64,
     height: 32,
+    triggers: buttonTriggers,
     component: React.lazy(() => import("./Button")),
     attributesComponent: React.lazy(() => import("./Button/attributes")),
   },

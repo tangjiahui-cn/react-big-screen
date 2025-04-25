@@ -69,7 +69,7 @@ export interface BaseComponent {
   height: number; // 高度
   level?: number; // 层级
   options?: Record<string, any>; // 配置数据（创建时以此为基准值）
-  category: ComponentCategory; // 组件分类
+  category: ComponentCategory | (string & {}); // 组件分类
   isAllPage?: boolean; // 是否全页面显示
 
   // layout相关

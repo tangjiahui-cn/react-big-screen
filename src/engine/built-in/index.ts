@@ -9,6 +9,7 @@ import { base } from "./base";
 import { layout } from "./layout";
 import { charts } from "./charts";
 import { nav } from "./nav";
+import { other } from "./other";
 
 export const defaultPackage: ComponentPackage = {
   id: "system",
@@ -21,5 +22,6 @@ export const defaultPackage: ComponentPackage = {
     ...layout, // 布局组件
     ...charts, // 图表组件
     ...nav, // 导航组件
+    ...other, // 其他组件
   ],
 };
