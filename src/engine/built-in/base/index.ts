@@ -8,6 +8,8 @@ import type { ComponentType } from "@/engine";
 import { textTriggers, textExposes } from "./Text";
 import React from "react";
 import { buttonTriggers } from "@/engine/built-in/base/Button";
+import { inputTriggers } from "@/engine/built-in/base/Input";
+import { titleExposes, titleTriggers } from "@/engine/built-in/base/Title";
 
 export const base: ComponentType[] = [
   {
@@ -25,6 +27,19 @@ export const base: ComponentType[] = [
     exposes: textExposes,
   },
   {
+    cId: "input",
+    cName: "输入框",
+    icon: () => import("@/static/built-in/input.png"),
+    category: "base",
+    x: 0,
+    y: 0,
+    width: 250,
+    height: 30,
+    triggers: inputTriggers,
+    component: React.lazy(() => import("./Input")),
+    attributesComponent: React.lazy(() => import("./Input/attributes")),
+  },
+  {
     cId: "title",
     cName: "标题",
     icon: () => import("@/static/built-in/title.png"),
@@ -33,6 +48,8 @@ export const base: ComponentType[] = [
     y: 0,
     width: 120,
     height: 48,
+    triggers: titleTriggers,
+    exposes: titleExposes,
     component: React.lazy(() => import("./Title")),
     attributesComponent: React.lazy(() => import("./Title/attributes")),
   },

@@ -4,12 +4,27 @@
  * @author tangjiahui
  * @date 2025/1/21
  */
-import { createComponent } from "@/engine";
+import { createComponent, EventData } from "@/engine";
 import styles from "./index.module.less";
 import { DEFAULT_OPTIONS, TitleOptions } from "./attributes";
+import { useState } from "react";
 
-export default createComponent<TitleOptions>((props) => {
-  const { options, width, height } = props;
+type TriggerKeys = "onClick";
+type ExposeKeys = "setText";
+
+export const titleTriggers: EventData<TriggerKeys>[] = [{ label: "点击事件", value: "onClick" }];
+export const titleExposes: EventData<ExposeKeys>[] = [{ label: "更新文本", value: "setText" }];
+
+export default createComponent<TitleOptions, TriggerKeys, ExposeKeys>((props) => {
+  const { options, width, height, useExpose, handleTrigger } = props;
+  const [innerValue, setInnerValue] = useState<string>();
+
+  useExpose({
+    setText(value: any) {
+      setInnerValue(value);
+    },
+  });
+
   return (
     <div
       style={{
@@ -24,9 +39,10 @@ export default createComponent<TitleOptions>((props) => {
         fontStyle: options?.fontStyle,
         fontSize: options?.fontSize,
       }}
+      onClick={(e) => handleTrigger("onClick", e)}
       className={styles.title}
       dangerouslySetInnerHTML={{
-        __html: options?.value,
+        __html: innerValue ?? (options?.value || ""),
       }}
     />
   );
