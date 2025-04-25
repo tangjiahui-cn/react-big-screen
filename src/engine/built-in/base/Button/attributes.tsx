@@ -8,7 +8,7 @@ import { createAttributesByConfig } from "@/engine";
 import { ButtonProps } from "antd";
 
 export const DEFAULT_OPTIONS = {
-  value: "标题",
+  value: "按钮",
   borderRadius: 2,
 };
 
