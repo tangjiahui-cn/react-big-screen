@@ -42,6 +42,7 @@ git clone https://github.com/tangjiahui-cn/react-big-screen.git
 cd react-big-screen
 
 # 安装依赖
+# node@20.15.1、pnpm@9.13.2 （或：node@16.20.1、pnpm@7.30.x）
 pnpm i
 
 # 本地运行
