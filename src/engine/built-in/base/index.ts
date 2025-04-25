@@ -5,8 +5,9 @@
  * @date 2025/1/21
  * */
 import type { ComponentType } from "@/engine";
-import { buttonTriggers, buttonExposes } from "./Text";
+import { textTriggers, textExposes } from "./Text";
 import React from "react";
+import { buttonTriggers } from "@/engine/built-in/base/Button";
 
 export const base: ComponentType[] = [
   {
@@ -20,8 +21,8 @@ export const base: ComponentType[] = [
     height: 32,
     component: React.lazy(() => import("./Text")),
     attributesComponent: React.lazy(() => import("./Text/attributes")),
-    triggers: buttonTriggers,
-    exposes: buttonExposes,
+    triggers: textTriggers,
+    exposes: textExposes,
   },
   {
     cId: "title",
@@ -44,6 +45,7 @@ export const base: ComponentType[] = [
     y: 0,
     width: 64,
     height: 32,
+    triggers: buttonTriggers,
     component: React.lazy(() => import("./Button")),
     attributesComponent: React.lazy(() => import("./Button/attributes")),
   },

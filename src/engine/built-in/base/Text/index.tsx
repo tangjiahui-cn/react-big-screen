@@ -12,8 +12,8 @@ import { createComponent } from "@/engine";
 type TriggerKeys = "onClick";
 type ExposeKeys = "setText";
 
-export const buttonTriggers: EventData<TriggerKeys>[] = [{ label: "点击事件", value: "onClick" }];
-export const buttonExposes: EventData<ExposeKeys>[] = [{ label: "更新文本", value: "setText" }];
+export const textTriggers: EventData<TriggerKeys>[] = [{ label: "点击事件", value: "onClick" }];
+export const textExposes: EventData<ExposeKeys>[] = [{ label: "更新文本", value: "setText" }];
 
 export default createComponent<TextOptions, TriggerKeys, ExposeKeys>((props) => {
   const { options, width, height, useExpose, handleTrigger } = props;
