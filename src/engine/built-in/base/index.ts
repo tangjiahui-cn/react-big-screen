@@ -34,7 +34,7 @@ export const base: ComponentType[] = [
     x: 0,
     y: 0,
     width: 250,
-    height: 30,
+    height: 32,
     triggers: inputTriggers,
     component: React.lazy(() => import("./Input")),
     attributesComponent: React.lazy(() => import("./Input/attributes")),
