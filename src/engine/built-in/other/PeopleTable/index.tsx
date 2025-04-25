@@ -68,8 +68,8 @@ export default createComponent<any, any, ExposeKeys>((props) => {
 
   return (
     <Table
+      style={{ width, height, overflow: "hidden auto" }}
       columns={columns}
-      style={{ width, height, overflow: "hidden" }}
       loading={loading}
       dataSource={dataSource}
       pagination={false}
