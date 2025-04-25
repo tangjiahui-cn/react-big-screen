@@ -6,53 +6,42 @@
  */
 import React, { useState } from "react";
 import { SketchPicker } from "react-color";
-import { Dropdown } from "antd";
 import styles from "./IColorPicker.module.less";
+import CustomDropDown from "@/components/CustomDropDown";
 
 type Hex = string;
 type RGBA = string;
 type ColorType = Hex | RGBA;
 
 interface Props {
-  // 颜色（默认白色）
-  value?: ColorType;
-  // 回调 (hex | rgba)
-  onChange?: (value: ColorType) => void;
-  // 样式
-  style?: React.CSSProperties;
+  value?: ColorType; // 颜色（默认白色）
+  onChange?: (value: ColorType) => void; // 回调 (hex | rgba)
+  style?: React.CSSProperties; // 样式
 }
 
 export function IColorPicker(props: Props) {
   const { value = "white" } = props;
   const [visible, setVisible] = useState(false);
+
+  function handleClose() {
+    setVisible(false);
+  }
+
   return (
-    <Dropdown
-      open={visible}
-      trigger={["click"]}
-      overlayClassName={styles.IColorPicker_overlay}
-      onOpenChange={(v) => {
-        if (!v) setVisible(false);
-      }}
-      menu={{
-        items: [
-          {
-            key: "color",
-            label: (
-              <div>
-                <SketchPicker
-                  color={value}
-                  onChange={(value) => {
-                    const { rgb } = value;
-                    const color =
-                      rgb.a === 1 ? value.hex : `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${rgb.a})`;
-                    props?.onChange?.(`${color}` || "#fff");
-                  }}
-                />
-              </div>
-            ),
-          },
-        ],
-      }}
+    <CustomDropDown
+      visible={visible}
+      onClose={handleClose}
+      overlayChildren={
+        <SketchPicker
+          width={"250px"}
+          color={value}
+          onChange={(value) => {
+            const { rgb } = value;
+            const color = rgb.a === 1 ? value.hex : `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${rgb.a})`;
+            props?.onChange?.(`${color}` || "#fff");
+          }}
+        />
+      }
     >
       <div
         className={styles.IColorPicker}
@@ -61,6 +50,6 @@ export function IColorPicker(props: Props) {
           if (!visible) setVisible(true);
         }}
       />
-    </Dropdown>
+    </CustomDropDown>
   );
 }

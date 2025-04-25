@@ -1,11 +1,6 @@
 # React-Big-Screen
 
-一个使用 React 框架实现的 `前端大屏拖拽平台`，只需要简单的拖拽、配置即可设计出不错的大屏页面。
-
-> 状态：`开发中`
-
-## 在线预览
-[https://tangjiahui-cn.github.io/react-big-screen](https://tangjiahui-cn.github.io/react-big-screen)
+react-big-screen 是一个使用React开发的`前端可拖拽大屏`开源项目，通过简单的拖拽和配置即可搭建页面。本项目已经实现了大部分的核心功能，包括：拖拽系统、多页面管理、组件联动、远程组件、预览页等（详见下文）。
 
 ## 页面截图
 
@@ -17,105 +12,61 @@
 
 <img src="./imgs/preview.png" height="200">
 
-## 功能特点
+## 核心功能
 
-- ✅ 拖拽移动、缩放。
-- ✅ 快捷键。
-- ✅ 批量处理组件。
-- ✅ 自定义新组件。
-- ✅ 自定义组件属性配置面板。
-- ✅ 自定义组件右键菜单。
-- ✅ 鼠标范围框选。
-- ✅ 支持预览页面。
-- ✅ 成组/取消成组。
-- ✅ 布局容器组件。
-- ✅ 属性配置面板（属性、数据、交互）。
-- ✅ 多组件联动。
-- ✅ 支持远程组件包。
-- ✅ 收藏夹。
-- ✅ i18n 国际化语言。
-- ✅ 支持多子页面切换。
-- ✅ 可撤销历史记录。
+详见`掘金专栏`：[前端大屏原理系列](https://juejin.cn/column/7492086179995811855)。
 
-## 设计理念
+- ✅ 拖拽系统。
+- ✅ 成组、取消成组
+- ✅ 鼠标范围框选
+- ✅ 右键菜单
+- ✅ 快捷键
+- ✅ 多组件联动
+- ✅ 多页面管理
+- ✅ 自定义组件
+- ✅ 自定义属性面板
+- ✅ 自适应预览页
+- ✅ 容器组件
+- ✅ 加载远程组件
+- ✅ i18n国际化
+- ✅ 可撤销历史记录
+- ✅ 导入、导出文件
 
-`数据`与`逻辑`分离。
+## 快速开始
+本地启动一个项目，用以调试或者开发功能。
+```shell
+# 拉取代码
+git clone https://github.com/tangjiahui-cn/react-big-screen.git 
 
-## 核心概念
+# 进入目录
+cd react-big-screen
 
-读取 `json格式对象`，将`components`与`componentNodes`合并渲染到页面，渲染过程中注册`instance`，编辑器通过修改 `componentNodes` 生效变更。
+# 安装依赖
+pnpm i
 
-- engine: 全部api的集合，统一管理所有的功能。
-- component: 注册的组件模板。
-- componentNode: 组件的数据实例，也是完整导出、保存的数据。
-- instance: 组件运行时的行为实例，管理单个组件所有的内部行为。
-- store：存储全局数据（不做复杂action，仅用作响应式变量触发引用位置更新）。
-- 实例：等于component + componentNode + instance。
+# 本地运行
+pnpm dev
+```
 
-## dom 事件
-点击事件只涉及到: `click`、`mousedown`、`mousemove`、`mouseup`。
+> 在线预览：[https://tangjiahui-cn.github.io/react-big-screen](https://tangjiahui-cn.github.io/react-big-screen)
 
-## 多组件联动
-
-自己单独实现了一套事件机制。`component`中声明了暴露事件列表`exposes`、触发事件列表`triggers`。
-
-- `exposes` 是暴露给外界，用来调用内部事件的端口。
-- `triggers` 是声明内部可以触发的事件，用来在 \[属性面板-交互\] 中读取该列表进行配置与其他组件联动。
-
-关于组件内部使用？
-
-在 `props` 中获取 `useExpose`、`handleTrigger`。通过 `useExpose` 去定义运行时暴露的事件行为，`handleTrigger` 去触发内部事件的执行。
-
-## 远程组件
-
-通过远程组件功能，可以拥有个人资产。
-
-> 在 `src/common-module.ts` 文件中配置公共模块配置，以此减小远程组件包体积。
-
-加载方式：
-- 本地上传
-- 远程URL
-
-支持格式：
-
-- 支持 UMD 模块包。
-- 支持 AMD 模块包。
-- 支持 .zip 压缩包。
-
-## 容器组件
-
-容器包含很多个面板，通过切换不同面板，实现显隐不同组件的效果。
-
-主要关注 `componentNode` 的三个属性：`panels`、`currentPanelId`、`panelId`。
-
-- panels：当前容器组件所包含的全部面板（panel是容器的一个面板）。
-- currentPanelId：当前容器组件展示的面板 panel 的 id。
-- panelId: 所属父容器 panels 中某个面板的id。
-
-若开发一个容器组件，只需要组件内部修改 `panels`、`currentPanelId` 即可，`panelId` 是引擎自动绑定的。
-
-核心API：
-- engine.componentNode.hidePanel：隐藏一个面板全部子组件
-- engine.componentNode.showPanel：显示一个面板全部子组件
-
-## 自定义组件
+## 创建一个自定义组件
 
 开发自定义组件，只需要3步：
-- 定义一个 `ComponentType` 对象。
-- 使用 `createComponent` 创建一个模板组件。
-- 使用 `createAttributes` 创建一个属性配置项组件。
+- 创建渲染组件 `Component`。
+- 创建属性配置组件 `Attributes`。
+- 注册自定义组件对象。
 
-示例：
-
+### 1. 创建 `Component`
+使用内置的`createComponent`创建自定义组件，可以享受编辑器类型提示。
 ```tsx
-import engine, { ComponentType, createComponent, createAttributes } from '@/engine';
+import engine, { createComponent } from '@/engine';
 
 // 配置属性值类型
 interface Options {
-  value: string; // 值
+  value: string; // 显示内容
 }
 
-// 模板组件
 const Component = createComponent<Options>(props => {
   const { options, width, height } = props;
   return (
@@ -124,20 +75,52 @@ const Component = createComponent<Options>(props => {
     </div>
   )
 })
+```
+
+### 2. 创建`Attributes`
+创建属性配置组件，可以使用`createAttributes`或`createAttributesByConfig`。（推荐使用`createAttributesByConfig`，享受更高效的表单配置式开发）
+
+```tsx
+// 使用 createAttributes
+import engine, { createAttributes } from '@/engine';
 
 // 属性配置组件
 const Attributes = createAttributes<Options>(props => {
   const { options, onChange } = props;
   return (
     <div>
+      <span>显示内容：</span>
       <input
         value={options?.value}
         onChange={e => onChange({ value: e.target.value })}
+        maxLength={100}
       />
     </div>
   )
 })
 
+```
+```tsx
+// 使用 createAttributesByConfig
+import engine, { createAttributesByConfig } from '@/engine';
+
+export default createAttributesByConfig<Options>(
+  [
+    {
+      key: "value",
+      label: "显示内容",
+      component: "input",
+      options: {
+        maxLength: 100
+      },
+    },
+  ]
+);
+
+```
+
+### 3. 注册组件
+```tsx
 // 注册组件
 engine.component.register({
   cId: 'demo-text', // 组件id（必填、唯一）
@@ -151,35 +134,87 @@ engine.component.register({
 })
 ```
 
-## 多页面管理
+## 创建一个容器组件
+容器组件：一个移动时会同时改变所有关联组件位置的组件。
 
-多页面，主要适用于一个大屏多个子页面的场景。
+### 1. 注册容器组件
+创建一个容器组件，`创建Component`、`创建Attributes`和普通组件一样，仅需要修改注册对象。
 
-> 展示一个页面时，其他页面会卸载，不渲染而只保留数据，因此不会造成性能损失。
+只要注册对象`panels`属性有值，就被认为是一个容器组件。运行时若有组件挂载到该容器，则会设置挂载组件的 `panelId` 为 该容器组件的`currentPanelId`。（注意：panelId为引擎自动绑定请不要修改！）
 
-若要控制多页面切换，需要开发`导航组件`：
-- `usePages`：实时获取所有页面
-- `useCurrentPageId`: 获取当前页id
-- `selectPage`: 选中对应页面（即切换页面）
+- panels：当前容器组件所包含的全部面板（panel是容器的一个面板）。
+- currentPanelId：当前容器组件展示的面板 panel 的 id。
+- panelId: 所属父容器 panels 中某个面板的id。
 
-常见场景：
-- 单大屏多子页面：顶部的导航栏tabs，点击打开目标子页面。
-- 类SPA站点：头部面包屑导航，点击跳转对应页面。
-- 单页面文档站点：导航下拉框，快速打开对应文档页。
+挂载 / 卸载面板 api：
+- engine.componentNode.hidePanel：隐藏一个面板全部子组件
+- engine.componentNode.showPanel：显示一个面板全部子组件
 
-> **为什么会出现子页面，容器组件难道不行吗？** <br><br>
-> 答：子页面会完整的加载、卸载、刷新一个页面的全部组件，而容器包含的所有组件一直存在（只会随页面卸载而删除）。
+```tsx
+// 单面板容器组件
+engine.component.register({
+  // ...
+  // 只要包含 panels 属性就被认为是一个容器组件
+  // （value值由引擎自动生成，此处置空）
+  panels: [{ label: "特殊卡片", value: "" }],
+})
+```
+```tsx
+// 多面板容器组件
+engine.component.register({
+  // ...
+  // 只要包含 panels 属性就被认为是一个容器组件
+  // （value值由引擎自动生成，此处置空）
+  panels: [
+    { label: "面板一", value: "" },
+    { label: "面板二", value: "" },
+    { label: "面板三", value: "" },
+  ],
+})
+```
+### 2. 运行时切换面板
 
-## 设计复杂页面
+```tsx
+/**
+ * 点击按钮切换面板
+ */
+import engine, { createComponent } from '@/engine';
+import { useEffect, useRef } from "react";
 
-若要实现复杂页面，则需将页面元素抽象成 一个个的实例，多个实例通过`暴露事件`、`触发事件`相互沟通。
+const Component = createComponent<Options>(props => {
+  const { options, width, height, componentNode } = props;
+  const lastPanelId = useRef()
 
-在 `react-big-screen` 中，事件机制是一个十分重要的功能，甚至可以触发自身的 `暴露事件`!
+  // 切换面板
+  function handleChange(panelId) {
+    if (!panelId || lastPanelId.current === panelId) return;
+    // 先隐藏上一个panel的所有组件
+    engine.componentNode.hidePanel(lastPanelId.current);
+    // 再显示当前panel的组件
+    engine.componentNode.showPanel(lastPanelId.current = panelId);
+  }
 
-> 例如：设计一个中后台查询表格页。我们只需要准备`按钮`、`表格`，点击 `按钮` 触发表格暴露的 `查询` 事件即可。如果想要修改查询参数，则只需要设置解析函数。
+  // 其他组件控制切换
+  useEffect(() => {
+    handleChange(componentNode?.currentPanelId)
+  }, [componentNode?.currentPanelId])
 
-另外，有时候会用到多页面管理，在一个页面中支持切换多个子页面。 可以单独开发 `导航组件`，用于管理页面的切换、或当做路由面包屑等。
-
+  return (
+    <div style={{ width, height }}>
+      {componentNode?.panels?.map?.(panel => {
+        return (
+          <button
+            key={panel?.value}
+            onClick={() => handleChange(panel?.value)}
+          >
+            {panel?.label}
+          </button>
+        )
+      })}
+    </div>
+  )
+})
+```
 ## 性能优化
 ### (1) 组件独立更新
 每个组件更新时，只会更新当前渲染节点，而不会更新所有组件。
@@ -219,66 +254,62 @@ engine.component.register({
 
 ### ...
 
-## 相关项目
-- [lowcode-engine](https://github.com/tangjiahui-cn/lowcode-engine)
+## dom 事件
+点击事件只涉及到: `click`、`mousedown`、`mousemove`、`mouseup`。
 
-## 本地调试
-```shell
-# 安装依赖（node@v20.15.1 pnpm@9.13.2）
-pnpm i
+## 多组件联动
 
-# 运行
-pnpm dev
-```
+自己单独实现了一套事件机制。`component`中声明了暴露事件列表`exposes`、触发事件列表`triggers`。
 
-## 开发日志
+- `exposes` 是暴露给外界，用来调用内部事件的端口。
+- `triggers` 是声明内部可以触发的事件，用来在 \[属性面板-交互\] 中读取该列表进行配置与其他组件联动。
 
-### v0.0.1
-完成基本大屏功能，支持拖拽移动设计大屏页面，修改页面组件属性，并支持上传导入、导出，可预览。
+关于组件内部使用？
 
-- ✅ 基本布局
-- ✅ 拖拽组件到页面创建
-- ✅ 内置几种类型组件
-- ✅ 选中组件/范围框选
-- ✅ 组件锁定/解锁
-- ✅ 拖拽移动/缩放
-- ✅ 编辑器 右键菜单禁用
-- ✅ 组件右键菜单（复制、删除、上移一层、下移一层、置顶、置底）
-- ✅ 完成页面右侧属性面板 (属性、数据、交互，共 3 类配置面板)
-- ✅ 完成预览页面
-- ✅ 成组/取消成组
-- ✅ 布局容器组件
-- ✅ 缓存请求
-- ✅ 多组件联动
-- ✅ 上传本地 / 加载远程组件包
-- ✅ 收藏夹
-- ✅ 页面组件列表
-- ✅ 自定义组件
-- ✅ i18n 国际化语言。
-- ✅ 支持多子页面切换。
-- ✅ 可撤销历史记录。
+在 `props` 中获取 `useExpose`、`handleTrigger`。通过 `useExpose` 去定义运行时暴露的事件行为，`handleTrigger` 去触发内部事件的执行。
 
-### v0.0.2 (进行中)
-开发大屏组件。
 
-#### 基础组件
-- Text：文本
-- Title: 标题
-- Select: 下拉框
-- Input：输入框
-- InputNumber: 数字输入框
-- Background：背景块
-- Image: 图片
-- Divider: 分割线
+## 多页面管理
 
-#### 容器组件
-- Carousel 跑马灯
-- SpecialCard 特殊卡片
+多页面，主要适用于一个大屏多个子页面的场景。
 
-#### 图表组件
-- Line: 折线图
-- Pie: 扇形图
-- Radar: 雷达图
-- bar：柱形图
-- gauge：仪表盘
-- chinaMap：中国地图
+> 展示一个页面时，其他页面会卸载，不渲染而只保留数据，因此不会造成性能损失。
+
+若要控制多页面切换，需要开发`导航组件`：
+- `usePages`：实时获取所有页面
+- `useCurrentPageId`: 获取当前页id
+- `selectPage`: 选中对应页面（即切换页面）
+
+常见场景：
+- 单大屏多子页面：顶部的导航栏tabs，点击打开目标子页面。
+- 类SPA站点：头部面包屑导航，点击跳转对应页面。
+- 单页面文档站点：导航下拉框，快速打开对应文档页。
+
+> **为什么会出现子页面，容器组件难道不行吗？** <br><br>
+> 答：子页面会完整的加载、卸载、刷新一个页面的全部组件，而容器包含的所有组件一直存在（只会随页面卸载而删除）。
+
+## 设计复杂页面
+
+若要实现复杂页面，则需将页面元素抽象成 一个个的实例，多个实例通过`暴露事件`、`触发事件`相互沟通。
+
+在 `react-big-screen` 中，事件机制是一个十分重要的功能，甚至可以触发自身的 `暴露事件`!
+
+> 例如：设计一个中后台查询表格页。我们只需要准备`按钮`、`表格`，点击 `按钮` 触发表格暴露的 `查询` 事件即可。如果想要修改查询参数，则只需要设置解析函数。
+
+另外，有时候会用到多页面管理，在一个页面中支持切换多个子页面。 可以单独开发 `导航组件`，用于管理页面的切换、或当做路由面包屑等。
+
+## 远程组件
+
+通过远程组件功能，可以拥有个人资产。
+
+> 在 `src/common-module.ts` 文件中配置公共模块配置，以此减小远程组件包体积。
+
+加载方式：
+- 本地上传
+- 远程URL
+
+支持格式：
+
+- 支持 UMD 模块包。
+- 支持 AMD 模块包。
+- 支持 .zip 压缩包。
