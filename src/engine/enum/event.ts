@@ -46,10 +46,12 @@ export const INIT_EXPOSES = {
   custom: "$_custom",
 };
 
-export const INIT_EXPOSE_LIST: {
+export interface ExposeItemType {
   label: string;
   value: ComponentNodeEventTargetOptExposeId;
-}[] = [
+}
+
+export const INIT_EXPOSE_LIST: ExposeItemType[] = [
   { label: "显隐", value: INIT_EXPOSES.visible },
   { label: "请求", value: INIT_EXPOSES.request },
   { label: "自定义函数", value: INIT_EXPOSES.custom },
