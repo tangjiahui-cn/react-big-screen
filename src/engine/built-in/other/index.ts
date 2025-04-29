@@ -18,7 +18,6 @@ export const other: ComponentType[] = [
     y: 0,
     width: 600,
     height: 300,
-    isAllPage: true,
     exposes: peopleExposes,
     component: React.lazy(() => import("./PeopleTable")),
   },
