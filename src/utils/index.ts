@@ -7,3 +7,4 @@ export * from "./function";
 export * from "./packages";
 export * from "./dom";
 export * from "./route";
+export * from "./getUrlQuery";

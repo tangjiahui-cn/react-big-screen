@@ -12,7 +12,7 @@ const DEFAULT_FILE_NAME = "未命名文件.txt";
 export async function getUrlText(url: string): Promise<string> {
   return new Promise((resolve) => {
     fetch(url)
-      .then((res) => {
+      .then(async (res) => {
         const isSuccess = `${res?.status}`?.startsWith?.("2");
         return isSuccess ? res.text() : "";
       })

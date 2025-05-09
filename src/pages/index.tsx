@@ -9,20 +9,37 @@ import Header from "./components/Header";
 import Attributes from "./components/Attributes";
 import Editor from "./components/Editor";
 import Menu from "./components/Menu";
-import engine from "@/engine";
+import engine, { JsonType } from "@/engine";
 import { useEffectOnce } from "@/hooks";
 import { useGlobalShortCutKeys } from "@/packages/shortCutKeys";
 import { cloneDeep } from "lodash-es";
+import { getUrlQuery, getUrlText } from "@/utils";
+
+// 获取示例json文本
+async function getExampleJsonString(name: string): Promise<string> {
+  const text = await getUrlText(`./example/${name}.json`);
+  return text.startsWith("<!DOCTYPE html>") ? "" : text;
+}
+
+// 获取初始加载json
+async function getInitJSONString(): Promise<string> {
+  const { example } = getUrlQuery();
+  if (example) return getExampleJsonString(example);
+  return localStorage.getItem("json") || "";
+}
 
 export default function Page() {
   // 注册全局快捷键
   useGlobalShortCutKeys();
 
   useEffectOnce(() => {
-    // 读取本地json
-    engine.loadJSONString(localStorage.getItem("json"), (json) => {
-      // 初始化历史记录
-      engine.history.setInitData(cloneDeep(json));
+    // 获取初始加载json字符串
+    getInitJSONString().then((jsonStr: string) => {
+      // 读取json
+      engine.loadJSONString(jsonStr, (json: JsonType) => {
+        // 初始化历史记录
+        engine.history.setInitData(cloneDeep(json));
+      });
     });
     // unmount
     return () => {
