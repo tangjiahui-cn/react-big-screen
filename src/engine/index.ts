@@ -2,7 +2,7 @@
  * 大屏 api
  *
  * @author tangjiahui
- * @date 2024/1/7
+ * @date 2025/1/7
  *
  * 核心:
  *     编辑json + 交互逻辑。

@@ -2,7 +2,7 @@
  * Image（图片）
  *
  * @author tangjiahui
- * @date 2024/1/7
+ * @date 2025/1/7
  */
 import { Image } from "antd";
 import { createComponent } from "@/engine";

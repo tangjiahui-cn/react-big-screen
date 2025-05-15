@@ -2,7 +2,7 @@
  * Carousel（走马灯）
  *
  * @author tangjiahui
- * @date 2024/1/7
+ * @date 2025/1/7
  */
 import engine, { EventData } from "@/engine";
 import styles from "./index.module.less";
