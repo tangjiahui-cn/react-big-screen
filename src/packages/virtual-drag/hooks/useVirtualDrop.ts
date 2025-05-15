@@ -25,7 +25,7 @@ export function useVirtualDrop<T extends HTMLElement>(
 
   useEffect(() => {
     const { accept } = options;
-    if (!Array.isArray(accept)) {
+    if (accept && !Array.isArray(accept)) {
       throw new Error("accept must be a string array.");
     }
 
