@@ -32,6 +32,9 @@ react-big-screen 是一个使用React开发的`前端可拖拽大屏`开源项�
 - ✅ 可撤销历史记录
 - ✅ 导入、导出文件
 
+## 功能 demo
+- [点击访问：多组件联动](https://tangjiahui-cn.github.io/react-big-screen/#/create?example=multiple-components-interactive)
+
 ## 快速开始
 本地启动一个项目，用以调试或者开发功能。
 ```shell
