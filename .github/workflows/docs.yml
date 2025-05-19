@@ -38,22 +38,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
-      - name: Deploy To My Remote Server 1
+      - name: Deploy To My Remote Server [Aliyun]
         uses: easingthemes/ssh-deploy@main
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.REMOTE_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          SSH_PRIVATE_KEY: ${{ secrets.REMOTE_SSH_KEY_ALIYUN }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST_ALIYUN }}
           REMOTE_USER: "root"
           TARGET: "/var/www/big-screen"
           ARGS: "-avzr --delete"
           SOURCE: "./dist/"
           EXCLUDE: "/node_modules/"
 
-      - name: Deploy To My Remote Server 2
+      - name: Deploy To My Remote Server [Japanese]
         uses: easingthemes/ssh-deploy@main
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.REMOTE_SSH_KEY_2 }}
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST_2 }}
+          SSH_PRIVATE_KEY: ${{ secrets.REMOTE_SSH_KEY_JP }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST_JP }}
           REMOTE_USER: "root"
           TARGET: "/var/www/big-screen"
           ARGS: "-avzr --delete"
