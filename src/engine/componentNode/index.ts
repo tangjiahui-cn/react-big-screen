@@ -230,8 +230,12 @@ export default class ComponentNode {
     if (!id || !extComponentNode) return;
     const componentNode = this.get(id);
     if (!componentNode) return;
-    const override =
-      typeof extComponentNode === "function" ? extComponentNode(componentNode) : extComponentNode;
+    // 创建新对象(避免以对象自身覆盖时，先删除属性导致再复制时为空的问题)
+    const override = {
+      ...(typeof extComponentNode === "function"
+        ? extComponentNode(componentNode)
+        : extComponentNode),
+    };
     // 如果覆盖，则删除id以外所有属性
     if (options?.cover) {
       for (const key in componentNode) {
