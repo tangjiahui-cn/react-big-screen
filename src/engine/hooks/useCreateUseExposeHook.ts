@@ -1,19 +1,21 @@
 /**
  * 创建 handleTrigger 函数
  */
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import engine, { getEventId } from "@/engine";
 
 function createUseExposeHook(componentNodeId: string) {
   return function (exposes: Record<string, (payload: any) => void>) {
-    for (const key in exposes) {
-      engine.events.on(getEventId(componentNodeId, key), exposes[key]);
-    }
-    return () => {
+    useEffect(() => {
       for (const key in exposes) {
-        engine.events.remove(getEventId(componentNodeId, key), exposes[key]);
+        engine.events.on(getEventId(componentNodeId, key), exposes[key]);
       }
-    };
+      return () => {
+        for (const key in exposes) {
+          engine.events.remove(getEventId(componentNodeId, key), exposes[key]);
+        }
+      };
+    });
   };
 }
 
