@@ -15,7 +15,7 @@ function createUseExposeHook(componentNodeId: string) {
           engine.events.remove(getEventId(componentNodeId, key), exposes[key]);
         }
       };
-    });
+    }, []);
   };
 }
 
