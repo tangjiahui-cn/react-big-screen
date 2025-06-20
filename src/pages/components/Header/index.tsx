@@ -28,6 +28,7 @@ import { cancelUndoHistory, saveLocal, undoHistory } from "@/packages/shortCutKe
 import { saveLocalPreviewJson } from "@/pages/preview";
 import { useTranslation } from "react-i18next";
 import { changeLanguage, LANGUAGE } from "@/i18n";
+import { isIgnoreDomainName } from "@/utils/ignore";
 
 interface OperateItem {
   key: string;
@@ -36,6 +37,7 @@ interface OperateItem {
   icon?: React.ReactNode;
 }
 
+const isIgnoreGithub = isIgnoreDomainName();
 export default function Header() {
   const [t, i18n] = useTranslation();
   const historyData = useHistoryData();
@@ -137,7 +139,9 @@ export default function Header() {
     <div className={styles.header}>
       <div className={styles.header_flex}>
         <b>BigScreen</b>
-        <GithubFilled style={{ cursor: "pointer", fontSize: 16 }} onClick={handleJumpGithub} />
+        {!isIgnoreGithub && (
+          <GithubFilled style={{ cursor: "pointer", fontSize: 16 }} onClick={handleJumpGithub} />
+        )}
       </div>
 
       <SizeBar />
