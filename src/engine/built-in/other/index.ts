@@ -21,4 +21,16 @@ export const other: ComponentType[] = [
     exposes: peopleExposes,
     component: React.lazy(() => import("./PeopleTable")),
   },
+  {
+    cId: "chinaMap",
+    cName: "中国地图",
+    description: "使用echarts实现的中国地图。",
+    category: "other",
+    x: 0,
+    y: 0,
+    width: 500,
+    height: 500,
+    component: React.lazy(() => import("./ChinaMap")),
+    attributesComponent: React.lazy(() => import("./ChinaMap/attributes")),
+  },
 ];

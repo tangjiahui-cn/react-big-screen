@@ -13,13 +13,13 @@ type Hex = string;
 type RGBA = string;
 type ColorType = Hex | RGBA;
 
-interface Props {
+export interface IColorPickerProps {
   value?: ColorType; // 颜色（默认白色）
   onChange?: (value: ColorType) => void; // 回调 (hex | rgba)
   style?: React.CSSProperties; // 样式
 }
 
-export function IColorPicker(props: Props) {
+export function IColorPicker(props: IColorPickerProps) {
   const { value = "white" } = props;
   const [visible, setVisible] = useState(false);
 

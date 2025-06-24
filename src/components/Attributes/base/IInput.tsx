@@ -8,11 +8,11 @@ import { Input, InputProps } from "antd";
 import styles from "./IInput.module.less";
 import classNames from "classnames";
 
-export function IInput(
-  props: Omit<InputProps, "onChange"> & {
-    onChange?: (value: string) => void;
-  },
-) {
+export type IInputProps = Omit<InputProps, "onChange"> & {
+  onChange?: (value: string) => void;
+};
+
+export function IInput(props: IInputProps) {
   const { onChange, className, ...rest } = props;
   return (
     <Input
