@@ -7,12 +7,12 @@
  */
 import { GlobalConfig, useGlobalSelector } from "..";
 
-type ChildSelector = (config: GlobalConfig) => any;
-export function useConfig<T = GlobalConfig>(childSelector?: ChildSelector): T {
+type ChildSelector<T> = (config: GlobalConfig) => T;
+export function useConfig<T = GlobalConfig>(childSelector?: ChildSelector<T>): T {
   return useGlobalSelector((state) => {
     if (childSelector) {
       return childSelector(state.config);
     }
     return state.config;
-  });
+  }) as T;
 }

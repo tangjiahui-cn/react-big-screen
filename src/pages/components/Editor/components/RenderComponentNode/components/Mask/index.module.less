@@ -27,24 +27,23 @@
   }
 }
 
-@size: 8px;
-
 .dragPointCommon {
+  @size: 8px;
   width: @size;
   height: @size;
   position: absolute;
   border-radius: 50%;
   border: 1px solid @primaryHover;
-  transform: translate(-50%, -50%);
   background: white;
+  box-sizing: border-box;
 }
 
-.p_top { top: -1px; }
-.p_left { left: -1px; }
-.p_right { right: -8px; }
-.p_bottom { bottom: -9px;}
-.p_horizontal_mid {left: 50%}
-.p_vertical_mid {top: 50%}
+.p_top { top: 0; }
+.p_left { left: 0; }
+.p_right { right: 0; }
+.p_bottom { bottom: 0; }
+.p_horizontal_mid { left: 50% }
+.p_vertical_mid { top: 50% }
 
 .dragPoint {
   &_top {
@@ -52,12 +51,14 @@
     .p_top();
     .p_horizontal_mid();
     cursor: n-resize;
+    translate: 0 -50%;
 
     &_left {
       .dragPointCommon();
       .p_top();
       .p_left();
       cursor: nw-resize;
+      translate: -50% -50%;
     }
 
     &_right {
@@ -65,6 +66,7 @@
       .p_top();
       .p_right();
       cursor: ne-resize;
+      translate: 50% -50%;
     }
   }
 
@@ -73,12 +75,14 @@
     .p_bottom();
     .p_horizontal_mid();
     cursor: s-resize;
+    translate: 0 50%;
 
     &_left {
       .dragPointCommon();
       .p_bottom();
       .p_left();
       cursor: sw-resize;
+      translate: -50% 50%;
     }
 
     &_right {
@@ -86,6 +90,7 @@
       .p_bottom();
       .p_right();
       cursor: se-resize;
+      translate: 50% 50%;
     }
   }
 
@@ -94,6 +99,7 @@
     .p_vertical_mid();
     .p_left();
     cursor: w-resize;
+    translate: -50% 0;
   }
 
   &_right {
@@ -101,5 +107,6 @@
     .p_vertical_mid();
     .p_right();
     cursor: e-resize;
+    translate: 50% 0;
   }
 }
