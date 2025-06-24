@@ -38,6 +38,7 @@ export default createComponent<TitleOptions, TriggerKeys, ExposeKeys>((props) =>
         fontWeight: options?.fontWeight,
         fontStyle: options?.fontStyle,
         fontSize: options?.fontSize,
+        letterSpacing: options?.letterSpacing,
       }}
       onClick={(e) => handleTrigger("onClick", e)}
       className={styles.title}

@@ -22,6 +22,7 @@ export interface TitleOptions {
   fontSize?: number; // 字号
   textAlign?: TextAlignType; // 水平对齐（默认不设置）
   background?: string; // 背景颜色
+  letterSpacing?: number; // 文字间距
 }
 
 export default createAttributesByConfig<TitleOptions>(
@@ -29,6 +30,7 @@ export default createAttributesByConfig<TitleOptions>(
     { key: "value", label: "标题", component: "input" },
     { key: "fontSize", label: "字号", component: "inputNumber" },
     { key: "fontWeight", label: "字重", component: "fontWeightSelect" },
+    { key: "letterSpacing", label: "字距", component: "inputNumber" },
     { key: "color", label: "颜色", component: "colorPicker" },
     { key: "background", label: "背景", component: "colorPicker" },
     {
