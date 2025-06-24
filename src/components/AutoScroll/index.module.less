@@ -1,0 +1,52 @@
+.autoScroll {
+  //.hideScroll();
+  position: relative;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  background: transparent;
+
+  &_inner {
+    .custom-scrollbar();
+    height: 100%;
+    width: 100%;
+    position: relative;
+  }
+}
+
+.custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 8px;
+    background-color: transparent;
+  }
+  /*定义滚动条轨道*/
+  &::-webkit-scrollbar-track {
+    width: 6px;
+    background-color: transparent;
+  }
+  /*定义滑块*/
+  &::-webkit-scrollbar-thumb {
+    width: 6px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+  }
+}
+
+@keyframes scrollTop {
+  from {
+    transform: translate(0, 0);
+  }
+
+  to {
+    transform: translate(0, -50%);
+  }
+}
+
+.scroll {
+  animation: scrollTop infinite linear;
+
+  &_paused {
+    animation-play-state: paused;
+  }
+}
+
