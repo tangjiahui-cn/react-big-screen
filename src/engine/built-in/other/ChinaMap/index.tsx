@@ -59,7 +59,7 @@ export default createComponent<ChinaMapOptions>((props) => {
                 color: "whitesmoke",
               },
               itemStyle: {
-                areaColor: options?.mapHoverColor,
+                areaColor: options?.mapHoverColor || "rgba(16,43,128,0.9)",
               },
             },
             // 选中状态
@@ -68,7 +68,7 @@ export default createComponent<ChinaMapOptions>((props) => {
                 color: "#fff",
               },
               itemStyle: {
-                areaColor: options?.mapSelectedColor,
+                areaColor: options?.mapSelectedColor || "rgba(16,43,128,1)",
               },
             },
           },
