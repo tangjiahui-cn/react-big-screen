@@ -41,17 +41,19 @@ export default createComponent<ChinaMapOptions>((props) => {
             type: "map",
             name: "中国地图",
             map: MAP_CHINA,
-            label: {
-              show: true,
-            },
             ...(options?.top ? { top: options?.top } : {}),
             ...(options?.right ? { right: options?.right } : {}),
             ...(options?.bottom ? { bottom: options?.bottom } : {}),
             ...(options?.left ? { left: options?.left } : {}),
             selectedMode: "single",
+            label: {
+              show: options?.showLabel,
+              color: options?.color || "#fff",
+            },
             // 默认区块样式
             itemStyle: {
               areaColor: options?.mapBgColor || "#fff",
+              borderColor: options?.outlineColor || "#23c2fb",
             },
             // 高亮状态（鼠标经过）
             emphasis: {
@@ -78,9 +80,12 @@ export default createComponent<ChinaMapOptions>((props) => {
     },
     {
       refreshDeps: [
+        options?.showLabel,
         options?.mapBgColor,
         options?.mapHoverColor,
         options?.mapSelectedColor,
+        options?.outlineColor,
+        options?.color,
         options.top,
         options.right,
         options.bottom,

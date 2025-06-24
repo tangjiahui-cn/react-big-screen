@@ -10,10 +10,13 @@ export const DEFAULT_OPTIONS: ChinaMapOptions = {
 
 export interface ChinaMapOptions {
   // 基本配置
-  bgColor?: string;
-  mapBgColor?: string;
-  mapHoverColor?: string;
-  mapSelectedColor?: string;
+  showLabel?: boolean; // 显示标签
+  bgColor?: string; // 背景颜色
+  mapBgColor?: string; // 地图背景颜色
+  mapHoverColor?: string; // 鼠标经过颜色
+  mapSelectedColor?: string; // 选中区块颜色
+  outlineColor?: string; // 轮廓颜色
+  color?: string; // 文字颜色
 
   // 位移配置
   top?: string;
@@ -25,6 +28,11 @@ export interface ChinaMapOptions {
 export default createAttributesByConfig<ChinaMapOptions>(
   [
     <b key={"data"}>基本配置</b>,
+    {
+      key: "showLabel",
+      label: "显示标签",
+      component: "checkbox",
+    },
     {
       key: "bgColor",
       label: "背景颜色",
@@ -56,6 +64,23 @@ export default createAttributesByConfig<ChinaMapOptions>(
       component: "colorPicker",
       options: {
         defaultColor: "rgba(16,43,128,1)",
+        reset: true,
+      },
+    },
+    {
+      key: "outlineColor",
+      label: "轮廓颜色",
+      component: "colorPicker",
+      options: {
+        defaultColor: "#23c2fb",
+        reset: true,
+      },
+    },
+    {
+      key: "color",
+      label: "文字颜色",
+      component: "colorPicker",
+      options: {
         reset: true,
       },
     },
