@@ -9,6 +9,7 @@ import {
   BarChart,
   PieChart,
   LineChart,
+  LinesChart,
   RadarChart,
   GaugeChart,
   MapChart,
@@ -22,6 +23,7 @@ import {
   DatasetComponent,
   TransformComponent,
   VisualMapComponent,
+  LegendComponent,
 } from "echarts/components";
 import { LabelLayout, UniversalTransition } from "echarts/features";
 import { CanvasRenderer } from "echarts/renderers";
@@ -34,6 +36,7 @@ echarts.use([
   PieChart,
   BarChart,
   LineChart,
+  LinesChart,
   RadarChart,
   GaugeChart,
   MapChart,
@@ -46,6 +49,7 @@ echarts.use([
   GridComponent,
   DatasetComponent,
   TransformComponent,
+  LegendComponent,
   // 自动布局、全局动画
   LabelLayout,
   UniversalTransition,

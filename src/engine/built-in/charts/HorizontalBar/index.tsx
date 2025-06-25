@@ -23,7 +23,6 @@ export default createComponent((props) => {
   const { width, height } = props;
   const [yData, setYData] = useState(INIT_Y_DATA);
   const chartOptions: any = useMemo(() => {
-    console.log("zz change");
     return {
       tooltip: {
         trigger: "axis",

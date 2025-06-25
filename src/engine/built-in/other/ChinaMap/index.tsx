@@ -11,6 +11,40 @@ import ReactECharts, { type EChartsOption } from "@/components/ReactECharts";
 import { useRequest } from "ahooks";
 import { ChinaMapOptions, DEFAULT_OPTIONS } from "./attributes";
 
+// 飞机线数据
+const lines = [
+  {
+    coords: [
+      [116, 39], // 起点 - 北京
+      [115, 22], // 终点
+    ],
+  },
+  {
+    coords: [
+      [116, 39], // 起点 - 北京
+      [91, 29], // 终点
+    ],
+  },
+  {
+    coords: [
+      [116, 39], // 起点 - 北京
+      [102, 25], // 终点
+    ],
+  },
+  {
+    coords: [
+      [116, 39], // 起点 - 北京
+      [108, 22], // 终点
+    ],
+  },
+  {
+    coords: [
+      [116, 39], // 起点 - 北京
+      [87, 43], // 终点
+    ],
+  },
+];
+
 export default createComponent<ChinaMapOptions>((props) => {
   const { width, height, options } = props;
 
@@ -105,6 +139,23 @@ export default createComponent<ChinaMapOptions>((props) => {
             },
             true,
           ),
+        ],
+        series: [
+          // 飞机线
+          {
+            type: "lines",
+            zlevel: maxZ--,
+            coordinateSystem: "geo",
+            effect: {
+              show: true,
+              delay: 0,
+              period: 3, // 图标飞跃速度，值越小速度越快
+              trailLength: 0.1, // 尾迹长度[0,1]值越大，尾迹越长
+              symbolSize: 4, // 图标大小
+              color: "#ffffff", // 图标颜色
+            },
+            data: lines,
+          },
         ],
       };
       return chartOptions;
