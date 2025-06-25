@@ -1,0 +1,29 @@
+.specialTitle {
+  color: white;
+  display: flex;
+  align-items: center;
+
+
+  &_line_left {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(to right, rgba(46, 220, 247, 0), rgba(46, 220, 247, 0.3), #2EDCF7);
+  }
+
+  &_inner {
+    gap: 8px;
+    display: flex;
+    align-items: center;
+
+    &_icon {
+      color: #2EDCF7;
+      font-size: 18px;
+    }
+  }
+
+  &_line_right {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(to left, rgba(46, 220, 247, 0), rgba(46, 220, 247, 0.3), #2EDCF7);
+  }
+}

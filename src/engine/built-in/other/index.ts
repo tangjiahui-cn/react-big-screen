@@ -87,4 +87,15 @@ export const other: ComponentType[] = [
     component: React.lazy(() => import("./ProgressList")),
     attributesComponent: React.lazy(() => import("./ProgressList/attributes")),
   },
+  {
+    cId: "specialTitle",
+    cName: "特殊标题",
+    category: "other",
+    x: 0,
+    y: 0,
+    width: 500,
+    height: 32,
+    component: React.lazy(() => import("./SpecialTitle")),
+    attributesComponent: React.lazy(() => import("./SpecialTitle/attributes")),
+  },
 ];
