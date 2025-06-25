@@ -48,7 +48,7 @@ export default createComponent<ProgressListOptions>((props) => {
                   fontSize: options?.titleFontSize,
                 }}
               >
-                <DoubleRightOutlined style={{ marginRight: 6 }} />
+                <DoubleRightOutlined style={{ marginRight: 6, color: options?.iconColor }} />
                 {item?.title}
               </div>
               <div
