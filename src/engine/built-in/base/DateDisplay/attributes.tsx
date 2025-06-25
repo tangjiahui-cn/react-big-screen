@@ -20,6 +20,9 @@ export default createAttributesByConfig<DateDisplayOptions>(
       key: "color",
       label: "字色",
       component: "colorPicker",
+      options: {
+        reset: true,
+      },
     },
     {
       key: "fontSize",

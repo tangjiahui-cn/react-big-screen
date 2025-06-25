@@ -54,4 +54,16 @@ export const other: ComponentType[] = [
     component: React.lazy(() => import("./ScrollList")),
     attributesComponent: React.lazy(() => import("./ScrollList/attributes")),
   },
+  {
+    cId: "defaultImage",
+    cName: "预置图片",
+    description: "预置的一组图片。",
+    category: "other",
+    x: 0,
+    y: 0,
+    width: 150,
+    height: 150,
+    component: React.lazy(() => import("./DefaultImage")),
+    attributesComponent: React.lazy(() => import("./DefaultImage/attributes")),
+  },
 ];

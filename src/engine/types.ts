@@ -173,6 +173,7 @@ export interface JsonTypePage {
   // 配置选项
   options?: {
     background?: string; // 页面背景
+    whiteBoardColor?: string; // 白板背景
     bordered?: boolean; // 是否显示边框
     borderColor?: string; // 边框颜色
   };

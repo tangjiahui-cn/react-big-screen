@@ -34,7 +34,7 @@ export default createComponent<ScrollListOptions>((props) => {
             {item?.status === "1" ? (
               <span style={{ color: "#2EDCF7" }}>已签</span>
             ) : (
-              <span style={{ color: "#e82a2a" }}>未签</span>
+              <span style={{ color: "#dfdfdf" }}>未签</span>
             )}
           </div>
         );
