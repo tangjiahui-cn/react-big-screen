@@ -12,5 +12,5 @@ export default createComponent<ScrollListOptions>((props) => {
   const { width, height, options } = props;
   const src = useMemo(() => `./default-images/${options?.id}`, [options?.id]);
 
-  return <img style={{ width, height }} alt={"预制图片"} src={src} />;
+  return <img style={{ width, height, pointerEvents: "none" }} alt={"预制图片"} src={src} />;
 }, DEFAULT_OPTIONS);
