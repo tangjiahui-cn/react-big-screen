@@ -49,7 +49,7 @@ export default createComponent((props) => {
           show: true,
         },
         axisLabel: {
-          color: "#fff",
+          color: "#b1b1b1",
         },
         axisTick: {
           show: false,
@@ -60,7 +60,7 @@ export default createComponent((props) => {
         type: "category",
         data: xData,
         axisLabel: {
-          color: "#fff",
+          color: "#b1b1b1",
         },
         axisTick: {
           show: false,

@@ -83,4 +83,15 @@ export const charts: ComponentType[] = [
     options: {},
     component: React.lazy(() => import("./HorizontalBar")),
   },
+  {
+    cId: "barLine",
+    cName: "柱形折线图",
+    category: "charts",
+    x: 0,
+    y: 0,
+    width: 350,
+    height: 300,
+    options: {},
+    component: React.lazy(() => import("./BarLine")),
+  },
 ];
