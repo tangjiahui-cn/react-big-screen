@@ -3,7 +3,8 @@
  */
 import { createComponent } from "@/engine";
 import ReactECharts from "@/components/ReactECharts";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { useEffectOnce } from "@/hooks";
 
 const colors: string[] = [
   "rgb(28, 172, 255)",
@@ -16,12 +17,13 @@ const colors: string[] = [
 ];
 
 const xData = ["私有化项目", "tjh项目", "xxx项目", "xyz项目", "zz项目", "演示项目", "培训项目"];
-const yData = [900, 100, 150, 250, 800, 1100, 200];
+const INIT_Y_DATA = [900, 100, 150, 250, 800, 1100, 200];
 
 export default createComponent((props) => {
   const { width, height } = props;
-
+  const [yData, setYData] = useState(INIT_Y_DATA);
   const chartOptions: any = useMemo(() => {
+    console.log("zz change");
     return {
       tooltip: {
         trigger: "axis",
@@ -87,7 +89,31 @@ export default createComponent((props) => {
         },
       ],
     };
-  }, []);
+  }, [yData]);
+
+  // 模拟柱形图动效 （动态修改数据变化）
+  useEffectOnce(() => {
+    function run() {
+      indexArr = indexArr.slice(1).concat(indexArr.slice(0, 1));
+      setYData(indexArr.map((index) => INIT_Y_DATA[index]));
+    }
+
+    // 索引数组
+    let indexArr = Array(INIT_Y_DATA.length)
+      .fill(null)
+      .map((_, index) => index);
+
+    let intervalId: any;
+    let timeoutId = setTimeout(() => {
+      run();
+      intervalId = setInterval(run, 2000);
+    }, 500);
+
+    return () => {
+      timeoutId && clearTimeout(timeoutId);
+      intervalId && clearInterval(intervalId);
+    };
+  });
 
   return <ReactECharts style={{ width, height }} options={chartOptions} />;
 });
