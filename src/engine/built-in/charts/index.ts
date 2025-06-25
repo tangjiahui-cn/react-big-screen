@@ -72,4 +72,15 @@ export const charts: ComponentType[] = [
     options: {},
     component: React.lazy(() => import("./Gauge")),
   },
+  {
+    cId: "horizontalBar",
+    cName: "横向柱形图",
+    category: "charts",
+    x: 0,
+    y: 0,
+    width: 350,
+    height: 300,
+    options: {},
+    component: React.lazy(() => import("./HorizontalBar")),
+  },
 ];
