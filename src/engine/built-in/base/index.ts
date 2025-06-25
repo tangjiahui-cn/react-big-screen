@@ -91,4 +91,16 @@ export const base: ComponentType[] = [
     component: React.lazy(() => import("./Image")),
     attributesComponent: React.lazy(() => import("./Image/attributes")),
   },
+  {
+    cId: "dateDisplay",
+    cName: "日期展示",
+    // icon: () => import("@/static/built-in/image.png"),
+    category: "base",
+    x: 0,
+    y: 0,
+    width: 250,
+    height: 32,
+    component: React.lazy(() => import("./DateDisplay")),
+    attributesComponent: React.lazy(() => import("./DateDisplay/attributes")),
+  },
 ];
