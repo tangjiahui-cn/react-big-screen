@@ -1,0 +1,17 @@
+.progressList {
+  position: relative;
+
+  &_line {
+    color: white;
+
+    &:first-child,
+    & + & {
+      margin-top: 16px;
+    }
+
+    &_header {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
