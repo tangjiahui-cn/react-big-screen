@@ -18,6 +18,51 @@ export default createComponent<ChinaMapOptions>((props) => {
     async () => {
       // 注册中国地图
       await registerChinaMap();
+
+      // 创建geo
+      function createGeo(ext: Record<string, any> = {}, isMask?: boolean): any {
+        return {
+          type: "map",
+          name: "中国地图",
+          map: MAP_CHINA,
+          selectedMode: "single",
+          label: {
+            show: options?.showLabel,
+            color: options?.color || "#fff",
+          },
+          // layoutCenter: ["50%", "62%"],
+          layoutSize: `${120 + options?.scale!}%`,
+          // 默认区块样式
+          itemStyle: {
+            areaColor: options?.areaColor || "transparent",
+            borderColor: options?.outlineColor || "#23c2fb",
+            borderWidth: options?.borderWidth || 1,
+          },
+          // 高亮状态（鼠标经过）
+          emphasis: {
+            disabled: isMask,
+            label: {
+              color: "whitesmoke",
+            },
+            itemStyle: {
+              areaColor: options?.mapHoverColor || "rgba(16,43,128,0.9)",
+            },
+          },
+          // 选中状态
+          select: {
+            disabled: isMask,
+            label: {
+              color: "#fff",
+            },
+            itemStyle: {
+              areaColor: options?.mapSelectedColor || "rgba(16,43,128,1)",
+            },
+          },
+          ...ext,
+        };
+      }
+
+      let maxZ = 999;
       const chartOptions: EChartsOption = {
         tooltip: {
           trigger: "item",
@@ -36,60 +81,46 @@ export default createComponent<ChinaMapOptions>((props) => {
             symbolSize: [30, 100],
           },
         },
-        series: [
-          {
-            type: "map",
-            name: "中国地图",
-            map: MAP_CHINA,
-            ...(options?.top ? { top: options?.top } : {}),
-            ...(options?.right ? { right: options?.right } : {}),
-            ...(options?.bottom ? { bottom: options?.bottom } : {}),
-            ...(options?.left ? { left: options?.left } : {}),
-            selectedMode: "single",
-            label: {
-              show: options?.showLabel,
-              color: options?.color || "#fff",
-            },
-            // 默认区块样式
-            itemStyle: {
-              areaColor: options?.mapBgColor || "#fff",
-              borderColor: options?.outlineColor || "#23c2fb",
-            },
-            // 高亮状态（鼠标经过）
-            emphasis: {
-              label: {
-                color: "whitesmoke",
-              },
+        geo: [
+          // 创建标准地图
+          createGeo({
+            layoutCenter: [`${50 + options?.centerX!}%`, `${62 + options?.centerY!}%`],
+            z: maxZ--,
+          }),
+          // 创建阴影遮罩层
+          createGeo(
+            {
+              layoutCenter: [`${50 + options?.centerX!}%`, `${64 + options?.centerY!}%`],
+              z: maxZ--,
+              silent: true,
               itemStyle: {
-                areaColor: options?.mapHoverColor || "rgba(16,43,128,0.9)",
+                areaColor: "#004b75",
+                borderColor: "#195175",
+                borderWidth: 2,
+                shadowColor: "#0f4c74",
+                shadowOffsetX: 4,
+                shadowOffsetY: 4,
+                shadowBlur: 10,
               },
             },
-            // 选中状态
-            select: {
-              label: {
-                color: "#fff",
-              },
-              itemStyle: {
-                areaColor: options?.mapSelectedColor || "rgba(16,43,128,1)",
-              },
-            },
-          },
+            true,
+          ),
         ],
       };
       return chartOptions;
     },
     {
       refreshDeps: [
+        options?.centerX,
+        options?.centerY,
+        options?.scale,
         options?.showLabel,
-        options?.mapBgColor,
+        options?.areaColor,
         options?.mapHoverColor,
         options?.mapSelectedColor,
         options?.outlineColor,
+        options?.borderWidth,
         options?.color,
-        options.top,
-        options.right,
-        options.bottom,
-        options.left,
       ],
     },
   );

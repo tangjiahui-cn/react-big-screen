@@ -15,6 +15,7 @@ import checkbox from "./checkbox";
 import checkboxValue from "./checkboxValue";
 import textAlignSelect from "./textAlignSelect";
 import antdButtonTypeSelect from "./antdButtonTypeSelect";
+import slider from "./slider";
 
 export type DEFAULT_REGISTER_KEY =
   | "select" // 下拉框
@@ -26,7 +27,8 @@ export type DEFAULT_REGISTER_KEY =
   | "checkbox" // 勾选框
   | "checkboxValue" // 勾选框（指定真值）
   | "textAlignSelect" // 文字对齐下拉框
-  | "antdButtonTypeSelect"; // antd按钮类型下拉框
+  | "antdButtonTypeSelect" // antd按钮类型下拉框
+  | "slider"; // 滑动条
 
 export default function registerDefault() {
   // 下拉框
@@ -49,4 +51,6 @@ export default function registerDefault() {
   textAlignSelect();
   // antd 按钮类型下拉框
   antdButtonTypeSelect();
+  // 滑动条
+  slider();
 }

@@ -6,28 +6,34 @@ import { createAttributesByConfig } from "@/engine";
 export const DEFAULT_OPTIONS: ChinaMapOptions = {
   // mapHoverColor: "rgba(16,43,128,0.9)",
   // mapSelectedColor: "rgba(16,43,128,1)",
+  areaColor: "#183558",
+  centerX: 0,
+  centerY: 0,
+  scale: 0,
 };
 
 export interface ChinaMapOptions {
   // 基本配置
   showLabel?: boolean; // 显示标签
   bgColor?: string; // 背景颜色
-  mapBgColor?: string; // 地图背景颜色
+  areaColor?: string; // 地图背景颜色
   mapHoverColor?: string; // 鼠标经过颜色
   mapSelectedColor?: string; // 选中区块颜色
   outlineColor?: string; // 轮廓颜色
+  borderWidth?: number; // 轮廓宽度
   color?: string; // 文字颜色
 
   // 位移配置
-  top?: string;
-  right?: string;
-  bottom?: string;
-  left?: string;
+  centerX?: number; // 中心 x坐标（单位%）
+  centerY?: number; // 中心 y坐标（单位%）
+  scale?: number; // 缩放比例（单位%）
 }
 
 export default createAttributesByConfig<ChinaMapOptions>(
   [
-    <b key={"data"}>基本配置</b>,
+    <b key={"data"} style={{ marginTop: 12 }}>
+      基本配置
+    </b>,
     {
       key: "showLabel",
       label: "显示标签",
@@ -39,14 +45,16 @@ export default createAttributesByConfig<ChinaMapOptions>(
       component: "colorPicker",
       options: {
         reset: true,
+        resetColor: "transparent",
       },
     },
     {
-      key: "mapBgColor",
+      key: "areaColor",
       label: "地图颜色",
       component: "colorPicker",
       options: {
         reset: true,
+        resetColor: DEFAULT_OPTIONS.areaColor,
       },
     },
     {
@@ -77,6 +85,11 @@ export default createAttributesByConfig<ChinaMapOptions>(
       },
     },
     {
+      key: "borderWidth",
+      label: "轮廓宽度",
+      component: "inputNumber",
+    },
+    {
       key: "color",
       label: "文字颜色",
       component: "colorPicker",
@@ -84,26 +97,35 @@ export default createAttributesByConfig<ChinaMapOptions>(
         reset: true,
       },
     },
-    <b key={"data"}>位移配置</b>,
+    <b key={"data"} style={{ marginTop: 12 }}>
+      位移配置
+    </b>,
     {
-      key: "top",
-      label: "top",
-      component: "input",
+      key: "centerX",
+      label: "中心坐标 x",
+      component: "slider",
+      options: {
+        min: -100,
+        max: +100,
+      },
     },
     {
-      key: "right",
-      label: "right",
-      component: "input",
+      key: "centerY",
+      label: "中心坐标 y",
+      component: "slider",
+      options: {
+        min: -100,
+        max: +100,
+      },
     },
     {
-      key: "bottom",
-      label: "bottom",
-      component: "input",
-    },
-    {
-      key: "left",
-      label: "left",
-      component: "input",
+      key: "scale",
+      label: "缩放比例",
+      component: "slider",
+      options: {
+        min: -100,
+        max: +100,
+      },
     },
   ],
   DEFAULT_OPTIONS,
