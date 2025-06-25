@@ -103,4 +103,15 @@ export const base: ComponentType[] = [
     component: React.lazy(() => import("./DateDisplay")),
     attributesComponent: React.lazy(() => import("./DateDisplay/attributes")),
   },
+  {
+    cId: "doubleText",
+    cName: "双行文本",
+    category: "base",
+    x: 0,
+    y: 0,
+    width: 120,
+    height: 64,
+    component: React.lazy(() => import("./DoubleText")),
+    attributesComponent: React.lazy(() => import("./DoubleText/attributes")),
+  },
 ];
