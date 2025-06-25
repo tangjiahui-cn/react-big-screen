@@ -3,16 +3,20 @@
  */
 import { createComponent } from "@/engine";
 import ReactECharts from "@/components/ReactECharts";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { useEffectOnce } from "@/hooks";
+import { getRandomInt, range } from "@/utils";
 
 const xData = ["06-01", "06-02", "06-03", "06-04", "06-05", "06-06", "06-07"];
-const yData = [250, 240, 235, 240, 242, 235, 220];
-const yRateData = yData.map((value) => (value * 100) / 250);
+const MAX = 250;
+const INIT_Y_DATA = [210, 200, 195, 200, 202, 195, 180];
 
 export default createComponent((props) => {
   const { width, height } = props;
+  const [yData, setYData] = useState<number[]>(INIT_Y_DATA);
 
   const chartOptions = useMemo(() => {
+    const yRateData = yData.map((value) => (value * 100) / MAX);
     return {
       tooltip: {
         trigger: "axis",
@@ -53,7 +57,7 @@ export default createComponent((props) => {
           type: "value",
           name: "万元",
           min: 0,
-          max: 250,
+          max: MAX,
           splitNumber: 5,
           nameTextStyle: {
             padding: [0, 0, 10, -40],
@@ -117,7 +121,6 @@ export default createComponent((props) => {
           name: "占比",
           type: "line",
           yAxisIndex: 1,
-          smooth: true,
           tooltip: {
             valueFormatter: function (value: any) {
               return value + " %";
@@ -132,7 +135,22 @@ export default createComponent((props) => {
         },
       ],
     };
-  }, []);
+  }, [yData]);
+
+  // ----------------- 模拟柱形图动效 （动态修改数据变化）-----------------
+  useEffectOnce(() => {
+    function run() {
+      setYData(
+        INIT_Y_DATA.map((x) => {
+          return range(x + getRandomInt(-30, 40), 0, MAX);
+        }),
+      );
+    }
+    let intervalId = setInterval(run, 1500);
+    return () => {
+      intervalId && clearInterval(intervalId);
+    };
+  });
 
   return <ReactECharts options={chartOptions as any} style={{ width, height }} />;
 });

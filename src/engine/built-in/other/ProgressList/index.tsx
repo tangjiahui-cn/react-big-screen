@@ -8,9 +8,11 @@ import { createComponent } from "@/engine";
 import { DEFAULT_OPTIONS, ProgressListOptions } from "./attributes";
 import styles from "./index.module.less";
 import AutoScroll from "@/components/AutoScroll";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Progress } from "antd";
 import { DoubleRightOutlined } from "@ant-design/icons";
+import { getRandomInt, range } from "@/utils";
+import { cloneDeep } from "lodash-es";
 
 interface DataSourceItem {
   key: string;
@@ -20,8 +22,8 @@ interface DataSourceItem {
 
 export default createComponent<ProgressListOptions>((props) => {
   const { width, height, options, dataSource } = props;
-  const list: DataSourceItem[] = dataSource;
-  const max = useMemo(() => getMax(), [list, options?.max]);
+  const [list, setList] = useState<DataSourceItem[]>(dataSource);
+  const max = useMemo(() => getMax(), [dataSource, options?.max]);
 
   // 计算最大值
   function getMax() {
@@ -29,6 +31,28 @@ export default createComponent<ProgressListOptions>((props) => {
     if (!options?.max) return listMax;
     return Math.max(options?.max, listMax);
   }
+
+  // ----------------- Mock动效 -----------------
+  useEffect(() => {
+    setList(dataSource);
+    let last = cloneDeep(dataSource);
+
+    function run() {
+      setList(
+        (last = last.map((x: DataSourceItem) => {
+          return {
+            ...x,
+            count: range(getRandomInt(-50, 50) + x?.count, 0, max),
+          };
+        })),
+      );
+    }
+
+    let intervalId = setInterval(run, 1200);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [dataSource]);
 
   return (
     <AutoScroll
