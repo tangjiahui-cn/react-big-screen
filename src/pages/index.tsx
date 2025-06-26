@@ -18,7 +18,8 @@ import { getUrlQuery, getExampleJsonText } from "@/utils";
 async function getInitJSONString(): Promise<string> {
   const { example } = getUrlQuery();
   if (example) return getExampleJsonText(example);
-  return localStorage.getItem("json") || "";
+  // return localStorage.getItem("json") || "";
+  return localStorage.getItem("json") || (await getExampleJsonText("classic"));
 }
 
 export default function Page() {

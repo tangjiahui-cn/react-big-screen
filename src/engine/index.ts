@@ -129,6 +129,7 @@ class Engine {
 
   // 加载json字符串对象
   public loadJSONString(text?: string | null, callback?: (json: JsonType) => void): void {
+    if (!text) return;
     try {
       const json = JSON.parse(text || "{}");
       callback?.(json);

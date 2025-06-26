@@ -9,7 +9,6 @@ import {
   UploadOutlined,
   VerticalAlignBottomOutlined,
   GithubFilled,
-  DesktopOutlined,
   SaveOutlined,
   SettingOutlined,
   ClearOutlined,
@@ -18,7 +17,7 @@ import {
 } from "@ant-design/icons";
 import styles from "./index.module.less";
 import TooltipButton from "@/components/TooltipButton";
-import { message } from "antd";
+import { Button, message } from "antd";
 import IconFont from "@/components/IconFont";
 import SizeBar from "./components/SizeBar";
 import engine, { useHistoryData } from "@/engine";
@@ -77,7 +76,16 @@ export default function Header() {
         disabled: true,
         icon: <SettingOutlined />,
       },
-      { key: "preview", description: t("head.preview"), icon: <DesktopOutlined /> },
+      // { key: "preview", description: t("head.preview"), icon: <DesktopOutlined /> },
+      {
+        key: "preview",
+        description: t("head.preview"),
+        icon: (
+          <Button type={"primary"} size={"small"} style={{ fontSize: 12 }}>
+            开始预览
+          </Button>
+        ),
+      },
     ];
   }, [i18n.language, historyData.isCanGoForward, historyData.isCanGoBack]);
 
