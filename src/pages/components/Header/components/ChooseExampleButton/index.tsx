@@ -4,20 +4,8 @@
  * @author tangjiahui
  * @date 2025/6/26
  */
-import { Button, Dropdown, message } from "antd";
-import { getUrlText } from "@/utils";
-import engine from "@/engine";
-
-// 载入示例json
-async function loadExample(jsonName: string) {
-  const text = await getUrlText(`./example/${jsonName}.json`);
-  const jsonStr = text.startsWith("<!DOCTYPE html>") ? "" : text;
-  if (!jsonStr) {
-    return message.error("读取失败");
-  }
-  // 读取json
-  engine.loadJSONString(jsonStr);
-}
+import { Button, Dropdown } from "antd";
+import { loadExample } from "@/utils";
 
 export default function ChooseExampleButton() {
   return (

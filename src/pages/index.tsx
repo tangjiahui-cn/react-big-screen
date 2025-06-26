@@ -12,18 +12,12 @@ import Menu from "./components/Menu";
 import engine from "@/engine";
 import { useEffectOnce } from "@/hooks";
 import { useGlobalShortCutKeys } from "@/packages/shortCutKeys";
-import { getUrlQuery, getUrlText } from "@/utils";
-
-// 获取示例json文本
-async function getExampleJsonString(name: string): Promise<string> {
-  const text = await getUrlText(`./example/${name}.json`);
-  return text.startsWith("<!DOCTYPE html>") ? "" : text;
-}
+import { getUrlQuery, getExampleJsonText } from "@/utils";
 
 // 获取初始加载json
 async function getInitJSONString(): Promise<string> {
   const { example } = getUrlQuery();
-  if (example) return getExampleJsonString(example);
+  if (example) return getExampleJsonText(example);
   return localStorage.getItem("json") || "";
 }
 

@@ -9,3 +9,4 @@ export * from "./dom";
 export * from "./route";
 export * from "./getUrlQuery";
 export * from "./random";
+export * from "./loadExampleJSON";
