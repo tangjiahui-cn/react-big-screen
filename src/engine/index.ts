@@ -35,6 +35,7 @@ import { BaseEvent } from "./model";
 import { changeLanguage } from "@/i18n";
 import { HistoryRecord } from "@/packages/historyRecord";
 import { INIT_CONFIG } from "@/engine/store";
+import { cloneDeep } from "lodash-es";
 
 export type * from "./types";
 export * from "./store";
@@ -131,6 +132,7 @@ class Engine {
     try {
       const json = JSON.parse(text || "{}");
       callback?.(json);
+      this.history.setInitData(cloneDeep(json));
       this.loadJSON(json);
     } catch (e) {
       console.error(e);

@@ -9,10 +9,9 @@ import Header from "./components/Header";
 import Attributes from "./components/Attributes";
 import Editor from "./components/Editor";
 import Menu from "./components/Menu";
-import engine, { JsonType } from "@/engine";
+import engine from "@/engine";
 import { useEffectOnce } from "@/hooks";
 import { useGlobalShortCutKeys } from "@/packages/shortCutKeys";
-import { cloneDeep } from "lodash-es";
 import { getUrlQuery, getUrlText } from "@/utils";
 
 // 获取示例json文本
@@ -36,10 +35,7 @@ export default function Page() {
     // 获取初始加载json字符串
     getInitJSONString().then((jsonStr: string) => {
       // 读取json
-      engine.loadJSONString(jsonStr, (json: JsonType) => {
-        // 初始化历史记录
-        engine.history.setInitData(cloneDeep(json));
-      });
+      engine.loadJSONString(jsonStr);
     });
     // unmount
     return () => {

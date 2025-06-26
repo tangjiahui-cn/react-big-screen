@@ -29,6 +29,7 @@ import { saveLocalPreviewJson } from "@/pages/preview";
 import { useTranslation } from "react-i18next";
 import { changeLanguage, LANGUAGE } from "@/i18n";
 import { isIgnoreDomainName } from "@/utils/ignore";
+import ChooseExampleButton from "./components/ChooseExampleButton";
 
 interface OperateItem {
   key: string;
@@ -147,6 +148,7 @@ export default function Header() {
       <SizeBar />
 
       <div className={styles.header_flex}>
+        <ChooseExampleButton />
         {operates.map((item: OperateItem) => {
           return (
             <TooltipButton
