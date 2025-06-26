@@ -29,6 +29,7 @@ import { useTranslation } from "react-i18next";
 import { changeLanguage, LANGUAGE } from "@/i18n";
 import { isIgnoreDomainName } from "@/utils/ignore";
 import ChooseExampleButton from "./components/ChooseExampleButton";
+import StepDriverButton from "./components/StepDriverButton";
 
 interface OperateItem {
   key: string;
@@ -77,20 +78,18 @@ export default function Header() {
         icon: <SettingOutlined />,
       },
       // { key: "preview", description: t("head.preview"), icon: <DesktopOutlined /> },
-      {
-        key: "preview",
-        description: t("head.preview"),
-        icon: (
-          <Button type={"primary"} size={"small"} style={{ fontSize: 12 }}>
-            开始预览
-          </Button>
-        ),
-      },
     ];
   }, [i18n.language, historyData.isCanGoForward, historyData.isCanGoBack]);
 
   function handleJumpGithub() {
     window.open("https://github.com/tangjiahui-cn/react-big-screen.git");
+  }
+
+  function handlePreview() {
+    engine.getJSON().then((json) => {
+      saveLocalPreviewJson(json);
+      openRoute("/preview");
+    });
   }
 
   function handleOperate(item: OperateItem) {
@@ -121,10 +120,7 @@ export default function Header() {
         });
         break;
       case "preview": // 预览
-        engine.getJSON().then((json) => {
-          saveLocalPreviewJson(json);
-          openRoute("/preview");
-        });
+        handlePreview();
         break;
       case "save": // 保存
         saveLocal();
@@ -157,18 +153,30 @@ export default function Header() {
 
       <div className={styles.header_flex}>
         <ChooseExampleButton />
-        {operates.map((item: OperateItem) => {
-          return (
-            <TooltipButton
-              key={item.key}
-              disabled={item?.disabled}
-              title={item.description}
-              onClick={() => handleOperate(item)}
-            >
-              {item?.icon}
-            </TooltipButton>
-          );
-        })}
+        <StepDriverButton />
+        <div className={styles.header_flex_btnContainer} id={"tool-bar"}>
+          {operates.map((item: OperateItem) => {
+            return (
+              <TooltipButton
+                key={item.key}
+                disabled={item?.disabled}
+                title={item.description}
+                onClick={() => handleOperate(item)}
+              >
+                {item?.icon}
+              </TooltipButton>
+            );
+          })}
+        </div>
+        <Button
+          type={"primary"}
+          size={"small"}
+          style={{ fontSize: 12 }}
+          id={"start-preview"}
+          onClick={handlePreview}
+        >
+          开始预览
+        </Button>
       </div>
     </div>
   );

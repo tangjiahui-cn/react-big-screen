@@ -12,13 +12,13 @@ import Menu from "./components/Menu";
 import engine from "@/engine";
 import { useEffectOnce } from "@/hooks";
 import { useGlobalShortCutKeys } from "@/packages/shortCutKeys";
-import { getUrlQuery, getExampleJsonText } from "@/utils";
+import { getUrlQuery, getExampleJsonText, startDriver } from "@/utils";
 
 // 获取初始加载json
 async function getInitJSONString(): Promise<string> {
   const { example } = getUrlQuery();
   if (example) return getExampleJsonText(example);
-  // return localStorage.getItem("json") || "";
+  // 默认使用经典大屏示例 classic.json
   return localStorage.getItem("json") || (await getExampleJsonText("classic"));
 }
 
@@ -31,8 +31,8 @@ export default function Page() {
     getInitJSONString().then((jsonStr: string) => {
       // 读取json
       engine.loadJSONString(jsonStr);
+      startDriver();
     });
-    // unmount
     return () => {
       engine.component.unRegisterAll();
     };
@@ -44,13 +44,13 @@ export default function Page() {
         <Header />
       </div>
       <div className={styles.page_body}>
-        <div className={styles.page_body_left}>
+        <div className={styles.page_body_left} id={"screen-menu"}>
           <Menu />
         </div>
-        <div className={styles.page_body_main}>
+        <div className={styles.page_body_main} id={"screen-editor"}>
           <Editor />
         </div>
-        <div className={styles.page_body_right}>
+        <div className={styles.page_body_right} id={"screen-attr"}>
           <Attributes />
         </div>
       </div>
