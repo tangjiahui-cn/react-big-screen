@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2025/6/26
  */
-import { lines, planePath } from "@/engine/built-in/other/ChinaMap/data/mockData";
+import { lines, planePath, pointers } from "@/engine/built-in/other/ChinaMap/data/mockData";
 import { type EChartsOption } from "@/components/ReactECharts";
 
 const color = "#00ffe4";
@@ -23,7 +23,7 @@ export function createAirplaneLine(): EChartsOption["series"] {
         period,
         trailLength: 0.7, // 尾迹长度[0,1]值越大，尾迹越长
         symbolSize: 3, // 图标大小
-        color, // 图标颜色
+        color,
       },
       lineStyle: {
         width: 0,
@@ -43,15 +43,39 @@ export function createAirplaneLine(): EChartsOption["series"] {
         trailLength: 0,
         symbol: planePath,
         symbolSize: 15,
-        color, // 图标颜色
+        color,
       },
       lineStyle: {
-        color, // 图标颜色
-        curveness, // 曲度 0~1 曲度越来越大
+        color,
+        curveness,
         width: 1,
-        opacity: 0.7,
+        opacity: 0.2, // 轨迹线
       },
       data: lines,
+    },
+    {
+      // 涟漪效果
+      zlevel: 1,
+      type: "effectScatter",
+      coordinateSystem: "geo",
+      data: pointers,
+      symbolSize: 10,
+      encode: {
+        value: 2,
+      },
+      rippleEffect: {
+        brushType: "stroke",
+        number: 2,
+        color,
+      },
+      emphasis: {
+        scale: false, // 高亮后禁止放大
+      },
+      itemStyle: {
+        shadowBlur: 10,
+        shadowColor: color,
+        color,
+      },
     },
   ];
 }

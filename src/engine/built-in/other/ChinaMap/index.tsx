@@ -70,17 +70,18 @@ export default createComponent<ChinaMapOptions>((props) => {
             return `${node?.name || ""}: ${(isNaN(node?.value) ? 0 : node?.value) || 0}`;
           },
         },
-        visualMap: {
-          type: "continuous",
-          show: false,
-          min: 0,
-          max: 50000,
-          text: ["High", "Low"],
-          inRange: {
-            color: ["red", "blue"],
-            symbolSize: [30, 100],
-          },
-        },
+        // // 配置 visualMap 会忽略 effectScatter
+        // visualMap: {
+        // type: "continuous",
+        // show: false,
+        // min: 0,
+        // max: 50000,
+        // text: ["High", "Low"],
+        // inRange: {
+        //   color: ["red", "blue"],
+        //   symbolSize: [30, 100],
+        // },
+        // },
         geo: [
           // 创建标准地图
           createGeo({
