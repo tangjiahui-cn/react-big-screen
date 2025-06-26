@@ -46,14 +46,14 @@ export function startDriver(force?: boolean) {
         element: "#choose-example-button",
         popover: {
           title: "切换示例",
-          description: "点击下拉切换到其他预置大屏示例。",
+          description: "选中下拉切换到其他大屏看板示例。",
         },
       },
       {
         element: "#starter-help",
         popover: {
           title: "新手教程",
-          description: "点击可重新开启此引导教程。",
+          description: "点击以重新开始此引导教程。",
         },
       },
       {
@@ -67,7 +67,7 @@ export function startDriver(force?: boolean) {
         element: "#start-preview",
         popover: {
           title: "开始预览",
-          description: "打开新页面预览你设计的页面。",
+          description: "打开新页面预览当前设计大屏。",
         },
       },
       {
