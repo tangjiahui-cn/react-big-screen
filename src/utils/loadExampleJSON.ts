@@ -17,7 +17,7 @@ export async function getExampleJsonText(jsonName: string): Promise<string> {
  *
  * @param jsonName 示例json名称
  */
-export async function loadExample(jsonName: string) {
+export async function loadExampleJson(jsonName: string) {
   const jsonText = await getExampleJsonText(jsonName);
   if (!jsonText) return message.error("读取失败");
   // 读取json

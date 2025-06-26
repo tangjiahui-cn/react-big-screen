@@ -5,7 +5,7 @@
  * @date 2025/6/26
  */
 import { Button, Dropdown } from "antd";
-import { loadExample } from "@/utils";
+import { loadExampleJson } from "@/utils";
 
 export default function ChooseExampleButton() {
   return (
@@ -19,7 +19,7 @@ export default function ChooseExampleButton() {
           },
         ],
         onClick({ key: jsonName }) {
-          loadExample(jsonName);
+          loadExampleJson(jsonName);
         },
       }}
     >
