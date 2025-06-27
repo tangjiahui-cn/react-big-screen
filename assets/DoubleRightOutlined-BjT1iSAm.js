@@ -1,0 +1,1 @@
+import{_ as o,am as a}from"./antd-CeXCeTun.js";import{r as e}from"./react-vendor--oJ8assb.js";import{I as i}from"./index-DKUxmCh7.js";var n=function(r,t){return e.createElement(i,o({},r,{ref:t,icon:a}))},s=e.forwardRef(n);export{s as R};
