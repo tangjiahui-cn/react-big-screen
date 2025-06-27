@@ -94,4 +94,15 @@ export const charts: ComponentType[] = [
     options: {},
     component: React.lazy(() => import("./BarLine")),
   },
+  {
+    cId: "ring",
+    cName: "圆环图",
+    category: "charts",
+    x: 0,
+    y: 0,
+    width: 350,
+    height: 300,
+    options: {},
+    component: React.lazy(() => import("./Ring")),
+  },
 ];

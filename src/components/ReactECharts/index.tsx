@@ -28,6 +28,10 @@ interface Props {
    * css style
    */
   style?: React.CSSProperties;
+  /**
+   * 获取echarts实例
+   */
+  onGetInstance?: (echarts: EChartsType) => void;
 }
 
 export default function ReactECharts(props: Props) {
@@ -44,6 +48,7 @@ export default function ReactECharts(props: Props) {
       chartInstance.current?.setOption?.(options);
       isNeedClearEcharts(options); // 初始调用刷新一次缓存
     }
+    props?.onGetInstance?.(chartInstance.current!);
     return () => {
       echarts.dispose(chartInstance.current as any);
     };
