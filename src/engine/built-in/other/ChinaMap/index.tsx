@@ -10,6 +10,7 @@ import { registerChinaMap, MAP_CHINA, createAirplaneLine } from "./utils";
 import ReactECharts, { type EChartsOption } from "@/components/ReactECharts";
 import { useRequest } from "ahooks";
 import { ChinaMapOptions, DEFAULT_OPTIONS } from "./attributes";
+import { cityValueMap } from "@/engine/built-in/other/ChinaMap/data/mockData";
 
 export default createComponent<ChinaMapOptions>((props) => {
   const { width, height, options } = props;
@@ -48,6 +49,16 @@ export default createComponent<ChinaMapOptions>((props) => {
               areaColor: options?.mapHoverColor || "rgba(16,43,128,0.9)",
             },
           },
+          ...(isMask
+            ? {}
+            : {
+                tooltip: {
+                  formatter(node: any) {
+                    const value = cityValueMap[node?.name] || 0;
+                    return `${node?.name || ""}: ${value}个`;
+                  },
+                },
+              }),
           // 选中状态
           select: {
             disabled: isMask,
@@ -66,9 +77,6 @@ export default createComponent<ChinaMapOptions>((props) => {
       const chartOptions: EChartsOption = {
         tooltip: {
           trigger: "item",
-          formatter: (node: any) => {
-            return `${node?.name || ""}: ${(isNaN(node?.value) ? 0 : node?.value) || 0}`;
-          },
         },
         // // 配置 visualMap 会忽略 effectScatter
         // visualMap: {

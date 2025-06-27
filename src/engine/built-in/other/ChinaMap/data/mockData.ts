@@ -10,6 +10,11 @@ const cityData = [
   { name: "新疆", coords: [87, 43], value: 67 },
 ];
 
+export const cityValueMap = cityData.reduce((dataMap, x) => {
+  dataMap[x.name] = x.value;
+  return dataMap;
+}, {} as any);
+
 const startCoords = cityData[0].coords;
 
 // 飞机线数据
