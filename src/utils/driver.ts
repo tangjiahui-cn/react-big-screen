@@ -60,7 +60,8 @@ export function startDriver(force?: boolean) {
         element: "#tool-bar",
         popover: {
           title: "工具栏",
-          description: "查看快捷键帮助、导出/导入json、保存、清空等操作。",
+          description:
+            "查看快捷键帮助、导出/导入json、保存、清空等操作。（鼠标移入看查看功能简介）",
         },
       },
       {
@@ -75,6 +76,48 @@ export function startDriver(force?: boolean) {
         popover: {
           title: "菜单区域",
           description: "可以选择组件模板、查看页面组件列表和历史记录等。",
+        },
+      },
+      {
+        element: "#rbs-library",
+        popover: {
+          title: "组件库",
+          description: "选中模板拖拽到编辑器创建新组件。",
+        },
+      },
+      {
+        element: "#rbs-pages",
+        popover: {
+          title: "页面管理",
+          description: "新增、删除大屏页面。",
+        },
+      },
+      {
+        element: "#rbs-componentNodes",
+        popover: {
+          title: "当前页组件",
+          description: "查看当前编辑大屏页面所有的组件，并支持修改。",
+        },
+      },
+      {
+        element: "#rbs-property",
+        popover: {
+          title: "个人资产",
+          description: "管理个人远程组件包资产，支持在线导入、本地导入组件包、导出组件包。",
+        },
+      },
+      {
+        element: "#rbs-favorites",
+        popover: {
+          title: "收藏夹",
+          description: "管理所有收藏的组件组合，拖拽到编辑器中即可进行创建。",
+        },
+      },
+      {
+        element: "#rbs-history",
+        popover: {
+          title: "历史记录",
+          description: "存储你的操作历史记录，最多20个存储容量。",
         },
       },
       {
