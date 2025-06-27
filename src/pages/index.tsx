@@ -44,13 +44,13 @@ export default function Page() {
         <Header />
       </div>
       <div className={styles.page_body}>
-        <div className={styles.page_body_left} id={"screen-menu"}>
+        <div className={styles.page_body_left} id={"rbs-menu"}>
           <Menu />
         </div>
-        <div className={styles.page_body_main} id={"screen-editor"}>
+        <div className={styles.page_body_main} id={"rbs-editor"}>
           <Editor />
         </div>
-        <div className={styles.page_body_right} id={"screen-attr"}>
+        <div className={styles.page_body_right} id={"rbs-attributes"}>
           <Attributes />
         </div>
       </div>

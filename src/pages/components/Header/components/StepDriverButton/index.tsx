@@ -12,7 +12,7 @@ export default function StepDriverButton() {
     <Button
       size={"small"}
       style={{ fontSize: 12 }}
-      id={"starter-help"}
+      id={"rbs-starter-help"}
       onClick={() => {
         startDriver(true);
       }}

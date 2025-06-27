@@ -36,28 +36,28 @@ export function startDriver(force?: boolean) {
     doneBtnText: "完成",
     steps: [
       {
-        element: "#size-bar",
+        element: "#rbs-sizebar",
         popover: {
           title: "尺寸工具栏",
           description: "调整大屏页面的大小、缩放比例。",
         },
       },
       {
-        element: "#choose-example-button",
+        element: "#rbs-choose-example-button",
         popover: {
           title: "切换示例",
           description: "选中下拉切换到其他大屏看板示例。",
         },
       },
       {
-        element: "#starter-help",
+        element: "#rbs-starter-help",
         popover: {
           title: "新手教程",
           description: "点击以重新开始此引导教程。",
         },
       },
       {
-        element: "#tool-bar",
+        element: "#rbs-tool-bar",
         popover: {
           title: "工具栏",
           description:
@@ -65,14 +65,14 @@ export function startDriver(force?: boolean) {
         },
       },
       {
-        element: "#start-preview",
+        element: "#rbs-preview",
         popover: {
           title: "开始预览",
           description: "打开新页面预览当前设计大屏。",
         },
       },
       {
-        element: "#screen-menu",
+        element: "#rbs-menu",
         popover: {
           title: "菜单区域",
           description: "可以选择组件模板、查看页面组件列表和历史记录等。",
@@ -121,14 +121,14 @@ export function startDriver(force?: boolean) {
         },
       },
       {
-        element: "#screen-editor",
+        element: "#rbs-editor",
         popover: {
           title: "编辑器区域",
           description: "主要拖拽交互区域，通过鼠标拖拽、框选页面组件。",
         },
       },
       {
-        element: "#screen-attr",
+        element: "#rbs-attributes",
         popover: {
           title: "属性配置区域",
           description: "查看和配置组件属性，实现想要的效果。",

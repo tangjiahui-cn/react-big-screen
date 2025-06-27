@@ -23,7 +23,7 @@ export default function ChooseExampleButton() {
         },
       }}
     >
-      <Button size={"small"} style={{ fontSize: 12 }} id={"choose-example-button"}>
+      <Button size={"small"} style={{ fontSize: 12 }} id={"rbs-choose-example-button"}>
         切换示例
       </Button>
     </Dropdown>

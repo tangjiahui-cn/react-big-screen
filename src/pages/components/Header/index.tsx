@@ -154,7 +154,7 @@ export default function Header() {
       <div className={styles.header_flex}>
         <ChooseExampleButton />
         <StepDriverButton />
-        <div className={styles.header_flex_btnContainer} id={"tool-bar"}>
+        <div className={styles.header_flex_btnContainer} id={"rbs-tool-bar"}>
           {operates.map((item: OperateItem) => {
             return (
               <TooltipButton
@@ -172,7 +172,7 @@ export default function Header() {
           type={"primary"}
           size={"small"}
           style={{ fontSize: 12 }}
-          id={"start-preview"}
+          id={"rbs-preview"}
           onClick={handlePreview}
         >
           开始预览
