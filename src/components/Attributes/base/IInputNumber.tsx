@@ -6,11 +6,11 @@
  */
 import { InputNumber, InputNumberProps } from "antd";
 
-export function IInputNumber(
-  props: Omit<InputNumberProps, "onChange"> & {
-    onChange?: (value?: number) => void;
-  },
-) {
+export type IInputNumberProps = Omit<InputNumberProps, "onChange"> & {
+  onChange?: (value?: number) => void;
+};
+
+export function IInputNumber(props: IInputNumberProps) {
   const { onChange, ...rest } = props;
   return (
     <InputNumber

@@ -8,7 +8,9 @@
 import ICustomSelect, { ICustomSelectProps } from "@/components/ICustomSelect";
 
 export type TextAlignType = "left" | "center" | "right";
-export function TextAlignSelect(props: ICustomSelectProps) {
+export type TextAlignSelectProps = ICustomSelectProps;
+
+export function TextAlignSelect(props: TextAlignSelectProps) {
   return (
     <ICustomSelect
       {...props}

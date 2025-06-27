@@ -38,7 +38,14 @@ export default createAttributesByConfig<TextOptions>(
       options: { min: 8 },
     },
     { key: "fontWeight", label: "字重", component: "fontWeightSelect" },
-    { key: "color", label: "颜色", component: "colorPicker" },
+    {
+      key: "color",
+      label: "颜色",
+      component: "colorPicker",
+      options: {
+        reset: true,
+      },
+    },
     { key: "background", label: "背景", component: "colorPicker" },
     {
       key: "fontStyle",

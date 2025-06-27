@@ -1,0 +1,19 @@
+.scrollList {
+  position: relative;
+
+  &_line {
+    color: white;
+    box-sizing: border-box;
+    padding: 12px 16px;
+    min-height: 40px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(to right, #112f70, rgba(17, 47, 112, 0.35));
+
+    &:nth-child(2n) {
+      background: rgb(6, 27, 53)
+    }
+  }
+}

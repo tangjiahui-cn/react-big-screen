@@ -64,6 +64,27 @@ export default function PageAttributes() {
             </Tooltip>
           </Line>
           <Line
+            label={"白板背景"}
+            labelTip={"页面所处白板的背景颜色"}
+            childrenStyle={{ display: "flex", alignItems: "center", gap: 8 }}
+          >
+            <IColorPicker
+              style={{ flex: 1 }}
+              value={options?.whiteBoardColor}
+              onChange={(whiteBoardColor) => {
+                handleChangeOptions({ whiteBoardColor });
+              }}
+            />
+            <Tooltip title={t("reset")}>
+              <ReloadOutlined
+                className={"icon_clickable"}
+                onClick={() => {
+                  handleChangeOptions({ whiteBoardColor: "white" });
+                }}
+              />
+            </Tooltip>
+          </Line>
+          <Line
             label={"边框"}
             childrenStyle={{ display: "flex", alignItems: "center", gap: 8 }}
             labelTip={"设置当前页边框"}

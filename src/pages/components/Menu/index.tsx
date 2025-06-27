@@ -34,36 +34,42 @@ export default function Menu() {
     return [
       {
         key: "library",
+        domId: "rbs-library",
         icon: <AppstoreOutlined />,
         title: t("menu.bar.library"),
         children: <Library />,
       },
       {
         key: "pages",
+        domId: "rbs-pages",
         icon: <FileTextOutlined />,
         title: t("menu.bar.pages"),
         children: <Pages />,
       },
       {
         key: "componentNodes",
+        domId: "rbs-componentNodes",
         icon: <ApartmentOutlined />,
         title: t("menu.bar.componentNodes"),
         children: <ComponentNodes />,
       },
       {
         key: "property",
+        domId: "rbs-property",
         icon: <BankOutlined />,
         title: t("menu.bar.property"),
         children: <Property />,
       },
       {
         key: "favorites",
+        domId: "rbs-favorites",
         icon: <StarOutlined />,
         title: t("menu.bar.favorites"),
         children: <Favorites />,
       },
       {
         key: "history",
+        domId: "rbs-history",
         icon: <HistoryOutlined />,
         title: t("menu.bar.history"),
         children: <History />,

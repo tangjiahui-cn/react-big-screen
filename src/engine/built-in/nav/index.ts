@@ -12,7 +12,7 @@ export const nav: ComponentType[] = [
     cId: "page-nav",
     cName: "页面导航栏",
     description: "管理所有子页面切换的导航栏。",
-    icon: "",
+    icon: () => import("@/static/built-in/page-nav.png"),
     category: "nav",
     x: 0,
     y: 0,

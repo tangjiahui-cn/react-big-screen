@@ -14,7 +14,7 @@ import React, {
   useMemo,
   useRef,
 } from "react";
-import type { DEFAULT_REGISTER_KEY } from "./registerDefault";
+import type { DEFAULT_REGISTER_KEY } from "./components";
 import { Form, Tooltip } from "antd";
 import styles from "./index.module.less";
 import classNames from "classnames";
@@ -25,7 +25,7 @@ export function useConfigExtra<T = any>(): T {
 }
 
 // 注册默认模板组件
-import("./registerDefault").then((module) => {
+import("./components").then((module) => {
   module.default?.();
 });
 

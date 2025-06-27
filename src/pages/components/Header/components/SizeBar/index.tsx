@@ -14,7 +14,7 @@ export default function SizeBar() {
   const config = useConfig();
 
   return (
-    <div className={styles.sizeBar}>
+    <div className={styles.sizeBar} id={"rbs-sizebar"}>
       <InputNumberWithSuffix
         suffix={"px"}
         value={config.width}

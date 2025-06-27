@@ -16,6 +16,7 @@ export interface FitScreenProps {
   children?: React.ReactNode;
   bodyClassName?: string;
   bodyStyle?: React.CSSProperties;
+  style?: React.CSSProperties;
 }
 
 export default function FitScreen(props: FitScreenProps) {
@@ -47,7 +48,7 @@ export default function FitScreen(props: FitScreenProps) {
   });
 
   return (
-    <div className={props?.className} ref={containerDomRef}>
+    <div className={props?.className} ref={containerDomRef} style={props?.style}>
       <div
         className={classNames(props?.bodyClassName, styles.fitScreenBody)}
         style={props?.bodyStyle}

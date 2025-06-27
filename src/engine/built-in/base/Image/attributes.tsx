@@ -12,6 +12,7 @@ export const DEFAULT_OPTIONS = {
 
 export interface ImageOptions {
   src: string; // 图片访问地址
+  enablePreview?: boolean; // 启用预览
 }
 
 export default createAttributesByConfig<ImageOptions>(
@@ -25,6 +26,11 @@ export default createAttributesByConfig<ImageOptions>(
           minRows: 5,
         },
       },
+    },
+    {
+      key: "enablePreview",
+      label: "启用预览",
+      component: "checkbox",
     },
   ],
   DEFAULT_OPTIONS,

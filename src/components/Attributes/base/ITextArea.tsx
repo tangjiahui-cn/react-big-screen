@@ -7,11 +7,11 @@
 import { Input } from "antd";
 import { TextAreaProps } from "antd/es/input";
 
-export function ITextArea(
-  props: Omit<TextAreaProps, "onChange"> & {
-    onChange?: (text: string) => void;
-  },
-) {
+export type ITextAreaProps = Omit<TextAreaProps, "onChange"> & {
+  onChange?: (text: string) => void;
+};
+
+export function ITextArea(props: ITextAreaProps) {
   const { onChange, ...rest } = props;
   return (
     <Input.TextArea

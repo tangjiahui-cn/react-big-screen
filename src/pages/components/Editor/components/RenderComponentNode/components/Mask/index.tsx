@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2025/3/20
  */
-import { ComponentNodeType, DATASET } from "@/engine";
+import { ComponentNodeType, DATASET, useConfig } from "@/engine";
 import classNames from "classnames";
 import styles from "./index.module.less";
 import { DRAG_DIRECTIONS } from "@/pages/components/Editor/hooks/useRegisterDrag/listenDragSize";
@@ -25,6 +25,7 @@ export default forwardRef((props: Props, ref: ForwardedRef<MaskRefType>) => {
   const { componentNode } = props;
   const boxDomRef = useRef<HTMLDivElement>(null);
   const [isSelected, setIsSelected] = useState(false);
+  const scale = useConfig((config) => config.scale);
 
   useImperativeHandle(ref, () => {
     return {
@@ -68,6 +69,7 @@ export default forwardRef((props: Props, ref: ForwardedRef<MaskRefType>) => {
           DRAG_DIRECTIONS.map((direction) => (
             <div
               key={direction}
+              style={{ transform: scale < 1 ? `scale(${1 / scale})` : undefined }}
               className={styles[`dragPoint_${direction}`]}
               {...{
                 [`data-${DATASET.dragDirection}`]: direction,
@@ -76,5 +78,5 @@ export default forwardRef((props: Props, ref: ForwardedRef<MaskRefType>) => {
           ))}
       </div>
     );
-  }, [componentNode.lock, isSelected]);
+  }, [componentNode.lock, isSelected, scale]);
 });

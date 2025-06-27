@@ -12,7 +12,9 @@
   }
 
   &_body {
-    flex: 1;
+    padding-top: 8px;
+    box-sizing: border-box;
+    flex: 0 0 60px;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -20,7 +22,11 @@
   }
 
   &_footer {
-    padding: 6px 16px 14px;
+    flex: 1;
+    padding: 6px 12px 14px;
     text-align: center;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
   }
 }

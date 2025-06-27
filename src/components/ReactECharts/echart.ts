@@ -5,13 +5,25 @@
  * @date 2025/3/3
  */
 import * as echarts from "echarts/core";
-import { BarChart, PieChart, LineChart, RadarChart, GaugeChart } from "echarts/charts";
+import {
+  BarChart,
+  PieChart,
+  LineChart,
+  LinesChart,
+  RadarChart,
+  GaugeChart,
+  MapChart,
+  EffectScatterChart,
+} from "echarts/charts";
 import {
   TitleComponent,
   TooltipComponent,
+  ToolboxComponent,
   GridComponent,
   DatasetComponent,
   TransformComponent,
+  VisualMapComponent,
+  LegendComponent,
 } from "echarts/components";
 import { LabelLayout, UniversalTransition } from "echarts/features";
 import { CanvasRenderer } from "echarts/renderers";
@@ -24,14 +36,20 @@ echarts.use([
   PieChart,
   BarChart,
   LineChart,
+  LinesChart,
   RadarChart,
   GaugeChart,
+  MapChart,
+  EffectScatterChart,
   // 组件
   TitleComponent,
   TooltipComponent,
+  ToolboxComponent,
+  VisualMapComponent,
   GridComponent,
   DatasetComponent,
   TransformComponent,
+  LegendComponent,
   // 自动布局、全局动画
   LabelLayout,
   UniversalTransition,
@@ -39,4 +57,6 @@ echarts.use([
   CanvasRenderer,
 ]);
 
+// @ts-ignore
+window.echarts = echarts;
 export default echarts;

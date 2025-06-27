@@ -7,6 +7,7 @@ import engine, {
   type JsonType,
   useComponentNodes,
   useConfig,
+  useCurrentPage,
   usePackages,
 } from "@/engine";
 import PageContainer from "../components/Editor/components/PageContainer";
@@ -33,6 +34,7 @@ export function getLocalPreviewJson(): JsonType | undefined {
 
 export default function Preview() {
   const config = useConfig();
+  const { options } = useCurrentPage() || {};
 
   // 组件包
   const packages = usePackages();
@@ -64,7 +66,12 @@ export default function Preview() {
   });
 
   return (
-    <FitScreen className={styles.preview} dw={config?.width || 1920} dh={config?.height || 1080}>
+    <FitScreen
+      className={styles.preview}
+      dw={config?.width || 1920}
+      dh={config?.height || 1080}
+      style={{ background: options?.whiteBoardColor }}
+    >
       <PageContainer preview style={{ width: "100%", height: "100%" }}>
         {renderComponentNodes}
       </PageContainer>

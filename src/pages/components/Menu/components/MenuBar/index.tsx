@@ -13,6 +13,7 @@ export interface MenuBarItem {
   key: string;
   icon: React.ReactNode;
   title: any;
+  domId?: string; // dom-id
 }
 
 interface Props {
@@ -29,6 +30,7 @@ export default function MenuBar(props: Props) {
         return (
           <Tooltip key={item?.key} title={item?.title} placement={"right"}>
             <div
+              id={item?.domId}
               className={classNames(
                 styles.menubar_item,
                 isSelected && styles.menubar_item_selected,

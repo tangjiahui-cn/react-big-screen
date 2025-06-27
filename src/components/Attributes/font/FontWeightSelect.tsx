@@ -6,7 +6,9 @@
  */
 import ICustomSelect, { ICustomSelectProps } from "@/components/ICustomSelect";
 
-export function FontWeightSelect(props: ICustomSelectProps) {
+export type FontWeightSelectProps = ICustomSelectProps;
+
+export function FontWeightSelect(props: FontWeightSelectProps) {
   return (
     <ICustomSelect
       {...props}

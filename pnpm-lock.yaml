@@ -20,6 +20,7 @@ specifiers:
   conventional-changelog-cli: ^5.0.0
   cross-env: ^7.0.3
   dayjs: ^1.11.13
+  driver.js: ^1.3.6
   echarts: ^5.6.0
   eslint: ^8.38.0
   eslint-config-prettier: ^8.8.0
@@ -60,6 +61,7 @@ dependencies:
   antd: 4.24.1_nnrd3gsncyragczmpvfhocinkq
   classnames: 2.5.1
   dayjs: 1.11.13
+  driver.js: 1.3.6
   echarts: 5.6.0
   file-saver: 2.0.5
   hotkeys-js: 3.13.9
@@ -2454,6 +2456,10 @@ packages:
     resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
     engines: {node: '>=12'}
     dev: true
+
+  /driver.js/1.3.6:
+    resolution: {integrity: sha512-g2nNuu+tWmPpuoyk3ffpT9vKhjPz4NrJzq6mkRDZIwXCrFhrKdDJ9TX5tJOBpvCTBrBYjgRQ17XlcQB15q4gMg==}
+    dev: false
 
   /dunder-proto/1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}

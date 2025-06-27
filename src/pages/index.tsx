@@ -9,23 +9,17 @@ import Header from "./components/Header";
 import Attributes from "./components/Attributes";
 import Editor from "./components/Editor";
 import Menu from "./components/Menu";
-import engine, { JsonType } from "@/engine";
+import engine from "@/engine";
 import { useEffectOnce } from "@/hooks";
 import { useGlobalShortCutKeys } from "@/packages/shortCutKeys";
-import { cloneDeep } from "lodash-es";
-import { getUrlQuery, getUrlText } from "@/utils";
-
-// 获取示例json文本
-async function getExampleJsonString(name: string): Promise<string> {
-  const text = await getUrlText(`./example/${name}.json`);
-  return text.startsWith("<!DOCTYPE html>") ? "" : text;
-}
+import { getUrlQuery, getExampleJsonText, startDriver } from "@/utils";
 
 // 获取初始加载json
 async function getInitJSONString(): Promise<string> {
   const { example } = getUrlQuery();
-  if (example) return getExampleJsonString(example);
-  return localStorage.getItem("json") || "";
+  if (example) return getExampleJsonText(example);
+  // 默认使用经典大屏示例 classic.json
+  return localStorage.getItem("json") || (await getExampleJsonText("classic"));
 }
 
 export default function Page() {
@@ -36,12 +30,9 @@ export default function Page() {
     // 获取初始加载json字符串
     getInitJSONString().then((jsonStr: string) => {
       // 读取json
-      engine.loadJSONString(jsonStr, (json: JsonType) => {
-        // 初始化历史记录
-        engine.history.setInitData(cloneDeep(json));
-      });
+      engine.loadJSONString(jsonStr);
+      startDriver();
     });
-    // unmount
     return () => {
       engine.component.unRegisterAll();
     };
@@ -53,13 +44,13 @@ export default function Page() {
         <Header />
       </div>
       <div className={styles.page_body}>
-        <div className={styles.page_body_left}>
+        <div className={styles.page_body_left} id={"rbs-menu"}>
           <Menu />
         </div>
-        <div className={styles.page_body_main}>
+        <div className={styles.page_body_main} id={"rbs-editor"}>
           <Editor />
         </div>
-        <div className={styles.page_body_right}>
+        <div className={styles.page_body_right} id={"rbs-attributes"}>
           <Attributes />
         </div>
       </div>

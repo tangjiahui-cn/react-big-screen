@@ -40,3 +40,10 @@ interface Window {
 }
 
 type Unmount = () => void;
+
+// 提取数组类型
+type GetObjectValueType<T> = T extends (infer U)[]
+  ? U
+  : T extends Records<string, infer V>
+  ? V
+  : never;
