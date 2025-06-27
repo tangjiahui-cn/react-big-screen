@@ -2,8 +2,8 @@ import { createAttributesByConfig } from "@/engine";
 import React from "react";
 
 export const DEFAULT_OPTIONS: DateDisplayOptions = {
-  color: "black",
-  fontSize: 16,
+  color: "#F8E71C",
+  fontSize: 20,
   lineHeight: 22,
 };
 
@@ -22,6 +22,7 @@ export default createAttributesByConfig<DateDisplayOptions>(
       component: "colorPicker",
       options: {
         reset: true,
+        resetColor: DEFAULT_OPTIONS.color,
       },
     },
     {

@@ -9,12 +9,13 @@ import { EChartsOption } from "echarts";
 import { createComponent } from "@/engine";
 import { useMemo, useRef } from "react";
 import { useEffectOnce } from "@/hooks";
+import { DEFAULT_OPTIONS, RingOptions } from "./attributes";
 
 const X_DATA = ["私有化项目", "培训项目", "演示项目", "tjh项目", "xyz项目"];
 const yData = [1048, 735, 580, 484, 300];
 
-export default createComponent((props) => {
-  const { width, height } = props;
+export default createComponent<RingOptions>((props) => {
+  const { width, height, options } = props;
   const chartsRef = useRef<EChartsType>();
 
   const chartOption: EChartsOption = useMemo(() => {
@@ -31,14 +32,14 @@ export default createComponent((props) => {
         left: "center",
         top: "37%",
         textStyle: {
-          color: "#fff",
+          color: options?.titleColor,
           fontWeight: "normal",
           fontSize: 30,
           align: "center",
         },
         subtext: "总人数",
         subtextStyle: {
-          color: "#bababa",
+          color: options?.subtextColor,
           fontWeight: "normal",
           fontSize: 16,
           align: "center",
@@ -75,7 +76,7 @@ export default createComponent((props) => {
         },
       ],
     } as any as EChartsOption;
-  }, []);
+  }, [options?.titleColor, options?.subtextColor]);
 
   // ----------------- 模拟柱形图动效 （循环高亮）-----------------
   useEffectOnce(() => {
@@ -118,4 +119,4 @@ export default createComponent((props) => {
       }}
     />
   );
-});
+}, DEFAULT_OPTIONS);
