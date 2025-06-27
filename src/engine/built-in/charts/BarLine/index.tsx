@@ -146,7 +146,7 @@ export default createComponent((props) => {
         }),
       );
     }
-    let intervalId = setInterval(run, 1500);
+    let intervalId = setInterval(run, 2000);
     return () => {
       intervalId && clearInterval(intervalId);
     };
