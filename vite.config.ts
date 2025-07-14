@@ -39,6 +39,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
+          "driver.js": ["driver.js"],
           "react-vendor": ["react", "react-dom"],
           "monaco-editor": ["monaco-editor"],
           echarts: ["echarts"],
