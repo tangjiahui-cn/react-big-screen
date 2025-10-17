@@ -4,9 +4,11 @@
  * @author tangjiahui
  * @date 2025/2/5
  */
-import engine from "@/engine";
+import { RbsEngine } from "@/export";
 
 export function selectedUnGroup() {
+  const engine = RbsEngine.getActiveEngine();
+  if (!engine) return;
   // 取消选中元素所在的group
   const allSelectedInstances = engine.instance.getAllSelected();
   const groupIds: string[] = Array.from(

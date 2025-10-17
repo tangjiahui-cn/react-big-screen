@@ -5,10 +5,11 @@
  * @date 2025/3/8
  */
 import { MoveHookQueueType } from "@/packages/dragMove/utils/startMove";
-import engine, { ComponentNodeType, InstanceType } from "@/engine";
+import { ComponentNodeType, InstanceType } from "@/engine";
 import { isInRect } from "@/utils";
 import { addHistory } from "@/packages/shortCutKeys";
 import { ask } from "@/components/Ask";
+import { RbsEngine } from "@/export";
 
 interface Coordinate {
   x: number;
@@ -22,6 +23,10 @@ export function listenDropLayout(
   return {
     onEnd(_, __, e) {
       setTimeout(() => {
+        const engine = RbsEngine.getActiveEngine();
+        if (!engine) {
+          return;
+        }
         const scale = engine.config.getConfig().scale;
         const componentNode = instance.getComponentNode();
         const containerDom = instance.getContainerDom();
@@ -49,6 +54,10 @@ function getLatestLayoutComponentNode(
   componentNode: ComponentNodeType,
   editorPos: Coordinate, // 编辑器虚拟坐标
 ): ComponentNodeType | undefined {
+  const engine = RbsEngine.getActiveEngine();
+  if (!engine) {
+    return;
+  }
   const layoutMap = engine.componentNode.getAll().reduce((result, current) => {
     if (
       (current.show ?? true) &&
@@ -71,6 +80,10 @@ function getLatestLayoutComponentNode(
  * @param editorPos 点击位置（编辑器坐标）
  */
 function moveLayout(componentNode: ComponentNodeType, editorPos: Coordinate): void | Unmount {
+  const engine = RbsEngine.getActiveEngine();
+  if (!engine) {
+    return;
+  }
   // 获取离用户屏幕最近的layout类型组件
   const layoutComponentNode = getLatestLayoutComponentNode(componentNode, {
     x: editorPos.x,

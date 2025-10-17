@@ -30,8 +30,8 @@ import {
   selectedUnGroup,
   unlockAllSelectedComponentNodes,
 } from "@/packages/shortCutKeys";
-import engine from "@/engine";
 import { createContextMenu, ContextMenuItem } from "@/packages/contextMenu";
+import { Engine } from "@/engine";
 
 const INIT_CONTEXT_MENU: ContextMenuItem[] = [
   {
@@ -106,8 +106,9 @@ const INIT_CONTEXT_MENU: ContextMenuItem[] = [
   },
 ];
 
-export function createItemContextMenu(e: MouseEvent): Unmount | undefined {
+export function createItemContextMenu(e: MouseEvent, engine: Engine): Unmount | undefined {
   return createContextMenu(e.clientX, e.clientY, INIT_CONTEXT_MENU, {
+    zIndex: engine?.componentNode?.getMaxLevel(),
     onBeforeOpen(menuItems: ContextMenuItem[]) {
       let lockCount = 0; // 锁定组件数量
       let isHasGroup = false; // 是否存在已成组元素

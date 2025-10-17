@@ -5,9 +5,10 @@
  * @date 2025/3/13
  */
 import React, { ForwardedRef } from "react";
-import engine, { useConfig, useCurrentPage } from "@/engine";
+import { useConfig, useCurrentPage } from "@/engine";
 import InfiniteContainer from "@/packages/infiniteContainer";
 import { zoomEditorDefault } from "@/packages/shortCutKeys";
+import { useEngineContext } from "@/export/context";
 
 interface Props {
   preview?: boolean; // 是否预览模式
@@ -18,6 +19,7 @@ interface Props {
 
 export default React.forwardRef((props: Props, ref: ForwardedRef<HTMLDivElement>) => {
   const { options } = useCurrentPage() || {};
+  const { engine } = useEngineContext();
   const config = useConfig();
 
   const children = (

@@ -4,15 +4,20 @@
  * @author tangjiahui
  * @date 2025/3/12
  */
-import engine, { ComponentNodeType } from "@/engine";
+import { ComponentNodeType } from "@/engine";
 import { isClickMouseLeft, isClickMouseRight } from "@/utils";
 import { addHistory, isKeyPressed } from "@/packages/shortCutKeys";
+import { RbsEngine } from "@/export";
 
 export function handleClickComponentNode(componentNode: ComponentNodeType, e: MouseEvent) {
   // 点击鼠标左键
   const isClickLeft = isClickMouseLeft(e);
   // 按住shift
   const isPressedShift = isKeyPressed("shift");
+  const engine = RbsEngine.getActiveEngine();
+  if (!engine) {
+    return;
+  }
 
   // 锁定状态下，不可单独选中
   if (componentNode.lock && isClickLeft && !isPressedShift) {

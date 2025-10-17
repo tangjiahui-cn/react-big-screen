@@ -5,13 +5,15 @@
  * @date 2025/3/13
  */
 import styles from "./index.module.less";
-import engine, { JsonTypePage, useCurrentPage } from "@/engine";
+import { JsonTypePage, useCurrentPage } from "@/engine";
 import { IColorPicker, Line, LineConfigProvider } from "@/components/Attributes";
 import { Checkbox, Col, Row, Tooltip } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
+import { useEngineContext } from "@/export/context";
 
 export default function PageAttributes() {
+  const { engine } = useEngineContext();
   const [t] = useTranslation();
   const page = useCurrentPage();
   const { id, options } = page || {};

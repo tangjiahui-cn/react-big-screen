@@ -7,12 +7,13 @@
 import { Button, Dropdown, Popover } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import engine, { ComponentNodeType } from "@/engine";
+import { ComponentNodeType } from "@/engine";
 import styles from "./index.module.less";
 import { IInput } from "@/components/Attributes/base/IInput";
 import ComponentNodeImage from "@/components/ComponentNodeImage";
 import IEmpty from "@/components/IEmpty";
 import RenderPopover from "@/components/AddComponentNodeButton/RenderPopover";
+import { useEngineContext } from "@/export/context";
 
 interface Props {
   style?: React.CSSProperties;
@@ -21,6 +22,7 @@ interface Props {
   onSelect?: (componentNode: ComponentNodeType) => void;
 }
 export default function AddComponentNodeButton(props: Props) {
+  const { engine } = useEngineContext();
   const [visible, setVisible] = useState(false);
   const [items, setItems] = useState<ComponentNodeType[]>([]);
   const [keyword, setKeyword] = useState<string>("");

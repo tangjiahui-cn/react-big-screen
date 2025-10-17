@@ -2,7 +2,7 @@
  * 创建 handleTrigger 函数
  */
 import { useMemo } from "react";
-import engine, {
+import {
   ComponentNodeEventTarget,
   ComponentNodeEventTargetCommonOption,
   ComponentNodeEventTargetCustomOption,
@@ -10,6 +10,7 @@ import engine, {
   ComponentNodeEventTargetRequestOption,
   ComponentNodeEventTargetVisibleOption,
   ComponentNodeType,
+  Engine,
   GetUpdateTargetComponentNodeFunction,
   INIT_EXPOSES,
   TransformFunction,
@@ -17,6 +18,7 @@ import engine, {
 } from "..";
 import { ensureObject, getMainFunction } from "@/utils";
 import { message } from "antd";
+import { useEngineContext } from "@/export/context";
 
 // 获取事件id
 export function getEventId(componentNodeId: string, exposeId: string): string {
@@ -36,6 +38,7 @@ function parserData(
 
 // 处理显隐 option
 function handleVisibleOption(
+  engine: Engine,
   opt: ComponentNodeEventTargetOpt, // 配置
   target: ComponentNodeType, // 目标组件
 ) {
@@ -47,6 +50,7 @@ function handleVisibleOption(
 
 // 处理请求 option
 function handleRequestOption(
+  engine: Engine,
   opt: ComponentNodeEventTargetOpt, // 配置
   target: ComponentNodeType, // 目标组件
   origin: ComponentNodeType, // 源组件
@@ -67,6 +71,7 @@ function handleRequestOption(
 
 // 处理自定义函数 option
 function handleCustomOption(
+  engine: Engine,
   opt: ComponentNodeEventTargetOpt, // 配置
   target: ComponentNodeType, // 目标组件
   origin: ComponentNodeType, // 源组件
@@ -83,6 +88,7 @@ function handleCustomOption(
 
 // 处理默认 option
 function handleCommonOption(
+  engine: Engine,
   opt: ComponentNodeEventTargetOpt,
   target: ComponentNodeType,
   origin: ComponentNodeType,
@@ -102,7 +108,7 @@ function handleCommonOption(
 }
 
 // 创建handleTrigger
-function createHandleTrigger(componentNodeId: string) {
+function createHandleTrigger(engine: Engine, componentNodeId: string) {
   return function (triggerId: string, payload: any) {
     const origin = engine.componentNode.get(componentNodeId);
     const targets = origin?.events?.find?.((event) => {
@@ -122,16 +128,16 @@ function createHandleTrigger(componentNodeId: string) {
       optTarget.opts.forEach((opt: ComponentNodeEventTargetOpt) => {
         switch (opt.exposeId) {
           case INIT_EXPOSES.visible:
-            handleVisibleOption(opt, target);
+            handleVisibleOption(engine, opt, target);
             break;
           case INIT_EXPOSES.request:
-            handleRequestOption(opt, target, origin, payload);
+            handleRequestOption(engine, opt, target, origin, payload);
             break;
           case INIT_EXPOSES.custom:
-            handleCustomOption(opt, target, origin, payload);
+            handleCustomOption(engine, opt, target, origin, payload);
             break;
           default:
-            handleCommonOption(opt, target, origin, payload);
+            handleCommonOption(engine, opt, target, origin, payload);
             break;
         }
       });
@@ -140,5 +146,6 @@ function createHandleTrigger(componentNodeId: string) {
 }
 
 export function useCreateHandleTrigger(componentNodeId: string) {
-  return useMemo(() => createHandleTrigger(componentNodeId), []);
+  const { engine } = useEngineContext();
+  return useMemo(() => createHandleTrigger(engine, componentNodeId), []);
 }

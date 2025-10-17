@@ -5,11 +5,13 @@
  * @date 2025/2/20
  */
 import { useState } from "react";
-import engine, { ComponentPackage } from "@/engine";
+import { ComponentPackage } from "@/engine";
 import { useEffectOnce } from "@/hooks";
+import { useEngineContext } from "@/export/context";
 
 export function usePackages() {
   const [packages, setPackages] = useState<ComponentPackage[]>([]);
+  const { engine } = useEngineContext();
 
   useEffectOnce(() => {
     setPackages(engine.component.getAllPackage());

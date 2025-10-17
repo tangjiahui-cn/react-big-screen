@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2025/1/16
  */
-import engine, {
+import {
   ComponentHandleTrigger,
   ComponentNodeType,
   ComponentType,
@@ -16,6 +16,7 @@ import engine, {
   ComponentPackage,
 } from "@/engine";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useEngineContext } from "@/export/context";
 
 interface RenderPreviewComponentNodeProps {
   componentNode: ComponentNodeType;
@@ -30,6 +31,7 @@ interface ScopeRenderPreviewComponentNodeProps
 export default function RenderPreviewComponentNode(props: RenderPreviewComponentNodeProps) {
   const [componentNode, setComponentNode] = useState(props?.componentNode);
   const componentNodeShow = componentNode?.show ?? true;
+  const { engine } = useEngineContext();
 
   // packages 变化必定导致 components 变化，所以重新查找组件的 component 是否存在
   const component = useMemo(() => {

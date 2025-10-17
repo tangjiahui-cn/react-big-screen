@@ -5,10 +5,11 @@
  * @date 2025/3/8
  */
 import { MoveHookQueueType } from "@/packages/dragMove/utils/startMove";
-import engine, { ComponentNodeType, InstanceType } from "@/engine";
+import { ComponentNodeType, InstanceType } from "@/engine";
 import { addHistory, getAllSelectedComponentNodes } from "@/packages/shortCutKeys";
 import globalCursor from "@/packages/globalCursor";
 import { throttle } from "lodash-es";
+import { RbsEngine } from "@/export";
 
 interface MoveOptItem {
   id: string; // 组件id
@@ -126,6 +127,8 @@ function updateSelectedInstances(
   deltaX: number,
   deltaY: number,
 ) {
+  const engine = RbsEngine.getActiveEngine();
+  if (!engine) return;
   moveOptItems.forEach((item) => {
     // 删除 transform
     if (item?.show && enableTransform) {
@@ -144,6 +147,13 @@ function updateSelectedInstances(
 
 // 获取所有移动 moveItems
 function getAllMoveItems() {
+  const engine = RbsEngine.getActiveEngine();
+  if (!engine) {
+    return {
+      showCount: 0,
+      list: [],
+    };
+  }
   const allSelectedComponentNodes = getAllSelectedComponentNodes();
   return allSelectedComponentNodes.reduce(
     (data, componentNode) => {

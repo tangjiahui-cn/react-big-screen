@@ -5,10 +5,12 @@
  * @date 2025/3/4
  */
 import { useEffect, useState } from "react";
-import engine, { JsonType } from "..";
+import { JsonType } from "..";
+import { useEngineContext } from "@/export/context";
 
 export function useJson(): JsonType | undefined {
   const [json, setJson] = useState<JsonType>();
+  const { engine } = useEngineContext();
 
   useEffect(() => {
     engine.getJSON().then((json) => setJson(json));

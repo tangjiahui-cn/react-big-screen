@@ -10,10 +10,11 @@ import IEmpty from "@/components/IEmpty";
 import { useHistoryData } from "@/engine/hooks";
 import { goHistory, undoHistory } from "@/packages/shortCutKeys";
 import classNames from "classnames";
-import engine from "@/engine";
 import { HistoryRecordItem } from "@/packages/historyRecord/types";
+import { useEngineContext } from "@/export/context";
 
 export default function Library() {
+  const { engine } = useEngineContext();
   const historyData = useHistoryData();
   const currentStepId = historyData.current?.stepId;
 

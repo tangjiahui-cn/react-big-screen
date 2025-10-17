@@ -7,11 +7,13 @@
 import styles from "./index.module.less";
 import { CloseOutlined } from "@ant-design/icons";
 import InputNumberWithSuffix from "@/components/InputNumberWithSuffix";
-import engine, { useConfig } from "@/engine";
+import { useConfig } from "@/engine";
 import ScaleSelect from "@/components/ScaleSelect";
+import { useEngineContext } from "@/export/context";
 
 export default function SizeBar() {
   const config = useConfig();
+  const { engine } = useEngineContext();
 
   return (
     <div className={styles.sizeBar} id={"rbs-sizebar"}>

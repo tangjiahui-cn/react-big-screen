@@ -4,9 +4,11 @@
  * @author tangjiahui
  * @date 2025/1/20
  */
-import engine from "@/engine";
+import { RbsEngine } from "@/export";
 
 export function unlockAllSelectedComponentNodes() {
+  const engine = RbsEngine.getActiveEngine();
+  if (!engine) return;
   const allSelectedInstances = engine.instance.getAllSelected();
   allSelectedInstances.forEach((instance) => {
     const componentNode = engine.componentNode.get(instance.id);

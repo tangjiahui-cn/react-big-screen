@@ -11,10 +11,11 @@ import { useEffect } from "react";
 import styles from "./index.module.less";
 import { ReloadOutlined, SaveOutlined } from "@ant-design/icons";
 import { Form, message, Tooltip } from "antd";
-import engine from "@/engine";
 import { isObject } from "@/utils";
+import { useEngineContext } from "@/export/context";
 
 export default function () {
+  const { engine } = useEngineContext();
   const { componentNode } = useSingleSelectedInstance();
   const [form] = Form.useForm();
 

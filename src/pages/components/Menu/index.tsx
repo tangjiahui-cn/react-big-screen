@@ -21,14 +21,16 @@ import {
   HistoryOutlined,
   StarOutlined,
 } from "@ant-design/icons";
-import engine, { GlobalConfig, useConfig } from "@/engine";
+import { GlobalConfig, useConfig } from "@/engine";
 import { useTranslation } from "react-i18next";
+import { useEngineContext } from "@/export/context";
 
 type MenuItem = MenuBarItem & {
   children?: React.ReactNode;
 };
 
 export default function Menu() {
+  const { engine } = useEngineContext();
   const [t, i18n] = useTranslation();
   const menuList: MenuItem[] = useMemo(() => {
     return [

@@ -6,7 +6,7 @@
  * @description 个人资产管理页面
  */
 import { message, Space } from "antd";
-import engine, { ComponentNodeType, ComponentPackage, usePackages } from "@/engine";
+import { ComponentNodeType, ComponentPackage, usePackages } from "@/engine";
 import Item from "./components/Item";
 import AddPackageButton from "./components/AddPackageButton";
 import DownloadButton from "./components/DownloadButton";
@@ -16,9 +16,11 @@ import IEmpty from "@/components/IEmpty";
 import { useRequest } from "ahooks";
 import jszip from "jszip";
 import { saveAs } from "file-saver";
+import { useEngineContext } from "@/export/context";
 
 export default function () {
   const packages = usePackages();
+  const { engine } = useEngineContext();
 
   // 刷新个人资产列表（远程请求）
   const { loading, run: runRefreshPropertyList } = useRequest(

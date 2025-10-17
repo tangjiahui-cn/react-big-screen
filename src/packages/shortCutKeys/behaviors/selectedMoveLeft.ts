@@ -4,10 +4,12 @@
  * @author tangjiahui
  * @date 2025/1/14
  */
-import engine from "@/engine";
 import { addHistory } from "@/packages/shortCutKeys";
+import { RbsEngine } from "@/export";
 
 export function selectedMoveLeft() {
+  const engine = RbsEngine.getActiveEngine();
+  if (!engine) return;
   engine.instance.getAllSelected().forEach((instance) => {
     const componentNode = engine.componentNode.get(instance.id);
     if (componentNode) {

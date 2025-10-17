@@ -6,11 +6,14 @@
  */
 import { RefObject } from "react";
 import { useVirtualDrop } from "@/packages/virtual-drag";
-import engine, { FavoritesComponentType } from "@/engine";
+import { FavoritesComponentType } from "@/engine";
 import { addHistory } from "@/packages/shortCutKeys";
 import { message } from "antd";
+import { useEngineContext } from "@/export/context";
 
 export function useCreateFavorite(containerDomRef: RefObject<HTMLElement>) {
+  const { engine } = useEngineContext();
+
   useVirtualDrop(containerDomRef, {
     accept: ["create-favorite"],
     onDrop: (e: MouseEvent, dragOptions) => {

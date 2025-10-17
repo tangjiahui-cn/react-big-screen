@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2025/2/9
  */
-import engine, { PanelData } from "@/engine";
+import { PanelData } from "@/engine";
 import styles from "./index.module.less";
 import { Button, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
@@ -13,6 +13,7 @@ import Item from "./item";
 import React from "react";
 import classNames from "classnames";
 import { useAsk } from "@/components/Ask";
+import { useEngineContext } from "@/export/context";
 
 interface Props {
   value?: string; // 选中值
@@ -24,6 +25,7 @@ interface Props {
 }
 
 export default function EditorList(props: Props) {
+  const { engine } = useEngineContext();
   const { value, onSelect, list = [], onChange } = props;
   const ask = useAsk();
 

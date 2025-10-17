@@ -6,16 +6,18 @@
  */
 import { createBindModalHook } from "@/hooks";
 import { Descriptions, Modal } from "antd";
-import engine, { FavoritesComponentType } from "@/engine";
+import { FavoritesComponentType } from "@/engine";
 import styles from "./index.module.less";
 import IEmpty from "@/components/IEmpty";
 import ComponentNodeImage from "@/components/ComponentNodeImage";
+import { useEngineContext } from "@/export/context";
 
 interface Params {
   favorite: FavoritesComponentType;
 }
 
 const useFavoriteDetailDialog = createBindModalHook<Params>((props) => {
+  const { engine } = useEngineContext();
   const favorite = props?.params?.favorite;
 
   return (

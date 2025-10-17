@@ -6,14 +6,16 @@
  * @description 页面组件列表
  */
 import styles from "./index.module.less";
-import engine, { ComponentNodeType, useComponentNodes, useSelectedInstances } from "@/engine";
+import { ComponentNodeType, useComponentNodes, useSelectedInstances } from "@/engine";
 import { useMemo, useRef } from "react";
 import ComponentNodeItem from "./components/ComponentNodeItem";
 import IEmpty from "@/components/IEmpty";
 import { unSelectAllComponentNodes } from "@/packages/shortCutKeys";
 import { useRegisterContextMenu } from "@/pages/components/Editor/hooks/useRegisterContextMenu";
+import { useEngineContext } from "@/export/context";
 
 export default function () {
+  const { engine } = useEngineContext();
   // 全部页面组件
   const componentNodes = useComponentNodes();
   // 选中实例（用于触发页面更新）

@@ -4,10 +4,12 @@
  * @author tangjiahui
  * @date 2025/1/15
  */
-import engine from "@/engine";
 import { addHistory, getAllSelectedComponentNodes } from ".";
+import { RbsEngine } from "@/export";
 
 export function copySelectedComponentNodes() {
+  const engine = RbsEngine.getActiveEngine();
+  if (!engine) return;
   const allSelectedComponentNodes = getAllSelectedComponentNodes(); // 所有选中组件
   const selectedInstanceIds = new Set(engine.instance.getAllSelected().map((ins) => ins.id));
   const newSelectedIds: string[] = []; // 复制后选中的组件
