@@ -29,9 +29,9 @@ export interface RbsEngineOptions {
   /** 开始预览 hook */
   onStartPreview?: (engine: Engine) => void;
   /** 页面底部 */
-  pageFooter?: React.ReactNode;
+  pageFooter?: React.FC;
   /** 页面logo */
-  pageLogo?: React.ReactNode;
+  pageLogo?: React.FC;
 }
 
 export class RbsEngine {

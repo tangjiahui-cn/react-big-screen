@@ -11,14 +11,14 @@ interface Props {
   json?: JsonType;
   engine: Engine;
   /** 页面底部 */
-  pageFooter?: React.ReactNode;
+  pageFooter?: React.FC;
   /** 页面logo */
-  pageLogo?: React.ReactNode;
+  pageLogo?: React.FC;
   onJSONLoad?: () => void;
 }
 
 export default function (props: Props) {
-  const { engine, json } = props;
+  const { engine, json, pageFooter: PageFooter } = props;
 
   // 注册快捷键
   useGlobalShortCutKeys();
@@ -45,7 +45,7 @@ export default function (props: Props) {
           <Attributes />
         </div>
       </div>
-      {props?.pageFooter}
+      {PageFooter ? <PageFooter /> : <></>}
     </div>
   );
 }

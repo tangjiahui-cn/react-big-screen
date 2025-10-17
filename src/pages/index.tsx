@@ -23,7 +23,7 @@ export default function Page() {
 
   React.useEffect(() => {
     const rbsEngine = new RbsEngine({
-      pageFooter: <Footer />,
+      pageFooter: Footer,
     });
     rbsEngine.mount(domRef.current!).then(async () => {
       startDriver();
