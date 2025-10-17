@@ -21,13 +21,15 @@ export * from "./resources";
 export { startDriver } from "@/utils";
 export { defaultPackage } from "@/engine";
 
-export interface RbsEngineOptions extends EngineOptions {
+export interface RbsEngineOptions {
   /** 挂载 dom */
   dom?: HTMLElement;
   /** 激活全局（但实例请确保为true，此选项为多实例优化时使用） */
   activeGlobal?: boolean;
   /** 开始预览 hook */
   onStartPreview?: (engine: Engine) => void;
+  /** 页面底部 */
+  pageFooter?: React.ReactNode;
 }
 
 export class RbsEngine {
@@ -41,10 +43,21 @@ export class RbsEngine {
   public mode: "edit" | "preview" = "edit";
   /** 事件钩子 */
   private hooks: Map<RbsHookType, ((payload?: any) => void)[]> | null = null;
+  /** 保存当前操作的json */
   private lastJson: JsonType | undefined = undefined;
+  /** options */
+  public options: RbsEngineOptions;
 
-  constructor(options?: RbsEngineOptions) {
-    const { activeGlobal = true, onStartPreview, dom, ...rest } = options || {};
+  constructor(options?: RbsEngineOptions & EngineOptions) {
+    const { activeGlobal = true, onStartPreview, dom, pageFooter, ...rest } = options || {};
+    // 格式化options
+    this.options = {
+      activeGlobal,
+      onStartPreview,
+      dom,
+      pageFooter,
+    };
+    // 初始化
     this.engine = new Engine(rest);
     if (dom) {
       this.mount(dom);
@@ -163,7 +176,12 @@ export class RbsEngine {
             // 渲染编辑模式
             this.app.render(
               <EngineContext.Provider value={{ engine: this.engine, rbsEngine: this }}>
-                <RenderEditor json={json} engine={this.engine} onJSONLoad={resolve} />
+                <RenderEditor
+                  json={json}
+                  engine={this.engine}
+                  onJSONLoad={resolve}
+                  footer={this.options?.pageFooter}
+                />
               </EngineContext.Provider>,
             );
           } else if (this.mode === "preview") {

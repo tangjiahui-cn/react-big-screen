@@ -10,6 +10,7 @@ import { useGlobalShortCutKeys } from "@/packages/shortCutKeys";
 interface Props {
   json?: JsonType;
   engine: Engine;
+  footer?: React.ReactNode;
   onJSONLoad?: () => void;
 }
 
@@ -41,23 +42,7 @@ export default function (props: Props) {
           <Attributes />
         </div>
       </div>
-      {!__DEV__ && (
-        <div className={styles.page_footer}>
-          <div className={styles.page_footer_beian}>
-            <img src={"/beian.png"} />
-            <a
-              href='https://beian.mps.gov.cn/#/query/webSearch?code=33010602013871'
-              rel='noreferrer'
-              target='_blank'
-            >
-              浙公网安备33010602013871号
-            </a>
-          </div>
-          <a href={"https://beian.miit.gov.cn"} target={"_blank"} rel='noreferrer'>
-            浙ICP备2024117433号-2
-          </a>
-        </div>
-      )}
+      {props?.footer}
     </div>
   );
 }

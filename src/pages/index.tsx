@@ -8,6 +8,7 @@ import React from "react";
 import { RbsEngine } from "@/export";
 import { getExampleJsonText, getUrlQuery, openRoute, startDriver } from "@/utils";
 import { saveLocalPreviewJson } from "@/pages/preview";
+import Footer from "./components/Footer";
 
 // 获取初始加载json
 async function getInitJSONString(): Promise<string> {
@@ -21,7 +22,9 @@ export default function Page() {
   const domRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    const rbsEngine = new RbsEngine();
+    const rbsEngine = new RbsEngine({
+      pageFooter: <Footer />,
+    });
     rbsEngine.mount(domRef.current!).then(async () => {
       startDriver();
       const jsonStr = await getInitJSONString();
