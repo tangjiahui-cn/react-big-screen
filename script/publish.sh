@@ -22,7 +22,7 @@ echo "--> step2"
 
 # 3、标记tag
 TAG_NAME=v${VERSION}
-git tag -d ${TAG_NAME} 2>/dev/null
+git tag -d ${TAG_NAME} 2
 git tag ${TAG_NAME}
 git push origin --tags
 echo step3
