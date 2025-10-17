@@ -1,3 +1,7 @@
+## [0.0.12](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.11...v0.0.12) (2025-10-17)
+
+
+
 ## [0.0.11](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.10...v0.0.11) (2025-10-17)
 
 
