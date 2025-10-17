@@ -22,7 +22,7 @@ export default mergeConfig(
       },
       rollupOptions: {
         // 本地link时需注释这一行
-        external: [/node_modules/, "react", "react-dom"],
+        external: [/node_modules/, "react", "react-dom", "antd"],
         output: {
           dir: OUTPUT_DIR,
         },
