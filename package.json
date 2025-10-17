@@ -5,7 +5,7 @@
   "author": "tangjiahui-cn",
   "description": "一个前端大屏看板项目",
   "license": "ISC",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "module": "./es/index.mjs",
   "types": "./types/src/export/index.d.ts",
   "scripts": {
