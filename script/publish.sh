@@ -42,7 +42,6 @@ echo "-> step6:推送远程git分支"
 git push origin
 git push origin --tags
 
-echo "\n\n"
 echo "🎉 发布成功 🎉"
 printf "tag: ${TAG_NAME}.\n"
 printf "version: ${VERSION}.\n"
