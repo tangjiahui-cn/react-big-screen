@@ -1,3 +1,12 @@
+## [0.0.13](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.12...v0.0.13) (2025-10-17)
+
+
+### Features
+
+* **.:** 增加 pageFooter属性，支持自定义编辑器底部 ([2cf37bb](https://github.com/tangjiahui-cn/react-big-screen/commit/2cf37bb1288b5e9a17dedbb51c96b5bb6ae5cc5f))
+
+
+
 ## [0.0.12](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.11...v0.0.12) (2025-10-17)
 
 
