@@ -5,6 +5,7 @@ import viteBase, { root } from "./vite.base";
 import dts from "vite-plugin-dts";
 import { mergeConfig, defineConfig } from "vite";
 import { rimrafSync } from "rimraf";
+import { externalDependencies } from "./utils";
 
 const OUTPUT_DIR = root("es");
 
@@ -21,8 +22,7 @@ export default mergeConfig(
         entry: root("src/export/index.tsx"),
       },
       rollupOptions: {
-        // 本地link时需注释这一行
-        external: [/node_modules/, "react", "react-dom", "antd"],
+        external: externalDependencies, // 本地link时需注释这一行
         output: {
           dir: OUTPUT_DIR,
         },
