@@ -21,7 +21,7 @@ export default mergeConfig(
         entry: root("src/export/index.tsx"),
       },
       rollupOptions: {
-        external: /node_modules/, // 本地link时需注释这一行
+        external: [/node_modules/, "react", "react-dom", "antd"], // 本地link时需注释这一行
         output: {
           dir: OUTPUT_DIR,
         },
