@@ -10,7 +10,10 @@ import { useGlobalShortCutKeys } from "@/packages/shortCutKeys";
 interface Props {
   json?: JsonType;
   engine: Engine;
-  footer?: React.ReactNode;
+  /** 页面底部 */
+  pageFooter?: React.ReactNode;
+  /** 页面logo */
+  pageLogo?: React.ReactNode;
   onJSONLoad?: () => void;
 }
 
@@ -29,7 +32,7 @@ export default function (props: Props) {
   return (
     <div className={styles.page}>
       <div className={styles.page_header}>
-        <Header />
+        <Header pageLogo={props?.pageLogo} />
       </div>
       <div className={styles.page_body}>
         <div className={styles.page_body_left} id={"rbs-menu"}>
@@ -42,7 +45,7 @@ export default function (props: Props) {
           <Attributes />
         </div>
       </div>
-      {props?.footer}
+      {props?.pageFooter}
     </div>
   );
 }

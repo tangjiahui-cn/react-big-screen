@@ -30,6 +30,8 @@ export interface RbsEngineOptions {
   onStartPreview?: (engine: Engine) => void;
   /** 页面底部 */
   pageFooter?: React.ReactNode;
+  /** 页面logo */
+  pageLogo?: React.ReactNode;
 }
 
 export class RbsEngine {
@@ -49,14 +51,24 @@ export class RbsEngine {
   public options: RbsEngineOptions;
 
   constructor(options?: RbsEngineOptions & EngineOptions) {
-    const { activeGlobal = true, onStartPreview, dom, pageFooter, ...rest } = options || {};
+    const {
+      activeGlobal = true,
+      onStartPreview,
+      dom,
+      pageFooter,
+      pageLogo,
+      ...rest
+    } = options || {};
+
     // 格式化options
     this.options = {
       activeGlobal,
       onStartPreview,
       dom,
       pageFooter,
+      pageLogo,
     };
+
     // 初始化
     this.engine = new Engine(rest);
     if (dom) {
@@ -180,7 +192,8 @@ export class RbsEngine {
                   json={json}
                   engine={this.engine}
                   onJSONLoad={resolve}
-                  footer={this.options?.pageFooter}
+                  pageFooter={this.options?.pageFooter}
+                  pageLogo={this.options?.pageLogo}
                 />
               </EngineContext.Provider>,
             );

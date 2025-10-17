@@ -38,8 +38,13 @@ interface OperateItem {
   icon?: React.ReactNode;
 }
 
+interface Props {
+  /** 页面logo */
+  pageLogo?: React.ReactNode;
+}
+
 const isIgnoreGithub = isIgnoreDomainName();
-export default function Header() {
+export default function Header(props: Props) {
   const { engine, rbsEngine } = useEngineContext();
   const [t, i18n] = useTranslation();
   const historyData = useHistoryData();
@@ -138,14 +143,18 @@ export default function Header() {
     }
   }
 
+  const renderLogo = (
+    <div className={styles.header_flex}>
+      <b>BigScreen</b>
+      {!isIgnoreGithub && (
+        <GithubFilled style={{ cursor: "pointer", fontSize: 16 }} onClick={handleJumpGithub} />
+      )}
+    </div>
+  );
+
   return (
     <div className={styles.header}>
-      <div className={styles.header_flex}>
-        <b>BigScreen</b>
-        {!isIgnoreGithub && (
-          <GithubFilled style={{ cursor: "pointer", fontSize: 16 }} onClick={handleJumpGithub} />
-        )}
-      </div>
+      {props?.pageLogo || renderLogo}
 
       <SizeBar />
 
