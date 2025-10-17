@@ -5,10 +5,12 @@
  * @date 2025/2/22
  * @description 获取指定id的componentNode（监听变化）。
  */
-import engine, { ComponentNodeType } from "..";
+import { ComponentNodeType } from "..";
 import { useEffect, useState } from "react";
+import { useEngineContext } from "@/export/context";
 
 export function useComponentNode(id: string): ComponentNodeType | undefined {
+  const { engine } = useEngineContext();
   const [componentNode, setComponentNode] = useState<ComponentNodeType>();
 
   useEffect(() => {

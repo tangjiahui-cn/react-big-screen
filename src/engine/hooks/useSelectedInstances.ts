@@ -6,14 +6,14 @@
  * @description 监听选中实例变化
  */
 import { useEffect, useState } from "react";
-import engine, { InstanceType } from "@/engine";
-
-function getInitial() {
-  return engine.instance.getAllSelected();
-}
+import { InstanceType } from "@/engine";
+import { useEngineContext } from "@/export/context";
 
 export function useSelectedInstances(): InstanceType[] {
-  const [selectedInstances, setSelectedInstances] = useState<InstanceType[]>(getInitial);
+  const { engine } = useEngineContext();
+  const [selectedInstances, setSelectedInstances] = useState<InstanceType[]>(() => {
+    return engine.instance.getAllSelected();
+  });
 
   useEffect(() => {
     return engine.instance.onSelectedChange((instances) => {

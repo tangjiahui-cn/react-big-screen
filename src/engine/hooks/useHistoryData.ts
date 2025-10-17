@@ -7,9 +7,11 @@
  */
 import { useEffect, useState } from "react";
 import { HistoryData } from "@/packages/historyRecord/types";
-import engine from "@/engine";
+import { useEngineContext } from "@/export/context";
 
 export function useHistoryData() {
+  const { engine } = useEngineContext();
+
   const [historyData, setHistoryData] = useState<HistoryData>(() => {
     return engine.history.getHistoryData();
   });

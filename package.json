@@ -5,11 +5,17 @@
   "author": "tangjiahui-cn",
   "description": "一个前端大屏看板项目",
   "license": "ISC",
-  "version": "0.0.0",
+  "version": "0.0.22",
+  "module": "./es/index.mjs",
+  "types": "./types/src/export/index.d.ts",
   "scripts": {
     "dev": "cross-env vite",
     "build": "tsc -b && vite build",
-    "build:analyzer": "cross-env mode=analyzer pnpm build",
+    "build:analyzer": "tsc -b cross-env mode=analyzer pnpm build",
+    "build:esm": "tsc -b && cross-env LIB_MODE=1 vite build -c ./config/vite.buildESM.ts",
+    "build-analysis:esm": "tsc -b && cross-env LIB_MODE=1 mode=analyzer vite build -c ./config/vite.buildESM.ts",
+    "build:lib": "pnpm build:esm",
+    "publish-npm": "sh ./script/checkLogin.sh && pnpm build:lib && sh ./script/publish.sh",
     "lint": "eslint .",
     "preview": "vite preview",
     "postinstall": "husky install",
@@ -24,7 +30,10 @@
     "url": "https://github.com/tangjiahui-cn/react-big-screen/issues"
   },
   "files": [
-    "README.md"
+    "README.md",
+    "es",
+    "umd",
+    "types"
   ],
   "config": {
     "commitizen": {
@@ -88,10 +97,12 @@
     "less": "^4.2.0",
     "lint-staged": "^13.2.1",
     "prettier": "^2.8.7",
+    "rimraf": "^6.0.1",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^5.4.1",
     "vite-bundle-analyzer": "^0.17.1",
+    "vite-plugin-dts": "^4.5.4",
     "vite-plugin-html": "^3.2.2"
   }
 }

@@ -36,6 +36,53 @@ react-big-screen 是一个使用React开发的`前端可拖拽大屏`开源项�
 - [点击访问：多组件联动](https://tangjiahui-cn.github.io/react-big-screen/#/create?example=multiple-components-interactive)
 
 ## 快速开始
+
+注：仅支持node版本20+、react版本18+
+
+```shell
+pnpm install react-big-screen
+```
+
+```tsx
+// index.tsx
+import { EXAMPLE, RbsEngine } from "react-big-screen";
+import * as React from "react";
+import "antd/dist/antd.min.css";
+import "react-big-screen/es/style.css";
+
+export default () => {
+  const domRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const engine = new RbsEngine();
+    
+    // 挂载到DOM
+    engine.mount(domRef.current!).then(() => {
+      // 挂载成功后，导入JSON文件
+      engine.importJSON(EXAMPLE.classic);
+    });
+    
+    // 销毁
+    return () => {
+      engine.destroy()
+    };
+  }, []);
+
+  return (
+    <div
+      ref={domRef}
+      style={{
+        width: "100vw",
+        height: "100vh",
+        position: "fixed",
+        overflow: "hidden",
+      }}
+    />
+  );
+};
+```
+
+## 本地调试
 本地启动一个项目，用以调试或者开发功能。
 ```shell
 # 拉取代码

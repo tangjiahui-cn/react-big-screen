@@ -5,7 +5,13 @@
  * @date 2025/6/26
  */
 import { Button, Dropdown } from "antd";
-import { loadExampleJson } from "@/utils";
+import { RbsEngine } from "@/export";
+
+async function loadLocalExampleJSON(jsonName: any) {
+  const json = await import(`@/../public/example/${jsonName}.json`);
+  const engine = RbsEngine.getActiveEngine();
+  engine?.loadJSON?.(json);
+}
 
 export default function ChooseExampleButton() {
   return (
@@ -19,7 +25,7 @@ export default function ChooseExampleButton() {
           },
         ],
         onClick({ key: jsonName }) {
-          loadExampleJson(jsonName);
+          loadLocalExampleJSON(jsonName);
         },
       }}
     >

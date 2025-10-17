@@ -7,13 +7,15 @@
 import { Suspense, useEffect, useMemo } from "react";
 import { Checkbox, Col, Form, InputNumber, Row } from "antd";
 import { useSingleSelectedInstance } from "../..";
-import engine, { ComponentNodeType } from "@/engine";
+import { ComponentNodeType } from "@/engine";
 import styles from "./index.module.less";
 import { Line, LineConfigProvider } from "@/components/Attributes";
 import EditText from "@/components/EditText";
 import { addHistory } from "@/packages/shortCutKeys";
+import { useEngineContext } from "@/export/context";
 
 export default function () {
+  const { engine } = useEngineContext();
   const { componentNode } = useSingleSelectedInstance();
   const [form] = Form.useForm<Partial<ComponentNodeType>>();
   const component = useMemo(() => {

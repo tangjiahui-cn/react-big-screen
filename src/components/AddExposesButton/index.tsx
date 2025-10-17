@@ -7,11 +7,12 @@
 import { Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import engine, { ExposeItemType, INIT_EXPOSE_LIST } from "@/engine";
+import { ExposeItemType, INIT_EXPOSE_LIST } from "@/engine";
 import styles from "./index.module.less";
 import { IInput } from "@/components/Attributes/base/IInput";
 import IEmpty from "@/components/IEmpty";
 import CustomDropDown from "@/components/CustomDropDown";
+import { useEngineContext } from "@/export/context";
 
 interface Item {
   label: string;
@@ -27,6 +28,7 @@ interface Props {
 }
 
 export default function AddExposesButton(props: Props) {
+  const { engine } = useEngineContext();
   const [visible, setVisible] = useState(false);
   const [items, setItems] = useState<Item[]>([]);
   const [keyword, setKeyword] = useState<string>("");

@@ -5,9 +5,11 @@
  * @date 2025/2/27
  * @description 选中页面
  */
-import engine from "@/engine";
+import { RbsEngine } from "@/export";
 
 export function selectPage(pageId?: string) {
+  const engine = RbsEngine.getActiveEngine();
+  if (!engine) return;
   if (!pageId) {
     console.error("pageId must be required.");
     return;

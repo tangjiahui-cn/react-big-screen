@@ -9,11 +9,12 @@ import Attributes from "./components/Attributes";
 import DataSource from "./components/DataSource";
 import Interactive from "./components/Interactive";
 import Json from "./components/Json";
-import engine, { ComponentNodeType, InstanceType } from "@/engine";
+import { ComponentNodeType, InstanceType } from "@/engine";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import styles from "./index.module.less";
 import { useListenRef } from "@/hooks";
+import { useEngineContext } from "@/export/context";
 
 const SingleSelectedContext = createContext<{
   instance?: InstanceType;
@@ -28,6 +29,7 @@ interface Props {
 
 export default function SingleInstanceAttributes(props: Props) {
   const [t, i18n] = useTranslation();
+  const { engine } = useEngineContext();
   const { instance } = props;
   const [scopeComponentNode, setScopeComponentNode] = useState<ComponentNodeType>();
   const instanceRef = useListenRef(instance);

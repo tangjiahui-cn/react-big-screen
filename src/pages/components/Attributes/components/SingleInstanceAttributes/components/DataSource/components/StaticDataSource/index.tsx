@@ -11,14 +11,15 @@ import { Line } from "@/components/Attributes";
 import { message, Tooltip } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 import { useSingleSelectedInstance } from "@/pages/components/Attributes/components/SingleInstanceAttributes";
-import engine from "@/engine";
 import { addHistory } from "@/packages/shortCutKeys";
+import { useEngineContext } from "@/export/context";
 
 interface Props {
   style?: React.CSSProperties;
 }
 
 export default function StaticDataSource(props: Props) {
+  const { engine } = useEngineContext();
   const { componentNode } = useSingleSelectedInstance();
   const [code, setCode] = useState<string>("");
 

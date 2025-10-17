@@ -1,0 +1,31 @@
+.beianFooter {
+  background: white;
+  border-top: @border;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+  font-size: 12px;
+  min-height: 32px;
+
+  &_beian {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    & > img {
+      @size: 12px;
+      width: @size;
+      height: @size;
+    }
+  }
+
+  & a {
+    color: @color;
+
+    &:hover {
+      text-decoration: @color underline;
+    }
+  }
+}

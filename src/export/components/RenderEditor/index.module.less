@@ -1,18 +1,16 @@
 .page {
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   display: flex;
-  position: fixed;
   overflow: hidden;
+  position: relative;
   background: #EDEFF3;
   flex-direction: column;
   user-select: none;
   @darkBoxShadowColor: rgba(0,0,0,0.1);
 
   &_header {
-    height: 40px;
+    min-height: 40px;
     background: white;
     border-bottom: @border;
   }
@@ -47,33 +45,5 @@
   }
 
   &_footer {
-    font-size: 12px;
-    height: 32px;
-    background: white;
-    border-top: @border;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 24px;
-
-    &_beian {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-
-      & > img {
-        @size: 12px;
-        width: @size;
-        height: @size;
-      }
-    }
-
-    & a {
-      color: @color;
-
-      &:hover {
-        text-decoration: @color underline;
-      }
-    }
   }
 }

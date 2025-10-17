@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2024/12/25
  */
-import engine, {
+import {
   ComponentHandleTrigger,
   ComponentNodeType,
   ComponentType,
@@ -19,6 +19,7 @@ import { Suspense, useMemo, useRef, useState } from "react";
 import { useEffectOnce, useListenRef } from "@/hooks";
 import { useUpdateEffect } from "ahooks";
 import Mask, { MaskRefType } from "./components/Mask";
+import { useEngineContext } from "@/export/context";
 
 interface RenderComponentProps {
   componentNode: ComponentNodeType;
@@ -30,6 +31,7 @@ interface ScopeRenderComponentNodeProps extends Omit<RenderComponentProps, "pack
 }
 
 export default function RenderComponentNode(props: RenderComponentProps) {
+  const { engine } = useEngineContext();
   const [scopeComponentNode, setScopeComponentNode] = useState<ComponentNodeType>(
     props?.componentNode,
   );

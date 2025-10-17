@@ -1,6 +1,6 @@
 import { getUrlText } from "@/utils/download";
 import { message } from "antd";
-import engine from "@/engine";
+import { RbsEngine } from "@/export";
 
 /**
  * 获取示例json文本
@@ -21,5 +21,6 @@ export async function loadExampleJson(jsonName: string) {
   const jsonText = await getExampleJsonText(jsonName);
   if (!jsonText) return message.error("读取失败");
   // 读取json
-  engine.loadJSONString(jsonText);
+  const engine = RbsEngine.getActiveEngine();
+  engine?.loadJSONString?.(jsonText);
 }

@@ -10,9 +10,10 @@ import styles from "./index.module.less";
 import { useSingleSelectedInstance } from "../..";
 import TriggerEventButton from "./components/TriggerEventButton";
 import EventList from "./components/EventList";
-import engine from "@/engine";
+import { useEngineContext } from "@/export/context";
 
 export default function () {
+  const { engine } = useEngineContext();
   const { componentNode } = useSingleSelectedInstance();
 
   return (

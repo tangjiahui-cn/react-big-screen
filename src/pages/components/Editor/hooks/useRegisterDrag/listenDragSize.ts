@@ -4,12 +4,13 @@
  * @author tangjiahui
  * @date 2025/3/19
  */
-import engine, { ComponentNodeType } from "@/engine";
+import { ComponentNodeType } from "@/engine";
 import { MoveHookQueueType } from "@/packages/dragMove/utils/startMove";
 import { MoveInfo } from "@/packages/dragMove";
 import React from "react";
 import globalCursor from "@/packages/globalCursor";
 import { addHistory } from "@/packages/shortCutKeys";
+import { RbsEngine } from "@/export";
 
 export type DragDirection =
   | "top"
@@ -123,6 +124,10 @@ export function listenDragSize(
     width: dom.offsetWidth,
     height: dom.offsetHeight,
   } as const;
+
+  const engine = RbsEngine.getActiveEngine();
+  if (!engine) return;
+
   return {
     onStart() {
       baseInfo = {

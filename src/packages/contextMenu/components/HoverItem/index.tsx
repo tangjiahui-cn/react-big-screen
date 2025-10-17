@@ -9,7 +9,7 @@ import { createPortal } from "react-dom";
 import styles from "./index.module.less";
 import RenderList from "@/packages/contextMenu/components/RenderList";
 import type { RenderListItem } from "../RenderList";
-import engine from "@/engine";
+import { useEngineContext } from "@/export/context";
 
 interface HoverItemProps extends Omit<HTMLAttributes<HTMLDivElement>, "onSelect"> {
   items?: RenderListItem[]; // 选项列表
@@ -21,6 +21,7 @@ const INIT_POSITION = {
   left: 0,
 };
 export default function HoverItem(props: HoverItemProps) {
+  const { engine } = useEngineContext();
   const { children, items, onSelect, ...rest } = props;
   const [visible, setVisible] = useState<boolean>(false);
   const [position, setPosition] = useState<{ top: number; left: number }>(INIT_POSITION);

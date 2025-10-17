@@ -14,6 +14,7 @@ import RenderModal, {
   RenderModalRefType,
 } from "./RenderModal";
 import { createRoot } from "react-dom/client";
+import { EngineContext, useEngineContext } from "@/export/context";
 
 export type { BindModalProps };
 
@@ -31,6 +32,7 @@ export function useBindModal<Params = any>(
   const unmountRef = useRef<Unmount>();
   const renderRef = useRef<RenderModalRefType>(null);
   const optionsRef = useRef<BindModalOptions>();
+  const { engine } = useEngineContext();
 
   // 实时取运行环境的options值
   optionsRef.current = options;
@@ -48,16 +50,18 @@ export function useBindModal<Params = any>(
     // 弹窗挂载到 document.body
     let mountRoot = createRoot(div);
     mountRoot.render(
-      <RenderModal
-        ref={renderRef}
-        component={component}
-        onCancel={(...args: any) => {
-          optionsRef.current?.onCancel?.(...args);
-        }}
-        onOk={(...args: any) => {
-          optionsRef.current?.onOk?.(...args);
-        }}
-      />,
+      <EngineContext.Provider value={{ engine }}>
+        <RenderModal
+          ref={renderRef}
+          component={component}
+          onCancel={(...args: any) => {
+            optionsRef.current?.onCancel?.(...args);
+          }}
+          onOk={(...args: any) => {
+            optionsRef.current?.onOk?.(...args);
+          }}
+        />
+      </EngineContext.Provider>,
     );
 
     // 注册卸载函数

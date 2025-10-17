@@ -6,10 +6,11 @@
  */
 import { RefObject } from "react";
 import { useVirtualDrop } from "@/packages/virtual-drag";
-import engine from "@/engine";
 import { addHistory } from "@/packages/shortCutKeys";
+import { useEngineContext } from "@/export/context";
 
 export function useCreateComponentNode(containerDomRef: RefObject<HTMLElement>) {
+  const { engine } = useEngineContext();
   useVirtualDrop(containerDomRef, {
     accept: ["create-component"],
     onDrop: (e: MouseEvent, dragOptions) => {

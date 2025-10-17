@@ -7,7 +7,8 @@
 import { Button, Dropdown, MenuProps } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import engine, { ComponentNodeType, ComponentType } from "@/engine";
+import { ComponentNodeType, ComponentType } from "@/engine";
+import { useEngineContext } from "@/export/context";
 
 interface Props {
   componentNode?: ComponentNodeType;
@@ -16,6 +17,7 @@ interface Props {
 
 export default function TriggerEventButton(props: Props) {
   const { componentNode } = props;
+  const { engine } = useEngineContext();
   const [items, setItems] = useState<MenuProps["items"]>([]);
   const component: ComponentType | undefined = useMemo(
     () => engine.component.get(componentNode?.cId),

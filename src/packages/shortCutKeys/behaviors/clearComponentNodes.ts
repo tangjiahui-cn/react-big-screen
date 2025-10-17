@@ -4,8 +4,9 @@
  * @author tangjiahui
  * @date 2025/1/16
  */
-import engine from "@/engine";
+import { RbsEngine } from "@/export";
 
 export function clearComponentNodes() {
-  engine.componentNode.clear();
+  const engine = RbsEngine.getActiveEngine();
+  engine?.componentNode?.clear?.();
 }

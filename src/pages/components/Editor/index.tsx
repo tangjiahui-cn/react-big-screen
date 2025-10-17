@@ -5,7 +5,7 @@
  * @date 2024/12/19
  */
 import styles from "./index.module.less";
-import engine, { ComponentNodeType, usePackages } from "@/engine";
+import { ComponentNodeType, usePackages } from "@/engine";
 import { useEffect, useMemo, useRef } from "react";
 import { useComponentNodes } from "@/engine";
 import RenderComponentNode from "./components/RenderComponentNode";
@@ -17,8 +17,10 @@ import {
   useRegisterContextMenu,
   useCreateFavorite,
 } from "./hooks";
+import { useEngineContext } from "@/export/context";
 
 export default () => {
+  const { engine } = useEngineContext();
   const editorDomRef = useRef<HTMLDivElement>(null);
   const innerEditorDomRef = useRef<HTMLDivElement>(null);
 

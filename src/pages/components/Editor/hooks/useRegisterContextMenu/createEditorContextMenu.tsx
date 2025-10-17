@@ -17,6 +17,7 @@ import {
   unSelectAllComponentNodes,
 } from "@/packages/shortCutKeys";
 import { createContextMenu, ContextMenuItem } from "@/packages/contextMenu";
+import { Engine } from "@/engine";
 
 const INIT_CONTEXT_MENU: ContextMenuItem[] = [
   {
@@ -45,6 +46,8 @@ const INIT_CONTEXT_MENU: ContextMenuItem[] = [
   },
 ];
 
-export function createEditorContextMenu(e: MouseEvent): Unmount | undefined {
-  return createContextMenu(e.clientX, e.clientY, INIT_CONTEXT_MENU);
+export function createEditorContextMenu(e: MouseEvent, engine: Engine): Unmount | undefined {
+  return createContextMenu(e.clientX, e.clientY, INIT_CONTEXT_MENU, {
+    zIndex: engine?.componentNode?.getMaxLevel(),
+  });
 }

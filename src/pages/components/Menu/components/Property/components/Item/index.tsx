@@ -6,12 +6,13 @@
  */
 import { message, Popover, Space } from "antd";
 import { DeleteOutlined, DownloadOutlined } from "@ant-design/icons";
-import engine, { ComponentNodeType, ComponentPackage, getPackageComponentNodes } from "@/engine";
+import { ComponentNodeType, ComponentPackage, getPackageComponentNodes } from "@/engine";
 import styles from "./index.module.less";
 import ComponentNodeImage from "@/components/ComponentNodeImage";
 import { useAsk } from "@/components/Ask";
 import classNames from "classnames";
 import { downloadText } from "@/utils";
+import { useEngineContext } from "@/export/context";
 
 interface Props {
   data: ComponentPackage;
@@ -21,6 +22,7 @@ interface Props {
 export default function (props: Props) {
   const { data } = props;
   const ask = useAsk();
+  const { engine } = useEngineContext();
 
   // 是否显示下载
   const isDownload = data?.origin !== "system";

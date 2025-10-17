@@ -9,20 +9,22 @@ import ICustomSelect from "@/components/ICustomSelect";
 import { Checkbox, Tooltip } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
 import CodeEditor from "@/components/CodeEditor";
-import engine, { ComponentNodeType, ComponentRequest } from "@/engine";
+import { ComponentNodeType, ComponentRequest } from "@/engine";
 import { useRequest } from "ahooks";
 import { useSingleSelectedInstance } from "@/pages/components/Attributes/components/SingleInstanceAttributes";
 import React, { useMemo } from "react";
 import styles from "./index.module.less";
 import { addHistory } from "@/packages/shortCutKeys";
+import { RbsEngine } from "@/export";
 
 interface Props {
   style?: React.CSSProperties;
 }
 
 export default function RequestDataSource(props: Props) {
+  const engine = RbsEngine.getActiveEngine();
   const { componentNode } = useSingleSelectedInstance();
-  const instance = useMemo(() => engine.instance.get(componentNode?.id), [componentNode?.id]);
+  const instance = useMemo(() => engine?.instance?.get?.(componentNode?.id), [componentNode?.id]);
   const request: ComponentRequest | undefined = componentNode?.request;
 
   // 调用一次request查询数据结果
@@ -44,7 +46,7 @@ export default function RequestDataSource(props: Props) {
   );
 
   function handleChange(newRequest: Partial<ComponentNodeType["request"]>) {
-    engine.componentNode.update(componentNode?.id, (config) => {
+    engine?.componentNode?.update?.(componentNode?.id, (config) => {
       return {
         request: {
           ...config.request,

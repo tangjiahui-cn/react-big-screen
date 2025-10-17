@@ -12,7 +12,7 @@ function resolve(resolvePromise: () => Promise<any>) {
   return <Component />;
 }
 
-export default createHashRouter([
+export const router: any = createHashRouter([
   {
     path: "/",
     element: <Navigate to={"/create"} replace />,
