@@ -8,7 +8,7 @@ import { RefObject, useRef } from "react";
 import { useDomEvents } from "@/hooks";
 import { handleClickEditor } from "./handleClickEditor";
 import { handleClickComponentNode } from "./handleClickComponentNode";
-import engine, { DATASET } from "@/engine";
+import { DATASET } from "@/engine";
 import { useUnmount } from "ahooks";
 import { startMove } from "@/packages/dragMove/utils/startMove";
 import { listenDragMove } from "./listenDragMove";
@@ -17,9 +17,11 @@ import { listenDropLayout } from "./listenDropLayout";
 import { listenDragSize } from "./listenDragSize";
 import { getHTMLElementDataSet, isClickMouseLeft, isClickMouseRight } from "@/utils";
 import { isKeyPressed } from "@/packages/shortCutKeys";
+import { useEngineContext } from "@/export/context";
 
 export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
   const unmountsRef = useRef<(Unmount | void)[]>([]);
+  const { engine } = useEngineContext();
 
   // 运行卸载函数
   function clear() {

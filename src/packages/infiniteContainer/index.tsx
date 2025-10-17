@@ -10,11 +10,11 @@ import React, { useEffect, useRef } from "react";
 import { useDomEvents, useListenRef } from "@/hooks";
 import { getWheelInfo, range } from "./utils";
 import styles from "./index.module.less";
-import engine from "@/engine";
 import { startMove } from "@/packages/dragMove/utils/startMove";
 import hotkeys from "hotkeys-js";
 import globalCursor from "@/packages/globalCursor";
 import { isClickMouseLeft, isClickMouseMid } from "@/utils";
+import { useEngineContext } from "@/export/context";
 
 function isNumber(v: any): v is number {
   return typeof v === "number";
@@ -35,6 +35,7 @@ interface InfiniteCanvasProps {
 }
 
 export default function InfiniteContainer(props: InfiniteCanvasProps) {
+  const { engine } = useEngineContext();
   const { defaultScale = 1, scaleStep = 0.05, scaleMax = 2, scaleMin = 0.1 } = props;
   const containerDomRef = useRef<HTMLDivElement>(null);
   const innerDomRef = useRef<HTMLDivElement>(null);

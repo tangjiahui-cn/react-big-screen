@@ -20,16 +20,16 @@ import TooltipButton from "@/components/TooltipButton";
 import { Button, message } from "antd";
 import IconFont from "@/components/IconFont";
 import SizeBar from "./components/SizeBar";
-import engine, { useHistoryData } from "@/engine";
-import { getLocalFileText, downloadText, openRoute } from "@/utils";
+import { getLocalFileText, downloadText } from "@/utils";
 import ShortCutKeysDescription from "./components/ShortCutKeysDescription";
 import { cancelUndoHistory, saveLocal, undoHistory } from "@/packages/shortCutKeys";
-import { saveLocalPreviewJson } from "@/pages/preview";
 import { useTranslation } from "react-i18next";
 import { changeLanguage, LANGUAGE } from "@/i18n";
 import { isIgnoreDomainName } from "@/utils/ignore";
 import ChooseExampleButton from "./components/ChooseExampleButton";
 import StepDriverButton from "./components/StepDriverButton";
+import { useEngineContext } from "@/export/context";
+import { useHistoryData } from "@/engine";
 
 interface OperateItem {
   key: string;
@@ -40,6 +40,7 @@ interface OperateItem {
 
 const isIgnoreGithub = isIgnoreDomainName();
 export default function Header() {
+  const { engine, rbsEngine } = useEngineContext();
   const [t, i18n] = useTranslation();
   const historyData = useHistoryData();
   const isChinese = i18n.language === LANGUAGE.zh;
@@ -85,11 +86,8 @@ export default function Header() {
     window.open("https://github.com/tangjiahui-cn/react-big-screen.git");
   }
 
-  function handlePreview() {
-    engine.getJSON().then((json) => {
-      saveLocalPreviewJson(json);
-      openRoute("/preview");
-    });
+  async function handlePreview() {
+    rbsEngine?.emit("startPreview", engine);
   }
 
   function handleOperate(item: OperateItem) {

@@ -4,19 +4,20 @@
  * @author tangjiahui
  * @date 2025/3/4
  */
-import engine from "@/engine";
 import { cloneDeep } from "lodash-es";
+import { RbsEngine } from "@/export";
 
 /**
  * 新增一条历史（对当前json拍摄快照）
  * @param description 描述文字
- * @param json 当前json快照
  */
 export function addHistory(description: string) {
-  setTimeout(() => {
-    engine.getJSON().then((json) => {
+  setTimeout(async () => {
+    const engine = RbsEngine.getActiveEngine();
+    if (engine) {
+      const json = await engine.getJSON();
       const cloned = cloneDeep(json);
       engine.history.add(cloned, description);
-    });
+    }
   });
 }

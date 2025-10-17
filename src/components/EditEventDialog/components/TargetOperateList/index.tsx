@@ -7,11 +7,12 @@
 import styles from "./index.module.less";
 import React, { useMemo } from "react";
 import classNames from "classnames";
-import engine, { ComponentNodeEventTargetOpt, INIT_EXPOSE_MAP } from "@/engine";
+import { ComponentNodeEventTargetOpt, INIT_EXPOSE_MAP } from "@/engine";
 import IEmpty from "@/components/IEmpty";
 import { DeleteOutlined } from "@ant-design/icons";
 import AddExposesButton from "@/components/AddExposesButton";
 import { createUUID } from "@/engine/utils";
+import { useEngineContext } from "@/export/context";
 
 interface Props {
   cId?: string; // 组件id
@@ -24,6 +25,7 @@ interface Props {
 }
 
 export default function TargetOperateList(props: Props) {
+  const { engine } = useEngineContext();
   const exposeNameMap = useMemo(() => {
     const component = engine.component.get(props?.cId);
     return {

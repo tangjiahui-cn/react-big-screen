@@ -8,12 +8,14 @@ import styles from "./index.module.less";
 import { Button, message, Space, Tree, TreeDataNode } from "antd";
 import { FileOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import engine, { JsonTypePage, useCurrentPageId, usePages } from "@/engine";
+import { JsonTypePage, useCurrentPageId, usePages } from "@/engine";
 import useAddPageDialog from "./components/AddPageDialog";
 import { useStateWithRef } from "@/hooks";
 import { selectPage } from "@/packages/shortCutKeys";
+import { useEngineContext } from "@/export/context";
 
 export default function () {
+  const { engine } = useEngineContext();
   const [expandedKeys, setExpandedKeys] = useState<any[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<any[]>([]);
   const [treeData, setTreeData, treeDataRef] = useStateWithRef<TreeDataNode[]>([]);

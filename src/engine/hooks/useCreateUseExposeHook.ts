@@ -2,9 +2,10 @@
  * 创建 handleTrigger 函数
  */
 import { useMemo, useEffect } from "react";
-import engine, { getEventId } from "@/engine";
+import { Engine, getEventId } from "@/engine";
+import { useEngineContext } from "@/export/context";
 
-function createUseExposeHook(componentNodeId: string) {
+function createUseExposeHook(engine: Engine, componentNodeId: string) {
   return function (exposes: Record<string, (payload: any) => void>) {
     useEffect(() => {
       for (const key in exposes) {
@@ -20,5 +21,6 @@ function createUseExposeHook(componentNodeId: string) {
 }
 
 export function useCreateUseExposeHook(componentNodeId: string) {
-  return useMemo(() => createUseExposeHook(componentNodeId), []);
+  const { engine } = useEngineContext();
+  return useMemo(() => createUseExposeHook(engine, componentNodeId), []);
 }

@@ -4,11 +4,11 @@
  * @author tangjiahui
  * @date 2025/3/19
  */
-import engine from "@/engine";
 import { createRoot } from "react-dom/client";
 import RenderContextMenu, { ContextMenuItem } from "./components/RenderContextMenu";
 
 export interface CreateContextMenuOptions {
+  zIndex?: number;
   // 打开右键菜单之前处理一次（支持重新修改 menuItems 菜单项）
   onBeforeOpen?: (menuItems: ContextMenuItem[]) => ContextMenuItem[] | void;
   // 选中一项回调
@@ -42,7 +42,9 @@ export function createContextMenu(
   div.style.position = "fixed";
   div.style.left = `${x}px`;
   div.style.top = `${y}px`;
-  div.style.zIndex = `${engine.componentNode.getMaxLevel()}`;
+  if (typeof options?.zIndex === "number") {
+    div.style.zIndex = `${options?.zIndex}`;
+  }
   document.body.appendChild(div);
   const app = createRoot(div);
   let isUnmount = false;

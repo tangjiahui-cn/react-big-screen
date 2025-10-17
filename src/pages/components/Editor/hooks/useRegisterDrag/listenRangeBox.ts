@@ -6,11 +6,11 @@
  */
 import { MoveHookQueueType } from "@/packages/dragMove/utils/startMove";
 import styles from "./listenRangeBox.module.less";
-import engine from "@/engine";
 import { throttle } from "lodash-es";
 import { isIntersect } from "@/utils";
 import { addHistory, isKeyPressed } from "@/packages/shortCutKeys";
 import globalCursor from "@/packages/globalCursor";
+import { RbsEngine } from "@/export";
 
 interface RangeInfo {
   x: number;
@@ -25,6 +25,8 @@ const handleSelectRangeInfo: (
   callback?: (selectedIds: string[]) => void,
 ) => void = throttle((rangeInfo: RangeInfo, callback?: (selectedIds: string[]) => void) => {
   // 过滤框选实例
+  const engine = RbsEngine.getActiveEngine();
+  if (!engine) return;
   const selectedIds = engine.componentNode.getAll().reduce((result, componentNode) => {
     const p1 = {
       x1: componentNode.x,
@@ -88,6 +90,10 @@ export function listenRangeBox(mountDom: HTMLElement): MoveHookQueueType | void 
 
   return {
     onStart(_, __, e) {
+      const engine = RbsEngine.getActiveEngine();
+      if (!engine) {
+        return;
+      }
       clear(); // 修复右键菜单后未卸载成功的问题
       const { x = 0, y = 0 } = e || {};
       scale = engine.config.getConfig().scale;

@@ -8,9 +8,10 @@ import { Line, LineConfigProvider } from "@/components/Attributes";
 import ICustomSelect from "@/components/ICustomSelect";
 import styles from "./index.module.less";
 import { useSingleSelectedInstance } from "../..";
-import engine, { DataSourceType } from "@/engine";
+import { DataSourceType } from "@/engine";
 import RequestDataSource from "./components/RequestDataSource";
 import StaticDataSource from "./components/StaticDataSource";
+import { useEngineContext } from "@/export/context";
 
 const dataSourceTypeOptions: { label: string; value: DataSourceType }[] = [
   { label: "静态数据", value: "static" },
@@ -18,6 +19,7 @@ const dataSourceTypeOptions: { label: string; value: DataSourceType }[] = [
 ];
 
 export default function () {
+  const { engine } = useEngineContext();
   const { componentNode } = useSingleSelectedInstance();
   const dataSourceType = componentNode?.dataSourceType ?? "static";
 

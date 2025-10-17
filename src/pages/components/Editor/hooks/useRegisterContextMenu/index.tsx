@@ -6,11 +6,12 @@
  */
 import { useDomEvents } from "@/hooks";
 import { RefObject } from "react";
-import engine, { DATASET } from "@/engine";
+import { DATASET } from "@/engine";
 import { createItemContextMenu } from "./createItemContextMenu";
 import { createEditorContextMenu } from "./createEditorContextMenu";
 import { getHTMLElementDataSet } from "@/utils";
 import { useUnmount } from "ahooks";
+import { useEngineContext } from "@/export/context";
 
 // 放在全局，是为了不同地方调用此hook，均能取消其他页面的右键菜单项。
 let unmountList: (Unmount | undefined)[] = [];
@@ -23,6 +24,8 @@ function clear() {
 }
 
 export function useRegisterContextMenu(domRef: RefObject<HTMLElement>) {
+  const { engine } = useEngineContext();
+
   useDomEvents(domRef, {
     contextmenu(e) {
       clear();
@@ -37,12 +40,12 @@ export function useRegisterContextMenu(domRef: RefObject<HTMLElement>) {
 
       // 选中实例右键菜单
       if (instance && componentNode) {
-        unmountList.push(createItemContextMenu(e));
+        unmountList.push(createItemContextMenu(e, engine));
         return;
       }
 
       // 编辑器右键菜单
-      unmountList.push(createEditorContextMenu(e));
+      unmountList.push(createEditorContextMenu(e, engine));
     },
   });
 

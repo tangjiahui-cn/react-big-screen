@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2025/1/7
  */
-import engine, { EventData } from "@/engine";
+import { EventData } from "@/engine";
 import styles from "./index.module.less";
 import { CarouselOptions, DEFAULT_OPTIONS } from "./attributes";
 import classNames from "classnames";
@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import { useUnmount } from "ahooks";
 import { createComponent } from "@/engine/utils";
 import ToggleBar from "./components/ToggleBar";
+import { useEngineContext } from "@/export/context";
 
 type TriggerKeys = "onChange" | "onClick";
 type ExposeKeys = "changePanel";
@@ -22,6 +23,7 @@ export const triggers: EventData<TriggerKeys>[] = [
 ];
 export const exposes: EventData<ExposeKeys>[] = [{ label: "切换面板", value: "changePanel" }];
 export default createComponent<CarouselOptions, TriggerKeys, ExposeKeys>((props) => {
+  const { engine } = useEngineContext();
   const { options, width, height, componentNode, handleTrigger, useExpose } = props;
   // 上一个panelId
   const lastPanelId = useRef<string>();

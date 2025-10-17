@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2025/2/11
  */
-import engine, { ComponentNodeEvent, ComponentNodeType } from "@/engine";
+import { ComponentNodeEvent, ComponentNodeType } from "@/engine";
 import styles from "./index.module.less";
 import { useMemo } from "react";
 import { DeleteOutlined, SettingOutlined } from "@ant-design/icons";
@@ -12,6 +12,7 @@ import IEmpty from "@/components/IEmpty";
 import useEditEventDialog from "@/components/EditEventDialog";
 import { message } from "antd";
 import { useAsk } from "@/components/Ask";
+import { useEngineContext } from "@/export/context";
 
 interface Item {
   label: string;
@@ -23,6 +24,7 @@ interface Props {
 }
 
 export default function EventList(props: Props) {
+  const { engine } = useEngineContext();
   const { componentNode } = props;
   const component = useMemo(() => engine.component.get(componentNode?.cId), [componentNode]);
   const ask = useAsk();

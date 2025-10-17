@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2025/2/5
  */
-import engine, { ComponentNodeType, DATASET } from "@/engine";
+import { ComponentNodeType, DATASET } from "@/engine";
 import classNames from "classnames";
 import ComponentNodeImage from "@/components/ComponentNodeImage";
 import { EyeInvisibleOutlined, EyeOutlined, LockOutlined } from "@ant-design/icons";
@@ -12,6 +12,7 @@ import styles from "./index.module.less";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { isKeyPressed } from "@/packages/shortCutKeys";
 import { isClickMouseLeft } from "@/utils";
+import { useEngineContext } from "@/export/context";
 
 interface Props {
   componentNode: ComponentNodeType;
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export default function ComponentNodeItem(props: Props) {
+  const { engine } = useEngineContext();
   const domRef = useRef<HTMLDivElement | null>(null);
   const [componentNode, setComponentNode] = useState(props?.componentNode);
   const show = componentNode?.show ?? true;

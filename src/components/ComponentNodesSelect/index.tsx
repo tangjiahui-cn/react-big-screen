@@ -5,9 +5,10 @@
  * @date 2025/2/10
  */
 import ICustomSelect, { ICustomSelectProps } from "@/components/ICustomSelect";
-import engine from "@/engine";
+import { useEngineContext } from "@/export/context";
 
 export default function ComponentNodesSelect(props: ICustomSelectProps) {
+  const { engine } = useEngineContext();
   return (
     <ICustomSelect
       {...props}

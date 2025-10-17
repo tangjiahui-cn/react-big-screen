@@ -35,7 +35,6 @@ import { BaseEvent } from "./model";
 import { changeLanguage } from "@/i18n";
 import { HistoryRecord } from "@/packages/historyRecord";
 import { INIT_CONFIG } from "@/engine/store";
-import { cloneDeep } from "lodash-es";
 
 export type * from "./types";
 export * from "./store";
@@ -46,7 +45,13 @@ export * from "./utils";
 type JsonListener = (json: JsonType) => void;
 type JsonListenerUnmount = () => void;
 
-class Engine {
+export interface EngineOptions {
+  /** 是否加载默认组件库 */
+  defaultComponents?: boolean;
+}
+
+export { defaultPackage };
+export class Engine {
   // 载入的json对象
   private json: JsonType | undefined = undefined;
   // json值监听
@@ -70,74 +75,91 @@ class Engine {
   // 历史记录管理
   public history: HistoryRecord = new HistoryRecord();
 
-  constructor() {
-    // （初始化时）注册内置组件
-    this.registerDefaultPackage();
+  private _options: EngineOptions = {};
+
+  constructor(options?: EngineOptions) {
+    this._options = this.formatOptions(options);
+    if (this._options?.defaultComponents) {
+      // （初始化时）注册内置组件
+      this.registerDefaultPackage();
+    }
+  }
+
+  private formatOptions(options: EngineOptions = {}): EngineOptions {
+    options.defaultComponents ??= true;
+    return options || {};
   }
 
   // 注册默认package
-  private registerDefaultPackage() {
+  private async registerDefaultPackage() {
     this.component.initPackages(defaultPackage);
   }
 
   // 加载json对象
-  public loadJSON(json: JsonType) {
-    this.json = json;
+  public async loadJSON(json?: JsonType): Promise<void> {
+    return new Promise((resolve, reject) => {
+      try {
+        this.json = json;
 
-    if (__DEV__) {
-      // 注册内置组件 (解决hmr时，内存注册的components丢失问题)
-      this.registerDefaultPackage();
-    }
+        if (__DEV__ && this._options?.defaultComponents) {
+          // 注册内置组件 (解决hmr时，内存注册的components丢失问题)
+          this.registerDefaultPackage();
+        }
 
-    // 切换语言
-    changeLanguage(json?.config?.language || "zh");
+        // 切换语言
+        changeLanguage(json?.config?.language || "zh");
 
-    // 设置config
-    this.config.setConfig({
-      ...INIT_CONFIG,
-      ...json?.config,
-      currentPageId: json?.config?.currentPageId || DEFAULT_PAGE.id,
-    });
+        // 设置config
+        this.config.setConfig({
+          ...INIT_CONFIG,
+          ...json?.config,
+          currentPageId: json?.config?.currentPageId || DEFAULT_PAGE.id,
+        });
 
-    // 注册 local package
-    this.component.loadLocalPackages(json?.localPackages);
-    // 设置收藏夹
-    this.favorites.set(json?.favorites || []);
+        // 注册 local package
+        this.component.loadLocalPackages(json?.localPackages);
+        // 设置收藏夹
+        this.favorites.set(json?.favorites || []);
 
-    // 初始化 pages
-    this.page.init(json?.componentNodes, json?.pages);
-    // 设置当前展示页 componentNodes
-    this.componentNode.set(
-      this.page.getComponentNodes(json?.config?.currentPageId || DEFAULT_PAGE.id),
-    );
+        // 初始化 pages
+        this.page.init(json?.componentNodes, json?.pages);
+        // 设置当前展示页 componentNodes
+        this.componentNode.set(
+          this.page.getComponentNodes(json?.config?.currentPageId || DEFAULT_PAGE.id),
+        );
 
-    // 读取默认选中
-    if (json.selectedIds) {
-      if (this.timerId) {
-        clearTimeout(this.timerId);
+        // 读取默认选中
+        if (json?.selectedIds) {
+          if (this.timerId) {
+            clearTimeout(this.timerId);
+          }
+          // 等待 packages 触发 componentNodes 更新完毕后再选中
+          this.timerId = setTimeout(() => {
+            this.timerId = undefined;
+            this.instance.select(json.selectedIds as string[], true);
+          }, 100);
+        }
+
+        // 触发json变化
+        this.notifyJsonChange();
+        resolve();
+      } catch (e) {
+        reject(e);
       }
-      // 等待 packages 触发 componentNodes 更新完毕后再选中
-      this.timerId = setTimeout(() => {
-        this.timerId = undefined;
-        this.instance.select(json.selectedIds as string[], true);
-      }, 100);
-    }
-
-    // 触发json变化
-    this.notifyJsonChange();
+    });
   }
 
-  // 加载json字符串对象
-  public loadJSONString(text?: string | null, callback?: (json: JsonType) => void): void {
-    if (!text) return;
-    try {
-      const json = JSON.parse(text || "{}");
-      callback?.(json);
-      this.history.setInitData(cloneDeep(json));
-      this.loadJSON(json);
-    } catch (e) {
-      console.error(e);
-    }
+  // 加载json对象
+  public async loadJSONString(text: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      try {
+        const json = JSON.parse(text || "{}");
+        this.loadJSON(json);
+        resolve();
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
 
   // 获取json对象
@@ -181,7 +203,9 @@ class Engine {
       this.listeners = this.listeners.filter((listener) => listener !== callback);
     };
   }
-}
 
-const engine = new Engine();
-export default engine;
+  // 销毁
+  public destroy() {
+    this.component.unRegisterAll();
+  }
+}

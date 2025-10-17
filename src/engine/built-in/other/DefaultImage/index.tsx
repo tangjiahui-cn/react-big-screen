@@ -6,11 +6,22 @@
  */
 import { createComponent } from "@/engine";
 import { DEFAULT_OPTIONS, ScrollListOptions } from "./attributes";
-import { useMemo } from "react";
+import React from "react";
+import { getLazyImage } from "./lazyImage";
 
 export default createComponent<ScrollListOptions>((props) => {
   const { width, height, options } = props;
-  const src = useMemo(() => `./default-images/${options?.id}`, [options?.id]);
+  const [src, setSrc] = React.useState<string>();
 
-  return <img style={{ width, height, pointerEvents: "none" }} alt={"预制图片"} src={src} />;
+  React.useEffect(() => {
+    getLazyImage(options?.id).then((url) => {
+      setSrc(url);
+    });
+  }, [options?.id]);
+
+  return src ? (
+    <img style={{ width, height, pointerEvents: "none" }} alt={"预制图片"} src={src} />
+  ) : (
+    <></>
+  );
 }, DEFAULT_OPTIONS);

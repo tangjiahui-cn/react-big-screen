@@ -7,11 +7,12 @@
 import styles from "./index.module.less";
 import React, { useMemo } from "react";
 import classNames from "classnames";
-import engine, { ComponentNodeEventTarget, ComponentNodeType } from "@/engine";
+import { ComponentNodeEventTarget, ComponentNodeType } from "@/engine";
 import IEmpty from "@/components/IEmpty";
 import AddComponentNodeButton from "@/components/AddComponentNodeButton";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useAsk } from "@/components/Ask";
+import { useEngineContext } from "@/export/context";
 
 interface Props {
   value?: string;
@@ -24,6 +25,7 @@ interface Props {
 
 export default function TargetComponentNodesList(props: Props) {
   const ask = useAsk();
+  const { engine } = useEngineContext();
 
   const list = useMemo(() => {
     return props?.targets?.map?.((target) => {

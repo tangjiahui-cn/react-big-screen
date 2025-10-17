@@ -6,7 +6,7 @@
  * @author 编辑event弹窗。
  */
 import { message, Modal } from "antd";
-import engine, {
+import {
   ComponentNodeEvent,
   ComponentNodeEventTarget,
   ComponentNodeEventTargetOpt,
@@ -19,6 +19,7 @@ import TargetComponentNodesList from "./components/TargetComponentNodesList";
 import TargetOperateList from "./components/TargetOperateList";
 import { cloneDeep } from "lodash-es";
 import { createBindModalHook } from "@/hooks";
+import { useEngineContext } from "@/export/context";
 
 export interface EditEventDialogParams {
   triggerId?: string;
@@ -27,6 +28,7 @@ export interface EditEventDialogParams {
 }
 
 export default createBindModalHook<EditEventDialogParams>((props) => {
+  const { engine } = useEngineContext();
   const { componentNode, triggerId, triggerName } = props?.params || {};
   const [currentEvent, setCurrentEvent] = useState<ComponentNodeEvent>();
   const [currentEventTarget, setCurrentEventTarget] = useState<ComponentNodeEventTarget>();

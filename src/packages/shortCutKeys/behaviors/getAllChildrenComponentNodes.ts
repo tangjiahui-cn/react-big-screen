@@ -4,12 +4,15 @@
  * @author tangjiahui
  * @date 2025/2/2/22
  */
-import engine, { ComponentNodeType } from "@/engine";
+import { ComponentNodeType } from "@/engine";
+import { RbsEngine } from "@/export";
 
 type ComponentNodeMap = Record<string, ComponentNodeType>;
 export function getAllChildrenComponentNodes(
   id: string | ComponentNodeType | (string | ComponentNodeType)[],
 ): ComponentNodeType[] {
+  const engine = RbsEngine.getActiveEngine();
+  if (!engine) return [];
   const list = Array.isArray(id) ? id : [id];
   return Object.values(
     list.reduce((dataMap: ComponentNodeMap, id: string | ComponentNodeType) => {
