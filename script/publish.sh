@@ -21,8 +21,8 @@ echo "-> step2：提交git记录(v${VERSION})"
 git commit -am "docs(.): publish version ${VERSION}"
 
 # 3、标记tag
-echo "-> step3：标记tag（${TAG_NAME}）"
 TAG_NAME=v${VERSION}
+echo "-> step3：标记tag（${TAG_NAME}）"
 git tag -d ${TAG_NAME} 2>/dev/null
 git tag ${TAG_NAME}
 echo step3
