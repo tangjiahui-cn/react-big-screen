@@ -1,3 +1,12 @@
+## [0.0.14](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.13...v0.0.14) (2025-10-17)
+
+
+### Features
+
+* **.:** 支持自定义页面logo ([6de2575](https://github.com/tangjiahui-cn/react-big-screen/commit/6de257538a17737a9d5d6966250f4643403d8c6d))
+
+
+
 ## [0.0.13](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.12...v0.0.13) (2025-10-17)
 
 
