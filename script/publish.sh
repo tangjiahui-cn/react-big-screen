@@ -17,35 +17,34 @@ fi
 NAME=$(node -p "require('./package.json').name")
 
 # 2、提交git记录
-echo "-> step2：提交git记录"
+echo "-> step2：提交git记录(v${VERSION})"
 git commit -am "docs(.): publish version ${VERSION}"
 
 # 3、标记tag
-echo "-> step3：标记tag"
+echo "-> step3：标记tag（${TAG_NAME}）"
 TAG_NAME=v${VERSION}
 git tag -d ${TAG_NAME} 2>/dev/null
 git tag ${TAG_NAME}
 echo step3
 
-# 4、打印消息
-echo "-> step4：打印消息"
-printf "\n\n"
-printf "【BUILD SUCCESS】\n"
-printf "Tag is ${TAG_NAME}.\n"
-printf "Version is ${VERSION}.\n"
-printf "\n\n"
-
 # 5、生成changelog
-echo "-> step5：生成changelog"
+echo "-> step4：生成changelog"
 conventional-changelog -p angular -i CHANGELOG.md -s -r 0
 git commit -am "docs(CHANGELOG.md): update changelog" # (新增提交，避免重写提交覆盖tag)
 
 # 发布库
-echo "-> step6：发布 https://registry.npmjs.org/"
+echo "-> step5：发布 https://registry.npmjs.org/"
 ADDRESS=https://registry.npmjs.org/
 npm unpublish ${NAME}@${VERSION} 2>/dev/null --registry=${ADDRESS}
 npm publish --registry=${ADDRESS}
 
-echo "-> step7:推送远程git分支"
+echo "-> step6:推送远程git分支"
 git push origin
 git push origin --tags
+
+echo "\n\n"
+echo "🎉 发布成功 🎉"
+printf "tag: ${TAG_NAME}.\n"
+printf "version: ${VERSION}.\n"
+echo ""
+
