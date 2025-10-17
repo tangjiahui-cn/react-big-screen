@@ -1,3 +1,12 @@
+## [0.0.15](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.14...v0.0.15) (2025-10-17)
+
+
+### Features
+
+* **.:** pageLogo和pageFooter支持React.FC ([e9474f8](https://github.com/tangjiahui-cn/react-big-screen/commit/e9474f8556f5f304e54dc4d39b212f237f21f0e2))
+
+
+
 ## [0.0.14](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.13...v0.0.14) (2025-10-17)
 
 
