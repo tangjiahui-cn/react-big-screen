@@ -1,3 +1,12 @@
+## [0.0.26](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.25...v0.0.26) (2025-10-19)
+
+
+### Bug Fixes
+
+* **.:** 修复previewDriverId ([50ab37c](https://github.com/tangjiahui-cn/react-big-screen/commit/50ab37c3ee4fc1b9b824c80722bb5ed808dec63e))
+
+
+
 ## [0.0.25](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.24...v0.0.25) (2025-10-19)
 
 
