@@ -30,6 +30,9 @@ import StepDriverButton from "./components/StepDriverButton";
 import { useEngineContext } from "@/export/context";
 import { useHistoryData } from "@/engine";
 
+const toolBarDriverId = "rbs-tool-bar";
+const previewDriverId = "rbs-preview";
+
 interface OperateItem {
   key: string;
   disabled?: boolean;
@@ -187,7 +190,7 @@ export default function Header(props: RbsEditorHeaderProps) {
           type={"primary"}
           size={"small"}
           style={{ fontSize: 12 }}
-          id={"rbs-preview"}
+          id={previewDriverId}
           onClick={handlePreview}
         >
           开始预览
@@ -196,7 +199,6 @@ export default function Header(props: RbsEditorHeaderProps) {
     </>
   );
 
-  const previewDriverId = "rbs-tool-bar";
   const renderToolBar = PageToolbarRight ? (
     typeof PageToolbarRight === "function" ? (
       <PageToolbarRight origin={originToolBar} previewDriverId={previewDriverId} />
@@ -216,7 +218,7 @@ export default function Header(props: RbsEditorHeaderProps) {
       <div className={styles.header_flex}>
         <ChooseExampleButton />
         <StepDriverButton />
-        <div className={styles.header_flex_btnContainer} id={previewDriverId}>
+        <div className={styles.header_flex_btnContainer} id={toolBarDriverId}>
           {renderToolBar}
         </div>
       </div>
