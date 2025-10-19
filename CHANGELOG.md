@@ -1,3 +1,12 @@
+## [0.0.24](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.23...v0.0.24) (2025-10-19)
+
+
+### Features
+
+* **.:** 支持自定义toolbar ([db43f98](https://github.com/tangjiahui-cn/react-big-screen/commit/db43f982f8690f4be7e2082ba659bfbb12beb569))
+
+
+
 ## [0.0.23](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.22...v0.0.23) (2025-10-19)
 
 
