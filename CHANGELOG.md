@@ -1,3 +1,12 @@
+## [0.0.25](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.24...v0.0.25) (2025-10-19)
+
+
+### Features
+
+* **.:** 新增 toolBarOptions 配置 ([ff4d0a3](https://github.com/tangjiahui-cn/react-big-screen/commit/ff4d0a3fd9ed4c0d438bcfa5e65e3c6cf76b9b45))
+
+
+
 ## [0.0.24](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.23...v0.0.24) (2025-10-19)
 
 
