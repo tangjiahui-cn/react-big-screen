@@ -40,7 +40,7 @@ interface OperateItem {
 
 interface Props {
   /** 页面logo */
-  pageLogo?: React.FC;
+  pageLogo?: React.FC | React.ReactNode;
 }
 
 const isIgnoreGithub = isIgnoreDomainName();
@@ -155,7 +155,7 @@ export default function Header(props: Props) {
 
   return (
     <div className={styles.header}>
-      {PageLogo ? <PageLogo /> : renderLogo}
+      {PageLogo ? typeof PageLogo === "function" ? <PageLogo /> : PageLogo : renderLogo}
 
       <SizeBar />
 

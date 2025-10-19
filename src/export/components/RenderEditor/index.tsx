@@ -11,9 +11,9 @@ interface Props {
   json?: JsonType;
   engine: Engine;
   /** 页面底部 */
-  pageFooter?: React.FC;
+  pageFooter?: React.FC | React.ReactNode;
   /** 页面logo */
-  pageLogo?: React.FC;
+  pageLogo?: React.FC | React.ReactNode;
   onJSONLoad?: () => void;
 }
 
@@ -45,7 +45,7 @@ export default function (props: Props) {
           <Attributes />
         </div>
       </div>
-      {PageFooter ? <PageFooter /> : <></>}
+      {typeof PageFooter === "function" ? <PageFooter /> : PageFooter}
     </div>
   );
 }
