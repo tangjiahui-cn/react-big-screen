@@ -1,3 +1,12 @@
+## [0.0.23](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.22...v0.0.23) (2025-10-19)
+
+
+### Features
+
+* **.:** pageLogo和pageHeader支持React.ReactNode ([63ca61d](https://github.com/tangjiahui-cn/react-big-screen/commit/63ca61d635c9b14b10cc2a9d04c8af1ca14c54a5))
+
+
+
 ## [0.0.22](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.21...v0.0.22) (2025-10-17)
 
 
