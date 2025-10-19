@@ -1,5 +1,5 @@
 import styles from "./index.module.less";
-import Header from "@/pages/components/Header";
+import Header, { RbsEditorHeaderProps } from "@/pages/components/Header";
 import Menu from "@/pages/components/Menu";
 import Editor from "@/pages/components/Editor";
 import Attributes from "@/pages/components/Attributes";
@@ -7,17 +7,18 @@ import { JsonType, Engine } from "@/engine";
 import React from "react";
 import { useGlobalShortCutKeys } from "@/packages/shortCutKeys";
 
-interface Props {
+export interface RbsEditorProps extends RbsEditorHeaderProps {
+  /** json数据 */
   json?: JsonType;
+  /** 低代码内核 */
   engine: Engine;
   /** 页面底部 */
   pageFooter?: React.FC | React.ReactNode;
-  /** 页面logo */
-  pageLogo?: React.FC | React.ReactNode;
+  /** json加载完成回调 */
   onJSONLoad?: () => void;
 }
 
-export default function (props: Props) {
+export default function (props: RbsEditorProps) {
   const { engine, json, pageFooter: PageFooter } = props;
 
   // 注册快捷键
@@ -32,7 +33,7 @@ export default function (props: Props) {
   return (
     <div className={styles.page}>
       <div className={styles.page_header}>
-        <Header pageLogo={props?.pageLogo} />
+        <Header pageLogo={props?.pageLogo} pageToolBar={props?.pageToolBar} />
       </div>
       <div className={styles.page_body}>
         <div className={styles.page_body_left} id={"rbs-menu"}>

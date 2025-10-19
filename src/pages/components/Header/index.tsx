@@ -10,7 +10,6 @@ import {
   VerticalAlignBottomOutlined,
   GithubFilled,
   SaveOutlined,
-  SettingOutlined,
   ClearOutlined,
   QuestionCircleOutlined,
   TranslationOutlined,
@@ -38,14 +37,23 @@ interface OperateItem {
   icon?: React.ReactNode;
 }
 
-interface Props {
+export interface RbsEditorHeaderProps {
   /** 页面logo */
   pageLogo?: React.FC | React.ReactNode;
+  /** 页面toolbar */
+  pageToolBar?:
+    | React.FC<{
+        /** 源 toolbar */
+        origin: React.ReactNode;
+        /** "开始预览" 按钮的 id（用于步骤引导） */
+        previewDriverId: string;
+      }>
+    | React.ReactNode;
 }
 
 const isIgnoreGithub = isIgnoreDomainName();
-export default function Header(props: Props) {
-  const { pageLogo: PageLogo } = props;
+export default function Header(props: RbsEditorHeaderProps) {
+  const { pageLogo: PageLogo, pageToolBar: PageToolbarRight } = props;
   const { engine, rbsEngine } = useEngineContext();
   const [t, i18n] = useTranslation();
   const historyData = useHistoryData();
@@ -71,20 +79,13 @@ export default function Header(props: Props) {
       },
       { key: "export", description: t("head.export"), icon: <UploadOutlined /> },
       { key: "import", description: t("head.import"), icon: <VerticalAlignBottomOutlined /> },
-      { key: "save", description: t("head.save"), icon: <SaveOutlined /> },
       { key: "clear", description: t("head.clear"), icon: <ClearOutlined /> },
       {
         key: "language",
         description: t("head.language", { text: `${isChinese ? "切换英语" : "change chinese"}` }),
         icon: <TranslationOutlined />,
       },
-      {
-        key: "settings",
-        description: t("head.settings"),
-        disabled: true,
-        icon: <SettingOutlined />,
-      },
-      // { key: "preview", description: t("head.preview"), icon: <DesktopOutlined /> },
+      { key: "save", description: t("head.save"), icon: <SaveOutlined /> },
     ];
   }, [i18n.language, historyData.isCanGoForward, historyData.isCanGoBack]);
 
@@ -153,6 +154,43 @@ export default function Header(props: Props) {
     </div>
   );
 
+  const originToolBar = (
+    <>
+      {operates.map((item: OperateItem) => {
+        return (
+          <TooltipButton
+            key={item.key}
+            disabled={item?.disabled}
+            title={item.description}
+            onClick={() => handleOperate(item)}
+          >
+            {item?.icon}
+          </TooltipButton>
+        );
+      })}
+      <Button
+        type={"primary"}
+        size={"small"}
+        style={{ fontSize: 12 }}
+        id={"rbs-preview"}
+        onClick={handlePreview}
+      >
+        开始预览
+      </Button>
+    </>
+  );
+
+  const previewDriverId = "rbs-tool-bar";
+  const renderToolBar = PageToolbarRight ? (
+    typeof PageToolbarRight === "function" ? (
+      <PageToolbarRight origin={originToolBar} previewDriverId={previewDriverId} />
+    ) : (
+      PageToolbarRight
+    )
+  ) : (
+    originToolBar
+  );
+
   return (
     <div className={styles.header}>
       {PageLogo ? typeof PageLogo === "function" ? <PageLogo /> : PageLogo : renderLogo}
@@ -162,29 +200,9 @@ export default function Header(props: Props) {
       <div className={styles.header_flex}>
         <ChooseExampleButton />
         <StepDriverButton />
-        <div className={styles.header_flex_btnContainer} id={"rbs-tool-bar"}>
-          {operates.map((item: OperateItem) => {
-            return (
-              <TooltipButton
-                key={item.key}
-                disabled={item?.disabled}
-                title={item.description}
-                onClick={() => handleOperate(item)}
-              >
-                {item?.icon}
-              </TooltipButton>
-            );
-          })}
+        <div className={styles.header_flex_btnContainer} id={previewDriverId}>
+          {renderToolBar}
         </div>
-        <Button
-          type={"primary"}
-          size={"small"}
-          style={{ fontSize: 12 }}
-          id={"rbs-preview"}
-          onClick={handlePreview}
-        >
-          开始预览
-        </Button>
       </div>
     </div>
   );
