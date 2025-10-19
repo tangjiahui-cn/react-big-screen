@@ -49,11 +49,21 @@ export interface RbsEditorHeaderProps {
         previewDriverId: string;
       }>
     | React.ReactNode;
+  /** toolbar配置 */
+  toolBarOptions?: {
+    /** 显示语言按钮 */
+    showLanguage?: boolean;
+    /** 显示保存按钮 */
+    showSave?: boolean;
+    /** 显示预览按钮 */
+    showPreview?: boolean;
+  };
 }
 
 const isIgnoreGithub = isIgnoreDomainName();
 export default function Header(props: RbsEditorHeaderProps) {
   const { pageLogo: PageLogo, pageToolBar: PageToolbarRight } = props;
+  const { showLanguage = true, showPreview = true, showSave = true } = props?.toolBarOptions || {};
   const { engine, rbsEngine } = useEngineContext();
   const [t, i18n] = useTranslation();
   const historyData = useHistoryData();
@@ -80,14 +90,18 @@ export default function Header(props: RbsEditorHeaderProps) {
       { key: "export", description: t("head.export"), icon: <UploadOutlined /> },
       { key: "import", description: t("head.import"), icon: <VerticalAlignBottomOutlined /> },
       { key: "clear", description: t("head.clear"), icon: <ClearOutlined /> },
-      {
+      showLanguage && {
         key: "language",
         description: t("head.language", { text: `${isChinese ? "切换英语" : "change chinese"}` }),
         icon: <TranslationOutlined />,
       },
-      { key: "save", description: t("head.save"), icon: <SaveOutlined /> },
-    ];
-  }, [i18n.language, historyData.isCanGoForward, historyData.isCanGoBack]);
+      showSave && {
+        key: "save",
+        description: t("head.save"),
+        icon: <SaveOutlined />,
+      },
+    ].filter(Boolean) as any as OperateItem[];
+  }, [i18n.language, historyData.isCanGoForward, historyData.isCanGoBack, showLanguage, showSave]);
 
   function handleJumpGithub() {
     window.open("https://github.com/tangjiahui-cn/react-big-screen.git");
@@ -168,15 +182,17 @@ export default function Header(props: RbsEditorHeaderProps) {
           </TooltipButton>
         );
       })}
-      <Button
-        type={"primary"}
-        size={"small"}
-        style={{ fontSize: 12 }}
-        id={"rbs-preview"}
-        onClick={handlePreview}
-      >
-        开始预览
-      </Button>
+      {showPreview && (
+        <Button
+          type={"primary"}
+          size={"small"}
+          style={{ fontSize: 12 }}
+          id={"rbs-preview"}
+          onClick={handlePreview}
+        >
+          开始预览
+        </Button>
+      )}
     </>
   );
 

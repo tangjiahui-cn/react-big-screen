@@ -22,15 +22,17 @@ export * from "./resources";
 export { startDriver } from "@/utils";
 export { defaultPackage } from "@/engine";
 
-export interface RbsEngineOptions
-  extends Pick<RbsEditorProps, "pageLogo" | "pageToolBar" | "pageFooter"> {
+export type RbsEngineOptions = Pick<
+  RbsEditorProps,
+  "pageLogo" | "pageToolBar" | "pageFooter" | "toolBarOptions"
+> & {
   /** 挂载 dom */
   dom?: HTMLElement;
   /** 激活全局（但实例请确保为true，此选项为多实例优化时使用） */
   activeGlobal?: boolean;
   /** 开始预览 hook */
   onStartPreview?: (engine: Engine) => void;
-}
+};
 
 export class RbsEngine {
   /** react createApp */
@@ -56,6 +58,7 @@ export class RbsEngine {
       pageFooter,
       pageLogo,
       pageToolBar,
+      toolBarOptions,
       ...rest
     } = options || {};
 
@@ -67,6 +70,7 @@ export class RbsEngine {
       pageFooter,
       pageLogo,
       pageToolBar,
+      toolBarOptions,
     };
 
     // 初始化
@@ -195,6 +199,7 @@ export class RbsEngine {
                   pageToolBar={this.options?.pageToolBar}
                   pageFooter={this.options?.pageFooter}
                   pageLogo={this.options?.pageLogo}
+                  toolBarOptions={this.options?.toolBarOptions}
                 />
               </EngineContext.Provider>,
             );

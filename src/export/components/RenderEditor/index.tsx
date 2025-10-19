@@ -33,7 +33,11 @@ export default function (props: RbsEditorProps) {
   return (
     <div className={styles.page}>
       <div className={styles.page_header}>
-        <Header pageLogo={props?.pageLogo} pageToolBar={props?.pageToolBar} />
+        <Header
+          pageLogo={props?.pageLogo}
+          pageToolBar={props?.pageToolBar}
+          toolBarOptions={props?.toolBarOptions}
+        />
       </div>
       <div className={styles.page_body}>
         <div className={styles.page_body_left} id={"rbs-menu"}>
