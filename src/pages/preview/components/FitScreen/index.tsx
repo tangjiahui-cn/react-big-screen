@@ -25,7 +25,7 @@ export default function FitScreen(props: FitScreenProps) {
   const domRef = useRef<HTMLDivElement>(null);
   const widthHeightRate = useMemo(() => dw / dh, [dw, dh]);
 
-  useResizeDom(containerDomRef, () => {
+  function handleResize() {
     if (!containerDomRef.current || !domRef.current) {
       return;
     }
@@ -45,7 +45,15 @@ export default function FitScreen(props: FitScreenProps) {
     }
     domRef.current.style.width = `${dw}px`;
     domRef.current.style.height = `${dh}px`;
+  }
+
+  useResizeDom(containerDomRef, () => {
+    handleResize();
   });
+
+  React.useEffect(() => {
+    handleResize();
+  }, []);
 
   return (
     <div className={props?.className} ref={containerDomRef} style={props?.style}>
