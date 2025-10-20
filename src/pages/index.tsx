@@ -9,7 +9,6 @@ import { RbsEngine } from "@/export";
 import { getExampleJsonText, getUrlQuery, openRoute, startDriver } from "@/utils";
 import { saveLocalPreviewJson } from "@/pages/preview";
 import Footer from "./components/Footer";
-import { Button } from "antd";
 
 // 获取初始加载json
 async function getInitJSONString(): Promise<string> {
@@ -25,28 +24,6 @@ export default function Page() {
   React.useEffect(() => {
     const rbsEngine = new RbsEngine({
       pageFooter: Footer,
-      toolBarOptions: {
-        showSave: false,
-        showPreview: false,
-      },
-      pageToolBar(props) {
-        return (
-          <>
-            {props?.origin}
-            <Button style={{ fontSize: 12 }} size={"small"}>
-              保存
-            </Button>
-            <Button
-              id={props.previewDriverId}
-              style={{ fontSize: 12 }}
-              size={"small"}
-              type={"primary"}
-            >
-              开始预览
-            </Button>
-          </>
-        );
-      },
     });
     rbsEngine.mount(domRef.current!).then(async () => {
       startDriver();
@@ -56,6 +33,7 @@ export default function Page() {
 
     // 监听“点击开始预览”事件
     rbsEngine.on("startPreview", async (engine) => {
+      console.log("zz start");
       const json = await engine.getJSON();
       saveLocalPreviewJson(json);
       openRoute("/preview");
