@@ -1,3 +1,12 @@
+## [0.0.27](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.26...v0.0.27) (2025-10-20)
+
+
+### Features
+
+* **.:** 修改FitScreen 的resize时机 ([17d0d3a](https://github.com/tangjiahui-cn/react-big-screen/commit/17d0d3a3cfd850d298ca8faf65d02a782f1c97eb))
+
+
+
 ## [0.0.26](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.25...v0.0.26) (2025-10-19)
 
 
