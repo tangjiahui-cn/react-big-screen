@@ -1,3 +1,12 @@
+## [0.0.28](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.27...v0.0.28) (2025-10-20)
+
+
+### Bug Fixes
+
+* **fitscreen:** 修复初次resize失效问题 ([e07f015](https://github.com/tangjiahui-cn/react-big-screen/commit/e07f0158a5ec8067991693d14b0f538ef874c20d))
+
+
+
 ## [0.0.27](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.26...v0.0.27) (2025-10-20)
 
 
