@@ -53,7 +53,7 @@ export default function FitScreen(props: FitScreenProps) {
 
   React.useEffect(() => {
     handleResize();
-  }, []);
+  }, [dw, dh]);
 
   return (
     <div className={props?.className} ref={containerDomRef} style={props?.style}>
