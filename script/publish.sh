@@ -38,9 +38,9 @@ ADDRESS=https://registry.npmjs.org/
 npm unpublish ${NAME}@${VERSION} 2>/dev/null --registry=${ADDRESS}
 npm publish --registry=${ADDRESS}
 
-echo "-> step6:推送远程git分支"
-git push origin
-git push origin --tags
+#echo "-> step6:推送远程git分支"
+#git push origin
+#git push origin --tags
 
 echo "🎉 发布成功 🎉"
 printf "tag: ${TAG_NAME}.\n"

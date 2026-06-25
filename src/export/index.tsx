@@ -9,6 +9,7 @@ import { JsonType, Engine, EngineOptions } from "@/engine";
 import { createRoot, Root } from "react-dom/client";
 import React from "react";
 import { EngineContext } from "@/export/context";
+import { RbsEditorProps } from "@/export/components/RenderEditor";
 
 const GLOBAL_ENGINE_KEY = "_$_rbs_current_engine_$_";
 const RenderEditor = React.lazy(() => import("./components/RenderEditor"));
@@ -21,18 +22,17 @@ export * from "./resources";
 export { startDriver } from "@/utils";
 export { defaultPackage } from "@/engine";
 
-export interface RbsEngineOptions {
+export type RbsEngineOptions = Pick<
+  RbsEditorProps,
+  "pageLogo" | "pageToolBar" | "pageFooter" | "toolBarOptions"
+> & {
   /** 挂载 dom */
   dom?: HTMLElement;
   /** 激活全局（但实例请确保为true，此选项为多实例优化时使用） */
   activeGlobal?: boolean;
   /** 开始预览 hook */
   onStartPreview?: (engine: Engine) => void;
-  /** 页面底部 */
-  pageFooter?: React.FC;
-  /** 页面logo */
-  pageLogo?: React.FC;
-}
+};
 
 export class RbsEngine {
   /** react createApp */
@@ -57,6 +57,8 @@ export class RbsEngine {
       dom,
       pageFooter,
       pageLogo,
+      pageToolBar,
+      toolBarOptions,
       ...rest
     } = options || {};
 
@@ -67,6 +69,8 @@ export class RbsEngine {
       dom,
       pageFooter,
       pageLogo,
+      pageToolBar,
+      toolBarOptions,
     };
 
     // 初始化
@@ -192,8 +196,10 @@ export class RbsEngine {
                   json={json}
                   engine={this.engine}
                   onJSONLoad={resolve}
+                  pageToolBar={this.options?.pageToolBar}
                   pageFooter={this.options?.pageFooter}
                   pageLogo={this.options?.pageLogo}
+                  toolBarOptions={this.options?.toolBarOptions}
                 />
               </EngineContext.Provider>,
             );

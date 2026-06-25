@@ -1,3 +1,57 @@
+## [0.0.28](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.27...v0.0.28) (2025-10-20)
+
+
+### Bug Fixes
+
+* **fitscreen:** 修复初次resize失效问题 ([e07f015](https://github.com/tangjiahui-cn/react-big-screen/commit/e07f0158a5ec8067991693d14b0f538ef874c20d))
+
+
+
+## [0.0.27](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.26...v0.0.27) (2025-10-20)
+
+
+### Features
+
+* **.:** 修改FitScreen 的resize时机 ([17d0d3a](https://github.com/tangjiahui-cn/react-big-screen/commit/17d0d3a3cfd850d298ca8faf65d02a782f1c97eb))
+
+
+
+## [0.0.26](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.25...v0.0.26) (2025-10-19)
+
+
+### Bug Fixes
+
+* **.:** 修复previewDriverId ([50ab37c](https://github.com/tangjiahui-cn/react-big-screen/commit/50ab37c3ee4fc1b9b824c80722bb5ed808dec63e))
+
+
+
+## [0.0.25](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.24...v0.0.25) (2025-10-19)
+
+
+### Features
+
+* **.:** 新增 toolBarOptions 配置 ([ff4d0a3](https://github.com/tangjiahui-cn/react-big-screen/commit/ff4d0a3fd9ed4c0d438bcfa5e65e3c6cf76b9b45))
+
+
+
+## [0.0.24](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.23...v0.0.24) (2025-10-19)
+
+
+### Features
+
+* **.:** 支持自定义toolbar ([db43f98](https://github.com/tangjiahui-cn/react-big-screen/commit/db43f982f8690f4be7e2082ba659bfbb12beb569))
+
+
+
+## [0.0.23](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.22...v0.0.23) (2025-10-19)
+
+
+### Features
+
+* **.:** pageLogo和pageHeader支持React.ReactNode ([63ca61d](https://github.com/tangjiahui-cn/react-big-screen/commit/63ca61d635c9b14b10cc2a9d04c8af1ca14c54a5))
+
+
+
 ## [0.0.22](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.21...v0.0.22) (2025-10-17)
 
 

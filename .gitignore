@@ -6,6 +6,8 @@ dist
 .dumi/tmp*
 docs-dist
 
+.env
+
 # build product
 /umd
 /es

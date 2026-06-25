@@ -33,6 +33,7 @@ export default function Page() {
 
     // 监听“点击开始预览”事件
     rbsEngine.on("startPreview", async (engine) => {
+      console.log("zz start");
       const json = await engine.getJSON();
       saveLocalPreviewJson(json);
       openRoute("/preview");

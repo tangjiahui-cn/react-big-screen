@@ -4,6 +4,7 @@ import path from "path";
 import { createHtmlPlugin } from "vite-plugin-html";
 import pkg from "./package.json";
 import { analyzer } from "vite-bundle-analyzer";
+import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 const dayjs = require("dayjs");
 
 // 是否分析打包情况
@@ -36,6 +37,7 @@ export default defineConfig({
     },
   },
   build: {
+    terserOptions: {},
     rollupOptions: {
       output: {
         manualChunks: {
@@ -70,6 +72,20 @@ export default defineConfig({
           },
         },
       ],
+    }),
+    ViteImageOptimizer({
+      png: {
+        quality: 80, // 质量（0-100，值越高越清晰，体积越大）
+      },
+      jpeg: {
+        quality: 80,
+      },
+      webp: {
+        quality: 80,
+        lossless: false,
+      },
+      include: /\.(png|jpe?g|svg)$/i, // 仅处理指定格式
+      exclude: /node_modules/, // 排除 node_modules 目录
     }),
     isAnalyzer && analyzer(),
   ],

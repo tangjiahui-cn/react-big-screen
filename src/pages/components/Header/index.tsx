@@ -10,7 +10,6 @@ import {
   VerticalAlignBottomOutlined,
   GithubFilled,
   SaveOutlined,
-  SettingOutlined,
   ClearOutlined,
   QuestionCircleOutlined,
   TranslationOutlined,
@@ -31,6 +30,9 @@ import StepDriverButton from "./components/StepDriverButton";
 import { useEngineContext } from "@/export/context";
 import { useHistoryData } from "@/engine";
 
+const toolBarDriverId = "rbs-tool-bar";
+const previewDriverId = "rbs-preview";
+
 interface OperateItem {
   key: string;
   disabled?: boolean;
@@ -38,14 +40,33 @@ interface OperateItem {
   icon?: React.ReactNode;
 }
 
-interface Props {
+export interface RbsEditorHeaderProps {
   /** 页面logo */
-  pageLogo?: React.FC;
+  pageLogo?: React.FC | React.ReactNode;
+  /** 页面toolbar */
+  pageToolBar?:
+    | React.FC<{
+        /** 源 toolbar */
+        origin: React.ReactNode;
+        /** "开始预览" 按钮的 id（用于步骤引导） */
+        previewDriverId: string;
+      }>
+    | React.ReactNode;
+  /** toolbar配置 */
+  toolBarOptions?: {
+    /** 显示语言按钮 */
+    showLanguage?: boolean;
+    /** 显示保存按钮 */
+    showSave?: boolean;
+    /** 显示预览按钮 */
+    showPreview?: boolean;
+  };
 }
 
 const isIgnoreGithub = isIgnoreDomainName();
-export default function Header(props: Props) {
-  const { pageLogo: PageLogo } = props;
+export default function Header(props: RbsEditorHeaderProps) {
+  const { pageLogo: PageLogo, pageToolBar: PageToolbarRight } = props;
+  const { showLanguage = true, showPreview = true, showSave = true } = props?.toolBarOptions || {};
   const { engine, rbsEngine } = useEngineContext();
   const [t, i18n] = useTranslation();
   const historyData = useHistoryData();
@@ -71,22 +92,19 @@ export default function Header(props: Props) {
       },
       { key: "export", description: t("head.export"), icon: <UploadOutlined /> },
       { key: "import", description: t("head.import"), icon: <VerticalAlignBottomOutlined /> },
-      { key: "save", description: t("head.save"), icon: <SaveOutlined /> },
       { key: "clear", description: t("head.clear"), icon: <ClearOutlined /> },
-      {
+      showLanguage && {
         key: "language",
         description: t("head.language", { text: `${isChinese ? "切换英语" : "change chinese"}` }),
         icon: <TranslationOutlined />,
       },
-      {
-        key: "settings",
-        description: t("head.settings"),
-        disabled: true,
-        icon: <SettingOutlined />,
+      showSave && {
+        key: "save",
+        description: t("head.save"),
+        icon: <SaveOutlined />,
       },
-      // { key: "preview", description: t("head.preview"), icon: <DesktopOutlined /> },
-    ];
-  }, [i18n.language, historyData.isCanGoForward, historyData.isCanGoBack]);
+    ].filter(Boolean) as any as OperateItem[];
+  }, [i18n.language, historyData.isCanGoForward, historyData.isCanGoBack, showLanguage, showSave]);
 
   function handleJumpGithub() {
     window.open("https://github.com/tangjiahui-cn/react-big-screen.git");
@@ -153,38 +171,56 @@ export default function Header(props: Props) {
     </div>
   );
 
+  const originToolBar = (
+    <>
+      {operates.map((item: OperateItem) => {
+        return (
+          <TooltipButton
+            key={item.key}
+            disabled={item?.disabled}
+            title={item.description}
+            onClick={() => handleOperate(item)}
+          >
+            {item?.icon}
+          </TooltipButton>
+        );
+      })}
+      {showPreview && (
+        <Button
+          type={"primary"}
+          size={"small"}
+          style={{ fontSize: 12 }}
+          id={previewDriverId}
+          onClick={handlePreview}
+        >
+          开始预览
+        </Button>
+      )}
+    </>
+  );
+
+  const renderToolBar = PageToolbarRight ? (
+    typeof PageToolbarRight === "function" ? (
+      <PageToolbarRight origin={originToolBar} previewDriverId={previewDriverId} />
+    ) : (
+      PageToolbarRight
+    )
+  ) : (
+    originToolBar
+  );
+
   return (
     <div className={styles.header}>
-      {PageLogo ? <PageLogo /> : renderLogo}
+      {PageLogo ? typeof PageLogo === "function" ? <PageLogo /> : PageLogo : renderLogo}
 
       <SizeBar />
 
       <div className={styles.header_flex}>
         <ChooseExampleButton />
         <StepDriverButton />
-        <div className={styles.header_flex_btnContainer} id={"rbs-tool-bar"}>
-          {operates.map((item: OperateItem) => {
-            return (
-              <TooltipButton
-                key={item.key}
-                disabled={item?.disabled}
-                title={item.description}
-                onClick={() => handleOperate(item)}
-              >
-                {item?.icon}
-              </TooltipButton>
-            );
-          })}
+        <div className={styles.header_flex_btnContainer} id={toolBarDriverId}>
+          {renderToolBar}
         </div>
-        <Button
-          type={"primary"}
-          size={"small"}
-          style={{ fontSize: 12 }}
-          id={"rbs-preview"}
-          onClick={handlePreview}
-        >
-          开始预览
-        </Button>
       </div>
     </div>
   );
