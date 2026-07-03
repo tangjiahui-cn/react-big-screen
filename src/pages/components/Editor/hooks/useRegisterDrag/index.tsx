@@ -11,7 +11,7 @@ import { handleClickComponentNode } from "./handleClickComponentNode";
 import { DATASET } from "@/engine";
 import { useUnmount } from "ahooks";
 import { startMove } from "@/packages/dragMove/utils/startMove";
-import { listenDragMove } from "./listenDragMove";
+import { listenDragMove, ListenDragMoveOptions } from "./listenDragMove";
 import { listenRangeBox } from "./listenRangeBox";
 import { listenDropLayout } from "./listenDropLayout";
 import { listenDragSize } from "./listenDragSize";
@@ -19,7 +19,7 @@ import { getHTMLElementDataSet, isClickMouseLeft, isClickMouseRight } from "@/ut
 import { isKeyPressed } from "@/packages/shortCutKeys";
 import { useEngineContext } from "@/export/context";
 
-export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
+export function useRegisterDrag(domRef: RefObject<HTMLElement>, options?: ListenDragMoveOptions) {
   const unmountsRef = useRef<(Unmount | void)[]>([]);
   const { engine } = useEngineContext();
 
@@ -79,7 +79,12 @@ export function useRegisterDrag(domRef: RefObject<HTMLElement>) {
                 // 监听拖拽大小
                 dragDirection && listenDragSize(componentNode, e.target as any, dragDirection),
                 // 监听拖拽移动
-                !dragDirection && listenDragMove(instance),
+                !dragDirection &&
+                  listenDragMove(instance, {
+                    onMoveStart: options?.onMoveStart,
+                    onMoving: options?.onMoving,
+                    onMoveEnd: options?.onMoveEnd,
+                  }),
                 // 监听是否放置到 layout 组件
                 listenDropLayout(instance, (unmount) => {
                   unmountsRef.current.push(unmount);
