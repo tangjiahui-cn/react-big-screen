@@ -18,7 +18,20 @@ interface MoveOptItem {
   componentNode?: ComponentNodeType; // 组件数据
 }
 
-export function listenDragMove(instance: InstanceType): MoveHookQueueType | void {
+export interface OnMoveData {
+  componentNodes: ComponentNodeType[];
+}
+
+export interface ListenDragMoveOptions {
+  onMoveStart?: (options: OnMoveData) => void;
+  onMoving?: (options: OnMoveData, moveInfo: { deltaX: number; deltaY: number }) => void;
+  onMoveEnd?: (options: OnMoveData) => void;
+}
+
+export function listenDragMove(
+  instance: InstanceType,
+  options?: ListenDragMoveOptions,
+): MoveHookQueueType | void {
   // 锁定组件不能移动
   const componentNode = instance.getComponentNode();
 
@@ -42,6 +55,11 @@ export function listenDragMove(instance: InstanceType): MoveHookQueueType | void
   let isMove = false;
   // 节流移动组件
   let throttleMove: ((deltaX: number, deltaY: number) => void) | undefined;
+
+  let onMoveData: OnMoveData = {
+    componentNodes: [],
+  };
+
   return {
     onStart() {
       // 修改全局光标
@@ -64,6 +82,15 @@ export function listenDragMove(instance: InstanceType): MoveHookQueueType | void
             trailing: true,
           },
         );
+
+        onMoveData = {
+          componentNodes: moveOptItems.reduce((result, moveOptItem) => {
+            if (moveOptItem.componentNode) result.push(moveOptItem.componentNode);
+            return result;
+          }, [] as ComponentNodeType[]),
+        };
+
+        options?.onMoveStart?.(onMoveData);
       });
       return false;
     },
@@ -75,10 +102,17 @@ export function listenDragMove(instance: InstanceType): MoveHookQueueType | void
       }
       // 移动选中实例
       throttleMove?.(deltaX, deltaY);
+
+      options?.onMoving?.(onMoveData, {
+        deltaX,
+        deltaY,
+      });
     },
     onEnd(deltaX: number, deltaY: number) {
       // 恢复全局光标
       globalCursor.revoke();
+
+      options?.onMoveEnd?.(onMoveData);
 
       // 如果未移动，则不处理选中实例
       if (!isMove) return;

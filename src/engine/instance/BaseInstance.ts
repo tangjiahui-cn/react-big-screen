@@ -34,15 +34,18 @@ export default class BaseInstance {
 
   // 新增实例
   public add(instance: undefined | InstanceType | (InstanceType | undefined)[]): void {
-    if (!instance) {
-      return;
-    }
-    if (Array.isArray(instance)) {
-      instance.forEach((instance) => this.add(instance));
-      return;
-    }
-    this._data[instance.id] = instance;
-    this._size++;
+    if (!instance) return;
+
+    const instances = Array.isArray(instance) ? instance : [instance];
+    instances.forEach((instance) => {
+      if (!instance) {
+        return;
+      }
+
+      this._data[instance.id] = instance;
+      this._size++;
+    });
+
     this.notify();
   }
 

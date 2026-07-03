@@ -1,0 +1,20 @@
+@borderColor: rgba(24, 144, 255, 0.5);
+@color: rgba(24, 144, 255, 0.6);
+@bg: rgba(9, 109, 217, 0.03);
+
+.positionLine {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: @bg;
+  border-right: 1px dotted @borderColor;
+  border-bottom: 1px dotted @borderColor;
+  color: @color;
+  font-size: 8px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  box-sizing: border-box;
+  padding: 0 4px 0 0;
+}

@@ -55,3 +55,37 @@ export function isRectInner(rect: RectCoordinate, targetRect: RectCoordinate) {
     rect.y2 <= targetRect.y2
   );
 }
+
+/**
+ * 计算一组坐标的左上角
+ */
+export function getLeftTopCoordinate(
+  coordinates: Array<{
+    x: number;
+    y: number;
+  }>,
+) {
+  if (!coordinates.length) {
+    return;
+  }
+
+  return coordinates.reduce(
+    (result, currentValue, currentIndex) => {
+      if (currentIndex === 0) {
+        return {
+          x: currentValue.x,
+          y: currentValue.y,
+        };
+      }
+
+      result.x = Math.min(result.x, currentValue.x);
+      result.y = Math.min(result.y, currentValue.y);
+
+      return result;
+    },
+    {
+      x: 0,
+      y: 0,
+    },
+  );
+}

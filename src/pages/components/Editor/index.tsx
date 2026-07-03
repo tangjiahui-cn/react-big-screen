@@ -16,6 +16,7 @@ import {
   useCreateComponentNode,
   useRegisterContextMenu,
   useCreateFavorite,
+  useRegisterPositionLine,
 } from "./hooks";
 import { useEngineContext } from "@/export/context";
 
@@ -45,8 +46,18 @@ export default () => {
     });
   }, [componentNodes, packages]);
 
+  // 注册定位线
+  const positionLine = useRegisterPositionLine(editorDomRef);
+
   // 注册拖拽相关
-  useRegisterDrag(innerEditorDomRef);
+  useRegisterDrag(innerEditorDomRef, {
+    onMoving(_, { deltaX, deltaY }) {
+      positionLine.move(deltaX, deltaY);
+    },
+    onMoveEnd() {
+      positionLine.flush();
+    },
+  });
 
   // 注册右键菜单
   useRegisterContextMenu(editorDomRef);
@@ -75,6 +86,9 @@ export default () => {
         {/* 渲染实例 */}
         {renderComponentNodes}
       </PageContainer>
+
+      {/** 辅助线实例 */}
+      {positionLine.children}
     </div>
   );
 };
