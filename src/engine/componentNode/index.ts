@@ -18,7 +18,7 @@ import { omit } from "lodash-es";
 import { createUUID } from "../utils";
 import { RectCoordinate } from "@/utils";
 
-type ComponentNodeChangeEventCallback = (options: { payload: ComponentNodeType }) => void;
+type ComponentNodeChangeEventCallback<T = ComponentNodeType> = (options: { payload: T }) => void;
 type ComponentNodeChangeEventUnmount = () => void;
 
 type ListerCallback<T> = (value: T) => void;
@@ -35,9 +35,11 @@ const INIT_COMPONENT: BaseComponent = {
   category: "unknown",
 };
 
+const COMPONENT_NODE_UPDATE = Symbol();
 export default class ComponentNode {
   private maxLevel: number = 1; // 最大层级
-  private eventMap: Record<string, ComponentNodeChangeEventCallback[]> = {}; // 数据节点变更回调事件 （id => callback）
+  private eventMap: Record<string, ComponentNodeChangeEventCallback[]> &
+    Record<symbol, ComponentNodeChangeEventCallback<ComponentNodeType[]>[]> = {}; // 数据节点变更回调事件 （id => callback）
   private groupMap: Record<string, ComponentNodeGroup> = {}; // 成组映射（groupId => 对应元素）
   private panelMap: Record<
     string,
@@ -65,29 +67,57 @@ export default class ComponentNode {
     this.deleteListeners.forEach((cb) => cb(deleteIds));
   }
 
-  // 触发onChange事件
-  private notifyChange(componentNode: ComponentNodeType) {
-    this.eventMap[componentNode.id]?.forEach?.((cb: ComponentNodeChangeEventCallback) => {
-      cb?.({
-        payload: componentNode,
+  // 手动触发 componentNode 更新
+  public notifyChange(componentNode: ComponentNodeType | ComponentNodeType[]) {
+    const componentNodes = Array.isArray(componentNode) ? componentNode : [componentNode];
+    if (!componentNodes.length) {
+      return;
+    }
+
+    // 更新单个组件
+    componentNodes.forEach((componentNode) => {
+      this.eventMap[componentNode.id]?.forEach?.((cb: ComponentNodeChangeEventCallback) => {
+        cb?.({
+          payload: componentNode,
+        });
       });
     });
+
+    this.eventMap[COMPONENT_NODE_UPDATE]?.forEach?.(
+      (cb: ComponentNodeChangeEventCallback<ComponentNodeType[]>) => {
+        cb?.({
+          payload: componentNodes,
+        });
+      },
+    );
   }
 
   // 注册节点事件变更回调
+  public onChange(id: ComponentNodeChangeEventCallback): ComponentNodeChangeEventUnmount;
   public onChange(
     id: string,
     callback: ComponentNodeChangeEventCallback,
+  ): ComponentNodeChangeEventUnmount;
+  public onChange(
+    id: string | ComponentNodeChangeEventCallback,
+    callback?: ComponentNodeChangeEventCallback,
   ): ComponentNodeChangeEventUnmount {
-    if (!id) {
+    const isIdFunction = typeof id === "function";
+
+    // 监听单个数据时校验
+    if (!isIdFunction && !id) {
       console.warn("id must be defined");
       return () => {};
     }
-    (this.eventMap[id] ||= []).push(callback);
+
+    const key: string | symbol = isIdFunction ? COMPONENT_NODE_UPDATE : id;
+    const fn = isIdFunction ? id : callback || (() => {});
+
+    (this.eventMap[key] ||= []).push(fn);
     return () => {
-      this.eventMap[id] = this.eventMap[id].filter((cb: ComponentNodeChangeEventCallback) => {
-        return cb !== callback;
-      });
+      this.eventMap[key] = this.eventMap[key].filter((cb) => {
+        return cb !== fn;
+      }) as any;
     };
   }
 
@@ -226,7 +256,7 @@ export default class ComponentNode {
       silent?: boolean; // 是否不触发更新，而仅仅是修改值。（默认false，true不触发，false触发）
       cover?: boolean; // 是否完全覆盖
     },
-  ) {
+  ): ComponentNodeType | undefined {
     if (!id || !extComponentNode) return;
     const componentNode = this.get(id);
     if (!componentNode) return;
@@ -250,6 +280,8 @@ export default class ComponentNode {
     if (!options?.silent) {
       this.notifyChange(componentNode);
     }
+
+    return componentNode;
   }
 
   // 删除 componentNode

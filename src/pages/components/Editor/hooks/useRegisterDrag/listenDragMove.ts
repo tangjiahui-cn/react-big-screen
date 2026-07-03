@@ -24,7 +24,7 @@ export interface OnMoveData {
 
 export interface ListenDragMoveOptions {
   onMoveStart?: (options: OnMoveData) => void;
-  onMoving?: (options: OnMoveData) => void;
+  onMoving?: (options: OnMoveData, moveInfo: { deltaX: number; deltaY: number }) => void;
   onMoveEnd?: (options: OnMoveData) => void;
 }
 
@@ -103,7 +103,10 @@ export function listenDragMove(
       // 移动选中实例
       throttleMove?.(deltaX, deltaY);
 
-      options?.onMoving?.(onMoveData);
+      options?.onMoving?.(onMoveData, {
+        deltaX,
+        deltaY,
+      });
     },
     onEnd(deltaX: number, deltaY: number) {
       // 恢复全局光标
