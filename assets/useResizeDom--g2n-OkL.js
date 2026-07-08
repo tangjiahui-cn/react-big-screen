@@ -1,0 +1,1 @@
+import{r as i}from"./react-vendor-C7qxa2PD.js";import{u as c}from"./useListenRef-BncaX_Rk.js";function f(e,n){const r=c(n);i.useEffect(()=>{if(!e.current)return;const s=new ResizeObserver((o,u)=>{var t;(t=r==null?void 0:r.current)==null||t.call(r,o,u)});return s.observe(e.current),()=>{s.disconnect()}},[])}export{f as u};
