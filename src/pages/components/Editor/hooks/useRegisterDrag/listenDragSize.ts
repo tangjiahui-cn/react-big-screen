@@ -147,11 +147,43 @@ export function listenDragSize(
       if (width < 0 || height < 0) {
         return;
       }
+
+      let newX = Math.round(baseInfo.x + moveInfo.dx);
+      let newY = Math.round(baseInfo.y + moveInfo.dy);
+      let newWidth = Math.round(Math.max(width, 0));
+      let newHeight = Math.round(Math.max(height, 0));
+
+      // 如果开启了拖拽不超出画布，限制组件在画布边界内
+      const config = engine.config.getConfig();
+      if (config.dragClampEnabled) {
+        // 限制左边界（x < 0 时缩减宽度补偿）
+        if (newX < 0) {
+          newWidth += newX;
+          newX = 0;
+        }
+        // 限制上边界（y < 0 时缩减高度补偿）
+        if (newY < 0) {
+          newHeight += newY;
+          newY = 0;
+        }
+        // 限制右边界
+        if (newX + newWidth > config.width) {
+          newWidth = config.width - newX;
+        }
+        // 限制下边界
+        if (newY + newHeight > config.height) {
+          newHeight = config.height - newY;
+        }
+        // 确保最小尺寸
+        if (newWidth < 1) newWidth = 1;
+        if (newHeight < 1) newHeight = 1;
+      }
+
       engine.componentNode.update(componentNode.id, {
-        x: Math.round(baseInfo.x + moveInfo.dx),
-        y: Math.round(baseInfo.y + moveInfo.dy),
-        height: Math.round(Math.max(height, 0)),
-        width: Math.round(Math.max(width, 0)),
+        x: newX,
+        y: newY,
+        height: Math.round(Math.max(newHeight, 0)),
+        width: Math.round(Math.max(newWidth, 0)),
       });
     },
     onEnd() {

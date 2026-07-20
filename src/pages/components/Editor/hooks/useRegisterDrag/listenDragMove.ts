@@ -140,16 +140,37 @@ function moveSelectedInstances(
   deltaX: number,
   deltaY: number,
 ) {
+  const engine = RbsEngine.getActiveEngine();
+  const config = engine?.config?.getConfig();
+  const isClampEnabled = config?.dragClampEnabled;
+
   moveOptItems.forEach((item: MoveOptItem) => {
     // 不显示的组件不移动
     if (!item.show) return;
     const dom = item.containerDom!;
+    const componentNode = item.componentNode!;
+
+    let displayX = deltaX;
+    let displayY = deltaY;
+
+    if (isClampEnabled && componentNode) {
+      const clampedX = Math.max(
+        0,
+        Math.min(deltaX + componentNode.x, config.width - componentNode.width),
+      );
+      const clampedY = Math.max(
+        0,
+        Math.min(deltaY + componentNode.y, config.height - componentNode.height),
+      );
+      displayX = clampedX - componentNode.x;
+      displayY = clampedY - componentNode.y;
+    }
+
     if (enableTransform) {
-      dom.style.transform = `translate3d(${deltaX}px,${deltaY}px, 0)`;
+      dom.style.transform = `translate3d(${displayX}px,${displayY}px, 0)`;
     } else {
-      const componentNode = item.componentNode!;
-      dom.style.left = `${componentNode.x + deltaX}px`;
-      dom.style.top = `${componentNode.y + deltaY}px`;
+      dom.style.left = `${componentNode.x + displayX}px`;
+      dom.style.top = `${componentNode.y + displayY}px`;
     }
   });
 }
@@ -163,6 +184,9 @@ function updateSelectedInstances(
 ) {
   const engine = RbsEngine.getActiveEngine();
   if (!engine) return;
+  const config = engine.config.getConfig();
+  const isClampEnabled = config.dragClampEnabled;
+
   moveOptItems.forEach((item) => {
     // 删除 transform
     if (item?.show && enableTransform) {
@@ -171,9 +195,17 @@ function updateSelectedInstances(
     // 更新 componentNode
     const componentNode = item?.componentNode;
     if (componentNode) {
+      let newX = Math.round(deltaX + (componentNode?.x || 0));
+      let newY = Math.round(deltaY + (componentNode?.y || 0));
+
+      if (isClampEnabled) {
+        newX = Math.max(0, Math.min(newX, config.width - componentNode.width));
+        newY = Math.max(0, Math.min(newY, config.height - componentNode.height));
+      }
+
       engine.componentNode.update(componentNode.id, {
-        x: Math.round(deltaX + (componentNode?.x || 0)),
-        y: Math.round(deltaY + (componentNode?.y || 0)),
+        x: newX,
+        y: newY,
       });
     }
   });
