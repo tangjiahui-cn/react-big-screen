@@ -6,6 +6,7 @@
  */
 import React, { useMemo } from "react";
 import {
+  SettingOutlined,
   UploadOutlined,
   VerticalAlignBottomOutlined,
   GithubFilled,
@@ -27,6 +28,7 @@ import { changeLanguage, LANGUAGE } from "@/i18n";
 import { isIgnoreDomainName } from "@/utils/ignore";
 import ChooseExampleButton from "./components/ChooseExampleButton";
 import StepDriverButton from "./components/StepDriverButton";
+import useSettingsDrawer from "./components/SettingsDrawer";
 import { useEngineContext } from "@/export/context";
 import { useHistoryData } from "@/engine";
 
@@ -71,6 +73,7 @@ export default function Header(props: RbsEditorHeaderProps) {
   const [t, i18n] = useTranslation();
   const historyData = useHistoryData();
   const isChinese = i18n.language === LANGUAGE.zh;
+  const settingsDrawer = useSettingsDrawer();
   const operates = useMemo(() => {
     return [
       {
@@ -93,6 +96,11 @@ export default function Header(props: RbsEditorHeaderProps) {
       { key: "export", description: t("head.export"), icon: <UploadOutlined /> },
       { key: "import", description: t("head.import"), icon: <VerticalAlignBottomOutlined /> },
       { key: "clear", description: t("head.clear"), icon: <ClearOutlined /> },
+      {
+        key: "settings",
+        description: "设置",
+        icon: <SettingOutlined />,
+      },
       showLanguage && {
         key: "language",
         description: t("head.language", { text: `${isChinese ? "切换英语" : "change chinese"}` }),
@@ -151,6 +159,7 @@ export default function Header(props: RbsEditorHeaderProps) {
         engine.clear();
         break;
       case "settings":
+        settingsDrawer.open();
         break;
       case "language":
         const language = isChinese ? "en" : "zh";
