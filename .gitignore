@@ -15,3 +15,7 @@ docs-dist
 /types
 
 tsconfig.tsbuildinfo
+
+# claude
+.claude/tmp
+CLAUDE.md

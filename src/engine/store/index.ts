@@ -24,6 +24,7 @@ export const INIT_CONFIG: GlobalState["config"] = {
   scaleMaxZoom: 2,
   width: 1920,
   height: 1080,
+  dragClampEnabled: false,
 };
 
 export const useGlobalSelector = create<GlobalState>(() => ({
