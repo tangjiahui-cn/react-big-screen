@@ -1,3 +1,22 @@
+## [0.0.29](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.28...v0.0.29) (2026-09-08)
+
+
+### Bug Fixes
+
+* **.:** 修复左侧 ComponentNode 菜单未显示最后一个组件的问题 ([4f060b9](https://github.com/tangjiahui-cn/react-big-screen/commit/4f060b9b8e824af8bc9291339e32a0fe28e01af0))
+* 修复this.loadJSON(json)异步加载时机问题 ([ce53346](https://github.com/tangjiahui-cn/react-big-screen/commit/ce53346918d8a25467825cb00c5b7a82b6b6a938))
+
+
+### Features
+
+* **.:** useRegisterDrag 增加 options，支持 onMoveStart,onMoving,onMoveEnd ([ab45d1e](https://github.com/tangjiahui-cn/react-big-screen/commit/ab45d1e619b45f30910f57eb40b6177c17a729ad))
+* **.:** 增加定位线 ([6d67c7f](https://github.com/tangjiahui-cn/react-big-screen/commit/6d67c7f16819f22cd9a9b066df156d73a23c1e0e))
+* 取消定位线的背景色 ([8d4615b](https://github.com/tangjiahui-cn/react-big-screen/commit/8d4615b6be4f6686338d6aec93c7fad9fd03dfa1))
+* 拖拽不超过画布配置 + 设置弹窗 ([75493fe](https://github.com/tangjiahui-cn/react-big-screen/commit/75493fe372214665bf5caee14d881e3607121c1d))
+* 拖拽移动和缩放增加画布边界钳制 ([e8da5be](https://github.com/tangjiahui-cn/react-big-screen/commit/e8da5be6690bf355caa870f510c35112b5cdb2bd))
+
+
+
 ## [0.0.28](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.27...v0.0.28) (2025-10-20)
 
 
