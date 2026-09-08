@@ -22,11 +22,11 @@ react-big-screen 是一个基于 React 18 的可视化大屏编辑器，通过�
 
 编辑模式：
 
-<img src="./imgs/edit.png" height="200" alt="react-big-screen 编辑画布">
+<img src="./imgs/edit.png" style="max-width: 100%;max-height: 500px;" alt="react-big-screen 编辑画布">
 
 预览模式：
 
-<img src="./imgs/preview.png" height="200" alt="react-big-screen 预览页">
+<img src="./imgs/preview.png" style="max-width: 100%;max-height: 500px;" alt="react-big-screen 预览页">
 
 ## 核心功能
 
