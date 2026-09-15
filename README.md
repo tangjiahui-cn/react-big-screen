@@ -131,7 +131,7 @@ export default function Screen() {
 pnpm add react-big-screen
 ```
 
-运行环境：Node 20+、React 18。在应用中一次性引入所需样式：
+运行环境：Node@24、React@18。在应用中一次性引入所需样式：
 
 ```tsx
 import "antd/dist/antd.min.css";

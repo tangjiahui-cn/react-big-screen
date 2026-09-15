@@ -15,15 +15,15 @@ jobs:
       - name: Copy Codes
         uses: actions/checkout@v4
 
-      - name: setup node@20.15.1
+      - name: setup node@24.21.0
         uses: actions/setup-node@v4
         with:
-          node-version: "20.15.1"
+          node-version: "24.21.0"
 
-      - name: Install pnpm@9.13.2
+      - name: Install pnpm@11.26.0
         uses: pnpm/action-setup@v4
         with:
-          version: 9.13.2
+          version: 11.26.0
 
       - name: Install Dependencies.
         run: pnpm install

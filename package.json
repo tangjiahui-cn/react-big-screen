@@ -22,10 +22,10 @@
     "commit": "git add . && git-cz",
     "build:github-page": "cross-env deploy=github pnpm build"
   },
-  "packageManager": "pnpm@9.13.2",
+  "packageManager": "pnpm@11.26.0",
   "volta": {
-    "node": "20.15.1",
-    "pnpm": "9.13.2"
+    "node": "24.21.0",
+    "pnpm": "11.26.0"
   },
   "repository": {
     "type": "git",
@@ -44,6 +44,9 @@
     "commitizen": {
       "path": "@commitlint/cz-commitlint"
     }
+  },
+  "engines": {
+    "node": ">=22"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
