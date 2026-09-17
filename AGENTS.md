@@ -1,33 +1,64 @@
-# Agent 使用约定
+# AGENTS.md
 
-## 交互哲学
+React-Big-Screen 是一个从0到1设计的 React 可视化编辑器。修改 `/src` 目录前，请读取 [docs/architecture.md](docs/architecture.md)。
 
-### 用户意愿优先
+## 仓库结构
 
-严格区分“询问”“给出方案”和“执行”：用户仅要求分析问题、说明原因或给出方案时，只提供分析与建议，不主动修改代码或执行操作。只有用户明确要求实施、修改或执行时，才进入实际变更阶段。
+```
+src/
+  engine/      编辑器内核：三层模型（Component / ComponentNode / Instance）、全局 store、
+               hooks、内置组件注册（built-in/）
+  export/      SDK 出口：RbsEngine 类、RenderEditor（编辑态）与 RenderPreview（预览态）
+  pages/       编辑器外壳 UI（Header / Menu / Attributes / Editor / Footer）与独立预览页
+  packages/    编辑器能力插件（非组件包）：拖拽、历史记录、快捷键、右键菜单、请求、无限画布等
+  components/  通用 UI 组件（属性面板表单控件、图表容器等）
+  i18n/        国际化（zh / en），语言配置随 JSON 持久化
+  router/      Hash 路由
+  utils/       工具函数（模块加载、下载、路由、示例 JSON 等）
+  static/      内置组件图标（仅 PNG，无代码）
+config/        构建配置：vite.base.ts、vite.buildESM.ts、external 依赖判定
+public/        示例 JSON（example/）与远程组件示例（demo.umd.js / demo.amd.js）
+docs/          架构文档
+script/        发布脚本
+```
 
-## 设计哲学
+注意：`src/packages/` 与 `src/engine/built-in/` 是两个不同的概念。前者是编辑器自身的能力插件，后者才是可注册进编辑器的**组件**（组件包）。详见下文。
 
-### 优先复用，克制创造
+## 常用命令
 
-优先复用现有组件库和公共能力，避免重复建设与无必要的新抽象。仅当现有能力无法合理覆盖，且新增组件具备明确、独立的职责边界时才创建；核心目标是控制概念数量、统一实现方式并降低长期维护成本。
+```sh
+pnpm install            # 安装依赖（Node ^22 || >=24，pnpm 11.26）
+pnpm dev                # 启动开发服务器，默认 http://localhost:11000
+pnpm build              # 构建独立编辑器（tsc -b && vite build），产物 dist/
+pnpm build:lib          # 构建对外发布的 ESM SDK + 类型声明，产物 es/ 与 types/
+pnpm build:analyzer     # 构建并输出体积分析报告
+pnpm lint               # eslint 全量检查
+pnpm preview            # 预览 dist/ 构建产物
+pnpm commit             # git add . + commitizen 交互式提交
+```
 
-### 单一事实来源
+## 如何测试
 
-同一规则、流程、约定或业务知识只保留一个权威实现，其他位置通过引用或调用复用，确保变化只需修改一处。仅对语义一致、变化点相同且重复出现的稳定逻辑进行抽象，并遵循 Rule of Three，避免因代码相似而过早提取。
+本项目没有配置任何测试框架——没有 test 脚本，没有 vitest / jest 依赖，也没有测试文件，因此不存在「运行单个测试」的命令。验证手段只有：
 
-### 意图边界优先
+- npx tsc -b —— 类型检查，提交钩子会自动执行。
+- pnpm lint —— 全量 eslint。
+- pnpm build / pnpm build:lib —— 改动 export/ 或 config/ 时，确认构建通过。
 
-当用户以假设、泛化或“如果”方式提问时，只基于当前问题本身进行分析，不默认关联、套用或推导到当前项目。除非用户明确要求结合项目上下文，否则不主动扩展解释范围。
+## 项目风格
 
-### 尊重数据原始语义
+- 代码风格见 [.eslintrc.js](.eslintrc.js)、[.prettierrc](.prettierrc)、[.editorconfig](.editorconfig)。
+- 格式化交给 prettier，不要手动调整缩进与换行。
+- lint / format 的忽略清单见 [.eslintignore](.eslintignore) 与 [.prettierignore](.prettierignore)。
 
-数据类型和字面量本身就是业务契约的一部分，应保持其原始语义和表示形式。不得基于“看起来更合理”擅自归一化、转换或重解释数据，只有明确的业务规则或外部协议要求时才进行转换。
+## 文档翻译
 
-### 不替用户做决策
+创建或修改 md 文件、做中英翻译时，遵循 [docs/i18n/README.md](docs/i18n/README.md)。
 
-严格遵循用户明确表达的意图、约束与数据语义，不因实现便利、惯例或主观判断擅自补充、修改或重解释需求。用户意图存在歧义时，应明确指出歧义并优先保持现状、缩小影响范围；涉及关键或不可逆决策时，不得自行推断后执行。
+产品 UI 的国际化见 src/i18n/，与本节的文档翻译无关。
 
-### 命名表达语义
+## git 提交
 
-变量、函数和类型命名应直接表达其业务含义与职责，避免使用 a、x、p、xxx 等缺乏上下文语义的缩写或泛化命名。命名应降低推断成本，使代码脱离局部上下文后仍可理解。
+执行任何 git 提交前，必须先读取并遵循 [docs/git-commit.md](docs/git-commit.md)。
+
+硬性要求：提交信息不得出现任何第三方 AI agent 的归属标识。

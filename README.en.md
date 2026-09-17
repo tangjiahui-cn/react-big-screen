@@ -3,7 +3,7 @@
 <p align="center">A drag-and-drop visual editor for building React data big-screens — usable standalone or embedded in your app as an ESM SDK.</p>
 
 <p align="center">
-  <a href="./README.md">简体中文</a> | <a href="./README.en-US.md">English</a>
+  <a href="./README.md">简体中文</a> | English
 </p>
 
 <p align="center">
@@ -64,6 +64,8 @@ More capabilities are available in the source code.
 | SDK embedding      | Exposes capabilities such as `mount`, `importJSON`, and `exportJSON` through `RbsEngine`, so the full editor or preview runtime can be embedded in other React applications. |
 
 ## Architecture
+
+See the architecture doc for details: [docs/architecture.en.md](docs/architecture.en.md)
 
 ```text
 ┌───────────────────────────────────────────────┐
