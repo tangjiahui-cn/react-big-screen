@@ -1,73 +1,106 @@
-# Architecture
+# 架构
 
-English | [简体中文](./architecture.zh.md)
+改动 `src/` 下的任意内容前，请先阅读本文。
 
-Read this document before changing anything under `src/`.
+## 三层模型
 
-## The three-layer model
+本项目架构核心为三层模型：`模板层 Component`，`数据层 ComponentNode`，`行为层 Instance`。所有功能都是基于三层模型扩展，例如：拖拽系统、历史记录、辅助线等。
 
-The core of this project's architecture is a three-layer model: the **template layer `Component`**, the **data layer `ComponentNode`**, and the **behavior layer `Instance`**. Every feature is an extension built on top of it — the drag system, history records, alignment guides, and so on.
+架构设计底层原则：数据和行为分离，避免耦合。
 
-The underlying design principle: separate data from behavior, and avoid coupling.
-
-| Layer | Question it answers | Persisted |
+| 层   | 回答的问题 | 是否持久化 |
 |-----| --- | --- |
-| Template layer | **What** this kind of component is | No |
-| Data layer | **What this component's configuration is** | Yes |
-| Behavior layer | **How** to operate this component at runtime | No |
+| 模板层 | 这类组件**是什么** | 否 |
+| 数据层 | 这个组件的**具体配置**是什么 | 是 |
+| 行为层 | 运行时**怎么操作**这个组件 | 否 |
 
-### Template layer (Component)
+### 模板层（Component）
 
-The template decides how a component renders. It is the only part of the three-layer model that supports user customization, and its carrier is a component.
+模板决定组件如何渲染，其是三层模型里唯一支持用户自定义的部分，载体形式是组件。
 
-### Data layer (ComponentNode)
+### 数据层（ComponentNode）
 
-Data is the editor's persistable state, and the single source of truth. It originates in two ways: automatically at editor runtime (creating a component, copying a component, and so on), or by parsing imported JSON during initialization.
+数据是编辑器可持久化状态，也是唯一事实来源。生成来源由两种：一是编辑器运行时自动生成（如：创建组件、复制组件等），二是初始化时导入 JSON 解析得到。
 
-The data layer is only stored permanently on an explicit export; at runtime it lives in memory.
+数据层仅在手动导出时才会永久存储，运行时保存在内存中。
 
-### Behavior layer (Instance)
+### 行为层（Instance）
 
-The behavior layer's main manifestation is the **behavior instance `Instance`**. An `Instance` is the runtime behavior handle of a component, used to control a specific behavior of a specific component at runtime. It registers itself automatically when the component mounts and unregisters when it unmounts. `Instance` only provides runtime operation capabilities: it carries no business state that needs persisting, and it keeps no mirrored copy of `ComponentNode`. A common use case is controlling whether a component is selected or deselected.
+行为层主要的表现形式为`行为实例 Instance`。`Instance`是组件运行时的行为句柄，用来在运行时控制某个具体的组件的某个行为。其在组件挂载时自动注册、卸载时自动取消。`Instance` 只提供运行时操作能力，不承载需要持久化的业务状态，也不维护 `ComponentNode` 的镜像数据。常见使用场景：控制组件的选中、取消选中
 
-### On the design
+### 关于设计
 
-#### 1. Why split data from behavior instances?
+#### 1. 为什么要拆分数据、行为实例？
 
-The two have different responsibilities and lifecycles: `ComponentNode` exists independently of whether a component is rendered, and must support serialization, history records, and import/export; `Instance` comes into being when a component mounts and is destroyed with it, and takes no part in persistence.
+两者的职责和生命周期不同：`ComponentNode` 独立于组件是否渲染而存在，需要支持序列化、历史记录和导入导出；`Instance` 依赖组件挂载产生，并随组件卸载销毁，不参与持久化。
 
-Splitting them keeps the data layer a pure data structure, with runtime capabilities provided through the instance layer. That prevents non-serializable objects — DOM nodes, React refs, methods — from leaking into editor state, and keeps state management, history records, and data persistence consistent.
+因此将两者拆分，可以保证数据层始终保持纯数据结构，运行时能力通过实例层提供，避免将 DOM、React Ref、方法等不可序列化对象混入编辑器状态，使状态管理、历史记录和数据持久化保持统一。
 
-## Component system
+## 组件系统
 
-In this editor a component is not a React component but a hot-pluggable asset, and each component uses its `cId` as its unique identifier. Users can define and register components without modifying the editor architecture.
+在本编辑器里，组件不是一个 React 组件，而是一个可热插拔的资产，每个组件使用 cId 作为唯一标识。用户可以定义并注册组件，无需修改编辑器架构。
 
-### Component contract
+### 组件契约
 
-It has three parts: renderer + property panel + event contract. The renderer renders the data layer into the editor, the property panel modifies the data layer, and the event contract declares the event relations between components.
+包含三个部分：渲染器 + 属性面板 + 事件契约。渲染器用于将数据层渲染到编辑器上，属性面板用于修改数据层，事件契约用于声明组件间的事件关联关系。
 
-### Triggering renders
+### 触发渲染
 
-The component list should be fully registered before the page renders, since it is the renderer of the data layer. Registering a single component triggers a re-render of the entire page, so batch registration is recommended.
+组件列表应该在页面渲染之前注册完毕，因为其是数据层的渲染器。每次注册一个组件，会触发整个页面重渲染，推荐采用批量注册组件。
 
-## Event system
+## 事件系统
 
-The event system mainly solves zero-coupling linkage between components. It consists of three parts: the event channel, the event contract, and the event relation.
+事件系统主要解决的是组件之间的零耦合联动。事件系统由三部分组成：事件通道、事件契约、事件关系。
 
-### Event channel
+### 事件通道
 
-Handles event transport and data processing. It reuses the editor's built-in pub/sub manager, generating `useExpose` and `handleTrigger` via `useCreateUseExposeHook` and `useCreateHandleTrigger`. These expose a component's internal events and trigger external events at runtime, hiding the underlying data-processing details.
+用于处理事件传输、数据处理。复用编辑器内置的发布订阅管理器，通过 `useCreateUseExposeHook` 和 `useCreateHandleTrigger` 生成 `useExpose` 和 `handleTrigger`，用于运行时暴露组件内部事件、触发外部事件，屏蔽底层数据处理细节。
 
-### Event contract
+### 事件契约
 
-It mainly decouples two pairs — component from component, and component from editor — and supports persistence.
+主要解决两层解耦：组件与组件、组件与编辑器，及可持久化保存。
+- 组件与组件：依赖倒置。A 操作 B，A 不导入 B，无需知道 B 的类型，B 也不持有 A 的任何引用。A 只持有目标 id 和契约 id，不持有目标本身。B 挂载了则响应，没挂载时不进行处理。
+- 组件与编辑器：编辑器依赖契约、不依赖实现。配置界面完全由 `triggers` / `exposes` 生成，没有硬编码的组件名单。加一个新组件，面板自动就有它的选项。
+- 持久化保存：事件链是源组件 ComponentNode 上的一个普通字段，纯数据形式(自定义函数以字符串形式存储、运行时还原)。
 
-- Component from component: dependency inversion. When A operates on B, A does not import B and need not know B's type, and B holds no reference to A. A holds only the target id and the contract id, never the target itself. If B is mounted it responds; if it is not mounted, nothing is done.
-- Component from editor: the editor depends on contracts, not on implementations. The configuration UI is generated entirely from `triggers` / `exposes`, with no hardcoded list of components. Add a new component and the panel automatically offers its options.
-- Persistence: an event chain is an ordinary field on the source component's `ComponentNode`, kept in pure data form (custom functions are stored as strings and restored at runtime).
+组件显式声明接口: `triggers` (内部发生了什么)，`exposes` (暴露内部的事件)。
 
-A component declares its interface explicitly: `triggers` (what happened inside) and `exposes` (the internal events it exposes).
+### 事件关系
 
-### Event relation
+用于保存事件间的联动关系。以纯数据形式存储在源组件的 `componentNode` 中，并一起导入导出，不和运行时绑定。关系由发起方持有，目标组件不持有任何引用；
 
-Stores the linkage relations between events. They are kept in pure data form inside the source component's `componentNode` and imported/exported along with it, with no binding to the runtime. A relation is owned by the initiator; the target component holds no reference to it.
+## 术语
+
+行文统一用词，避免同义混用。
+
+### 一律保留英文
+
+`Component`、`ComponentNode`、`Instance`、`cId`、`RbsEngine`、`store`、`hook`、`lint`，以及 DSL、JSON、SDK、API、ESM、UMD / AMD、i18n、React、TypeScript（首次出现后可写 TS）、Zustand、IndexedDB、ECharts、antd、Vite、ESLint、Prettier。
+
+三层模型的三个名字即 `Component`（模板层）、`ComponentNode`（数据层）、`Instance`（行为层），不写复数的 component nodes / component instances。
+
+### 需要区分的用词
+
+| 用词 | 含义 | 不要写成 |
+|---|---|---|
+| 组件包 | 可注册进编辑器的组件集合 | — |
+| 编辑器能力插件 | `src/packages/` 下的能力插件 | 组件包 |
+| 缩放（resize） | 改变**组件尺寸** | 调整大小 |
+| 画布缩放（zoom） | 改变**画布整体比例** | 缩放——与 resize 严格区分 |
+| 撤销 / 取消撤销 | 历史记录操作 | 重做、反撤销 |
+| 轮询 | 数据源定时刷新 | 轮训 |
+| 右键菜单 | context menu | 上下文菜单 |
+| 联动（interaction） | **组件间**联动 | 交互 |
+| 触发（trigger） | 声明内部发生了什么 | — |
+| 暴露（expose） | 声明对外暴露什么 | — |
+| 事件通道 / 事件契约 / 事件关系 | 事件系统的三个组成部分 | 事件链关系 |
+| 事实来源 | 指 ComponentNode | 真源 |
+| 辅助线 | alignment guide | 参考线、对齐线 |
+| 成组 / 取消成组 | group / ungroup | 分组、解组 |
+| 卸载 | unmount | 销毁；`engine.destroy()` 译为「卸载并清理」 |
+| 宿主应用 | 引入 SDK 的 React 应用 | 主应用 |
+| 热插拔 | hot-pluggable | — |
+| 自适应 | adaptive | 响应式 |
+| 多页面 | multi-page | 多页签 |
+| 类型检查 | `npx tsc -b` | — |
+| 提交 | commit | 签入 |

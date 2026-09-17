@@ -1,6 +1,6 @@
 # AGENTS.md
 
-React-Big-Screen 是一个从0到1设计的 React 可视化编辑器。修改 `/src` 目录前，请读取 [docs/architecture.zh.md](docs/architecture.zh.md)。
+React-Big-Screen 是一个从0到1设计的 React 可视化编辑器。修改 `/src` 目录前，请读取 [docs/architecture.md](docs/architecture.md)。
 
 ## 仓库结构
 
@@ -51,14 +51,16 @@ pnpm commit             # git add . + commitizen 交互式提交
 - 格式化交给 prettier，不要手动调整缩进与换行。
 - lint / format 的忽略清单见 [.eslintignore](.eslintignore) 与 [.prettierignore](.prettierignore)。
 
-## 文档翻译
+## 文档语言
 
-创建或修改 md 文件、做中英翻译时，遵循 [docs/i18n/README.md](docs/i18n/README.md)。
+文档默认中文：`{name}.md` 即中文正文，不再有 `.zh.md` 后缀，也不再有配对清单与校验脚本。
 
-产品 UI 的国际化见 src/i18n/，与本节的文档翻译无关。
+唯一例外是 [README.en.md](README.en.md)——它是 npm / GitHub 门面上的英文版，与中文 [README.md](README.md) 互为语言切换行。其余文档只维护中文，不要创建英文副本。
+
+产品 UI 的国际化见 src/i18n/，与本节的文档语言无关。
 
 ## git 提交
 
-执行任何 git 提交前，必须先读取并遵循 [docs/git-commit.zh.md](docs/git-commit.zh.md)。
+执行任何 git 提交前，必须先读取并遵循 [docs/git-commit.md](docs/git-commit.md)。
 
 硬性要求：提交信息不得出现任何第三方 AI agent 的归属标识。

@@ -1,71 +1,71 @@
 <h1 align="center">react-big-screen</h1>
 
-<p align="center">A drag-and-drop visual editor for building React data big-screens — usable standalone or embedded in your app as an ESM SDK.</p>
+<p align="center">一个用于搭建 React 数据大屏的拖拽式可视化编辑器 —— 既可独立使用，也可作为 ESM SDK 嵌入你的应用。</p>
 
 <p align="center">
-  English | <a href="./README.zh.md">简体中文</a>
+  简体中文 | <a href="./README.en.md">English</a>
 </p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/react-big-screen"><img src="https://img.shields.io/npm/v/react-big-screen?style=flat-square" alt="npm version"></a>
   <a href="https://github.com/tangjiahui-cn/react-big-screen"><img src="https://img.shields.io/github/stars/tangjiahui-cn/react-big-screen?style=flat-square" alt="GitHub stars"></a>
-  <a href="https://tangjiahui-cn.github.io/react-big-screen"><img src="https://img.shields.io/badge/demo-online-0891B2?style=flat-square" alt="Online demo"></a>
+  <a href="https://tangjiahui-cn.github.io/react-big-screen"><img src="https://img.shields.io/badge/demo-online-0891B2?style=flat-square" alt="在线 demo"></a>
   <img src="https://img.shields.io/badge/React-18-3776AB?style=flat-square" alt="React 18">
 </p>
 
-react-big-screen is a visual big-screen editor built on React 18. By dragging and configuring components, you can quickly assemble a data big-screen. It can be used in two ways:
+react-big-screen 是一个基于 React 18 的可视化大屏编辑器，通过拖拽、配置组件即可快速搭好一张数据大屏。它有两种使用方式：
 
-- **Standalone editor**: build a page visually on the canvas, then preview or share the running result directly.
-- **Embeddable SDK**: the entire screen is driven by a single piece of JSON and exposed through `RbsEngine`, letting you embed the editor or the runtime page into your own React project.
+- **独立编辑器**：在画布上可视化搭好页面后，直接预览或分享运行结果。
+- **可嵌入 SDK**：整张大屏由一份 JSON 驱动，通过 `RbsEngine` 对外暴露，可将编辑器或运行时页面嵌入到你自己的 React 项目中。
 
-## Screenshots
+## 界面截图
 
-Edit mode:
+编辑模式：
 
-<img src="./imgs/edit.png" height="200" alt="react-big-screen editing canvas">
+<img src="./imgs/edit.png" style="max-width: 100%;max-height: 500px;" alt="react-big-screen 编辑画布">
 
-Preview mode:
+预览模式：
 
-<img src="./imgs/preview.png" height="200" alt="react-big-screen preview page">
+<img src="./imgs/preview.png" style="max-width: 100%;max-height: 500px;" alt="react-big-screen 预览页">
 
-## Core Features
+## 核心功能
 
-- ✅ Drag & drop system
-- ✅ Group / ungroup
-- ✅ Box selection
-- ✅ Right-click context menu
-- ✅ Keyboard shortcuts
-- ✅ Multi-component interaction
-- ✅ Multi-page management
-- ✅ Custom components
-- ✅ Custom property panels
-- ✅ Adaptive preview page
-- ✅ Container components
-- ✅ Alignment guides
-- ✅ Load remote components
-- ✅ i18n internationalization
-- ✅ Undoable history records
-- ✅ Import / export files
-- ✅ SDK support
+- ✅ 拖拽系统
+- ✅ 成组、取消成组
+- ✅ 鼠标范围框选
+- ✅ 右键菜单
+- ✅ 快捷键
+- ✅ 多组件联动
+- ✅ 多页面管理
+- ✅ 自定义组件
+- ✅ 自定义属性面板
+- ✅ 自适应预览页
+- ✅ 容器组件
+- ✅ 辅助线
+- ✅ 加载远程组件
+- ✅ i18n国际化
+- ✅ 可撤销历史记录
+- ✅ 导入、导出文件
+- ✅ 支持 SDK 引用
 
-More capabilities are available in the source code.
+更多能力详见源码。
 
-## Core Design
+## 核心设计
 
-| Design             | Description                                                                                                                                                  |
-|--------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| DSL-driven         | The entire screen is described by a unified JSON DSL capturing page structure, component config, data binding, and inter-component event relations. The editor and the preview runtime share the same page document model. |
-| Component system   | Extend the editor's capabilities through a component registration mechanism, with support for custom components, custom property panels, container components, and remote components. |
-| Event system       | Inter-component coordination is implemented via a `trigger → expose` event chain, so a component never depends on other component instances directly. |
-| Data system        | Each component can independently bind to static data or a remote API data source, with support for polling refresh. |
-| Editor capabilities | Drag, resize, box selection, grouping, alignment, shortcuts, and history records all work uniformly around component nodes. |
-| Multi-page model   | One big-screen can contain multiple sub-pages. Only the current page is rendered; the others keep their document data without being rendered. |
-| Remote components  | Supports loading UMD / AMD / zip component packages and caches remote component resources in IndexedDB. |
-| SDK embedding      | Exposes capabilities such as `mount`, `importJSON`, and `exportJSON` through `RbsEngine`, so the full editor or preview runtime can be embedded in other React applications. |
+| 设计     | 说明                                                                                  |
+|--------|-------------------------------------------------------------------------------------|
+| DSL 驱动 | 整张大屏由统一的 JSON DSL 描述页面结构、组件配置、数据绑定与组件间事件关系，编辑器与预览运行时共享同一份页面文档模型                     |
+| 组件系统   | 通过组件注册机制扩展编辑器能力，支持自定义组件、自定义属性面板、容器组件及远程组件。                                          |
+| 事件系统   | 通过 `trigger → expose` 事件链实现组件间联动，组件无需直接依赖其它组件实例。                                    |
+| 数据系统   | 每个组件可独立绑定静态数据或远程 API 数据源，并支持轮询刷新。                                                   |
+| 编辑器能力  | 拖拽、缩放、框选、成组、对齐、快捷键和历史记录等能力围绕组件节点统一工作。                                               |
+| 多页面模型  | 一个大屏可包含多个子页面，仅渲染当前页面，其余页面保留文档数据而不参与渲染。                                              |
+| 远程组件   | 支持加载 UMD / AMD / zip 组件包，并使用 IndexedDB 缓存远程组件资源。                                    |
+| SDK 嵌入 | 通过 `RbsEngine` 暴露 `mount`、`importJSON`、`exportJSON` 等能力，可将完整编辑器或预览运行时嵌入其它 React 应用。 |
 
-## Architecture
+## 架构
 
-See the architecture doc for details: [docs/architecture.md](docs/architecture.md)
+架构文档详见：[docs/architecture.md](docs/architecture.md)
 
 ```text
 ┌───────────────────────────────────────────────┐
@@ -99,7 +99,7 @@ See the architecture doc for details: [docs/architecture.md](docs/architecture.m
 └───────────────────────────────────────────────┘
 ```
 
-## Usage Example
+## 使用示例
 
 ```tsx
 import { useEffect, useRef } from "react";
@@ -111,13 +111,13 @@ export default function Screen() {
   const hostRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const engine = new RbsEngine(); // edit mode by default
+    const engine = new RbsEngine(); // 默认编辑模式
     engine.mount(hostRef.current!).then(() => {
-      engine.importJSON(EXAMPLE.classic); // render an example big-screen
+      engine.importJSON(EXAMPLE.classic); // 渲染示例大屏
     });
 
     return () => {
-      engine.destroy(); // unmount and clean up
+      engine.destroy(); // 卸载并清理
     };
   }, []);
 
@@ -125,29 +125,29 @@ export default function Screen() {
 }
 ```
 
-The snippet above mounts the full editor and loads an example big-screen. For a read-only runtime view, call `engine.enablePreview()` before `mount()` / `importJSON()`.
+以上会挂载完整编辑器并载入示例大屏。如需只读的运行画面，请在 `mount()` / `importJSON()` 之前调用 `engine.enablePreview()`。
 
-## Quick Install
+## 快速安装
 
 ```shell
 pnpm add react-big-screen
 ```
 
-Environment requirements: Node 20+, React 18. Import the required styles once in your app:
+运行环境：Node@24、React@18。在应用中一次性引入所需样式：
 
 ```tsx
 import "antd/dist/antd.min.css";
 import "react-big-screen/es/style.css";
 ```
 
-## Quick Start
+## 快速开始
 
-The fastest way to try it is the online editor — no installation needed:
+最快体验方式是在线编辑，无需安装：
 
-- Online demo: [https://tangjiahui-cn.github.io/react-big-screen](https://tangjiahui-cn.github.io/react-big-screen)
-- Feature demo (multi-component interaction): [Open example](https://tangjiahui-cn.github.io/react-big-screen/#/create?example=multiple-components-interactive)
+- 在线体验：[https://tangjiahui-cn.github.io/react-big-screen](https://tangjiahui-cn.github.io/react-big-screen)
+- 功能 demo（多组件联动）：[打开示例](https://tangjiahui-cn.github.io/react-big-screen/#/create?example=multiple-components-interactive)
 
-Run the full editor locally:
+本地运行完整编辑器：
 
 ```shell
 git clone https://github.com/tangjiahui-cn/react-big-screen.git
@@ -156,12 +156,12 @@ pnpm install
 pnpm dev
 ```
 
-The dev server runs at http://localhost:11000 by default.
+开发服务器默认运行在 http://localhost:11000。
 
-## Community & Support
+## 社区与支持
 
-- Author's big-screen principles column series: [前端大屏原理系列（掘金）](https://juejin.cn/column/7492086179995811855)
-- Report issues or request features: [GitHub Issues](https://github.com/tangjiahui-cn/react-big-screen/issues)
+- 作者大屏原理系列专栏：[前端大屏原理系列（掘金）](https://juejin.cn/column/7492086179995811855)
+- 反馈问题或提需求：[GitHub Issues](https://github.com/tangjiahui-cn/react-big-screen/issues)
 
 ## Star History
 
