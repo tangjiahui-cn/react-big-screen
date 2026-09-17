@@ -39,6 +39,7 @@ pnpm run verify-translation-pairing --write <path>...    re-record the given pai
 
 Verification is wired into the pre-commit hook with `--staged`, so a pair whose two sides drifted apart fails the commit while pairs the commit does not touch are not re-checked.
 `--staged` reads the index on both sides, so it judges the content the commit would actually store — including a side staged for deletion, which has left the index while still sitting on disk.
+A passing verification prints nothing and exits 0; only a failure writes to stderr, and only re-recording reports back.
 Re-recording always names its targets explicitly: there is no "regenerate everything", so the manifest can never be updated without someone deciding to.
 
 ## What is governed

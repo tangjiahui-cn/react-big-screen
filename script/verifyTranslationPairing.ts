@@ -197,7 +197,7 @@ for (const base of bases) {
   if (!hasManifest) {
     if (hasEn && hasZh) {
       problems.push(
-        `${en} and ${zh} form a pair but are not registered, re-record it with \`--write ${en}\``,
+        `${en} and ${zh} form a pair but are not registered; record it with \`--write ${en}\`, or remove the pair as a whole`,
       );
     }
     continue;
@@ -250,4 +250,6 @@ if (problems.length) {
   process.exit(1);
 }
 
-console.log(writing ? "[SUCCESS] Re-recorded successfully." : "[SUCCESS] All checks passed.");
+// Verification stays silent when it passes: this runs on every commit, and the exit code is the
+// contract. Re-recording mutates files, so it reports back.
+if (writing) console.log("[SUCCESS] Re-recorded successfully.");
