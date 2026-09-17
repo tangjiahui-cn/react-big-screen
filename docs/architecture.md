@@ -68,39 +68,3 @@
 ### 事件关系
 
 用于保存事件间的联动关系。以纯数据形式存储在源组件的 `componentNode` 中，并一起导入导出，不和运行时绑定。关系由发起方持有，目标组件不持有任何引用；
-
-## 术语
-
-行文统一用词，避免同义混用。
-
-### 一律保留英文
-
-`Component`、`ComponentNode`、`Instance`、`cId`、`RbsEngine`、`store`、`hook`、`lint`，以及 DSL、JSON、SDK、API、ESM、UMD / AMD、i18n、React、TypeScript（首次出现后可写 TS）、Zustand、IndexedDB、ECharts、antd、Vite、ESLint、Prettier。
-
-三层模型的三个名字即 `Component`（模板层）、`ComponentNode`（数据层）、`Instance`（行为层），不写复数的 component nodes / component instances。
-
-### 需要区分的用词
-
-| 用词 | 含义 | 不要写成 |
-|---|---|---|
-| 组件包 | 可注册进编辑器的组件集合 | — |
-| 编辑器能力插件 | `src/packages/` 下的能力插件 | 组件包 |
-| 缩放（resize） | 改变**组件尺寸** | 调整大小 |
-| 画布缩放（zoom） | 改变**画布整体比例** | 缩放——与 resize 严格区分 |
-| 撤销 / 取消撤销 | 历史记录操作 | 重做、反撤销 |
-| 轮询 | 数据源定时刷新 | 轮训 |
-| 右键菜单 | context menu | 上下文菜单 |
-| 联动（interaction） | **组件间**联动 | 交互 |
-| 触发（trigger） | 声明内部发生了什么 | — |
-| 暴露（expose） | 声明对外暴露什么 | — |
-| 事件通道 / 事件契约 / 事件关系 | 事件系统的三个组成部分 | 事件链关系 |
-| 事实来源 | 指 ComponentNode | 真源 |
-| 辅助线 | alignment guide | 参考线、对齐线 |
-| 成组 / 取消成组 | group / ungroup | 分组、解组 |
-| 卸载 | unmount | 销毁；`engine.destroy()` 译为「卸载并清理」 |
-| 宿主应用 | 引入 SDK 的 React 应用 | 主应用 |
-| 热插拔 | hot-pluggable | — |
-| 自适应 | adaptive | 响应式 |
-| 多页面 | multi-page | 多页签 |
-| 类型检查 | `npx tsc -b` | — |
-| 提交 | commit | 签入 |
