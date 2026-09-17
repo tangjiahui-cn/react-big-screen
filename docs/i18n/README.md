@@ -33,10 +33,12 @@ The manifest is machine-maintained: re-record it with the command below rather t
 
 ```
 pnpm run verify-translation-pairing                      verify every pair
+pnpm run verify-translation-pairing --staged             verify only the pairs staged for commit
 pnpm run verify-translation-pairing --write <path>...    re-record the given pair(s)
 ```
 
-Verification is wired into the pre-commit hook, so a pair whose two sides drifted apart fails the commit.
+Verification is wired into the pre-commit hook with `--staged`, so a pair whose two sides drifted apart fails the commit while pairs the commit does not touch are not re-checked.
+`--staged` reads the index on both sides, so it judges the content the commit would actually store — including a side staged for deletion, which has left the index while still sitting on disk.
 Re-recording always names its targets explicitly: there is no "regenerate everything", so the manifest can never be updated without someone deciding to.
 
 ## What is governed
@@ -50,9 +52,9 @@ Because a single-language doc is defined by the absence of a counterpart rather 
 
 ## Re-recording is a checkpoint, not a proof
 
-Both hashes are written together, so re-recording always produces a manifest that verifies.
-The gate is the step before it: you cannot commit a changed pair without naming it, which is the moment to confirm both sides actually agree.
-Never wire re-recording into a hook — it would turn verification into a no-op.
+- Both hashes are written together, so re-recording always produces a manifest that verifies;
+- The gate is the step before it: you cannot commit a changed pair without naming it, which is the moment to confirm both sides actually agree;
+- Never wire re-recording into a hook — it would turn verification into a no-op.
 
 ## Language checks
 
@@ -62,13 +64,16 @@ Never wire re-recording into a hook — it would turn verification into a no-op.
 
 ## Handling references
 
-When a paired document references another md, it points to the version matching the referencing document's language;
-if that language's version does not exist, point to an existing language version.
+- When a paired document references another md, it points to the version matching the referencing document's language;
+- if that language's version does not exist, it points to an existing language version.
 
 For example, `README.md` points to `docs/architecture.md`, and `README.zh.md` points to `docs/architecture.zh.md`.
 
 ## Scope
 
-In scope: every registered pair, plus any complete `{name}.md` / `{name}.zh.md` pair in the working tree.
-A `.md` with no counterpart is a single-language document and is left alone; `AGENTS.md` and `CHANGELOG.md` are the current examples.
-[terminology.md](terminology.md) is the terminology source of truth, maintained in a single language and deliberately not paired.
+- Every registered pair, plus any complete `{name}.md` / `{name}.zh.md` pair in the working tree, is in scope;
+- `--staged` narrows a run to the pairs the index carries a change for, changing how much of that scope a run covers but never the rules applied to it;
+- A `.md` with no counterpart is a single-language document and is left alone;
+- [terminology.md](terminology.md) is the terminology source of truth, maintained in a single language and deliberately not paired.
+
+For example, `AGENTS.md` and `CHANGELOG.md` are the current single-language documents.

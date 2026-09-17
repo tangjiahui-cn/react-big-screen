@@ -33,10 +33,12 @@ README.zh.md: aa66ef1d24a5e2165859e9337273d807dff3d070
 
 ```
 pnpm run verify-translation-pairing                     校验全部配对
+pnpm run verify-translation-pairing --staged            仅校验已暂存待提交的配对
 pnpm run verify-translation-pairing --write <路径>...   重录指定配对
 ```
 
-校验已挂入 pre-commit 钩子，因此两侧脱节的配对会直接提交失败。
+校验已挂入 pre-commit 钩子，并带 `--staged`，因此两侧脱节的配对会直接提交失败，而本次提交未触及的配对不会被重复检查。
+`--staged` 两侧都读索引，因此它判定的是这次提交真正会存下的内容 —— 包括被暂存删除的一侧：它已经离开索引，却仍躺在磁盘上。
 重录必须显式指名对象：不存在「全量重新生成」，所以清单不可能在无人决策的情况下被更新。
 
 ## 受管辖的范围
@@ -50,9 +52,9 @@ pnpm run verify-translation-pairing --write <路径>...   重录指定配对
 
 ## 重录是检查点，不是证明
 
-两个哈希是一起写入的，所以重录出来的清单必然能通过校验。
-真正的闸门在它之前那一步：改过的配对不指名就提交不上去，而那一刻正是确认两侧确实一致的机会。
-不要把重录挂进任何钩子 —— 那会让校验退化成空操作。
+- 两个哈希是一起写入的，所以重录出来的清单必然能通过校验；
+- 真正的闸门在它之前那一步：改过的配对不指名就提交不上去，而那一刻正是确认两侧确实一致的机会；
+- 不要把重录挂进任何钩子 —— 那会让校验退化成空操作。
 
 ## 语言检查
 
@@ -62,13 +64,16 @@ pnpm run verify-translation-pairing --write <路径>...   重录指定配对
 
 ## 处理引用
 
-配对文档引用其他 md 时，指向引用方语言对应的版本；
-该语言的版本不存在时，指向已存在的语言版本。
+- 配对文档引用其他 md 时，指向引用方语言对应的版本；
+- 该语言的版本不存在时，指向已存在的语言版本。
 
 例：`README.md` 指向 `docs/architecture.md`；`README.zh.md` 指向 `docs/architecture.zh.md`。
 
 ## 处理范围
 
-处理范围内：全部已登记的配对，以及工作区里任何双侧齐全的 `{name}.md` / `{name}.zh.md` 配对。
-没有对侧的 `.md` 属单语文档，放过；`AGENTS.md` 与 `CHANGELOG.md` 是当前的例子。
-[terminology.md](terminology.md) 是术语真源，单语维护，有意不配对。
+- 全部已登记的配对，以及工作区里任何双侧齐全的 `{name}.md` / `{name}.zh.md` 配对，都在范围内；
+- `--staged` 把一次校验收窄到索引里存在变更的配对，它只改变一次运行覆盖多少范围，不改变施加其上的规则；
+- 没有对侧的 `.md` 属单语文档，放过；
+- [terminology.md](terminology.md) 是术语真源，单语维护，有意不配对。
+
+例：`AGENTS.md` 与 `CHANGELOG.md` 是当前的单语文档。

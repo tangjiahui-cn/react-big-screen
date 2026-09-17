@@ -4,5 +4,5 @@
 npx tsc -b
 npx lint-staged --allow-empty
 
-# 校验双语文档 hash 值是否匹配
-pnpm run verify-translation-pairing
+# 校验双语文档 hash 值是否匹配（仅校验暂存区，全仓审计用不带参数的调用）
+pnpm run verify-translation-pairing --staged
