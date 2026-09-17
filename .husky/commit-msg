@@ -1,4 +1,19 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npx --no-install commitlint --edit "$1"
+# 1、检测是否包含第三方 AI 提交标识
+msg_file="$1"
+
+ai_pattern='^Co-[Aa]uthored-[Bb]y:.*([Cc]laude|[Cc]opilot|[Cc]ursor|[Cc]hat[Gg][Pp][Tt])|Generated (with|by|using) \[?([Cc]laude|[Cc]opilot|[Cc]ursor|[Cc]hat[Gg][Pp][Tt])'
+
+if grep -qE "$ai_pattern" "$msg_file"; then
+  echo ""
+  echo "[ERROR] Commit message contains a third-party AI agent attribution."
+  grep -nE "$ai_pattern" "$msg_file"
+  echo ""
+  echo "[WARNING] Remove the lines above and retry."
+  exit 1
+fi
+
+# 2、检测提交内容格式
+npx --no-install commitlint --edit "$msg_file"

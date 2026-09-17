@@ -3,7 +3,7 @@
 <p align="center">一个用于搭建 React 数据大屏的拖拽式可视化编辑器 —— 既可独立使用，也可作为 ESM SDK 嵌入你的应用。</p>
 
 <p align="center">
-  <a href="./README.md">简体中文</a> | <a href="./README.en-US.md">English</a>
+  简体中文 | <a href="./README.en.md">English</a>
 </p>
 
 <p align="center">
@@ -64,6 +64,8 @@ react-big-screen 是一个基于 React 18 的可视化大屏编辑器，通过�
 | SDK 嵌入 | 通过 `RbsEngine` 暴露 `mount`、`importJSON`、`exportJSON` 等能力，可将完整编辑器或预览运行时嵌入其它 React 应用。 |
 
 ## 架构
+
+架构文档详见：[docs/architecture.md](docs/architecture.md)
 
 ```text
 ┌───────────────────────────────────────────────┐
