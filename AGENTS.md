@@ -19,7 +19,7 @@ src/
 config/        构建配置：vite.base.ts、vite.buildESM.ts、external 依赖判定
 public/        示例 JSON（example/）与远程组件示例（demo.umd.js / demo.amd.js）
 docs/          架构文档
-script/        发布脚本
+scripts/       发布脚本与 git 钩子脚本
 ```
 
 注意：`src/packages/` 与 `src/engine/built-in/` 是两个不同的概念。前者是编辑器自身的能力插件，后者才是可注册进编辑器的**组件**（组件包）。详见下文。

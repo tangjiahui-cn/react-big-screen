@@ -17,5 +17,7 @@
 ## 执行方式
 
 - 优先关闭 agent 自带的归属配置（如 Claude Code 的 `attribution.commit`、Copilot 的 `git.addAICoAuthor`），从源头不生成标识。
-- 若无法关闭，用仓库级 `commit-msg` 钩子拦截并剥离匹配行。
+- 若无法关闭，用仓库级 `commit-msg` 钩子拦截匹配行，阻止提交。
 - 匹配必须锚定归属语境（`Co-Authored-By:`、`Generated with`），不得只匹配工具名，以免误伤正常提交信息。
+
+校验逻辑实现在 [scripts/verify-ai-attribution.ts](../scripts/verify-ai-attribution.ts)，由 [.husky/commit-msg](../.husky/commit-msg) 在 `commitlint` 之前调用；命中时列出全部命中行并以非零码退出，阻止本次提交。
