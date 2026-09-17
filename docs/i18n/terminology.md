@@ -1,6 +1,6 @@
 # Terminology
 
-本表约定本仓库的中英术语统一译法，适用于 `README.md` / `README.en.md`、`docs/` 与 `AGENTS.md`。
+本表约定本仓库的中英术语统一译法。
 
 **通用规则：**
 - "中文"列为中文译文的正文默认用词。若该列为英文，则中文译文的正文中保留英文不翻译。
@@ -144,12 +144,12 @@
 
 | English | 中文 | 首次出现 | 不要译作 | 备注 |
 |---|---|---|---|---|
-| architecture doc | 架构文档 | | | [docs/architecture.md](../architecture.md) |
+| architecture doc | 架构文档 | | | [docs/architecture.zh.md](../architecture.zh.md) |
 | bilingual documentation | 双语文档 | | | |
 | pairing | 配对 | | | 中英两份 md 的对应关系 |
 | counterpart | 对侧文件 | | 对应物、配对物 | 泛指「另一侧」时写「另一侧」 |
 | language switcher | 语言切换行 | | | 文档顶部的 中文 / English 互链行 |
 | terminology source of truth | 术语真源 | | 术语表真源 | 指本文件；单语维护，不参与配对 |
-| scope | 范围 | | | 见 [README.md](./README.md) |
+| scope | 范围 | | | 见 [README.zh.md](./README.zh.md) |
 | typecheck | 类型检查 | | | `npx tsc -b`；命令语境保留 `typecheck`，行文写「类型检查」 |
 | commit | 提交 | | 签入 | |

@@ -1,6 +1,6 @@
 # AGENTS.md
 
-React-Big-Screen 是一个从0到1设计的 React 可视化编辑器。修改 `/src` 目录前，请读取 [docs/architecture.md](docs/architecture.md)。
+React-Big-Screen 是一个从0到1设计的 React 可视化编辑器。修改 `/src` 目录前，请读取 [docs/architecture.zh.md](docs/architecture.zh.md)。
 
 ## 仓库结构
 
@@ -59,6 +59,6 @@ pnpm commit             # git add . + commitizen 交互式提交
 
 ## git 提交
 
-执行任何 git 提交前，必须先读取并遵循 [docs/git-commit.md](docs/git-commit.md)。
+执行任何 git 提交前，必须先读取并遵循 [docs/git-commit.zh.md](docs/git-commit.zh.md)。
 
 硬性要求：提交信息不得出现任何第三方 AI agent 的归属标识。

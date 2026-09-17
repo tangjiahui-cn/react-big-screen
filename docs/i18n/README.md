@@ -1,35 +1,74 @@
-# 双语文档
+# Bilingual documentation
 
-简体中文 | [English](./README.en.md)
+[简体中文](./README.zh.md) | English
 
-本仓库的文档供中国境内外的人与 agent 阅读，因此范围内每篇文档都维护英文与简体中文两个版本。
-本页定义配对约定、检查、引用处理与范围规则；[terminology.md](terminology.md) 是术语真源。
+The documentation in this repository is read by people and agents both within and outside China, so every document in scope is maintained in both an English and a Simplified Chinese version.
+English is the default language: a plain `{name}.md` is the English version, and Simplified Chinese carries the `{name}.zh.md` suffix.
+This page defines the pairing contract, the checks, how references are handled, and the scope rules; [terminology.md](terminology.md) is the source of truth for terminology.
 
-## 修改约定
+## Editing contract
 
-更新范围内任一篇 md 时，必须在同一改动中同步更新其配对语言版本；
-配对版本不存在时，在本改动中创建。
+When updating any md in scope, you must update its counterpart language version in the same change;
+if the counterpart version does not exist, create it in that change.
+When adding or modifying a bilingual md, you must also update its `{name}.i18n.yaml` in the same change.
 
-文件名约定：
-- 中文：{name}.md
-- 英文：{name}.en.md
+File naming:
+- English (default): {name}.md
+- Simplified Chinese: {name}.zh.md
+- Pairing manifest: {name}.i18n.yaml
 
-例：更新 `README.md` 时同步更新 `README.en.md`；`README.en.md` 不存在则创建。
+For example, when updating `README.md`, update `README.zh.md` and `README.i18n.yaml` in the same change; if they do not exist, create them.
 
-## 语言检查
+## Pairing manifest
 
-- 范围内每篇文档都存在中英两份 md。
-- 每份文档顶部提供 中文/English 切换入口。
-- 当前语言不加链接，另一种语言加链接。
+Each pair is registered in a `{name}.i18n.yaml` sitting next to it, recording the content hash of both sides:
 
-## 处理引用
+```yaml
+README.md: 9f89db3d4502dea4a0d181799164f304d4976740
+README.zh.md: aa66ef1d24a5e2165859e9337273d807dff3d070
+```
 
-配对文档引用其他 md 时，指向引用方语言对应的版本；
-该语言的版本不存在时，指向已存在的语言版本。
+The key is the file name relative to the manifest's own directory, and the value is the content hash git would store for that file (`git hash-object`).
+The manifest is machine-maintained: re-record it with the command below rather than computing hashes by hand.
 
-例：`README.en.md` 指向 `docs/architecture.en.md`。
+```
+pnpm run verify-translation-pairing                      verify every pair
+pnpm run verify-translation-pairing --write <path>...    re-record the given pair(s)
+```
 
-## 处理范围
+Verification is wired into the pre-commit hook, so a pair whose two sides drifted apart fails the commit.
+Re-recording always names its targets explicitly: there is no "regenerate everything", so the manifest can never be updated without someone deciding to.
 
-处理范围内：项目下的 `.md` 文件。
-严禁处理：`terminology.md`（术语真源，单语维护，不参与配对）。
+## What is governed
+
+- A pair is **registered** when its `{name}.i18n.yaml` exists.
+- Registered: both sides must exist and both hashes must match.
+- A complete pair with no manifest is an error — it must be registered.
+- A `.md` with no counterpart and no manifest is a single-language doc, and is left alone.
+
+Because a single-language doc is defined by the absence of a counterpart rather than by a list, there is no exemption file to maintain.
+
+## Re-recording is a checkpoint, not a proof
+
+Both hashes are written together, so re-recording always produces a manifest that verifies.
+The gate is the step before it: you cannot commit a changed pair without naming it, which is the moment to confirm both sides actually agree.
+Never wire re-recording into a hook — it would turn verification into a no-op.
+
+## Language checks
+
+- Every registered pair has both an English and a Chinese md.
+- Every document provides a Chinese/English switcher at the top.
+- The current language is not linked; the other language is.
+
+## Handling references
+
+When a paired document references another md, it points to the version matching the referencing document's language;
+if that language's version does not exist, point to an existing language version.
+
+For example, `README.md` points to `docs/architecture.md`, and `README.zh.md` points to `docs/architecture.zh.md`.
+
+## Scope
+
+In scope: every registered pair, plus any complete `{name}.md` / `{name}.zh.md` pair in the working tree.
+A `.md` with no counterpart is a single-language document and is left alone; `AGENTS.md` and `CHANGELOG.md` are the current examples.
+[terminology.md](terminology.md) is the terminology source of truth, maintained in a single language and deliberately not paired.

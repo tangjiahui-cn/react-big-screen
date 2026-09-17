@@ -3,3 +3,6 @@
 
 npx tsc -b
 npx lint-staged --allow-empty
+
+# 校验双语文档 hash 值是否匹配
+pnpm run verify-translation-pairing
