@@ -3,7 +3,7 @@
 <p align="center">A drag-and-drop visual editor for building React data big-screens — usable standalone or embedded in your app as an ESM SDK.</p>
 
 <p align="center">
-  <a href="./README.zh.md">简体中文</a> | English
+  English | <a href="./README.zh.md">简体中文</a>
 </p>
 
 <p align="center">

@@ -1,6 +1,6 @@
 # Bilingual documentation
 
-[简体中文](./README.zh.md) | English
+English | [简体中文](./README.zh.md)
 
 The documentation in this repository is read by people and agents both within and outside China, so every document in scope is maintained in both an English and a Simplified Chinese version.
 English is the default language: a plain `{name}.md` is the English version, and Simplified Chinese carries the `{name}.zh.md` suffix.
@@ -60,7 +60,7 @@ Because a single-language doc is defined by the absence of a counterpart rather 
 ## Language checks
 
 - Every registered pair has both an English and a Chinese md.
-- Every document provides a Chinese/English switcher at the top.
+- Every document provides a language switcher at the top, English first: `English | 简体中文`.
 - The current language is not linked; the other language is.
 
 ## Handling references

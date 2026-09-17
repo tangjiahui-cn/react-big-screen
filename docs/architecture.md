@@ -1,6 +1,6 @@
 # Architecture
 
-[简体中文](./architecture.zh.md) | English
+English | [简体中文](./architecture.zh.md)
 
 Read this document before changing anything under `src/`.
 

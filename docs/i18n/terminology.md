@@ -148,7 +148,7 @@
 | bilingual documentation | 双语文档 | | | |
 | pairing | 配对 | | | 中英两份 md 的对应关系 |
 | counterpart | 对侧文件 | | 对应物、配对物 | 泛指「另一侧」时写「另一侧」 |
-| language switcher | 语言切换行 | | | 文档顶部的 中文 / English 互链行 |
+| language switcher | 语言切换行 | | | 文档顶部的 English / 简体中文 互链行 |
 | terminology source of truth | 术语真源 | | 术语表真源 | 指本文件；单语维护，不参与配对 |
 | scope | 范围 | | | 见 [README.zh.md](./README.zh.md) |
 | typecheck | 类型检查 | | | `npx tsc -b`；命令语境保留 `typecheck`，行文写「类型检查」 |

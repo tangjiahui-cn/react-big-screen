@@ -1,6 +1,6 @@
 # 架构
 
-简体中文 | [English](./architecture.md)
+[English](./architecture.md) | 简体中文
 
 改动 `src/` 下的任意内容前，请先阅读本文。
 

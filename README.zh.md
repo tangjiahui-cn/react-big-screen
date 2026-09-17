@@ -3,7 +3,7 @@
 <p align="center">一个用于搭建 React 数据大屏的拖拽式可视化编辑器 —— 既可独立使用，也可作为 ESM SDK 嵌入你的应用。</p>
 
 <p align="center">
-  简体中文 | <a href="./README.md">English</a>
+  <a href="./README.md">English</a> | 简体中文
 </p>
 
 <p align="center">

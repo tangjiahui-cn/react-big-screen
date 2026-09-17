@@ -1,6 +1,6 @@
 # Git 提交
 
-简体中文 | [English](./git-commit.md)
+[English](./git-commit.md) | 简体中文
 
 提交信息中不得出现任何第三方 AI agent 的归属标识。
 

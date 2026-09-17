@@ -1,6 +1,6 @@
 # Git commits
 
-[简体中文](./git-commit.zh.md) | English
+English | [简体中文](./git-commit.zh.md)
 
 A commit message must not carry attribution to any third-party AI agent.
 
