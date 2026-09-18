@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# 1、检测是否包含第三方 AI 提交标识（规则见 docs/git-commit.md）
+# 1、检测是否包含第三方 AI 提交标识（规则见 docs/git-commit-ai-attribution.md）
 npx --no-install tsx scripts/verify-ai-attribution.ts "$1" || exit 1
 
 # 2、检测提交内容格式

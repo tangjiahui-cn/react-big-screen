@@ -11,12 +11,14 @@
   "scripts": {
     "dev": "cross-env vite",
     "build": "tsc -b && vite build",
-    "build:analyzer": "tsc -b cross-env mode=analyzer pnpm build",
+    "build:analyzer": "tsc -b && cross-env mode=analyzer pnpm build",
     "build:esm": "tsc -b && cross-env LIB_MODE=1 vite build -c ./config/vite.buildESM.ts",
     "build-analysis:esm": "tsc -b && cross-env LIB_MODE=1 mode=analyzer vite build -c ./config/vite.buildESM.ts",
     "build:lib": "pnpm build:esm",
     "publish-npm": "sh ./scripts/checkLogin.sh && pnpm build:lib && sh ./scripts/publish.sh",
     "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "preview": "vite preview",
     "postinstall": "husky install",
     "commit": "git add . && git-cz",
@@ -116,6 +118,7 @@
     "vite-bundle-analyzer": "^0.17.1",
     "vite-plugin-dts": "^4.5.4",
     "vite-plugin-html": "^3.2.2",
-    "vite-plugin-image-optimizer": "^2.0.3"
+    "vite-plugin-image-optimizer": "^2.0.3",
+    "vitest": "^3.2.7"
   }
 }

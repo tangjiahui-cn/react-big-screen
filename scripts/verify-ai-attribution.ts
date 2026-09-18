@@ -4,11 +4,17 @@
  * Called by .husky/commit-msg:
  *   tsx scripts/verify-ai-attribution.ts <commit-msg-file>
  *
- * See docs/git-commit.md. Patterns stay anchored to attribution phrasing so that
+ * Can also validate a draft message passed inline, without touching the filesystem:
+ *   tsx scripts/verify-ai-attribution.ts --text "feat: add login flow"
+ *
+ * See docs/git-commit-ai-attribution.md. Patterns stay anchored to attribution phrasing so that
  * messages merely mentioning a tool by name -- e.g. "fix: handle claude code MCP timeout" --
  * are not flagged.
+ *
+ * Unit tests live next to this file in verify-ai-attribution.test.ts; run them with `pnpm test`.
  */
 import { readFileSync } from "node:fs";
+import { pathToFileURL } from "node:url";
 
 const AI_AGENT_NAMES = ["claude", "copilot", "cursor", "chatgpt"];
 
@@ -21,24 +27,115 @@ const ATTRIBUTION_PATTERNS = [
   new RegExp(`\\bGenerated\\s+(?:with|by|using)\\s+\\[?${AI_AGENT}\\b`, "i"),
 ];
 
-const messageFile = process.argv[2];
+export const USAGE = [
+  "Usage:",
+  "  tsx scripts/verify-ai-attribution.ts <commit-msg-file>",
+  "  tsx scripts/verify-ai-attribution.ts --text <commit-message>",
+].join("\n");
 
-if (!messageFile) {
-  console.error("Usage: tsx scripts/verify-ai-attribution.ts <commit-msg-file>");
-  process.exit(1);
+/**
+ * Offending lines of `message`, rendered as "1-based line number: line".
+ * Empty array means the message carries no attribution the script can detect.
+ */
+export function findAttributionOffenders(message: string): string[] {
+  return message
+    .split("\n")
+    .flatMap((line, index) =>
+      ATTRIBUTION_PATTERNS.some((pattern) => pattern.test(line)) ? [`${index + 1}: ${line}`] : [],
+    );
 }
 
-const offenders = readFileSync(messageFile, "utf8")
-  .split("\n")
-  .flatMap((line, index) =>
-    ATTRIBUTION_PATTERNS.some((pattern) => pattern.test(line)) ? [`${index + 1}: ${line}`] : [],
-  );
+export type ParsedArgs =
+  | { kind: "help" }
+  | { kind: "text"; text: string }
+  | { kind: "file"; file: string }
+  | { kind: "error"; message: string };
 
-if (offenders.length > 0) {
+export function parseArgs(args: string[]): ParsedArgs {
+  if (args.includes("--help") || args.includes("-h")) {
+    return { kind: "help" };
+  }
+
+  const textFlagIndex = args.indexOf("--text");
+  const text = textFlagIndex === -1 ? undefined : args[textFlagIndex + 1];
+
+  if (textFlagIndex !== -1 && text === undefined) {
+    return { kind: "error", message: "[ERROR] --text requires a value." };
+  }
+
+  // Everything that is neither the --text flag nor its value is a positional message file.
+  const positional =
+    textFlagIndex === -1
+      ? args
+      : args.filter((_, index) => index !== textFlagIndex && index !== textFlagIndex + 1);
+
+  const messageFile = positional[0];
+
+  if (text !== undefined && messageFile) {
+    return { kind: "error", message: "[ERROR] Pass either a commit-msg file or --text, not both." };
+  }
+
+  if (text === undefined && !messageFile) {
+    return { kind: "error", message: "[ERROR] No commit message given." };
+  }
+
+  return text === undefined
+    ? { kind: "file", file: messageFile as string }
+    : { kind: "text", text };
+}
+
+function usageError(message: string): number {
+  console.error(message);
+  console.error("");
+  console.error(USAGE);
+  return 1;
+}
+
+/**
+ * Runs the CLI for `argv` -- process.argv with the node and script entries stripped.
+ * Returns the exit code to use: 0 when the message is free of attribution, 1 otherwise
+ * (offenders found, bad arguments, or an unreadable message file).
+ */
+export function runCli(argv: string[]): number {
+  const parsed = parseArgs(argv);
+
+  if (parsed.kind === "help") {
+    console.log(USAGE);
+    return 0;
+  }
+
+  if (parsed.kind === "error") {
+    return usageError(parsed.message);
+  }
+
+  let message: string;
+
+  if (parsed.kind === "text") {
+    message = parsed.text;
+  } else {
+    try {
+      message = readFileSync(parsed.file, "utf8");
+    } catch (error) {
+      const reason = error instanceof Error ? error.message : String(error);
+      return usageError(`[ERROR] Cannot read commit message file (${parsed.file}): ${reason}`);
+    }
+  }
+
+  const offenders = findAttributionOffenders(message);
+
+  if (offenders.length === 0) {
+    return 0;
+  }
+
   console.error("");
   console.error("[ERROR] Commit message contains a third-party AI agent attribution.");
   console.error(offenders.join("\n"));
   console.error("");
   console.error("[WARNING] Remove the lines above and retry.");
-  process.exit(1);
+  return 1;
+}
+
+// Only drive the CLI when executed as a script, so tests can import the helpers above.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  process.exit(runCli(process.argv.slice(2)));
 }
