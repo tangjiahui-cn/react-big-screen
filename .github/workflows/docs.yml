@@ -37,7 +37,7 @@ jobs:
           target_branch: gh-page
           build_dir: dist
         env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy To My Remote Server [Aliyun]
         uses: easingthemes/ssh-deploy@main
