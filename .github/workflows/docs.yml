@@ -58,7 +58,7 @@ jobs:
 
       - name: Deploy To My Remote Server [Aliyun]
         if: github.event_name != 'pull_request'
-        uses: easingthemes/ssh-deploy@v5
+        uses: easingthemes/ssh-deploy@v6.0.3
         with:
           SSH_PRIVATE_KEY: ${{ secrets.REMOTE_SSH_KEY_ALIYUN }}
           REMOTE_HOST: ${{ secrets.REMOTE_HOST_ALIYUN }}
@@ -70,7 +70,7 @@ jobs:
 
       - name: Deploy To My Remote Server [Japanese]
         if: github.event_name != 'pull_request'
-        uses: easingthemes/ssh-deploy@v5
+        uses: easingthemes/ssh-deploy@v6.0.3
         with:
           SSH_PRIVATE_KEY: ${{ secrets.REMOTE_SSH_KEY_JP }}
           REMOTE_HOST: ${{ secrets.REMOTE_HOST_JP }}
