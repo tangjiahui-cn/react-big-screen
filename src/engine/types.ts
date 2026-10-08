@@ -137,6 +137,7 @@ export interface GlobalConfig {
 
   editorOffsetX?: number; // 编辑器x轴偏移量 (默认0，用于保存编辑器的位置)
   editorOffsetY?: number; // 编辑器y轴偏移量 (默认0，用于保存编辑器的位置)
+  dragClampEnabled?: boolean; // 是否限制拖拽不超过画布 (默认false)
 }
 
 export type ComponentUsed = Record<

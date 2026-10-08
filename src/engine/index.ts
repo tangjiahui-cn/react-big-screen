@@ -151,10 +151,10 @@ export class Engine {
 
   // 加载json对象
   public async loadJSONString(text: string): Promise<void> {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       try {
         const json = JSON.parse(text || "{}");
-        this.loadJSON(json);
+        await this.loadJSON(json);
         resolve();
       } catch (e) {
         reject(e);

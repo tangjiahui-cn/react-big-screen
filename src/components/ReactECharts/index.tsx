@@ -4,7 +4,7 @@
  * @author tangjiahui
  * @date 2025/1/21
  */
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import echarts, { EChartsOption, EChartsType } from "./echart";
 import { useUpdateEffect } from "ahooks";
 import { useResizeDom } from "@/hooks";
@@ -12,7 +12,7 @@ import { useIsNeedClearEcharts } from "./hooks/useIsNeedClearEcharts";
 
 export type * from "./echart";
 
-interface Props {
+interface Props extends React.ComponentPropsWithoutRef<"div"> {
   /**
    * 配置项
    */
@@ -25,17 +25,13 @@ interface Props {
    */
   shouldClear?: boolean | ((currentOptions: EChartsOption, preOptions?: EChartsOption) => boolean);
   /**
-   * css style
-   */
-  style?: React.CSSProperties;
-  /**
    * 获取echarts实例
    */
   onGetInstance?: (echarts: EChartsType) => void;
 }
 
 export default function ReactECharts(props: Props) {
-  const { options, shouldClear } = props;
+  const { options, shouldClear, onGetInstance, style, ...rest } = props;
   const chartInstance = useRef<EChartsType>();
   const domRef = useRef<HTMLDivElement>(null);
   const isNeedClearEcharts = useIsNeedClearEcharts();
@@ -47,6 +43,7 @@ export default function ReactECharts(props: Props) {
     if (options) {
       chartInstance.current?.setOption?.(options);
       isNeedClearEcharts(options); // 初始调用刷新一次缓存
+      lastOptionsRef.current = options;
     }
     props?.onGetInstance?.(chartInstance.current!);
     return () => {
@@ -84,5 +81,5 @@ export default function ReactECharts(props: Props) {
     chartInstance.current?.resize?.();
   });
 
-  return useMemo(() => <div style={props?.style} ref={domRef} />, [props?.style]);
+  return <div ref={domRef} style={style} {...rest} />;
 }

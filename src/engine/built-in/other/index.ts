@@ -6,7 +6,8 @@
  * */
 import type { ComponentType } from "@/engine";
 import React from "react";
-import { peopleExposes } from "@/engine/built-in/other/PeopleTable";
+import { peopleExposes } from "./PeopleTable";
+import { chinaMapTriggers } from "./ChinaMap";
 
 export const other: ComponentType[] = [
   {
@@ -32,6 +33,7 @@ export const other: ComponentType[] = [
     y: 0,
     width: 500,
     height: 500,
+    triggers: chinaMapTriggers,
     component: React.lazy(() => import("./ChinaMap")),
     attributesComponent: React.lazy(() => import("./ChinaMap/attributes")),
   },
