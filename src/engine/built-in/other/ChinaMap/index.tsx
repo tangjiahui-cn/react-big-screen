@@ -5,15 +5,19 @@
  * @date 2025/6/23
  */
 
-import { createComponent } from "@/engine";
+import { createComponent, EventData } from "@/engine";
 import { registerChinaMap, MAP_CHINA, createAirplaneLine } from "./utils";
 import ReactECharts, { type EChartsOption } from "@/components/ReactECharts";
 import { useRequest } from "ahooks";
 import { ChinaMapOptions, DEFAULT_OPTIONS } from "./attributes";
 import { cityValueMap } from "@/engine/built-in/other/ChinaMap/data/mockData";
 
-export default createComponent<ChinaMapOptions>((props) => {
-  const { width, height, options } = props;
+type TriggerKeys = "onClick";
+
+export const chinaMapTriggers: EventData<TriggerKeys>[] = [{ label: "点击事件", value: "onClick" }];
+
+export default createComponent<ChinaMapOptions, TriggerKeys>((props) => {
+  const { width, height, options, handleTrigger } = props;
 
   const { data: chartOption } = useRequest(
     async () => {
@@ -144,6 +148,9 @@ export default createComponent<ChinaMapOptions>((props) => {
         height,
         overflow: "hidden",
         background: options?.bgColor,
+      }}
+      onClick={(e) => {
+        handleTrigger("onClick", e);
       }}
     />
   );
