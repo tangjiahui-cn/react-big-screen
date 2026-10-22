@@ -14,6 +14,9 @@ import {
 import PageContainer from "@/pages/components/Editor/components/PageContainer";
 import RenderPreviewComponentNode from "@/pages/preview/components/RenderPreviewComponentNode";
 import FitScreen from "@/pages/preview/components/FitScreen";
+import ErrorBoundary from "@/components/ErrorBoundary";
+import ErrorFallback from "@/components/ErrorBoundary/ErrorFallback";
+import DownloadJSONButton from "@/components/DownloadJSONButton";
 import styles from "./index.module.less";
 
 interface Props {
@@ -61,9 +64,24 @@ export default function (props: Props) {
       dh={config?.height || 1080}
       style={{ background: options?.whiteBoardColor }}
     >
-      <PageContainer preview style={{ width: "100%", height: "100%" }}>
-        {renderComponentNodes}
-      </PageContainer>
+      <ErrorBoundary
+        onError={(error) => {
+          console.error("[RBS] preview render error:", error);
+        }}
+        fallback={({ error }) => (
+          <ErrorFallback
+            title={"页面报错（请打开 console 查看）"}
+            error={error}
+            showMessage={false}
+          >
+            <DownloadJSONButton />
+          </ErrorFallback>
+        )}
+      >
+        <PageContainer preview style={{ width: "100%", height: "100%" }}>
+          {renderComponentNodes}
+        </PageContainer>
+      </ErrorBoundary>
     </FitScreen>
   );
 }

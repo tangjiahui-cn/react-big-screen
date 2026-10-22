@@ -6,6 +6,9 @@ import Attributes from "@/pages/components/Attributes";
 import { JsonType, Engine } from "@/engine";
 import React from "react";
 import { useGlobalShortCutKeys } from "@/packages/shortCutKeys";
+import ErrorBoundary from "@/components/ErrorBoundary";
+import ErrorFallback from "@/components/ErrorBoundary/ErrorFallback";
+import DownloadJSONButton from "@/components/DownloadJSONButton";
 
 export interface RbsEditorProps extends RbsEditorHeaderProps {
   /** json数据 */
@@ -39,17 +42,28 @@ export default function (props: RbsEditorProps) {
           toolBarOptions={props?.toolBarOptions}
         />
       </div>
-      <div className={styles.page_body}>
-        <div className={styles.page_body_left} id={"rbs-menu"}>
-          <Menu />
+      <ErrorBoundary
+        onError={(error) => {
+          console.error("[RBS] editor render error:", error);
+        }}
+        fallback={({ error }) => (
+          <ErrorFallback title={"页面报错（请打开 console 查看）"} error={error}>
+            <DownloadJSONButton />
+          </ErrorFallback>
+        )}
+      >
+        <div className={styles.page_body}>
+          <div className={styles.page_body_left} id={"rbs-menu"}>
+            <Menu />
+          </div>
+          <div className={styles.page_body_main} id={"rbs-editor"}>
+            <Editor />
+          </div>
+          <div className={styles.page_body_right} id={"rbs-attributes"}>
+            <Attributes />
+          </div>
         </div>
-        <div className={styles.page_body_main} id={"rbs-editor"}>
-          <Editor />
-        </div>
-        <div className={styles.page_body_right} id={"rbs-attributes"}>
-          <Attributes />
-        </div>
-      </div>
+      </ErrorBoundary>
       {typeof PageFooter === "function" ? <PageFooter /> : PageFooter}
     </div>
   );

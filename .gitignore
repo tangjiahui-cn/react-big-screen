@@ -18,3 +18,4 @@ tsconfig.tsbuildinfo
 
 # claude
 .claude/tmp
+.pipeline/

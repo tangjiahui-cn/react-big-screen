@@ -5,6 +5,7 @@ React-Big-Screen 是一个从0到1设计的 React 可视化编辑器。
 ## 硬性规则
 
 - 执行任何操作前，必须读取并遵循 [docs/principles.md](docs/principles.md)。
+- 写会落地的前端代码或注释（含回复中的代码块）前，必须读取并遵循 [docs/code-comment.md](docs/code-comment.md)。
 - 修改 `/src` 目录前，必须读取 [docs/architecture.md](docs/architecture.md)。
 
 ## 仓库结构
@@ -26,7 +27,7 @@ src/
                公共模块：React / ReactDOM / antd 的预置引用，改动影响打包体积
 config/        构建配置：vite.base.ts、vite.buildESM.ts、external 依赖判定
 public/        示例 JSON（example/）与远程组件示例（demo.umd.js / demo.amd.js）
-docs/          存放架构、Agent 原则与 git 提交规范
+docs/          存放架构、Agent 原则、注释规则与 git 提交规范
 scripts/       发布脚本与 git 钩子脚本
 ```
 
