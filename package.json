@@ -5,7 +5,7 @@
   "homepage": "https://github.com/tangjiahui-cn/react-big-screen.git",
   "description": "A DSL-driven visual editor built with React 18 and TypeScript, featuring custom components, undo/redo history, smooth drag-and-drop, favorites, multi-component interactions, multi-page management, remote component loading, marquee/range selection, and an SDK for easy integration into existing projects.",
   "license": "ISC",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "module": "./es/index.mjs",
   "types": "./types/src/export/index.d.ts",
   "scripts": {
