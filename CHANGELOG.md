@@ -1,10 +1,27 @@
-## [0.0.29](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.28...v0.0.29) (2026-09-08)
+
+## [0.0.30](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.29...v0.0.30) (2026-11-02)
+
+
+### Bug Fixes
+
+* 修复删除MD情况下提交报错问题 ([d4fe3f3](https://github.com/tangjiahui-cn/react-big-screen/commit/d4fe3f3898ed7456f23f0768a3c814abd867ebcd))
+
+
+### Features
+
+* chinaMap 增加 onClick 事件 ([e27f8e2](https://github.com/tangjiahui-cn/react-big-screen/commit/e27f8e2f36645063abff1ba7a75f7b14700143ec))
+* commit-msg 钩子改用 ts 脚本校验 AI 归属标识 ([8b4e594](https://github.com/tangjiahui-cn/react-big-screen/commit/8b4e5948720f72987c96e466f3045c12266c40cd))
+* 删除双语文档机制 ([b2c7851](https://github.com/tangjiahui-cn/react-big-screen/commit/b2c78514814a458421b9ad0e2c4f5a62c3d4f035))
+* 增加 ErrorBoundary ([587a7b9](https://github.com/tangjiahui-cn/react-big-screen/commit/587a7b9d5428aa5c593976ef3023141f5dc8f12e))
+* 更新经典示例 ([7ec0127](https://github.com/tangjiahui-cn/react-big-screen/commit/7ec0127d96320219a56c7397f71d4c1a745c9f2a))
+
+## [0.0.29](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.28...v0.0.29) (2026-09-17)
 
 
 ### Bug Fixes
 
 * **.:** 修复左侧 ComponentNode 菜单未显示最后一个组件的问题 ([4f060b9](https://github.com/tangjiahui-cn/react-big-screen/commit/4f060b9b8e824af8bc9291339e32a0fe28e01af0))
-* 修复this.loadJSON(json)异步加载时机问题 ([ce53346](https://github.com/tangjiahui-cn/react-big-screen/commit/ce53346918d8a25467825cb00c5b7a82b6b6a938))
+* 修复this.loadJSON(json)异步加载时机问题 ([ffc0ad3](https://github.com/tangjiahui-cn/react-big-screen/commit/ffc0ad37e9ee41691198f6dfaf215ddc88885b6c))
 
 
 ### Features
@@ -15,16 +32,12 @@
 * 拖拽不超过画布配置 + 设置弹窗 ([75493fe](https://github.com/tangjiahui-cn/react-big-screen/commit/75493fe372214665bf5caee14d881e3607121c1d))
 * 拖拽移动和缩放增加画布边界钳制 ([e8da5be](https://github.com/tangjiahui-cn/react-big-screen/commit/e8da5be6690bf355caa870f510c35112b5cdb2bd))
 
-
-
 ## [0.0.28](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.27...v0.0.28) (2025-10-20)
 
 
 ### Bug Fixes
 
 * **fitscreen:** 修复初次resize失效问题 ([e07f015](https://github.com/tangjiahui-cn/react-big-screen/commit/e07f0158a5ec8067991693d14b0f538ef874c20d))
-
-
 
 ## [0.0.27](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.26...v0.0.27) (2025-10-20)
 
@@ -33,16 +46,12 @@
 
 * **.:** 修改FitScreen 的resize时机 ([17d0d3a](https://github.com/tangjiahui-cn/react-big-screen/commit/17d0d3a3cfd850d298ca8faf65d02a782f1c97eb))
 
-
-
 ## [0.0.26](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.25...v0.0.26) (2025-10-19)
 
 
 ### Bug Fixes
 
 * **.:** 修复previewDriverId ([50ab37c](https://github.com/tangjiahui-cn/react-big-screen/commit/50ab37c3ee4fc1b9b824c80722bb5ed808dec63e))
-
-
 
 ## [0.0.25](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.24...v0.0.25) (2025-10-19)
 
@@ -51,16 +60,12 @@
 
 * **.:** 新增 toolBarOptions 配置 ([ff4d0a3](https://github.com/tangjiahui-cn/react-big-screen/commit/ff4d0a3fd9ed4c0d438bcfa5e65e3c6cf76b9b45))
 
-
-
 ## [0.0.24](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.23...v0.0.24) (2025-10-19)
 
 
 ### Features
 
 * **.:** 支持自定义toolbar ([db43f98](https://github.com/tangjiahui-cn/react-big-screen/commit/db43f982f8690f4be7e2082ba659bfbb12beb569))
-
-
 
 ## [0.0.23](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.22...v0.0.23) (2025-10-19)
 
@@ -69,35 +74,19 @@
 
 * **.:** pageLogo和pageHeader支持React.ReactNode ([63ca61d](https://github.com/tangjiahui-cn/react-big-screen/commit/63ca61d635c9b14b10cc2a9d04c8af1ca14c54a5))
 
-
-
 ## [0.0.22](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.21...v0.0.22) (2025-10-17)
-
-
 
 ## [0.0.21](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.20...v0.0.21) (2025-10-17)
 
-
-
 ## [0.0.20](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.19...v0.0.20) (2025-10-17)
-
-
 
 ## [0.0.19](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.18...v0.0.19) (2025-10-17)
 
-
-
 ## [0.0.18](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.17...v0.0.18) (2025-10-17)
-
-
 
 ## [0.0.17](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.16...v0.0.17) (2025-10-17)
 
-
-
 ## [0.0.16](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.15...v0.0.16) (2025-10-17)
-
-
 
 ## [0.0.15](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.14...v0.0.15) (2025-10-17)
 
@@ -106,16 +95,12 @@
 
 * **.:** pageLogo和pageFooter支持React.FC ([e9474f8](https://github.com/tangjiahui-cn/react-big-screen/commit/e9474f8556f5f304e54dc4d39b212f237f21f0e2))
 
-
-
 ## [0.0.14](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.13...v0.0.14) (2025-10-17)
 
 
 ### Features
 
 * **.:** 支持自定义页面logo ([6de2575](https://github.com/tangjiahui-cn/react-big-screen/commit/6de257538a17737a9d5d6966250f4643403d8c6d))
-
-
 
 ## [0.0.13](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.12...v0.0.13) (2025-10-17)
 
@@ -124,39 +109,21 @@
 
 * **.:** 增加 pageFooter属性，支持自定义编辑器底部 ([2cf37bb](https://github.com/tangjiahui-cn/react-big-screen/commit/2cf37bb1288b5e9a17dedbb51c96b5bb6ae5cc5f))
 
-
-
 ## [0.0.12](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.11...v0.0.12) (2025-10-17)
-
-
 
 ## [0.0.11](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.10...v0.0.11) (2025-10-17)
 
-
-
 ## [0.0.10](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.9...v0.0.10) (2025-10-17)
-
-
 
 ## [0.0.9](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.8...v0.0.9) (2025-10-17)
 
-
-
 ## [0.0.8](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.7...v0.0.8) (2025-10-17)
-
-
 
 ## [0.0.7](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.6...v0.0.7) (2025-10-17)
 
-
-
 ## [0.0.6](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.5...v0.0.6) (2025-10-17)
 
-
-
 ## [0.0.5](https://github.com/tangjiahui-cn/react-big-screen/compare/v0.0.4...v0.0.5) (2025-10-17)
-
-
 
 ## [0.0.4](https://github.com/tangjiahui-cn/react-big-screen/compare/ed05ffe959566410357060e29f68991846e94783...v0.0.4) (2025-10-17)
 
@@ -497,6 +464,3 @@
 * **zoom:** 关联滚轮速度与缩放速度 ([372eef6](https://github.com/tangjiahui-cn/react-big-screen/commit/372eef669c12954a6e10fe359566463bcfd96f06))
 * **zoom:** 增加鼠标滚轮控制缩放功能 ([df34a54](https://github.com/tangjiahui-cn/react-big-screen/commit/df34a54d945ae37a4ff5d52156a4fcdfdc9b30a3))
 * **zoom:** 当scale为1时，移除页面的transform:scale属性 ([6dd955f](https://github.com/tangjiahui-cn/react-big-screen/commit/6dd955faa64f4af9e4fd6dc51cf818c76b256f11))
-
-
-
