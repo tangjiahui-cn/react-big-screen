@@ -17,6 +17,7 @@ import {
 } from "@/engine";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useEngineContext } from "@/export/context";
+import { useListenRef } from "@/hooks";
 
 interface RenderPreviewComponentNodeProps {
   componentNode: ComponentNodeType;
@@ -54,7 +55,7 @@ export default function RenderPreviewComponentNode(props: RenderPreviewComponent
 
 function ScopeRenderPreviewComponentNode(props: ScopeRenderPreviewComponentNodeProps) {
   const { component, componentNode } = props;
-  const componentNodeRef = useRef<ComponentNodeType>();
+  const componentNodeRef = useListenRef<ComponentNodeType>(componentNode);
   const containerDomRef = useRef<HTMLDivElement>(null);
 
   // 注册请求
