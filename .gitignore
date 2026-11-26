@@ -19,3 +19,7 @@ tsconfig.tsbuildinfo
 # claude
 .claude/tmp
 .pipeline/
+
+# openspec
+.agents/skills/openspec-*/
+.agents/skills/.openspec-target
